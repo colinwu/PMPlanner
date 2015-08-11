@@ -1,0 +1,85 @@
+<%= form_for @device do |f| %>
+  <%= f.error_messages %>
+  <table width=100%>
+    <tr><th>Equipment Detail</th><th>Equipment Notes</th></tr>
+    <tr>
+      <td width=45%>
+        <span class="left_field_label">CRM ID</span>
+        <%= f.text_field :crm_object_id, readonly: true %><br />
+        <span class="left_field_label">Model</span>
+        <%= text_field_tag :model, @device.model.name, readonly: true, size: 10 %><br />
+        <span class="left_field_label">Serial Number</span>
+        <%= f.text_field :serial_number, :readonly => true %>
+      </td>
+      <td id="dev_notes_cell">
+        <%= f.text_area :notes, :rows => 5, id: 'dev_notes' %>
+      </td> 
+    </tr>
+  </table>
+  <table width="100%">
+    <tr><td>
+      <span class="left_field_label">Customer</span>
+      <%= f.hidden_field :client_id %>
+      <%= hidden_field_tag 'device[location_id]', 0 %>
+      <%= autocomplete_field_tag :client_name, @device.client.name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', :size => 60 %>
+    <br />
+      <span class="left_field_label">Location</span>
+      <div id="device_location">
+        <% @locations.each do |loc| %>
+          <%= f.radio_button :location_id, loc.id %> <%= loc.to_s  %><br />
+        <% end %>
+        <hr>
+        <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
+        <span class='left_field_label'>Address1</span>
+          <%= text_field_tag 'location[address1]', '', size: 40 %><br />
+        <span class='left_field_label'>Address2</span>
+          <%= text_field_tag 'location[address2]', '', size: 40 %><br />
+        <span class='left_field_label'>City</span>
+          <%= text_field_tag 'location[city]', '', size: 40 %><br />
+        <span class='left_field_label'>Province</span>
+          <%= select_tag 'location[province]', options_for_select([['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]) %><br />
+        <span class='left_field_label'>Postal Code</span>
+          <%= text_field_tag 'location[post_code]', '', size: 7 %>
+        </fieldset>
+      </div>
+      </td>
+    </tr>
+  </table>
+  <table width="100%">
+    <tr>
+      <td width="33%">
+        <span class='left_field_label'>Team</span>
+        <%= text_field_tag :team, "#{@device.team.name}", :readonly => true %>
+        <br />
+        <span class="left_field_label">Primary tech</span>
+        <%= text_field_tag :primary_tech, "#{@device.primary_tech.first_name} #{@device.primary_tech.last_name}", :readonly => @readonly_flag %>
+        <br />
+        <span class="left_field_label">Backup tech</span>
+        <%= text_field_tag :backup_tech, "#{@device.backup_tech.first_name} #{@device.backup_tech.last_name}", :readonly => @readonly_flag %>
+        <br />
+        <span class="left_field_label">Manager</span>
+        <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.first_name} #{@device.manager.last_name}" %>
+        <%= text_field_tag :manager, manager, :readonly => true %>
+      </td>
+      <td width=33%>
+        Equipment Status:<br /><br />
+        <%= f.check_box :active %> Active
+        <br />
+        <%= f.check_box :under_contract %> Under contract
+        <br />
+        <%= f.check_box :do_pm %> In PM program
+      </td>
+      <td>
+        Estimate PM date using:<br /><br />
+        <%= f.radio_button :pm_counter_type, 'count' %> Page Counter<br />
+        <%= f.radio_button :pm_counter_type, 'rotation' %> Rotations<br />
+        <%= f.radio_button :pm_counter_type, 'life' %> Life %
+      </td>
+    </tr>
+    <tr><td colspan='100%'>
+      <p><%= f.submit %></p>
+    </td></tr>
+  </table>
+<% end %>
+
+<%= render 'device_contacts' %>

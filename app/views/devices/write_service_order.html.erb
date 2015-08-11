@@ -1,0 +1,22 @@
+<% title @title, false %>
+<%= form_tag send_order_devices_path do %>
+<table>
+  <tr>
+    <td class=left_field_label>To:</td>
+    <td><%= text_field_tag 'email[to', @tech.preference.default_from_email, size: 60 %></td>
+  </tr>
+  <tr>
+    <td class=left_field_label>CC:</td>
+    <td><%= text_field_tag 'email[cc]', @tech.email, size: 60 %></td>
+  </tr>
+  <tr>
+    <td class=left_field_label>Subject:</td>
+    <td><%= text_field_tag 'email[subject]', 'Create Service Order(s)', size: 60 %></td>
+  </tr>
+  <tr>
+    <td class=left_field_label>Message:</td>
+    <td><%= text_area_tag 'email[msg]', @msg_body, size: '80x20' %></td>
+  </tr>
+  <tr><td colspan=2><%= submit_tag 'Send' %></td></tr>
+</table>
+<% end %>

@@ -1,0 +1,20 @@
+<br />
+<table width=100%>
+  <% @group.each_key do |mg_id| %>
+    <tr>
+      <th colspan=4>Model Group: <%= ModelGroup.find(mg_id).name %></th>
+    </tr>
+    <tr>
+      <th>Maint Code</th>
+      <th>Part Number</th>
+      <th>Description</th>
+    </tr>
+    <% @group[mg_id].each do |part| %>
+      <tr>
+        <td><%= part.pm_code.name %></td>
+        <td><%= part.part.name %></td>
+        <td><%= part.part.description %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

@@ -1,0 +1,20 @@
+<%= form_for @counter_datum do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :counter_id %><br />
+    <%= f.text_field :counter_id %>
+  </p>
+  <p>
+    <%= f.label :reading_id %><br />
+    <%= f.text_field :reading_id %>
+  </p>
+  <p>
+    <%= f.label :value %><br />
+    <%= f.text_field :value %>
+  </p>
+  <p>
+    <%= f.label :unit %><br />
+    <%= f.text_field :unit %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

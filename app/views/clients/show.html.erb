@@ -1,0 +1,32 @@
+<% title "Client" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @client.name %>
+</p>
+<p>
+  <strong>Address:</strong>
+  <%= @client.address %>
+</p>
+<p>
+  <strong>City:</strong>
+  <%= @client.city %>
+</p>
+<p>
+  <strong>Province:</strong>
+  <%= @client.province %>
+</p>
+<p>
+  <strong>Postal Code:</strong>
+  <%= @client.postal_code %>
+</p>
+<p>
+  <strong>Notes:</strong>
+  <%= @client.notes %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_client_path(@client) %> |
+  <%= link_to "Destroy", @client, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", clients_path %>
+</p>

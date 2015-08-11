@@ -1,0 +1,13 @@
+@mixin border-radius($tl,$tr,$br,$bl) {
+  -webkit-border-radius: $tl $tr $br $bl;
+  -moz-border-radius: $tl $tr $br $bl;
+  -ms-border-radius: $tl $tr $br $bl;
+  border-radius: $tl $tr $br $bl;
+}
+
+@mixin background-gradient($default,$from,$to) {
+  background: $default;
+  background: -moz-linear-gradient(top, $from, $to);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from($from), to($to));
+}
+

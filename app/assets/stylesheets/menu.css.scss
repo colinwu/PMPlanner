@@ -1,0 +1,66 @@
+@import '0common';
+
+#menu {
+  list-style:none;
+  width:85%x;
+  margin:10px auto 0px auto;
+  height:30px;
+  padding:0px 20px 0px 20px;
+
+  /* Rounded Corners */
+  @include border-radius(5px,5px,5px,5px);
+
+  /* Background color and gradients */
+  @include background-gradient(#014464,#0272a7,#013953);
+
+  /* Borders */
+  border: 1px solid #002232;
+
+  -moz-box-shadow:inset 0px 0px 1px #edf9ff;
+  -webkit-box-shadow:inset 0px 0px 1px #edf9ff;
+  box-shadow:inset 0px 0px 1px #edf9ff;
+  li {
+    float:left;
+    display:block;
+    text-align:center;
+    position:relative;
+    padding: 4px 8px 4px 8px;
+    margin-right:5px;
+    margin-top:2px;
+    border:none;
+    color: yellow;
+    a {
+      font-family:Arial, Helvetica, sans-serif;
+      font-size:12px;
+      font-weight: bold;
+      color: #EEEEEE;
+      display:block;
+      outline:0;
+      text-decoration:none;
+      text-shadow: 1px 1px 1px #000;
+    }
+  }
+}
+
+#menu li:hover {
+  border: 1px solid #777777;
+  padding: 4px 7px 4px 7px;
+
+  /* Background color and gradients */
+  @include background-gradient(#F4F4F4,#F4F4F4,#EEEEEE);
+
+  /* Rounded corners */
+  @include border-radius(5px,5px,5px,5px);
+  
+}
+
+#menu li:hover a {
+  color:#161616;
+  text-shadow: 1px 1px 1px #FFFFFF;
+}
+
+#menu li:active a {
+  color:yellow;
+  text-shadow: 1px 1px 1px #FFFFFF;
+}
+

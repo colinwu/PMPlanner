@@ -1,0 +1,48 @@
+<% title @title %>
+
+<table width='100%'>
+  <tr class='pretty'>
+    <th><%= sortable 'clients.name', 'Client', params[:search] %></th>
+    <th><%= sortable 'address1', 'Address1', params[:search] %></th>
+    <th><%= sortable 'address2', 'Address2', params[:search] %></th>
+    <th><%= sortable 'city', 'City', params[:search] %></th>
+    <th><%= sortable 'province', 'Province', params[:search] %></th>
+    <th><%= sortable 'post_code', 'Postal Code', params[:search] %></th>
+    <th>Notes</th>
+    <th># Devs</th>
+    <th></th>
+  </tr>
+  <tr class='search_fields'>
+  <%= form_tag locations_url, method: :get do %>
+    <%= hidden_field_tag 'sort', sort_column %>
+    <%= hidden_field_tag 'direction', sort_direction %>
+    <td><%= text_field_tag 'search[client_name]', @search_params['cleint_name'], :size => 1 %></td>
+    <td><%= text_field_tag 'search[address1]', @search_params['address1'], :size => 1 %></td>
+    <td><%= text_field_tag 'search[address2]', @search_params['address2'], :size => 1 %></td>
+    <td><%= text_field_tag 'search[city]', @search_params['city'], :size => 1 %></td>
+    <td><%= text_field_tag 'search[province]', @search_params['province'], :size => 1 %></td>
+    <td><%= text_field_tag 'search[post_code]', @search_params['post_code'], :size => 1 %></td>
+    <td><%= text_field_tag 'search[loc_notes]', @search_params['loc_notes'], :size => 1 %></td>
+    <td></td>
+    <td><%= submit_tag 'Search' %></td>
+  <% end %>
+  </tr>
+  <% for location in @locations %>
+    <tr class="<%= cycle('light','dark') %>">
+      <td><%= location.client.name %></td>
+      <td><%= location.address1.titleize %></td>
+      <td><%= location.address2.titleize %></td>
+      <td><%= location.city.titleize %></td>
+      <td><%= location.province %></td>
+      <td><%= location.post_code %></td>
+      <td><%= location.notes %>; <%= location.team.nil? ? '' : location.team.name %></td>
+      <td><%= location.devices.length %></td>
+      <td><%= link_to "Edit", edit_location_path(location) %> |
+      <%= link_to "Show Devices", show_devices_at_location_path(location) %> |
+      <%= link_to_unless (location.devices.length > 0), "Del", location, method: :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= will_paginate(@locations) %>
+<p><%= link_to "New Location", new_location_path %></p>

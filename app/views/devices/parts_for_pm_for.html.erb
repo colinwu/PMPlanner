@@ -1,0 +1,32 @@
+<% title @title, false %>
+
+<%= render partial: "header_table", locals: {button: "parts_for_pm"} %>
+
+<table width="100%">
+  <tr>
+    <th></th>
+    <th>PM Code</th>
+    <th>Part Number</th>
+    <th>Part Description</th>
+    <th>Qty</th>
+    <th>Choice</th>
+  </tr>
+  <%= form_tag parts_for_pm_for_device_path(@device) do %>
+    <%= hidden_field_tag 'critical_codes', @critical_codes %>
+    <% i = 0 %>
+    <% @rows.each do |row| %>
+      <%= hidden_field_tag "choices[#{row[0]}]", @choices[row[0]] %>
+      <%= hidden_field_tag "part[#{i}]", row[1] %>
+      <tr>
+        <td><%= check_box_tag "pm_code[#{row[0]}]", row[0], false, :title => "Check to find alternate parts for #{row[0]}" %></td>
+        <td><%=h row[0] %></td>
+        <td><%=h row[1] %></td>
+        <td><%=h row[2] %></td>
+        <td><%=h row[3] %></td>
+        <td><%=h row[4] %></td>
+      </tr>
+      <% i += 1 %>
+    <% end %>
+    <tr><td colspan=5>For selected PM code(s): <%= submit_tag "Find Alternate Parts" %></td></tr>
+  <% end %>
+</table>

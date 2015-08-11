@@ -1,0 +1,15 @@
+one:
+  name: MyString
+  address: MyString
+  city: MyString
+  province: MyString
+  postal_code: MyString
+  notes: MyText
+
+two:
+  name: MyString
+  address: MyString
+  city: MyString
+  province: MyString
+  postal_code: MyString
+  notes: MyText

@@ -1,0 +1,32 @@
+<% title "Contact" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @contact.name %>
+</p>
+<p>
+  <strong>Phone1:</strong>
+  <%= @contact.phone1 %>
+</p>
+<p>
+  <strong>Phone2:</strong>
+  <%= @contact.phone2 %>
+</p>
+<p>
+  <strong>Email:</strong>
+  <%= @contact.email %>
+</p>
+<p>
+  <strong>Notes:</strong>
+  <%= @contact.notes %>
+</p>
+<p>
+  <strong>Client:</strong>
+  <%= @contact.client_id %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_contact_path(@contact) %> |
+  <%= link_to "Destroy", @contact, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", contacts_path %>
+</p>

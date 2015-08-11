@@ -1,0 +1,12 @@
+<% title "Pm Code" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @pm_code.name %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_pm_code_path(@pm_code) %> |
+  <%= link_to "Destroy", @pm_code, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", pm_codes_path %>
+</p>

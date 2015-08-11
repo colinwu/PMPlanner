@@ -1,0 +1,53 @@
+<%= form_for @technician do |f| %>
+  <%= f.error_messages %>
+  <div class=field>
+    <div class=leftdiv>
+      First name<br />
+      <%= f.text_field :first_name %>
+    </div>
+    <div class=leftdiv>
+      Last name<br />
+      <%= f.text_field :last_name %>
+    </div>
+    <div class=rightdiv>
+      Friendly name<br />
+      <%= f.text_field :friendly_name %>
+    </div>
+    <div id=email>
+      Email address<br />
+      <%= f.text_field :email, :size => 40 %>
+    </div>
+  </div>
+  <div class=field>
+    <div class=leftdiv>
+      Team<br />
+      <%= f.collection_select :team_id, Team.all, :id, :name, selected: @technician.team_id %>&nbsp;<%= f.label "Manager? " %> <%= f.check_box :manager %>
+    </div> 
+     <div class=leftdiv>
+      CRM ID<br />
+      <%= f.text_field :crm_id %>
+    </div>
+    <div class=rightdiv>
+      Car Stock Number<br />
+      <%= f.number_field :car_stock_number %>
+    </div>
+  </div>
+  <div class="field">
+  <%= f.label :password %> (Only if you want to change your password.)
+  <% if @validatable %>
+  <em>(<%= @minimum_password_length %> characters minimum)</em>
+  <% end %><br />
+  <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+  
+  <div class="field">
+  <%= f.label :password_confirmation %><br />
+  <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  </div>
+  
+  <div class=field>
+    <%= f.label "Admin? " %> <%= f.check_box :admin %>
+  </div>
+  
+  <p><%= f.submit "Update" %></p>
+<% end %>

@@ -1,0 +1,36 @@
+<% title @title, false %>
+
+<table width="100%">
+  <tr>
+    <th><%= sortable 'name' %></th>
+    <th><%= sortable 'phone1' %></th>
+    <th><%= sortable 'phone2' %></th>
+    <th><%= sortable 'email' %></th>
+    <th><%= sortable 'notes' %></th>
+    <th><%= sortable 'locations.address1', 'Location' %></th>
+    <th>Devices</th>
+    <th> </th>
+  </tr>
+  <% for contact in @contacts %>
+    <tr class="<%= cycle('light','dark') %>">
+      <td><%= contact.name %></td>
+      <td><%= number_to_phone(contact.phone1, area_code:true) %></td>
+      <td><%= number_to_phone(contact.phone2, area_code:true) %></td>
+      <td><%= contact.email %></td>
+      <td><%= contact.notes %></td>
+      <td><% unless contact.location.nil? %>
+           <%=h contact.location.address1 %>, <%=h contact.location.city %>
+           <% end %>
+      </td>
+      <td class=rightjustify><%= link_to contact.location.devices.length, show_devices_at_location_url(contact.location) %></td>
+      <td><%= link_to "Edit", edit_contact_path(contact) %> | 
+      <%= link_to "Del", contact, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= will_paginate @contacts %>
+
+<% if current_technician.admin? %>
+<p><%= link_to "New Contact", new_contact_path %></p>
+<% end %>

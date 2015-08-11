@@ -1,0 +1,32 @@
+<% title @title, false %>
+<br />
+<%= form_tag send_transfer_devices_path do %>
+<%= hidden_field_tag 'email[from]', @tech.email %>
+<table>
+  <tr>
+    <td class=left_field_label>To:</td>
+    <td><%= text_field_tag 'email[to]', @to_manager.email, size: 60 %></td>
+  </tr>
+  <tr>
+    <td class=left_field_label>CC:</td>
+    <td><%= text_field_tag 'email[cc]', @tech.email, size: 60 %></td>
+  </tr>
+  <tr>
+    <td class=left_field_label>Subject:</td>
+    <td><%= text_field_tag 'email[subject]', "Transfering device(s) to you", size: 60 %></td>
+  </tr>
+  <tr>
+    <td class=left_field_label>Message:</td>
+    <td>The following devices are being transfered:<br />
+    <ul>
+      <% @dev_list.each do |dev| %>
+        <%= hidden_field_tag "device[#{dev.id}]", dev.id %>
+        <li>CRM ID: <%= dev.crm_object_id %>, Model: <%= dev.model.name %>, s/n: <%= dev.serial_number %></li>
+      <% end %>
+    </ul>
+    Do you wish to add a personalized message? <br />
+    <%= text_area_tag 'email[msg]', '', size: '80x10' %></td>
+  </tr>
+  <tr><td colspan=2><%= submit_tag 'Send' %></td></tr>
+</table>
+<% end %>

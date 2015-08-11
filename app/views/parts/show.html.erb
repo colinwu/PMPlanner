@@ -1,0 +1,24 @@
+<% title "Part" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @part.name %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%= @part.description %>
+</p>
+<p>
+  <strong>Price:</strong>
+  <%= @part.price %>
+</p>
+<p>
+  <strong>New Name:</strong>
+  <%= @part.new_name %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_part_path(@part) %> |
+  <%= link_to "Destroy", @part, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", parts_path %>
+</p>

@@ -1,0 +1,27 @@
+<% title "Clients", false %>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <th>City</th>
+    <th>Province</th>
+    <th>Postal Code</th>
+    <th>Notes</th>
+  </tr>
+  <% for client in @clients %>
+    <tr>
+      <td><%= client.name %></td>
+      <td><%= client.address %></td>
+      <td><%= client.city %></td>
+      <td><%= client.province %></td>
+      <td><%= client.postal_code %></td>
+      <td><%= client.notes %></td>
+      <td><%= link_to "Edit", edit_client_path(client) %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= will_paginate @clients %>
+<% if current_technician.admin? %>
+  <p><%= link_to "New Client", new_client_path %></p>
+<% end %>

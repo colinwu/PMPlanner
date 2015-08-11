@@ -1,0 +1,34 @@
+<% title @title, false %>
+
+<table width=100%>
+  <tr>
+    <th>Team</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Friendly Name</th>
+    <th>Sharp Name</th>
+    <th>Car Stock Number</th>
+    <th>Email</th>
+    <th>Crm</th>
+    <th>Admin?</th>
+    <th>Manager</th>
+    <th></th>
+  </tr>
+  <% for technician in @technicians %>
+    <tr class="<%= cycle('light','dark') %>">
+      <td><%= technician.team.name %></td>
+      <td><%= technician.first_name %></td>
+      <td><%= technician.last_name %></td>
+      <td><%= technician.friendly_name %></td>
+      <td><%= technician.sharp_name %></td>
+      <td><%= technician.car_stock_number %></td>
+      <td><%= technician.email %></td>
+      <td><%= technician.crm_id %></td>
+      <td><%= technician.admin %></td>
+      <td><%= technician.manager %></td>
+      <td><%= link_to "Edit", edit_technician_path(technician) %> | <%= link_to "Delete", technician, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Technician", new_technician_path %></p>

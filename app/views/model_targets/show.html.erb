@@ -1,0 +1,24 @@
+<% title "Model Target" %>
+
+<p>
+  <strong>Name:</strong>
+  <%= @model_target.name %>
+</p>
+<p>
+  <strong>Target:</strong>
+  <%= @model_target.target %>
+</p>
+<p>
+  <strong>Model Group:</strong>
+  <%= @model_target.model_group_id %>
+</p>
+<p>
+  <strong>Unit:</strong>
+  <%= @model_target.unit %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_model_target_path(@model_target) %> |
+  <%= link_to "Destroy", @model_target, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", model_targets_path %>
+</p>

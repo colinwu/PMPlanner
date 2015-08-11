@@ -1,0 +1,19 @@
+one:
+  team_id: 1
+  first_name: MyString
+  last_name: MyString
+  friendly_name: MyString
+  sharp_name: MyString
+  car_stock_number: 1
+  email: MyString
+  crm_id: MyString
+
+two:
+  team_id: 1
+  first_name: MyString
+  last_name: MyString
+  friendly_name: MyString
+  sharp_name: MyString
+  car_stock_number: 1
+  email: MyString
+  crm_id: MyString
