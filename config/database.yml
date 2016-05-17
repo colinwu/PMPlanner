@@ -15,7 +15,7 @@ development:
   database: pm_planner_development
   pool: 5
   username: root
-  password:
+  password: 56tyghbn
   socket: /var/lib/mysql/mysql.sock
 
 # Warning: The database defined as "test" will be erased and
