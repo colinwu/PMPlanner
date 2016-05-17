@@ -38,5 +38,5 @@ production:
   database: pm_planner_production
   pool: 5
   username: root
-  password:
+  password: 5TGBnhy6
   socket: /var/lib/mysql/mysql.sock
