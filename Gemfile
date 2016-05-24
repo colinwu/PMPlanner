@@ -61,6 +61,7 @@ group :development do
   gem 'rvm1-capistrano3', require: false
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
+  gem 'capistrano-bundler'
 end
 
 # To use debugger
