@@ -58,7 +58,8 @@ group :development do
   gem 'spring'
   
   gem 'capistrano'
-  gem 'rvm1-capistrano3', require: false
+#  gem 'rvm1-capistrano3', require: false
+
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
   gem 'capistrano-bundler'
