@@ -11,14 +11,14 @@ class ApplicationController < ActionController::Base
   
   def authorize
     if current_technician.nil?
-      redirect_to login_url, alert: "Please log in first"
+      redirect_to login_url, alert: "Please log in."
     end
   end
 
   protected
   
   def current_technician
-    Technician.where(id: session[:technician_id]).first
+    Technician.where(id: session[:tech_id]).first
   end
   helper_method :current_technician
   

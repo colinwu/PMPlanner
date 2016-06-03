@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
       params[:username] =~ /\\(.+)$/
       sAMAccountName = $1
       if ldap.bind
-        session[:technician_id] = tech.id
+        session[:tech_id] = tech.id
         redirect_to root_path, notice: "Log in successful."
       else
         flash[:error] = "Suppied name and/or password incorrect."
@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:technician_id] = nil
+    session[:tech_id] = nil
     redirect_to root_url, notice: "Logged out."
   end
 end
