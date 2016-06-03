@@ -10,7 +10,6 @@ gem 'minitest'
 
 group :development, :test do
   gem 'railroady'
-  gem 'byebug'
 end
 
 # Gems used only for assets and not required
