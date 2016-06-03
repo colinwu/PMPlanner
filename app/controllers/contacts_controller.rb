@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :authenticate_technician!, :except => [:sign_in]
+  before_action :authorize
   helper_method :sort_column, :sort_direction
   
   def index

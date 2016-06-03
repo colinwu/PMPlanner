@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150508022157) do
+ActiveRecord::Schema.define(version: 20160531165009) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -84,11 +84,11 @@ ActiveRecord::Schema.define(version: 20150508022157) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string   "address1",   limit: 255, default: ""
-    t.string   "address2",   limit: 255, default: ""
-    t.string   "city",       limit: 255, default: ""
-    t.string   "province",   limit: 255, default: ""
-    t.string   "post_code",  limit: 255, default: ""
+    t.string   "address1",   limit: 255
+    t.string   "address2",   limit: 255
+    t.string   "city",       limit: 255
+    t.string   "province",   limit: 255
+    t.string   "post_code",  limit: 255
     t.string   "notes",      limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
@@ -230,31 +230,25 @@ ActiveRecord::Schema.define(version: 20150508022157) do
   end
 
   create_table "technicians", force: :cascade do |t|
-    t.integer  "team_id",                limit: 4
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.string   "friendly_name",          limit: 255
-    t.string   "sharp_name",             limit: 255
-    t.integer  "car_stock_number",       limit: 4
-    t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "crm_id",                 limit: 255
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
-    t.string   "reset_password_token",   limit: 255
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,     null: false
+    t.integer  "team_id",            limit: 4
+    t.string   "first_name",         limit: 255
+    t.string   "last_name",          limit: 255
+    t.string   "friendly_name",      limit: 255
+    t.string   "sharp_name",         limit: 255
+    t.integer  "car_stock_number",   limit: 4
+    t.string   "email",              limit: 255, default: "",    null: false
+    t.string   "crm_id",             limit: 255
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.boolean  "admin",                  limit: 1,   default: false, null: false
-    t.boolean  "manager",                limit: 1,   default: false
+    t.string   "current_sign_in_ip", limit: 255
+    t.string   "last_sign_in_ip",    limit: 255
+    t.boolean  "admin",              limit: 1,   default: false, null: false
+    t.boolean  "manager",            limit: 1,   default: false
   end
 
   add_index "technicians", ["email"], name: "index_technicians_on_email", unique: true, using: :btree
-  add_index "technicians", ["reset_password_token"], name: "index_technicians_on_reset_password_token", unique: true, using: :btree
 
   create_table "transfers", force: :cascade do |t|
     t.integer  "from_team_id", limit: 4

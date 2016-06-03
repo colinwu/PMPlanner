@@ -1,6 +1,6 @@
 class ReadingsController < ApplicationController
-  before_action :authenticate_technician!, :except => [:sign_in]
-
+  before_action :authorize
+  
   def index
     @readings = Reading.order(:taken_at).page(params[:page])
   end

@@ -1,9 +1,5 @@
 class Technician < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-  attr_accessible :team_id, :first_name, :last_name, :friendly_name, :sharp_name, :car_stock_number, :email, :crm_id, :password, :password_confirmation, :remember_me, :admin, :manager
+  attr_accessible :team_id, :first_name, :last_name, :friendly_name, :sharp_name, :car_stock_number, :email, :crm_id, :remember_me, :admin, :manager
   
   has_many :primary_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'primary_tech_id'
   has_many :backup_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'backup_tech_id'
@@ -61,4 +57,5 @@ class Technician < ActiveRecord::Base
       device.primary_tech_id == self.id or device.backup_tech_id == self.id
     end
   end
+    
 end

@@ -10,6 +10,7 @@ gem 'minitest'
 
 group :development, :test do
   gem 'railroady'
+  gem 'byebug'
 end
 
 # Gems used only for assets and not required
@@ -25,12 +26,14 @@ group :assets do
 end
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-gem 'nifty-generators'
+# gem 'nifty-generators'
 gem 'jquery-rails'
 gem 'csv-mapper'
 gem 'will_paginate'
 gem 'getopt'
-gem 'devise'
+gem 'net-ldap', '~> 0.14.0'
+# gem 'devise'
+# gem "devise_ldap_authenticatable"
 gem 'protected_attributes', '~> 1.0.8'
 gem 'jquery-datetimepicker-rails'
 gem 'css3-progress-bar-rails'
@@ -47,7 +50,13 @@ gem 'rails4-autocomplete'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-gem 'capistrano'
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-passenger'
+  gem 'rvm1-capistrano3', require: false
+end
 
 # To use debugger
 # gem 'debugger'

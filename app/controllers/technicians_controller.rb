@@ -1,5 +1,5 @@
 class TechniciansController < ApplicationController
-  before_action :authenticate_technician!, :except => [:sign_in]
+  before_action :authorize
   
   def index
     if current_technician.admin?

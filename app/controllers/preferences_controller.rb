@@ -1,5 +1,5 @@
 class PreferencesController < ApplicationController
-  before_action :authenticate_technician!
+  before_action :authorize
   
   def index
     unless current_technician.admin?

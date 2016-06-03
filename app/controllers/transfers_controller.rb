@@ -1,6 +1,6 @@
 class TransfersController < ApplicationController
   # TODO see if we can use before_action filter to ensure the signed-in tech is admin or manager
-  before_action :authenticate_technician!, :except => [:sign_in]
+  before_action :authorize
   def index
     you_are_here
     @title = "All transfers"
