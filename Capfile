@@ -21,7 +21,6 @@ require 'capistrano/deploy'
 require 'rvm1/capistrano3'
 require 'capistrano/bundler'
 require 'capistrano/rails'
-# require 'capistrano/rails/migrations'
 require 'capistrano/passenger'
 
 # Load custom tasks from `lib/capistrano/tasks' if you have any defined

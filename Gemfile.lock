@@ -37,8 +37,16 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
+<<<<<<< HEAD
     builder (3.2.2)
     byebug (9.0.5)
+=======
+    bcrypt (3.1.9)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
+    builder (3.2.2)
+    byebug (9.0.0)
+>>>>>>> 705a7a099180e2850ffab4f21fa504b6545d0ce5
     capistrano (3.3.5)
       capistrano-stats (~> 1.1.0)
       i18n
@@ -65,6 +73,17 @@ GEM
       rails (>= 3.1)
     csv-mapper (0.5.1)
       fastercsv
+<<<<<<< HEAD
+=======
+    debug_inspector (0.0.2)
+    devise (3.4.1)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
+>>>>>>> 705a7a099180e2850ffab4f21fa504b6545d0ce5
     erubis (2.7.0)
     execjs (2.2.2)
     fastercsv (1.5.5)
@@ -144,6 +163,7 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    spring (1.7.1)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -168,6 +188,16 @@ GEM
     uglifier (2.7.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+<<<<<<< HEAD
+=======
+    warden (1.2.3)
+      rack (>= 1.0)
+    web-console (2.3.0)
+      activemodel (>= 4.0)
+      binding_of_caller (>= 0.7.2)
+      railties (>= 4.0)
+      sprockets-rails (>= 2.0, < 4.0)
+>>>>>>> 705a7a099180e2850ffab4f21fa504b6545d0ce5
     will_paginate (3.0.7)
 
 PLATFORMS
@@ -189,16 +219,25 @@ DEPENDENCIES
   minitest
   mocha
   mysql2
+<<<<<<< HEAD
   net-ldap (~> 0.14.0)
+=======
+>>>>>>> 705a7a099180e2850ffab4f21fa504b6545d0ce5
   protected_attributes (~> 1.0.8)
   railroady
   rails (= 4.2.0)
   rails4-autocomplete
   rvm1-capistrano3
   sass-rails (~> 4.0.0)
+  spring
   therubyracer
   uglifier (>= 1.0.3)
+  web-console (~> 2.0)
   will_paginate
 
 BUNDLED WITH
+<<<<<<< HEAD
    1.12.5
+=======
+   1.12.4
+>>>>>>> 705a7a099180e2850ffab4f21fa504b6545d0ce5

@@ -3,6 +3,8 @@ lock '3.3.5'
 
 set :application, 'PMPlanner'
 set :repo_url, 'https://github.com/colinwu/PMPlanner.git'
+set :default_shell, "/bin/bash --login"
+set :default_stage, "production"
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call

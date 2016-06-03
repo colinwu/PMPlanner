@@ -26,7 +26,6 @@ group :assets do
 end
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
-# gem 'nifty-generators'
 gem 'jquery-rails'
 gem 'csv-mapper'
 gem 'will_paginate'
@@ -39,6 +38,10 @@ gem 'jquery-datetimepicker-rails'
 gem 'css3-progress-bar-rails'
 gem 'rails4-autocomplete'
 
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -56,6 +59,11 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
   gem 'rvm1-capistrano3', require: false
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+  
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 end
 
 # To use debugger
