@@ -30,8 +30,6 @@ gem 'csv-mapper'
 gem 'will_paginate'
 gem 'getopt'
 gem 'net-ldap', '~> 0.14.0'
-# gem 'devise'
-# gem "devise_ldap_authenticatable"
 gem 'protected_attributes', '~> 1.0.8'
 gem 'jquery-datetimepicker-rails'
 gem 'css3-progress-bar-rails'
@@ -57,7 +55,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
- # gem 'rvm1-capistrano3', require: false
+  gem 'rvm1-capistrano3', require: false
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
   
