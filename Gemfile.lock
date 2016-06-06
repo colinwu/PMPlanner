@@ -138,6 +138,8 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     ref (1.0.5)
+    responders (2.2.0)
+      railties (>= 4.2.0, < 5.1)
     rvm1-capistrano3 (1.4.0)
       capistrano (~> 3.0)
       sshkit (>= 1.2)
@@ -203,6 +205,7 @@ DEPENDENCIES
   railroady
   rails (= 4.2.0)
   rails4-autocomplete
+  responders (~> 2.0)
   rvm1-capistrano3
   sass-rails (~> 4.0.0)
   spring
