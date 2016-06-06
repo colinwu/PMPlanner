@@ -8,7 +8,7 @@ gem 'rails', '4.2.0'
 gem 'mysql2'
 gem 'minitest'
 gem 'responders', '~> 2.0'
-gem 'passenger', '~> 5.0.28'
+# gem 'passenger', '~> 5.0.28'
 
 group :development, :test do
   gem 'railroady'
