@@ -197,6 +197,15 @@ ActiveRecord::Schema.define(version: 20160531165009) do
     t.string   "default_root_path",       limit: 255,   default: "/devices/my_pm_list"
   end
 
+  create_table "reading_targets", force: :cascade do |t|
+    t.integer  "target",          limit: 4
+    t.integer  "model_group_id",  limit: 4
+    t.integer  "counter_id",      limit: 4
+    t.integer  "counter_type_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "readings", force: :cascade do |t|
     t.date     "taken_at"
     t.string   "notes",         limit: 255
