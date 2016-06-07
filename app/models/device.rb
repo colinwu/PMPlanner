@@ -14,7 +14,7 @@ class Device < ActiveRecord::Base
   has_one :device_stat, :dependent => :destroy
   has_many :transfers, :dependent => :destroy
   
-  validates :crm_object_id, :location_id, :client_id, numericality: { greater_than: 0 }
+  validates :location_id, :client_id, numericality: { greater_than: 0 }
   validates :crm_object_id, :serial_number, :location_id, presence: true
   validates_associated :model
   

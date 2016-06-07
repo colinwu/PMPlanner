@@ -235,6 +235,7 @@ class DevicesController < ApplicationController
       counter_data.each do |code,value|
         p = PmCode.where(["name = ?",code]).first
         begin
+          value = value.to_i
           @reading.counters.create!(pm_code_id: p.id, value: value, unit: 'count')
         rescue
           flash[:alert] += "Error saving counter for #{p.name}. Value = #{value}"
@@ -271,117 +272,121 @@ class DevicesController < ApplicationController
 
       @last_reading = @device.last_non_zero_reading_before(@now)
       
-      last_now_interval = @now - @last_reading.taken_at
+      unless @last_reading.nil?
+        last_now_interval = @now - @last_reading.taken_at
       
-      dailyc = 0
-      if @device.model.model_group.color_flag
-        dailyc = @c_monthly / 30.5
-        last_c_val = @last_reading.counter_for('ctotal').value
-        c_estimate = last_c_val + dailyc * last_now_interval
-      end
-      
-      # Calculate BW stats
-      dailybw = @bw_monthly / 30.5
-      last_bw_val = @last_reading.counter_for('bwtotal').value
-      bw_estimate = last_bw_val + (dailybw + dailyc) * last_now_interval
-      
-      # BW and C progress % and PM Dates depend on @vpy
-      visit_interval = 365 / @vpy
-      prog = 100.0 * last_now_interval / visit_interval
-      next_pm_date = @last_reading.taken_at + visit_interval.round
-      
-      # background color for the total counters
-      case
-      when next_pm_date <= @now
-        bgclass = 'emerg'
-      when (next_pm_date < @now + range) # (> @now is implied)
-        bgclass = 'urgent'
-      when (next_pm_date < @now + 2*range)
-        bgclass = 'approaching'
-      else
-        bgclass = ''
-      end
-      
-      # Record TotBW row
-      @rows << [bgclass,
-              'TotBW',
-              'Total Counter: TotBW',
-              last_bw_val,
-              @bw_monthly != 0 ? bw_estimate.round : 0,
-              @bw_monthly != 0 ? prog : 0,
-              @bw_monthly != 0 ? next_pm_date.strftime("%b %-d, %Y") : '']
-      
-      if @device.model.model_group.color_flag
-      # Record TotC row if there's any
+        dailyc = 0
+        if @device.model.model_group.color_flag
+          dailyc = @c_monthly / 30.5
+          last_c_val = @last_reading.counter_for('ctotal').value
+          c_estimate = last_c_val + dailyc * last_now_interval
+        end
+        
+        # Calculate BW stats
+        dailybw = @bw_monthly / 30.5
+        last_bw_val = @last_reading.counter_for('bwtotal').value
+        bw_estimate = last_bw_val + (dailybw + dailyc) * last_now_interval
+        
+        # BW and C progress % and PM Dates depend on @vpy
+        visit_interval = 365 / @vpy
+        prog = 100.0 * last_now_interval / visit_interval
+        next_pm_date = @last_reading.taken_at + visit_interval.round
+        
+        # background color for the total counters
+        case
+        when next_pm_date <= @now
+          bgclass = 'emerg'
+        when (next_pm_date < @now + range) # (> @now is implied)
+          bgclass = 'urgent'
+        when (next_pm_date < @now + 2*range)
+          bgclass = 'approaching'
+        else
+          bgclass = ''
+        end
+        
+        # Record TotBW row
         @rows << [bgclass,
-                'TotC',
-                'Total Counter: TotC',
-                last_c_val,
-                @c_monthly != 0 ? c_estimate.round : 0,
-                @c_monthly != 0 ? prog : 0,
-                @c_monthly != 0 ? next_pm_date.strftime("%b %-d, %Y") : '']
-      end
-      
-      # Now calculate stuff for all the other PM codes
-      codes_list = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
-      critical_codes_list = Array.new
-      @choices = Hash.new
-      
-      codes_list.each do |c|
-        @choices[c] = 0
-        target = @device.target_for(c)
-        unless target.nil? or target.target == 0
-          pm_code = PmCode.where(["name = ?", c]).first
-          target_val = target.target
-          last_val = @last_reading.counter_for(c).nil? ? 0 : @last_reading.counter_for(c).value
-          if pm_code.colorclass == 'ALL'
-            daily = dailyc + dailybw
-          elsif pm_code.colorclass == 'COLOR'
-            daily = dailyc
-          elsif pm_code.colorclass == 'BW'
-            daily = dailybw
-          end
-          monthlyaverage = daily * 30.5
-          estimate = last_val + daily * last_now_interval
-          prog = (100.0 * estimate / target_val)
-          case monthlyaverage
-          when 0
-            next_pm_date = @now + 366
-          else
-            next_pm_date = (@now + (30.5*(target_val - estimate) / monthlyaverage))
-          end
-          # CSS class 
-          range = current_technician.preference.upcoming_interval * 7
-          # set background color and also remember the ones that are either 'emerg' or 'urgent' state
-          case
-          when next_pm_date <= @now
-            bgclass = 'emerg'
-            critical_codes_list << c unless (c == 'TA' or c == 'CA')
-          when (next_pm_date < @now + range) # (> @now is implied)
-            bgclass = 'urgent'
-            critical_codes_list << c unless (c == 'TA' or c == 'CA')
-          when (next_pm_date < @now + 2*range)
-            bgclass = 'approaching'
-          else
-            bgclass = ''
-          end
-          
-          case
-          when next_pm_date > @now + 365
-            npd = "> 1 year away"
-          else
-            npd = next_pm_date.strftime("%b %-d, %Y")
-          end
+                'TotBW',
+                'Total Counter: TotBW',
+                last_bw_val,
+                @bw_monthly != 0 ? bw_estimate.round : 0,
+                @bw_monthly != 0 ? prog : 0,
+                @bw_monthly != 0 ? next_pm_date.strftime("%b %-d, %Y") : '']
+        
+        if @device.model.model_group.color_flag
+        # Record TotC row if there's any
           @rows << [bgclass,
-                    c,
-                    pm_code.description, 
-                    last_val, 
-                    @bw_monthly != 0 ? estimate.round : 0, 
-                    @bw_monthly != 0 ? prog : 0,
-                    npd]
-        end # unless target.nil? or target.target == 0
-      end # codes_list.each do |c|
-      @critical_codes = critical_codes_list.join(',')
+                  'TotC',
+                  'Total Counter: TotC',
+                  last_c_val,
+                  @c_monthly != 0 ? c_estimate.round : 0,
+                  @c_monthly != 0 ? prog : 0,
+                  @c_monthly != 0 ? next_pm_date.strftime("%b %-d, %Y") : '']
+        end
+        
+        # Now calculate stuff for all the other PM codes
+        codes_list = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
+        critical_codes_list = Array.new
+        @choices = Hash.new
+        
+        codes_list.each do |c|
+          @choices[c] = 0
+          target = @device.target_for(c)
+          unless target.nil? or target.target == 0
+            pm_code = PmCode.where(["name = ?", c]).first
+            target_val = target.target
+            last_val = @last_reading.counter_for(c).nil? ? 0 : @last_reading.counter_for(c).value
+            if pm_code.colorclass == 'ALL'
+              daily = dailyc + dailybw
+            elsif pm_code.colorclass == 'COLOR'
+              daily = dailyc
+            elsif pm_code.colorclass == 'BW'
+              daily = dailybw
+            end
+            monthlyaverage = daily * 30.5
+            estimate = last_val + daily * last_now_interval
+            prog = (100.0 * estimate / target_val)
+            case monthlyaverage
+            when 0
+              next_pm_date = @now + 366
+            else
+              next_pm_date = (@now + (30.5*(target_val - estimate) / monthlyaverage))
+            end
+            # CSS class 
+            range = current_technician.preference.upcoming_interval * 7
+            # set background color and also remember the ones that are either 'emerg' or 'urgent' state
+            case
+            when next_pm_date <= @now
+              bgclass = 'emerg'
+              critical_codes_list << c unless (c == 'TA' or c == 'CA')
+            when (next_pm_date < @now + range) # (> @now is implied)
+              bgclass = 'urgent'
+              critical_codes_list << c unless (c == 'TA' or c == 'CA')
+            when (next_pm_date < @now + 2*range)
+              bgclass = 'approaching'
+            else
+              bgclass = ''
+            end
+            
+            case
+            when next_pm_date > @now + 365
+              npd = "> 1 year away"
+            else
+              npd = next_pm_date.strftime("%b %-d, %Y")
+            end
+            @rows << [bgclass,
+                      c,
+                      pm_code.description, 
+                      last_val, 
+                      @bw_monthly != 0 ? estimate.round : 0, 
+                      @bw_monthly != 0 ? prog : 0,
+                      npd]
+          end # unless target.nil? or target.target == 0
+        end # codes_list.each do |c|
+        @critical_codes = critical_codes_list.join(',')
+      else
+        
+      end
     else
       flash[:alert] = "No, or invalid, device specified."
       @device = nil

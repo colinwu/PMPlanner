@@ -5,10 +5,10 @@ class Reading < ActiveRecord::Base
   belongs_to :technician
   has_many :counters, :dependent => :destroy
 
-  validates_associated :counters
-  validates_associated :device
-  validates_associated :technician
-  validate :taken_at_is_date
+#   validates_associated :counters
+#   validates_associated :device
+#   validates_associated :technician
+#   validate :taken_at_is_date
   
   def counter_for(code)
     self.counters.joins(:pm_code).where(["pm_codes.name = ?", code]).first    
@@ -16,7 +16,7 @@ class Reading < ActiveRecord::Base
   
   def taken_at_is_date
     begin
-      status = Date.parse(taken_at)
+      status = Date.parse(self.taken_at)
     rescue
       errors.add(:taken_at, "is not a valid date")
     end

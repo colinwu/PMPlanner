@@ -7,7 +7,7 @@
   <tr>
     <th>PM Code</th>
     <th>PM Description</th>
-    <th>Previous Readings<br /><%= @last_reading.taken_at.strftime('%b %-d, %Y') %></th>
+    <th>Previous Readings<br /><%= @last_reading.nil? ? ' ' : @last_reading.taken_at.strftime('%b %-d, %Y') %></th>
     <th>Current Estimate<br /><%= @now.strftime('%b %-d, %Y') %></th>
     <th>Progress to next PM</th>
     <th>Next PM Date</th>
