@@ -12,6 +12,8 @@ gem 'responders', '~> 2.0'
 
 group :development, :test do
   gem 'railroady'
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
 end
 
 # Gems used only for assets and not required
@@ -36,11 +38,7 @@ gem 'protected_attributes', '~> 1.0.8'
 gem 'jquery-datetimepicker-rails'
 gem 'css3-progress-bar-rails'
 gem 'rails4-autocomplete'
-
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-end
+gem 'best_in_place', '~> 3.1'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

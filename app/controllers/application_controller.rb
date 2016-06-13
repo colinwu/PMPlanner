@@ -12,6 +12,8 @@ class ApplicationController < ActionController::Base
   def authorize
     if current_technician.nil?
       redirect_to login_url, alert: "Please log in."
+    else
+      current_technician.log()
     end
   end
 

@@ -20,8 +20,7 @@
             <% WillPaginate.per_page = current_technician.preference.lines_per_page %>
             Signed in as <%= current_technician.friendly_name -%> | 
             <%= link_to "Sign out", logout_path %> |
-            <%= link_to "My profile", edit_preference_path(current_technician) %> |
-            <%= link_to "Change Password", edit_technician_path(current_technician) %>
+            <%= link_to "My profile", edit_preference_path(current_technician) %>
           <% else %>
             <%= link_to "Sign in", login_path %>
           <% end %>

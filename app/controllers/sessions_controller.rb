@@ -15,9 +15,11 @@ class SessionsController < ApplicationController
       sAMAccountName = $1
       if ldap.bind
         session[:tech_id] = tech.id
+        current_technician.logs.create(message: "Logged in")
+        current_technician.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
         redirect_to root_path, notice: "Log in successful."
       else
-        flash[:error] = "Suppied name and/or password incorrect."
+        flash[:error] = "Name and/or password incorrect."
         render :new
       end
     else
@@ -28,6 +30,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    current_technician.logs.create(message: "Logged out")
     session[:tech_id] = nil
     redirect_to root_url, notice: "Logged out."
   end

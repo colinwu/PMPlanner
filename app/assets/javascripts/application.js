@@ -11,8 +11,10 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require best_in_place
 //= require jquery_ujs
 //= require jquery-ui
+//= require best_in_place.jquery-ui
 //= require autocomplete-rails
 //= require jquery.datetimepicker
 //= require_tree .
@@ -28,4 +30,7 @@ $(document).ready(function() {
   $("textarea[readonly!='readonly']").focus(function() {
     $(this).effect('highlight',500);
   });
+  /* Activating Best In Place */
+  jQuery(".best_in_place").best_in_place();
+  
 });

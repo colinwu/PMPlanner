@@ -41,7 +41,7 @@ class DevicesController < ApplicationController
       @order = sort_column + ' ' + sort_direction
     end
     if current_technician.admin?
-      if not session[:tech_id].nil? and not session[:tech_id].empty?
+      if not session[:tech_id].nil?
         @tech = Technician.find(session[:tech_id])
         @title = "Devices in "
       else
@@ -245,7 +245,7 @@ class DevicesController < ApplicationController
     end
     current_technician.logs.create(device_id: @device.id, message: "Counter data saved.")
     @device.update_pm_visit_tables
-    redirect_to analyze_data_device_url(@device)
+    redirect_to service_history_device_url(@device)
   end
   
   def analyze_data
@@ -273,24 +273,23 @@ class DevicesController < ApplicationController
       @last_reading = @device.last_non_zero_reading_before(@now)
       
       unless @last_reading.nil?
-        last_now_interval = @now - @last_reading.taken_at
       
         dailyc = 0
         if @device.model.model_group.color_flag
           dailyc = @c_monthly / 30.5
-          last_c_val = @last_reading.counter_for('ctotal').value
+          last_c_val = @last_reading.nil? ? '-' : @last_reading.counter_for('ctotal').value
           c_estimate = last_c_val + dailyc * last_now_interval
         end
         
         # Calculate BW stats
         dailybw = @bw_monthly / 30.5
-        last_bw_val = @last_reading.counter_for('bwtotal').value
+        last_bw_val = @last_reading.nil? ? '-' : @last_reading.counter_for('bwtotal').value
         bw_estimate = last_bw_val + (dailybw + dailyc) * last_now_interval
         
         # BW and C progress % and PM Dates depend on @vpy
         visit_interval = 365 / @vpy
         prog = 100.0 * last_now_interval / visit_interval
-        next_pm_date = @last_reading.taken_at + visit_interval.round
+        next_pm_date = @last_reading.nil? ? '-' : @last_reading.taken_at + visit_interval.round
         
         # background color for the total counters
         case
@@ -385,7 +384,7 @@ class DevicesController < ApplicationController
         end # codes_list.each do |c|
         @critical_codes = critical_codes_list.join(',')
       else
-        
+        flash[:alert] = "No previous data available. Can not perform analysis."
       end
     else
       flash[:alert] = "No, or invalid, device specified."
@@ -411,7 +410,7 @@ class DevicesController < ApplicationController
     
     if @device and current_technician.can_manage?(@device)      
       
-      @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
+      @last_reading = @device.readings.order(:taken_at).last
       
       if @device.device_stat.nil?
         stats = @device.calculate_stats
