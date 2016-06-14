@@ -10,10 +10,10 @@ class ApplicationController < ActionController::Base
   end
   
   def authorize
-    if current_technician.nil?
+    if current_technician.nil? and (Time.now - session[:active_at]) > 600 #10 minutes
       redirect_to login_url, alert: "Please log in."
     else
-      current_technician.log()
+      session[:active_at] = Time.now
     end
   end
 

@@ -2,7 +2,7 @@
 <br />
 <%= render partial: "header_table", locals: {button: "analysis"} %>
 
-<% unless @device.nil? %>
+<% unless @device.nil? or @last_reading.nil? %>
 <table width="100%">
   <tr>
     <th>PM Code</th>

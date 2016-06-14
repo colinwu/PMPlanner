@@ -17,6 +17,7 @@
         </div>
         <div id="tech_navbar">
           <% if current_technician %>
+            <% session[:active_at] = Time.now %>
             <% WillPaginate.per_page = current_technician.preference.lines_per_page %>
             Signed in as <%= current_technician.friendly_name -%> | 
             <%= link_to "Sign out", logout_path %> |

@@ -32,6 +32,7 @@ class SessionsController < ApplicationController
   def destroy
     current_technician.logs.create(message: "Logged out")
     session[:tech_id] = nil
+    session[:active_at] = nil
     redirect_to root_url, notice: "Logged out."
   end
 end
