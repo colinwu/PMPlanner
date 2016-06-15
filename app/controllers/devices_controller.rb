@@ -454,6 +454,15 @@ class DevicesController < ApplicationController
       end
     else
       my_team = [current_technician]
+      if params[:showbackup].nil?
+        @showbackup = current_technician.preference.showbackup
+      else
+        if params[:showbackup] == 'true'
+          @showbackup = true
+        else
+          @showbackup = false
+        end
+      end
       @title = "My PM List"
     end
     @now = Date.today
@@ -465,7 +474,12 @@ class DevicesController < ApplicationController
     end
     my_team.each do |tech|
       range = tech.preference.upcoming_interval*7
-      Device.where(["primary_tech_id = ? or backup_tech_id = ?", tech.id, tech.id]).joins(:location, :client, :model).order(@order).each do |dev|
+      if @showbackup
+        where = ["primary_tech_id = ? or backup_tech_id = ?", tech.id, tech.id]
+      else
+        where = ["primary_tech_id = ?", tech.id]
+      end
+      Device.where(where).joins(:location, :client, :model).order(@order).each do |dev|
         if dev.active and dev.under_contract and dev.do_pm
           if dev.outstanding_pms or (dev.neglected.next_visit < @now + range*2)
             @dev_list << dev
@@ -673,6 +687,10 @@ class DevicesController < ApplicationController
         flash[:error] = 'Unknown "to region" for transfer.'
         redirect_to back_or_go_here()
       end
+    elsif params[:showbackup] == 'true'
+      redirect_to action: 'my_pm_list', showbackup: 'true'
+    elsif params[:showbackup] == 'false'
+      redirect_to action: 'my_pm_list', showbackup: 'false'
     else
       redirect_to back_or_go_here()
     end

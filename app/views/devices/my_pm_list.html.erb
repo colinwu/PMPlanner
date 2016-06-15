@@ -9,6 +9,16 @@
       <%= submit_tag "List All Parts", name: 'all_parts' %>
       <% if current_technician.admin? or current_technician.manager? %>
         | Transfer device(s) to <%= select_tag :to_team_id, options_from_collection_for_select(Team.all, :id, :name), include_blank: true %><%= submit_tag "Go", name: 'transfer' %>
+      <% else %>
+        <div class=right_end>
+        <% if @showbackup %>
+          <%= hidden_field_tag 'showbackup', false %>
+          <%= submit_tag "Hide Backup Devices" %>
+        <% else %>
+          <%= hidden_field_tag 'showbackup', true %>
+          <%= submit_tag "Show Backup Devices" %>
+        <% end %>
+        </div>
       <% end %>
     </div>
     <br />

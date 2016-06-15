@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
       sAMAccountName = $1
       if ldap.bind
         session[:tech_id] = tech.id
+        session[:active_at] = Time.now
         current_technician.logs.create(message: "Logged in")
         current_technician.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
         redirect_to root_path, notice: "Log in successful."

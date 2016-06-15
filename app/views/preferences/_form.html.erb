@@ -25,6 +25,8 @@
   <legend>PM List Settings</legend>
     <%= f.check_box :select_territory %>
     Allow selection of territory<br />
+    <%= f.check_box :showbackup %>
+    Show devices for which I am the backup technician<br />
     <p>
     <div class="left_field_label">Territory:</div><%= f.text_field :territory_to_explore %></p>
     <p>
@@ -36,9 +38,9 @@
   <legend>E-Mail Defaults</legend>
     <%= f.check_box :use_default_email %> Allow use of default parameters for email messages<br />
     <p>
-    <div class="left_field_label">Email Parts</div>
+    <div class="left_field_label">Parts eMail</div>
     <%= f.text_field :default_to_email, :size => 40 %></p>
-    <div class="left_field_label">Email Dispatch</div>
+    <div class="left_field_label">Dispatch eMail</div>
     <p>
     <%= f.text_field :default_from_email, :size => 40 %></p>
     <p>

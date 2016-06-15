@@ -1,5 +1,5 @@
 class Technician < ActiveRecord::Base
-  attr_accessible :team_id, :first_name, :last_name, :friendly_name, :sharp_name, :car_stock_number, :email, :crm_id, :remember_me, :admin, :manager
+  attr_accessible :team_id, :first_name, :last_name, :friendly_name, :sharp_name, :car_stock_number, :email, :crm_id, :remember_me, :admin, :manager, :current_sign_in_at, :current_sign_in_ip
   
   has_many :primary_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'primary_tech_id'
   has_many :backup_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'backup_tech_id'
