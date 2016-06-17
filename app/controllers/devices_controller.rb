@@ -721,20 +721,25 @@ class DevicesController < ApplicationController
     unless params[:email].nil?
       email = params[:email]
       email_to = email[:to]
-      email_from = email[:from]
+      email_from = current_technician.email
       email_sub = email[:subject]
       email_cc = email[:cc]
       msg_body = email[:msg]
-      PartsMailer.send_order(email_to, email_cc, email_from, email_sub, msg_body).deliver_now
-      flash[:notice] = "Message has been sent."
-      if request.referer =~ /write_parts_order\Z/
-        current_technician.logs.create(message: "Parts order sent\n==============\n#{msg_body}")
-      elsif request.referer =~ /write_service_order\Z/
-        current_technician.logs.create(message: "Service order sent\n==============\n#{msg_body}")
+      if email_to.nil? or email_to.empty?
+        flash[:error] = "You must enter a valid 'To:' email address."
+        render write_service_order
       else
-        current_technician.logs.create(message: "Message of unknown origin sent to:#{email_to} from:#{email_from} subject:#{email_sub}\n==============\n#{msg_body}")
+        PartsMailer.send_order(email_to, email_cc, email_from, email_sub, msg_body).deliver_now
+        flash[:notice] = "Message has been sent."
+        if request.referer =~ /write_parts_order\Z/
+          current_technician.logs.create(message: "Parts order sent\n==============\n#{msg_body}")
+        elsif request.referer =~ /write_service_order\Z/
+          current_technician.logs.create(message: "Service order sent\n==============\n#{msg_body}")
+        else
+          current_technician.logs.create(message: "Message of unknown origin sent to:#{email_to} from:#{email_from} subject:#{email_sub}\n==============\n#{msg_body}")
+        end
+        redirect_to back_or_go_here
       end
-      redirect_to back_or_go_here
     else
       flash[:error] = 'Appropriate email parameters not found.'
       redirect_to back_or_go_here
