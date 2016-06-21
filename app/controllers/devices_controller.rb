@@ -273,7 +273,7 @@ class DevicesController < ApplicationController
       @last_reading = @device.last_non_zero_reading_before(@now)
       
       unless @last_reading.nil?
-      
+        last_now_interval = @now - @last_reading.taken_at
         dailyc = 0
         if @device.model.model_group.color_flag
           dailyc = @c_monthly / 30.5
