@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
         session[:active_at] = Time.now
         current_technician.logs.create(message: "Logged in")
         current_technician.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
-        redirect_to root_path, notice: "Log in successful."
+        redirect_to back_or_go_here(root_url), notice: "Log in successful."
       else
         flash[:error] = "Name and/or password incorrect."
         render :new
