@@ -48,14 +48,14 @@ gem 'best_in_place', '~> 3.1'
 
 # Use unicorn as the app server
 # gem 'unicorn'
+gem 'capistrano'
+gem 'capistrano-bundler'
+gem 'capistrano-rails'
+gem 'capistrano-passenger'
+gem 'rvm1-capistrano3', require: false
 
 # Deploy with Capistrano
 group :development do
-  gem 'capistrano'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rails'
-  gem 'capistrano-passenger'
-  gem 'rvm1-capistrano3', require: false
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
   
