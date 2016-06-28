@@ -482,7 +482,7 @@ class DevicesController < ApplicationController
       end
       Device.where(where).joins(:location, :client, :model).order(@order).each do |dev|
         if dev.active and dev.under_contract and dev.do_pm
-          if dev.outstanding_pms or (dev.neglected.next_visit < @now + range*2)
+          if dev.outstanding_pms or (dev.neglected.next_visit < (@now + range*2))
             @dev_list << dev
           end
         end
