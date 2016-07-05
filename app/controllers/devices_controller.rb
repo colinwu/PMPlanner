@@ -480,12 +480,26 @@ class DevicesController < ApplicationController
       else
         where = ["primary_tech_id = ?", tech.id]
       end
-      Device.where(where).joins(:location, :client, :model).order(@order).each do |dev|
-        if dev.active and dev.under_contract and dev.do_pm
-          if dev.outstanding_pms or (dev.neglected.next_visit < (@now + range*2))
-            @dev_list << dev
-          end
+      if (sort_column == 'outstanding_pms')
+        code_count = {}
+        sorted_count = []
+        devs = Device.where(where).joins(:location, :client, :model)
+        devs.each { |d| code_count[d.id] = d.outstanding_pms.count }
+        sorted_count = code_count.sort_by { |k,v| v }
+        if (sort_direction == 'desc')
+          sorted_count.reverse!
         end
+        sorted_count.each do |c|
+          @dev_list << devs.find(c[0])
+        end
+      else
+        Device.where(where).joins(:location, :client, :model).order(@order).each do |dev|
+          if dev.active and dev.under_contract and dev.do_pm
+            if dev.outstanding_pms or (dev.neglected.next_visit < (@now + range*2))
+              @dev_list << dev
+            end # if
+          end # if
+        end # Device.each
       end
     end
   end

@@ -10,7 +10,7 @@
       <% if current_technician.admin? or current_technician.manager? %>
         | Transfer device(s) to <%= select_tag :to_team_id, options_from_collection_for_select(Team.all, :id, :name), include_blank: true %><%= submit_tag "Go", name: 'transfer' %>
       <% else %>
-        <div class=right_end>
+        <span class=right_end>
         <% if @showbackup %>
           <%= hidden_field_tag 'showbackup', false %>
           <%= submit_tag "Hide Backup Devices" %>
@@ -18,7 +18,7 @@
           <%= hidden_field_tag 'showbackup', true %>
           <%= submit_tag "Show Backup Devices" %>
         <% end %>
-        </div>
+        </span>
       <% end %>
     </div>
     <br />
@@ -30,7 +30,7 @@
     <th><%= sortable 'clients.name', 'Client Name' %></th>
     <th><%= sortable 'locations.address1', 'Address' %></th>
     <th><%= sortable 'locations.city', 'City' %></th>
-    <th><%= sortable 'outstanding_pms.length', 'Codes' %></th>
+    <th><%= sortable 'outstanding_pms', 'Codes' %></th>
   </tr>
   <% @dev_list.each do |dev| %>
     <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>

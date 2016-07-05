@@ -231,26 +231,29 @@ as the background to represent PM Status of each device.*/
   background-position: center center;
   width: 1em;
   height: 1em;
+  text-align: right;
 }
 
 .past_due {
 /*   background-image: url(red_led.png); */
-  color: red;
+  color: white;
+  background-color: red;
 }
 
 .in_range {
 /*   background-image: url(yellow_led.png); */
-  color: #80016B;
+  color: black;
+  background-color: yellow;
 }
 
 .range2 {
 /*   background-image: url(blue_led.png); */
-  color: blue;
+  background-color: blue;
+  color: white;
 }
 
 .all_good {
 /*   background-image: url(white_led.png); */
-  color: white;
 }
 
 #device_location {
