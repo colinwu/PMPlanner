@@ -3,14 +3,12 @@
 <table>
   <tr>
     <th>Name</th>
-    <th>Description</th>
-    <th>Maint Code</th>
+    <th>Value</th>
   </tr>
   <% for counter in @counters %>
     <tr>
-      <td><%= counter.name %></td>
-      <td><%= counter.description %></td>
-      <td><%= counter.maint_code %></td>
+      <td><%= counter.pm_code.name %></td>
+      <td><%= counter.value %></td>
       <td><%= link_to "Show", counter %></td>
       <td><%= link_to "Edit", edit_counter_path(counter) %></td>
       <td><%= link_to "Destroy", counter, :confirm => 'Are you sure?', :method => :delete %></td>

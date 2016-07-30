@@ -25,11 +25,16 @@ class CountersController < ApplicationController
   end
 
   def update
+    byebug
     @counter = Counter.find(params[:id])
-    if @counter.update_attributes(params[:counter])
-      redirect_to @counter, :notice  => "Successfully updated counter."
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @counter.update_attributes(params[:counter])
+        format.html {redirect_to((back_or_go_here(root_path)), :notice => "Update successful") }
+        format.json {respond_with_bip(@counter)}
+      else
+        format.html {render :action => 'edit'}
+        format.json {respond_with_bip(@counter)}
+      end
     end
   end
 

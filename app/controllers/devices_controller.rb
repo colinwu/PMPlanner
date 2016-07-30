@@ -245,7 +245,7 @@ class DevicesController < ApplicationController
     end
     current_technician.logs.create(device_id: @device.id, message: "Counter data saved.")
     @device.update_pm_visit_tables
-    redirect_to service_history_device_url(@device)
+    redirect_to analyze_data_device_url(@device)
   end
   
   def analyze_data
@@ -270,7 +270,7 @@ class DevicesController < ApplicationController
       @c_monthly = avg['c_monthly']
       @vpy = avg['vpy']
 
-      @last_reading = @device.last_non_zero_reading_before(@now)
+      @last_reading = @device.last_non_zero_reading_on_or_before(@now)
       
       unless @last_reading.nil?
         last_now_interval = @now - @last_reading.taken_at
@@ -404,7 +404,7 @@ class DevicesController < ApplicationController
     end
     @title = "Service History"
     if @device.nil?
-      flash[:alert] = "No, or invalid, device specified."
+      flash[:alert] = "No valid device specified."
       render "service_history"
       return
     end
@@ -425,21 +425,10 @@ class DevicesController < ApplicationController
       @vpy = stats['vpy']
       
       @readings = @device.readings.order(taken_at: :desc)
-      if params[:commit] == 'Show counters'
-        @rows = Array.new
-        @all_codes = @device.model.model_group.model_targets.map(&:maint_code)
-        @all_codes.delete('AMV')
-        @readings.each do |r|
-          r_hash = Hash.new
-          r_hash['taken_at'] = r.taken_at.strftime("%b %-d, %Y")
-          r.counters.each do |c|
-            r_hash[c.pm_code.name] = c.value
-          end
-          @rows << r_hash
-        end
-      end
+      @all_codes = @device.model.model_group.model_targets.map(&:maint_code)
+      @all_codes.delete('AMV')
     else
-      flash[:alert] = "No, or invalid, device specified."
+      flash[:alert] = "No valid device specified."
     end
   end
   

@@ -2,15 +2,11 @@
   <%= f.error_messages %>
   <p>
     <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <%= f.text_field :name, :readonly => true, value: @counter.pm_code.name %>
   </p>
   <p>
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
-  </p>
-  <p>
-    <%= f.label :maint_code %><br />
-    <%= f.text_field :maint_code %>
+    <%= f.label :value %><br />
+    <%= f.text_field :value %>
   </p>
   <p><%= f.submit %></p>
 <% end %>

@@ -4,40 +4,30 @@
 
 <% unless @device.nil? %>
   <table width="100%">
-  <tr>
-    <% if @rows.nil? %>
+    <tr>
       <th rowspan=2>Date</th>
       <th colspan=2>Total Counters</th>
-      <th rowspan=2>Technician's notes</th>
-      <th rowspan=2>Recorded by</th>
-    <% else %>
-      <th>Date</th>
+    </tr>
+    <tr>
+      <th>BW</th>
+      <th>Colour</th>
       <% @all_codes.each do |c| %>
         <th><%=h c %></th>
       <% end %>
-    <% end %>
-  </tr>
-  <% if @rows.nil? %>
-    <tr><th>BW</th><th>Colour</th></tr>
+    </tr>
     <% for reading in @readings %>
       <tr class="<%= cycle('light','dark') %>">
-        <td><%=h reading.taken_at.strftime('%b %-d, %Y') %></td>
-        <td class=rightjustify><%=h number_with_delimiter(reading.counter_for('bwtotal').value) %></td>
-        <td class=rightjustify><%=h reading.counter_for('ctotal').nil? ? '' : number_with_delimiter(reading.counter_for('ctotal').value) %></td>
-        <td><%=h reading.notes %></td>
-        <td><%=h reading.technician.friendly_name %></td>
-      </tr>
-    <% end %>
-  <% else %>
-    <% for row in @rows %>
-      <tr class="<%= cycle('light','dark') %>">
-        <td><%=h row['taken_at'] %></td>
-        <% @all_codes.each do |k| %>
-          <td class=rightjustify><%=h number_with_delimiter(row[k]) %></td>
+        <td><span title="<%=h reading.notes %>"><%=h reading.taken_at.strftime('%b %-d, %Y') %></span></td>
+        <% counter = reading.counter_for('bwtotal') %>
+        <td class=rightjustify><%= best_in_place counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6} %></td>
+        <% counter = reading.counter_for('ctotal') %>
+        <td class=rightjustify><%= counter.nil? ? '' : best_in_place(counter, :value,  display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
+        <% @all_codes.each do |c| %>
+          <% counter = reading.counter_for(c) %>
+          <td class=rightjustify><%= counter.nil? ? '' : best_in_place(counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
         <% end %>
       </tr>
     <% end %>
-  <% end %>
   </table>
 <% end %>
 

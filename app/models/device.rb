@@ -62,7 +62,7 @@ class Device < ActiveRecord::Base
 
   def update_pm_visit_tables
     now = Date.today
-    last_reading = self.last_non_zero_reading_before
+    last_reading = self.last_non_zero_reading_on_or_before
     unless last_reading.nil? 
       first_outstanding = self.outstanding_pms.first
       unless first_outstanding.nil?
@@ -144,8 +144,8 @@ class Device < ActiveRecord::Base
     
   end
 
-  def last_non_zero_reading_before(date = Date.today)
-    self.readings.where("taken_at < '#{date}'").order('taken_at desc').each do |r|
+  def last_non_zero_reading_on_or_before(date = Date.today)
+    self.readings.where("taken_at <= '#{date}'").order('taken_at desc').each do |r|
       r.counters.each do |c|
         if c.value > 0
           return r
