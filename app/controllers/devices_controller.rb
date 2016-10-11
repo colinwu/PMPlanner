@@ -229,18 +229,17 @@ class DevicesController < ApplicationController
   def record_data
 #     TODO: Should do some value sanity checking here
     @device = Device.find(params[:id])
-    @reading = Reading.new(params[:reading])
-    if @reading.save
-      counter_data = params[:counter]
-      counter_data.each do |code,value|
-        p = PmCode.where(["name = ?",code]).first
-        begin
-          value = value.to_i
-          @reading.counters.create!(pm_code_id: p.id, value: value, unit: 'count')
-        rescue
-          flash[:alert] += "Error saving counter for #{p.name}. Value = #{value}"
-          current_technician.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
-        end
+    @reading = @device.readings.find_or_create_by(taken_at: params[:reading][:taken_at])
+    @reading.update_attributes(params[:reading])
+    params[:counter].each do |code,value|
+      p = PmCode.find_by_name(code)
+      begin
+        value.gsub!(/[^0-9]/,'')
+        c = @reading.counters.find_or_create_by(pm_code_id: p.id)
+        c.update_attributes(value: value, unit: 'count')
+      rescue
+        flash[:alert] += "Error saving counter for #{p.name}. Value = #{value}"
+        current_technician.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
       end
     end
     current_technician.logs.create(device_id: @device.id, message: "Counter data saved.")
@@ -253,6 +252,9 @@ class DevicesController < ApplicationController
     you_are_here
     @rows = Array.new
     @now = Date.today
+    @bw_list = []
+    @c_list = []
+    @all_list = []
     @title = "Analysis and Estimate"
     begin
       @device = Device.find(params[:id])
@@ -260,6 +262,15 @@ class DevicesController < ApplicationController
       @device = nil
     end
     if @device and current_technician.can_manage?(@device)
+      @device.pm_codes.each do |code|
+        if code.colorclass == 'BW'
+          @bw_list << code.name
+        elsif code.colorclass == 'COLOR'
+          @c_list << code.name
+        elsif code.colorclass == 'ALL'
+          @all_list << code.name
+        end
+      end
       if @device.device_stat.nil?
         avg = @device.calculate_stats
         @device.create_device_stat(c_monthly: avg['c_monthly'], bw_monthly: avg['bw_monthly'], vpy: avg['vpy'])
@@ -269,28 +280,29 @@ class DevicesController < ApplicationController
       @bw_monthly = avg['bw_monthly']
       @c_monthly = avg['c_monthly']
       @vpy = avg['vpy']
-
-      @last_reading = @device.last_non_zero_reading_on_or_before(@now)
       
-      unless @last_reading.nil?
-        last_now_interval = @now - @last_reading.taken_at
+      @todays_reading = @device.readings.find_by_taken_at(@now)
+      @prev_reading = @device.last_non_zero_reading_on_or_before(@now-1)
+      
+      unless @prev_reading.nil?
+        last_now_interval = @now - @prev_reading.taken_at
         range = current_technician.preference.upcoming_interval * 7
         dailyc = 0
         if @device.model.model_group.color_flag
           dailyc = @c_monthly / 30.5
-          last_c_val = @last_reading.nil? ? '-' : @last_reading.counter_for('ctotal').value
-          c_estimate = last_c_val + dailyc * last_now_interval
+          last_c_val = @prev_reading.counter_for('ctotal').value
+          c_estimate = @todays_reading.nil? ? (last_c_val + dailyc * last_now_interval) : @todays_reading.counter_for('ctotal').value
         end
-        
+      
         # Calculate BW stats
         dailybw = @bw_monthly / 30.5
-        last_bw_val = @last_reading.nil? ? '-' : @last_reading.counter_for('bwtotal').value
-        bw_estimate = last_bw_val + (dailybw + dailyc) * last_now_interval
+        last_bw_val = @prev_reading.counter_for('bwtotal').value
+        bw_estimate = @todays_reading.nil? ? (last_bw_val + (dailybw + dailyc) * last_now_interval) : @todays_reading.counter_for('bwtotal').value
         
         # BW and C progress % and PM Dates depend on @vpy
         visit_interval = 365 / @vpy
         prog = 100.0 * last_now_interval / visit_interval
-        next_pm_date = @last_reading.nil? ? '-' : @last_reading.taken_at + visit_interval.round
+        next_pm_date = @todays_reading.nil? ? (@prev_reading.taken_at + visit_interval.round) : (@todays_reading.taken_at + visit_interval)
         
         # background color for the total counters
         case
@@ -306,8 +318,8 @@ class DevicesController < ApplicationController
         
         # Record TotBW row
         @rows << [bgclass,
-                'TotBW',
-                'Total Counter: TotBW',
+                'BWTOTAL',
+                'Total Counter: BW',
                 last_bw_val,
                 @bw_monthly != 0 ? bw_estimate.round : 0,
                 @bw_monthly != 0 ? prog : 0,
@@ -316,8 +328,8 @@ class DevicesController < ApplicationController
         if @device.model.model_group.color_flag
         # Record TotC row if there's any
           @rows << [bgclass,
-                  'TotC',
-                  'Total Counter: TotC',
+                  'CTOTAL',
+                  'Total Counter: Color',
                   last_c_val,
                   @c_monthly != 0 ? c_estimate.round : 0,
                   @c_monthly != 0 ? prog : 0,
@@ -325,17 +337,17 @@ class DevicesController < ApplicationController
         end
         
         # Now calculate stuff for all the other PM codes
-        codes_list = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
+        @codes_list = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
         critical_codes_list = Array.new
         @choices = Hash.new
         
-        codes_list.each do |c|
+        @codes_list.each do |c|
           @choices[c] = 0
           target = @device.target_for(c)
           unless target.nil? or target.target == 0
             pm_code = PmCode.where(["name = ?", c]).first
             target_val = target.target
-            last_val = @last_reading.counter_for(c).nil? ? 0 : @last_reading.counter_for(c).value
+            last_val = @prev_reading.counter_for(c).nil? ? 0 : @prev_reading.counter_for(c).value
             if pm_code.colorclass == 'ALL'
               daily = dailyc + dailybw
             elsif pm_code.colorclass == 'COLOR'
@@ -344,7 +356,7 @@ class DevicesController < ApplicationController
               daily = dailybw
             end
             monthlyaverage = daily * 30.5
-            estimate = last_val + daily * last_now_interval
+            estimate = @todays_reading.nil? ? (last_val + daily * last_now_interval) : @todays_reading.counter_for(c).value
             prog = (100.0 * estimate / target_val)
             case monthlyaverage
             when 0
@@ -386,9 +398,10 @@ class DevicesController < ApplicationController
         @critical_codes = critical_codes_list.join(',')
       else
         flash[:alert] = "No previous data available. Can not perform analysis."
+        redirect_to enter_data_device_path(@device)
       end
     else
-      flash[:alert] = "No, or invalid, device specified."
+      flash[:alert] = "No valid, device specified."
       @device = nil
     end
   end
@@ -473,7 +486,13 @@ class DevicesController < ApplicationController
         code_count = {}
         sorted_count = []
         devs = Device.where(where).joins(:location, :client, :model)
-        devs.each { |d| code_count[d.id] = d.outstanding_pms.count }
+        devs.each do |d| 
+          if d.active and d.under_contract and d.do_pm
+            if !d.outstanding_pms.empty? or (!d.neglected.nil? and (d.neglected.next_visit < (@now + range*2)))
+              code_count[d.id] = d.outstanding_pms.count
+            end
+          end
+        end
         sorted_count = code_count.sort_by { |k,v| v }
         if (sort_direction == 'desc')
           sorted_count.reverse!
@@ -484,7 +503,7 @@ class DevicesController < ApplicationController
       else
         Device.where(where).joins(:location, :client, :model).order(@order).each do |dev|
           if dev.active and dev.under_contract and dev.do_pm
-            if dev.outstanding_pms or (dev.neglected.next_visit < (@now + range*2))
+            if !dev.outstanding_pms.empty? or (!dev.neglected.nil? and (dev.neglected.next_visit < (@now + range*2)))
               @dev_list << dev
             end # if
           end # if
@@ -752,6 +771,15 @@ class DevicesController < ApplicationController
   
   def get_autocomplete_items(parameters)
     super(parameters).joins(:locations).where(["locations.team_id = ?", params[:team_id]]).group(:name)
+  end
+  
+  def get_pm_codes_list
+    d = Device.find(params[:id])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+      format.json { render json: d.pm_codes }
+    end
   end
   
   private

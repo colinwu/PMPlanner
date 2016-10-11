@@ -66,6 +66,7 @@ PmPlanner::Application.routes.draw do
       post 'parts_for_pm'
       post 'add_contact_for'
       get 'transfer'
+      get 'get_pm_codes_list'
     end
   end
 

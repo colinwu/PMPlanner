@@ -33,12 +33,12 @@
   <% @codes.each do |c| %>
     <% prev = @last_reading.counter_for(c) %>
     <% unless @device.model.model_group.model_targets.where(["maint_code = ? and target <> 0", c]).empty? %>
-      <% pm_code = PmCode.where(["name = ?", c]).first %>
+      <% pm_code = PmCode.find_by_name c %>
       <tr>
         <td><%= c.upcase %></td>
         <td><%= pm_code.description %></td>
-        <td class=rightjustify><%= prev.nil? ? '' : number_with_delimiter(prev.value) %></td>
-        <td class=rightjustify><%= text_field_tag "counter[#{c}]" %></td>
+        <td class=rightjustify><span id="prev_<%= c.upcase %>"><%= prev.nil? ? '' : number_with_delimiter(prev.value) %></span></td>
+        <td class=rightjustify><%= text_field_tag "counter[#{c.upcase}]" %></td>
       </tr>
     <% end %>
   <% end %>

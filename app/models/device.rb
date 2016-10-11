@@ -28,7 +28,7 @@ class Device < ActiveRecord::Base
   def calculate_stats
     if self.readings.count > 1
       first_reading = self.readings.order(:taken_at).first      
-      last_reading = self.last_non_zero_reading_before # default is before today
+      last_reading = self.last_non_zero_reading_on_or_before(Date.today) 
       first_last_interval = last_reading.taken_at - first_reading.taken_at
       if first_last_interval == 0  # for the case where there is only 1 non-zero reading
         return {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0}
@@ -62,11 +62,11 @@ class Device < ActiveRecord::Base
 
   def update_pm_visit_tables
     now = Date.today
-    last_reading = self.last_non_zero_reading_on_or_before
-    unless last_reading.nil? 
+    prev_reading = self.last_non_zero_reading_on_or_before(now-1)
+    unless prev_reading.nil? 
       first_outstanding = self.outstanding_pms.first
       unless first_outstanding.nil?
-        midnight = Time.parse(Date.today.to_s)
+        midnight = Time.parse(now.to_s)
         if (first_outstanding.created_at > midnight) and (first_outstanding.created_at > self.readings.order(:taken_at).last.created_at) 
           return nil
         end
@@ -90,7 +90,7 @@ class Device < ActiveRecord::Base
       vpy = stats['vpy']
       self.create_device_stat(c_monthly: c_monthly, bw_monthly: bw_monthly, vpy: vpy)
             
-      last_now_interval = now - last_reading.taken_at
+      last_now_interval = Date.today - prev_reading.taken_at
       
       ### NOTE May be able to skip this section if Total counters are not included,
       ## except that we will still need the dailyc and dailybw numbers
@@ -104,7 +104,7 @@ class Device < ActiveRecord::Base
       
       # BW and C progress % and PM Dates depend on @vpy
       visit_interval = 365 / vpy
-      next_pm_date = last_reading.taken_at + visit_interval.round
+      next_pm_date = prev_reading.taken_at + visit_interval.round
       ###
       # Now calculate stuff for all the other PM codes
       codes_list = self.model.model_group.model_targets.where("maint_code <> 'amv'").map {|t| t.maint_code }
@@ -113,7 +113,7 @@ class Device < ActiveRecord::Base
         unless target.nil? or target.target == 0
 #           pm_code = PmCode.find_by name: c
           target_val = target.target
-          last_val = last_reading.counter_for(c).nil? ? 0 : last_reading.counter_for(c).value
+          last_val = prev_reading.counter_for(c).nil? ? 0 : prev_reading.counter_for(c).value
           if pm_code[c] == 'ALL'
             daily = dailyc + dailybw
           elsif pm_code[c] == 'COLOR'
@@ -136,7 +136,7 @@ class Device < ActiveRecord::Base
         end # unless target.nil? or target.target == 0
       end # codes_list.each do |c|
       if self.outstanding_pms.empty?
-        self.create_neglected(next_visit: (last_reading.taken_at + (365/vpy).round))
+        self.create_neglected(next_visit: (prev_reading.taken_at + (365/vpy).round))
       end
     else
       self.create_neglected(next_visit: Date.today)
@@ -193,5 +193,9 @@ class Device < ActiveRecord::Base
   
   def manager
     Technician.where(["manager = true and team_id = ?", self.team_id]).first
+  end
+  
+  def pm_codes
+    self.model.model_group.model_targets.where("maint_code <> 'AMV'").map {|t| PmCode.find_by_name(t.maint_code)}
   end
 end

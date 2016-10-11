@@ -25,7 +25,6 @@ class CountersController < ApplicationController
   end
 
   def update
-    byebug
     @counter = Counter.find(params[:id])
     respond_to do |format|
       if @counter.update_attributes(params[:counter])

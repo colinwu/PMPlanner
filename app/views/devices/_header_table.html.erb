@@ -23,14 +23,6 @@
             <%= hidden_field_tag "device[#{@device.id}]", @device.id %>
             <%= submit_tag "Generate Parts List", name: 'parts' %>
           <% end %>
-      <% when "history" %>
-        <%= form_tag service_history_device_path(@device), method: :get do %>
-          <% if @rows.nil? %>
-            <%= submit_tag 'Show counters' %>
-          <% else %>
-            <%= submit_tag 'Show totals' %>
-          <% end %>
-        <% end %>
       <% end %>
     <% end %>
     </td>
