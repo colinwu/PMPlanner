@@ -95,9 +95,7 @@ jQuery ->
       all = JSON.parse($("#all_hidden").text())
     
       deltaBW = Number($("#counter_BWTOTAL").val().replace(/[^0-9]/g,'')) - Number($("#prev_BWTOTAL").text().replace(/[^0-9]/g,''))
-      console.log("deltaBW = #{deltaBW}")
       deltaC = Number($(e.currentTarget).val().replace(/[^0-9]/g,'')) - Number($("#prev_CTOTAL").text().replace(/[^0-9]/g,''))
-      console.log("deltaC = #{deltaC}")
       
       change_val_of code, deltaC for code in color
       change_val_of code, (deltaBW + deltaC) for code in all
@@ -113,8 +111,6 @@ jQuery ->
     TA_val = Number($(e.currentTarget).val().replace(/[^0-9]/g,''))
     prev_TA_val = Number($("#prev_TA").text().replace(/[^0-9]/g,''))
     deltaBW = TA_val - prev_TA_val - deltaC
-    console.log("In TA...")
-    console.log("deltaBW = #{deltaBW}, deltaC = #{deltaC}")
     change_val_of code, deltaBW for code in bw
     change_val_of code, (deltaBW + deltaC) for code in all
     
@@ -127,10 +123,6 @@ jQuery ->
     all = JSON.parse($("#all_hidden").text())
   
     deltaC = Number($(e.currentTarget).val().replace(/[^0-9]/g,'')) - Number($("#prev_CA").text().replace(/[^0-9]/g,''))
-
-    console.log("In CA...")
-    console.log("deltaBW = #{deltaBW}, deltaC = #{deltaC}")
-    
     change_val_of code, deltaC for code in color
     change_val_of code, (deltaBW + deltaC) for code in all
     $("#counter_TA").change()

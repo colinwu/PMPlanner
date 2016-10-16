@@ -189,6 +189,9 @@ class DevicesController < ApplicationController
     session[:search_caller] = request.path_parameters[:action]
     you_are_here
     
+    @bw_list = []
+    @c_list = []
+    @all_list = []
     @now = Date.today
     @title = "Enter Counter Data"
     begin
@@ -197,6 +200,15 @@ class DevicesController < ApplicationController
       @device = nil
     end
     if @device and current_technician.can_manage?(@device)
+      @device.pm_codes.each do |code|
+        if code.colorclass == 'BW'
+          @bw_list << code.name
+        elsif code.colorclass == 'COLOR'
+          @c_list << code.name
+        elsif code.colorclass == 'ALL'
+          @all_list << code.name
+        end
+      end
       if @device.device_stat.nil?
         stats = @device.calculate_stats
       else
@@ -205,7 +217,8 @@ class DevicesController < ApplicationController
       @bw_monthly = stats['bw_monthly']
       @c_monthly = stats['c_monthly']
       @vpy = stats['vpy']
-      @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
+      @last_reading = @device.last_non_zero_reading_on_or_before(@now)
+#       @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
       if @last_reading.nil?
         @last_reading = Reading.new(taken_at: Date.today)
         @lastbw = 0
@@ -397,7 +410,7 @@ class DevicesController < ApplicationController
         end # codes_list.each do |c|
         @critical_codes = critical_codes_list.join(',')
       else
-        flash[:alert] = "No previous data available. Can not perform analysis."
+        flash[:alert] = "Can not perform analysis: Insufficient data."
         redirect_to enter_data_device_path(@device)
       end
     else

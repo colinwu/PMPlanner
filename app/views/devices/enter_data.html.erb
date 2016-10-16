@@ -1,4 +1,7 @@
 <% title @title, false %>
+<div id="bw_hidden"><%= @bw_list %></div>
+<div id="c_hidden"><%= @c_list %></div>
+<div id="all_hidden"><%= @all_list %></div>
 <br />
 <%= render partial: 'header_table', locals: {button: 'enter'} %>
 
@@ -19,14 +22,14 @@
     <td>TotBW</td>
     <td>Total Counter: TotBW</td>
     <td class=rightjustify><%= number_with_delimiter(@lastbw) %></td>
-    <td class=rightjustify><%= text_field_tag "counter[bwtotal]" %></td>
+    <td class=rightjustify><%= text_field_tag "counter[BWTOTAL]" %></td>
   </tr>
   <% unless @lastc.nil? %>
     <tr>
       <td>TotC</td>
       <td>Total Counter: TotC</td>
       <td class=rightjustify><%= number_with_delimiter(@lastc) %></td>
-      <td class=rightjustify><%= text_field_tag "counter[ctotal]" %></td>
+      <td class=rightjustify><%= text_field_tag "counter[CTOTAL]" %></td>
     </tr>
   <% end %>
 
