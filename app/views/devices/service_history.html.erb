@@ -7,6 +7,7 @@
     <tr>
       <th rowspan=2>Date</th>
       <th colspan=2>Total Counters</th>
+      <th colspan=99>Maintenance Counters</th>
     </tr>
     <tr>
       <th>BW</th>
@@ -14,8 +15,10 @@
       <% @all_codes.each do |c| %>
         <th><%=h c %></th>
       <% end %>
+      <th>Action</th>
     </tr>
     <% for reading in @readings %>
+      <% zero_reading = true %>
       <tr class="<%= cycle('light','dark') %>">
         <td><span title="<%=h reading.notes %>"><%=h reading.taken_at.strftime('%b %-d, %Y') %></span></td>
         <% counter = reading.counter_for('bwtotal') %>
@@ -24,7 +27,11 @@
         <td class=rightjustify><%= counter.nil? ? '' : best_in_place(counter, :value,  display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
         <% @all_codes.each do |c| %>
           <% counter = reading.counter_for(c) %>
-          <td class=rightjustify><%= counter.nil? ? '' : best_in_place(counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
+          <% zero_reading = false if (!counter.nil? and counter.value > 0) %>
+          <td class=rightjustify><%= best_in_place(counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
+        <% end %>
+        <% if zero_reading %>
+          <td><%= link_to "Remove", reading, :confirm => 'Are you sure?', :method => :delete %></td>
         <% end %>
       </tr>
     <% end %>

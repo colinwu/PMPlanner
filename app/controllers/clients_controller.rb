@@ -1,5 +1,6 @@
 class ClientsController < ApplicationController
   respond_to :json
+  before_action :authorize
   
   def index
     you_are_here

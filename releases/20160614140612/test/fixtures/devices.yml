@@ -1,0 +1,35 @@
+one:
+  installed_base_id: MyString
+  crm_object_id: MyString
+  alternate_id: MyString
+  model_id: 1
+  client_id: 1
+  serial_number: MyString
+  location_id: 1
+  primary_tech_id: 1
+  backup_tech_id: 1
+  status: false
+  under_contract: false
+  do_pm: false
+  pm_counter_type_id: 1
+  pm_visits_min: 1.5
+  contact_id: 1
+  notes: MyText
+
+two:
+  installed_base_id: MyString
+  crm_object_id: MyString
+  alternate_id: MyString
+  model_id: 1
+  client_id: 1
+  serial_number: MyString
+  location_id: 1
+  primary_tech_id: 1
+  backup_tech_id: 1
+  status: false
+  under_contract: false
+  do_pm: false
+  pm_counter_type_id: 1
+  pm_visits_min: 1.5
+  contact_id: 1
+  notes: MyText

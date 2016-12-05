@@ -2,7 +2,7 @@
     <tr class="<%= cycle('light','dark') %>">
       <td><%= check_box_tag "device[#{device.id}]", device.id %></td>
       <td><%= link_to device.crm_object_id, edit_device_path(device), title: "Edit device details." %></td>
-      <td><%= device.model.name %></td>
+      <td><%= device.model.nm %></td>
       <td><%= device.serial_number %></td>
       <td><%= device.client.name %></td>
       <td><%= device.location.address1 %></td>

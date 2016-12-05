@@ -9,10 +9,24 @@ main_counter_changed = exports ? this
 main_counter_changed = false
 
 jQuery ->
-  # begin test script
+  # retrieve the current device's ID #
   dev_id = $("#reading_device_id").val()
   
-  # end test script
+  # for 'edit' and 'new' retrieve list of model names to be used for autocomplete
+  url = document.documentURI
+  mfp_models = []
+  mfp_model_id = {}
+  if url.match(/\/devices\/new$/) || url.match(/\/devices\/\d+\/edit$/)
+    $.getJSON '/models', (result) ->
+      $("#model_nm").hide()
+      for m in result
+        mfp_models.push(m.model.nm)
+        mfp_model_id[m.model.nm] = m.model.id
+      $("#model_nm").autocomplete({ source: mfp_models })
+      $("#model_nm").show()
+        
+  # Set the size of the input field to be the same as the enclosing element 
+  # (usually this is a table cell) when the browser window is resized
   set_size_of field for field in fields
   $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
 
@@ -41,12 +55,13 @@ jQuery ->
     $("tr").css("background-color", "")
     $("[id^='"+$(this).text()+"']").css("background-color", 'pink')
 
+# 
   $('#client_name').bind('railsAutocomplete.select', (e, data) ->
     $.ajax(url: "/clients/" + data.item.id + "/get_locations.json").done (html) ->
       content = ''
       for c in html
         content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + c.to_s + '<br />'
-      content += '<hr>
+      content += '<hr />
         <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
         <span class="left_field_label">Address1</span>
         <input type="text" name="location[address1]" id="location_address1" value="" size="40" /><br />
@@ -137,7 +152,25 @@ jQuery ->
     deltaBW = Number($(e.currentTarget).val()) - Number($("#prev_MREQ").text())
     change_val_of code, deltaBW for code in bw
     change_val_of code, (deltaBW + deltaC) for code in all
+
+  $("#device_team_id").change (e) ->
+    team_id = $(e.currentTarget).val()
+    $("#client_name").attr('data-autocomplete',"/devices/autocomplete_client_name?team_id=#{team_id}")
+    $.getJSON "/teams/#{team_id}/manager", (result) ->
+      $("#manager").val("#{result.technician.first_name} #{result.technician.last_name}")
+      return true
+    $.getJSON "/teams/#{team_id}/techs", (result) ->
+      techList = []
+      for tech in result
+        techList.push("<option value='#{tech.technician.id}'>#{tech.technician.first_name} #{tech.technician.last_name}</option>")
+      optionStr = techList.join("\n")
+      $("#device_primary_tech_id").html(optionStr)
+      $("#device_backup_tech_id").html(optionStr)
+      return true
     
+  $("#model_nm").focusout (e) ->
+    $("#device_model_id").val(mfp_model_id[$(e.currentTarget).val()])
+      
 # When a form field has changed set the changed flag to true
   $("[id^='counter_']").change (e) ->
     root.changed = true

@@ -1,8 +1,8 @@
 <%= form_for @model_target do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <%= f.label :maint_code %><br />
+    <%= f.collection_select :maint_code, PmCode.all, :name, :name %>
   </p>
   <p>
     <%= f.label :target %><br />
@@ -10,11 +10,11 @@
   </p>
   <p>
     <%= f.label :model_group_id %><br />
-    <%= f.text_field :model_group_id %>
+    <%= f.collection_select :model_group_id, ModelGroup.all, :id, :name %>
   </p>
   <p>
     <%= f.label :unit %><br />
-    <%= f.text_field :unit %>
+    <%= f.select :unit, [['counter','counter'],['rotation','rotation'],['life','life']] %>
   </p>
   <p><%= f.submit %></p>
 <% end %>

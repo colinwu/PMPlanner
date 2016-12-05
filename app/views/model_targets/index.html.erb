@@ -2,15 +2,16 @@
 
 <table>
   <tr>
-    <th>Name</th>
+    <th>PM Code</th>
     <th>Target</th>
     <th>Model Group</th>
     <th>Unit</th>
+    <th colspan=3>Action</th>
   </tr>
   <% for model_target in @model_targets %>
-    <tr>
+    <tr class="<%= cycle('dark','light')%>">
       <td><%= model_target.maint_code %></td>
-      <td><%= model_target.target %></td>
+      <td class="rightjustify"><%= number_with_delimiter(model_target.target) %></td>
       <td><%= model_target.model_group.name %></td>
       <td><%= model_target.unit %></td>
       <td><%= link_to "Show", model_target %></td>
@@ -20,4 +21,7 @@
   <% end %>
 </table>
 
-<p><%= link_to "New Model Target", new_model_target_path %></p>
+<% if current_technician.admin %>
+  <p><%= link_to "New Model Target", new_model_target_path %></p>
+<% end %>
+<p><%= will_paginate(@model_targets) %></p>

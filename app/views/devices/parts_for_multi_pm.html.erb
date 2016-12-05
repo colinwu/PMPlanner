@@ -1,4 +1,4 @@
-<% title "Parts List for PMs", false %>
+<% title "Parts List for PMs", true %>
 <br />
 <table width = 100%>
 
@@ -7,7 +7,7 @@
   <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
   <% unless @parts_hash[dev].empty? %>
     <tr>
-      <th colspan=10>CRM Object ID: <%=h dev.crm_object_id %>, Model: <%=h dev.model.name %><br /><%=h dev.client.name %>, <%=h dev.location.address1 %></td>
+      <th colspan=10>CRM Object ID: <%=h dev.crm_object_id %>, Model: <%=h dev.model.nm %><br /><%=h dev.client.name %>, <%=h dev.location.address1 %></td>
     </tr>
     <tr>
       <th></th>

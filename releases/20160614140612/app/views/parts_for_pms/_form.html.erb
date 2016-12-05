@@ -1,0 +1,24 @@
+<%= form_for @parts_for_pm do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :model_group_id %><br />
+    <%= f.number_field :model_group_id %>
+  </p>
+  <p>
+    <%= f.label :pm_code_id %><br />
+    <%= f.number_field :pm_code_id %>
+  </p>
+  <p>
+    <%= f.label :choice %><br />
+    <%= f.number_field :choice %>
+  </p>
+  <p>
+    <%= f.label :part_id %><br />
+    <%= f.number_field :part_id %>
+  </p>
+  <p>
+    <%= f.label :quantity %><br />
+    <%= f.number_field :quantity %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

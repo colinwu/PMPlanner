@@ -5,6 +5,8 @@ class Technician < ActiveRecord::Base
   has_many :backup_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'backup_tech_id'
   has_many :readings, :dependent => :nullify
   has_many :logs
+  has_many :teams, :class_name => 'Team', :foreign_key => 'manager_id'
+  
   belongs_to :team, :foreign_key => :team_id
   has_one :preference, :dependent => :destroy
   
@@ -56,6 +58,14 @@ class Technician < ActiveRecord::Base
     else
       device.primary_tech_id == self.id or device.backup_tech_id == self.id
     end
+  end
+      
+  def get_manager
+    self.team.manager
+  end
+  
+  def full_name
+    "#{self.first_name} #{self.last_name}"
   end
     
 end

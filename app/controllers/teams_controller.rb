@@ -5,6 +5,10 @@ class TeamsController < ApplicationController
 
   def show
     @team = Team.find(params[:id])
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @team }
+    end
   end
 
   def new
@@ -37,5 +41,21 @@ class TeamsController < ApplicationController
     @team = Team.find(params[:id])
     @team.destroy
     redirect_to teams_url, :notice => "Successfully destroyed team."
+  end
+  
+  def manager
+    @technician = Team.find(params[:id]).manager
+    respond_to do |format|
+      format.html { render html: "/technicians/#{@technician.id}"}
+      format.json { render json: @technician }
+    end
+  end
+  
+  def techs
+    @techs = Team.find(params[:id]).technicians
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @techs }
+    end
   end
 end

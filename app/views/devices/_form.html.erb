@@ -5,11 +5,12 @@
     <tr>
       <td width=45%>
         <span class="left_field_label">CRM ID</span>
-        <%= f.text_field :crm_object_id, readonly: true %><br />
+        <%= f.text_field :crm_object_id, readonly: @readonly_flag, size: 10 %><br />
         <span class="left_field_label">Model</span>
-        <%= text_field_tag :model, @device.model.name, readonly: true, size: 10 %><br />
+        <%= text_field_tag :model_nm, @device.model_nm, readonly: @readonly_flag, size: 10 %><br />
+        <%= f.hidden_field :model_id %>
         <span class="left_field_label">Serial Number</span>
-        <%= f.text_field :serial_number, :readonly => true %>
+        <%= f.text_field :serial_number, :readonly => @readonly_flag, size: 10 %>
       </td>
       <td id="dev_notes_cell">
         <%= f.text_area :notes, :rows => 5, id: 'dev_notes' %>
@@ -17,48 +18,34 @@
     </tr>
   </table>
   <table width="100%">
-    <tr><td>
-      <span class="left_field_label">Customer</span>
-      <%= f.hidden_field :client_id %>
-      <%= hidden_field_tag 'device[location_id]', 0 %>
-      <%= autocomplete_field_tag :client_name, @device.client.name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', :size => 60 %>
-    <br />
-      <span class="left_field_label">Location</span>
-      <div id="device_location">
-        <% @locations.each do |loc| %>
-          <%= f.radio_button :location_id, loc.id %> <%= loc.to_s  %><br />
-        <% end %>
-        <hr>
-        <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
-        <span class='left_field_label'>Address1</span>
-          <%= text_field_tag 'location[address1]', '', size: 40 %><br />
-        <span class='left_field_label'>Address2</span>
-          <%= text_field_tag 'location[address2]', '', size: 40 %><br />
-        <span class='left_field_label'>City</span>
-          <%= text_field_tag 'location[city]', '', size: 40 %><br />
-        <span class='left_field_label'>Province</span>
-          <%= select_tag 'location[province]', options_for_select([['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]) %><br />
-        <span class='left_field_label'>Postal Code</span>
-          <%= text_field_tag 'location[post_code]', '', size: 7 %>
-        </fieldset>
-      </div>
-      </td>
-    </tr>
-  </table>
-  <table width="100%">
     <tr>
       <td width="33%">
         <span class='left_field_label'>Team</span>
-        <%= text_field_tag :team, "#{@device.team.name}", :readonly => true %>
-        <br />
+        <% if current_technician.admin? %>
+          <%= f.select :team_id, options_from_collection_for_select(Team.all, :id, :name, @device.team.nil? ? nil : @device.team_id), include_blank: true %>
+          <br />
+        <% else %>
+          <%= text_field_tag :team, "#{@device.team.name}", :readonly => true %>
+          <br />
+        <% end %>
         <span class="left_field_label">Primary tech</span>
-        <%= text_field_tag :primary_tech, "#{@device.primary_tech.first_name} #{@device.primary_tech.last_name}", :readonly => @readonly_flag %>
-        <br />
+        <% if current_technician.manager? or current_technician.admin? %>
+          <%= f.select :primary_tech_id, options_from_collection_for_select(current_technician.my_techs, :id, :full_name, @device.primary_tech_id.nil? ? nil : @device.primary_tech_id), include_blank: true %>
+          <br />
+        <% else %>
+          <%= text_field_tag :primary_tech, "#{@device.primary_tech.first_name} #{@device.primary_tech.last_name}", :readonly => @readonly_flag %>
+          <br />
+        <% end %>
         <span class="left_field_label">Backup tech</span>
-        <%= text_field_tag :backup_tech, "#{@device.backup_tech.first_name} #{@device.backup_tech.last_name}", :readonly => @readonly_flag %>
-        <br />
+        <% if current_technician.manager? or current_technician.admin? %>
+          <%= f.select :backup_tech_id, options_from_collection_for_select(current_technician.my_techs, :id, :full_name, @device.backup_tech_id.nil? ? nil : @device.backup_tech_id), include_blank: true %>
+          <br />
+        <% else %>
+          <%= text_field_tag :backup_tech, @device.backup_tech.nil? ? '' : "#{@device.backup_tech.first_name} #{@device.backup_tech.last_name}", :readonly => @readonly_flag %>
+          <br />
+        <% end %>
         <span class="left_field_label">Manager</span>
-        <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.first_name} #{@device.manager.last_name}" %>
+        <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.full_name}" %>
         <%= text_field_tag :manager, manager, :readonly => true %>
       </td>
       <td width=33%>
@@ -76,10 +63,41 @@
         <%= f.radio_button :pm_counter_type, 'life' %> Life %
       </td>
     </tr>
+  </table>
+  <p><hr /></p>
+  <table width="100%">
+    <tr><td>
+      <span class="left_field_label">Customer</span>
+      <%= f.hidden_field :client_id %>
+      <%= hidden_field_tag 'device[location_id]', 0 %>
+      <%= autocomplete_field_tag :client_name, @device.client_name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', :size => 60 %>
+    <br />
+      <span class="left_field_label">Location</span>
+      <div id="device_location">
+        <% @locations.each do |loc| %>
+          <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc)  %><br />
+        <% end %>
+        <br /><hr />
+        <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
+        <span class='left_field_label'>Address1</span>
+          <%= text_field_tag 'location[address1]', '', size: 40 %><br />
+        <span class='left_field_label'>Address2</span>
+          <%= text_field_tag 'location[address2]', '', size: 40 %><br />
+        <span class='left_field_label'>City</span>
+          <%= text_field_tag 'location[city]', '', size: 40 %><br />
+        <span class='left_field_label'>Province</span>
+          <%= select_tag 'location[province]', options_for_select([['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]) %><br />
+        <span class='left_field_label'>Postal Code</span>
+          <%= text_field_tag 'location[post_code]', '', size: 7 %>
+        </fieldset>
+      </div>
+      </td>
+    </tr>
     <tr><td colspan='100%'>
       <p><%= f.submit %></p>
     </td></tr>
   </table>
 <% end %>
-
-<%= render 'device_contacts' %>
+<% unless @device.id.nil? %>
+  <%= render 'device_contacts' %>
+<% end %>

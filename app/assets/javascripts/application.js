@@ -10,6 +10,7 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+//= require_self
 //= require jquery
 //= require best_in_place
 //= require jquery.purr
@@ -20,19 +21,3 @@
 //= require autocomplete-rails
 //= require jquery.datetimepicker
 //= require_tree .
-var set_size_of;
-set_size_of = function(elem) {
-  $(elem).outerWidth(1);
-  return $(elem).outerWidth($(elem).parent().innerWidth());
-};
-$(document).ready(function() {
-  $("input[readonly!='readonly']").focus(function() {
-    $(this).effect('highlight',500);
-  });
-  $("textarea[readonly!='readonly']").focus(function() {
-    $(this).effect('highlight',500);
-  });
-  /* Activating Best In Place */
-  jQuery(".best_in_place").best_in_place();
-  
-});

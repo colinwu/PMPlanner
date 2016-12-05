@@ -1,6 +1,13 @@
 class ModelTargetsController < ApplicationController
+  before_action :authorize
   def index
-    @model_targets = ModelTarget.all
+    respond_to do |format|
+      format.html {@model_targets = ModelTarget.page(params[:page])}
+      format.json {
+        @model_targets = ModelTarget.all
+        render json: @model_targets
+      }
+    end
   end
 
   def show
@@ -14,7 +21,7 @@ class ModelTargetsController < ApplicationController
   def create
     @model_target = ModelTarget.new(params[:model_target])
     if @model_target.save
-      redirect_to @model_target, :notice => "Successfully created model target."
+      redirect_to model_targets_url, :notice => "Successfully created model target."
     else
       render :action => 'new'
     end
@@ -26,10 +33,14 @@ class ModelTargetsController < ApplicationController
 
   def update
     @model_target = ModelTarget.find(params[:id])
-    if @model_target.update_attributes(params[:model_target])
-      redirect_to @model_target, :notice  => "Successfully updated model target."
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @model_target.update_attributes(params[:model_target])
+        format.html {redirect_to model_target_url, :notice  => "Successfully updated model target."}
+        format.json {respond_with_bip(@model_target)}
+      else
+        format.html {render :action => 'edit'}
+        format.json {respond_with_bip(@model_target)}
+      end
     end
   end
 

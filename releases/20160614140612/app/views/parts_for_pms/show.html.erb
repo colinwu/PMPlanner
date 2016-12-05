@@ -1,0 +1,28 @@
+<% title "Parts For Pm" %>
+
+<p>
+  <strong>Model Group:</strong>
+  <%= @parts_for_pm.model_group_id %>
+</p>
+<p>
+  <strong>Pm Code:</strong>
+  <%= @parts_for_pm.pm_code_id %>
+</p>
+<p>
+  <strong>Choice:</strong>
+  <%= @parts_for_pm.choice %>
+</p>
+<p>
+  <strong>Part:</strong>
+  <%= @parts_for_pm.part_id %>
+</p>
+<p>
+  <strong>Quantity:</strong>
+  <%= @parts_for_pm.quantity %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_parts_for_pm_path(@parts_for_pm) %> |
+  <%= link_to "Destroy", @parts_for_pm, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", parts_for_pms_path %>
+</p>

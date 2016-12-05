@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   def authorize
     if current_technician.nil?
       redirect_to login_url, alert: "Please log in."
-    elsif (Time.now - session[:active_at]) > 600
+    elsif (Time.now - session[:active_at]) > 6000
       you_are_here
       current_technician.logs.create(message: "Session timed out.")
       redirect_to login_url, alert: "Your session has timed out. Please log in."

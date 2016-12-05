@@ -1,9 +1,19 @@
 <table width="100%">
   <tr>
-    <td rowspan=2 width="25%" >
+    <td rowspan=2 width="30%" class="boxed" >
     <%= form_tag search_devices_path, method: :get do %>
-      <%= text_field_tag 'search_str', @search_str %>
+      <%= text_field_tag 'search_str', @search_str, size: 10 %>
       <%= submit_tag "Search" %>
+    <% end %>
+    <br />
+    <% unless @reading.nil? %>
+      <%= form_for @reading do |f| %>
+        <%= f.label "Upload 22-6 file for this device" %>
+        <%= f.file_field :ptn1 %>
+        <%= f.hidden_field :device_id, { value: @reading.device_id } %>
+        <%= f.hidden_field :technician_id, { value: @reading.technician_id} %>
+        <%= f.submit "Upload" %>
+      <% end %>
     <% end %>
     <br />
     <% unless @device.nil? %>
@@ -15,10 +25,6 @@
             <% end %>
           <% end %>
       <% when "analysis" %>
-          <%= form_tag enter_data_device_path(@device), method: :get do %>
-            <%= submit_tag "Enter actual counter values" %>
-          <% end %>
-          <br />
           <%= form_tag handle_checked_devices_path do %>
             <%= hidden_field_tag "device[#{@device.id}]", @device.id %>
             <%= submit_tag "Generate Parts List", name: 'parts' %>
@@ -31,12 +37,12 @@
   <tr>
     <td class=boxed>
     <% unless @device.nil? %>
-      <%=h @device.model.name %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %><br />
+      <strong><%=h @device.model.nm %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %></strong><br /><br />
       <%=h @device.client.name %><br />
-      <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br />
-      Monthly average: BW = <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; COL = <%= number_with_delimiter(@c_monthly.round) %><% else %>; COL = Unknown<% end %><br />
+      <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br /><br />
+      Monthly average: BW = <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; COL = <%= number_with_delimiter(@c_monthly.round) %><% else %>; COL = Unknown<% end %>
       <% if @vpy > 0 -%>
-        PM visits per year: <%= number_with_precision(@vpy, precision: 2) %><br />
+        ; PM visits per year: <%= number_with_precision(@vpy, precision: 2) %><br />
         <% unless @last_reading.nil? %>
           <strong>Notes from <%= @last_reading.taken_at.strftime('%b %-d, %Y') %>:</strong> <%=h @last_reading.notes %>
         <% end %>

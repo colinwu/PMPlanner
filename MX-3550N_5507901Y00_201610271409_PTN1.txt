@@ -1,0 +1,778 @@
+&l48D*p96X*p150Y(s17Ht4OCT/27/2016/t4THU 02:09 t4PM . (s17HMX-3550N
+*p96X&l48D*p96X*p150Y(s17H*p3264X t4S/N: 5507901Y00 *p4448X&l48D(s17H1 / 6(s18H
+
+*p96X(MACHINE ROM VERSION)   BUNDLE VERSION 04.00.K1.00 - 16.06.14.00
+*p96XICU-MAIN:          04.00.K1.00    POWER-CON:         01.00.Z1.00    SCU:               03.00.Z1.00    FAX:                      NONE
+*p96XICU-BIOS:          01.01.Z1.00                                      DSPF:                     NONE
+*p96XASIC-MAIN:         04.00.Z1.00                                      PCU:               04.00.Z1.00
+*p96XASIC-SUB:          01.02.Z1.00                                      DESK:              01.01.Z1.00    ACU:                      NONE
+*p96XLANGUAGE:          02.01.Z1.00    FONT SPDL:         05.00.00.00    LCC:                      NONE
+*p96XLANGUAGE(LIST):    01.16.Z1.00                                      FINISHER(INNER):   01.02.Z1.00
+*p96XEOSA:              05.02.00.0b                                      JOGGER:                   NONE
+*p96XUICONTENTS:        04.00.Z1.00    WATER MARK:        02.00.00.00    FIN-SUB:                  NONE
+*p96XSIM-TEXT:          01.03.Z1.00    E-MANUAL:          02.20.K1.00    SADDLE:                   NONE
+*p96XPCL(PROFILE):      01.00.Z1.00    OCR-DIC:           02.01.00.00    PUNCH(IN):         01.00.Z1.00
+*p96X(MACHINE SYSTEM)
+*p96XMACHINE:              MX-3550N    FAX1:                     NONE    ICU_PWB(REUS):          1024MB    ACM:                      NONE
+*p96XSPF:                  STANDARD                                      ICU_PWB(SOC):           4096MB    EAM:                      NONE
+*p96XSTAMP:                    NONE                                      HDD:                     320GB
+*p96XDESK:                  MX-DE27                                      SSD:                   16013MB
+*p96XLCC:                      NONE    HAND SET:                 NONE                                      OFFICE DRT:               NONE
+*p96XPUNCHER:              MX-PN14B                                      BARCODE:                  NONE    HC-PDF:                   NONE
+*p96XFINISHER:              MX-FN27                                      FONT:                     NONE
+*p96XSEPARATOR:                NONE    PS:                    MX-PK13    INTERNET-FAX:             NONE
+
+*p96X                                  SECURITY:                 NONE    AIM:                      NONE
+*p96X(HDD) DEVICE MODEL:     TOSHIBA MQ01ABF032                         SERIAL NUMBER:               X5LEC693T
+*p96X(SERIAL NUMBER)                                                     (PLACED DAY)        (PCU CPLD)
+*p96XICU:                  5507901Y00  PCU:                  5507901Y00  2016/02/01                 100
+*p96XLOG (DA00094900B4AD016B7CE1AFFCBF028FA2B8A86100)
+*p96X(COUNTERS)
+*p96X(SIM22-01)                 (SIM22-08)                 (SIM22-09)                 (SIM22-11)                 (SIM22-19)
+*p96XTOTAL OUT(BW):       228   SPF:                 163   TRAY1:               415   FAX OUTPUT:            0   NET SCN ORG_B/W:      50
+*p96XTOTAL OUT(COL):      400   SCAN:                 17   TRAY2:                81                              NET SCN ORG_CL:       33
+*p96XTOTAL(BW):           228   STAPLER:               4   TRAY3:                 1                              NET SCN ORG_2CL:       0
+*p96XTOTAL(COL):          400   PUNCHER:               3   TRAY4:                11   FAX SEND:              0   NET SCN ORG_SGL:       0
+*p96XTOTAL(2COL):           0   STAMP:                 0   MFT:                  26   FAX RECEIVED:          0   NET FAX OUTPUT:        0
+*p96XTOTAL(3COL):           0   SADDLE STAPLER:        0                              SENDIMAGES:            0   NET FAX SEND OP:       0
+*p96XTOTAL(SGL_COL):        0   SADDLE V FOLD:         0   ADU:                  89                              NET FAX RECEIVE:       0
+*p96XCOPY(BW):             55   COVER:                17   TRAY1_TTL:           415                              NET FAX SEND:          0
+*p96XCOPY(COL):            51   HP_ON:               997   TRAY2_TTL:            81   SENDTIME:        0: 0: 0   MAIL COUNTER:          8
+*p96XCOPY(2COL):            0   OC LAMP TIME:       0:26   TRAY3_TTL:             1   RECEVTIME:       0: 0: 0   FTP COUNTER:           0
+*p96XCOPY(SGL_COL):         0                              TRAY4_TTL:            11                              SMB SEND:              0
+*p96XPRINT(BW):            32   FIN OUTPUT:          533   MFT_TTL:              26                              USB CNT:               6
+*p96XPRINT(COL):          341   STPLLESS STPL:        15                                                         TRIAL MODE_B&C:        0
+*p96XPRINT(2COL):           0   MANUAL STAPLE:        53   ADU_TTL:              89                              SCAN TO HDD_B/W:       0
+*p96XPRINT(3COL):           0                              TRAY1_RETRY:           0                              SCAN TO HDD_CL:        0
+*p96XPRINT(SGL_COL):        0                              TRAY2_RETRY:           0                              SCAN TO HDD_2CL:       0
+*p96XDOCFIL(BW):            0                              TRAY3_RETRY:           0                              SCAN TO HDD_SGL:       0
+*p96XDOCFIL(COL):           0                              TRAY4_RETRY:           0
+*p96XDOCFIL(2COL):          0                              MFT_RETRY:             0
+*p96XDOCFIL(SGL_COL):       0
+*p96XOTHER(BW):           141
+*p96XOTHER(COL):            8
+
+
+*p96X(SIM22-13)
+*p96X                   COUNTER        TURN     DAY         LIFE REMAIN                       COUNTER        TURN     DAY         LIFE REMAIN
+*p96XMAINTENANCE ALL:   0000000638  ----------  0000000266  000%   ----    DRUM UNIT(K):      0000000638  0000011113       00266  000%   ----
+*p96XMAINTENANCE COL:   0000000408  ----------  0000000266  000%   ----    DRUM UNIT(C):      0000000408  0000008846       00266  000%   ----
+*p96XFUSING BELT:       0000000638  0000023856  0000000266  000%   ----    DRUM UNIT(M):      0000000408  0000008846       00266  000%   ----
+*p96XFUSING ROLLER:     0000000638  0000023856  0000000266  000%   ----    DRUM UNIT(Y):      0000000408  0000008846       00266  000%   ----
+*p96XPRESSURE ROLLER:   0000000638  0000023856  0000000266  000%   ----    MAIN CHARGER(K):   0000000638  0000011113       00266  000%   ----
+*p96XSEPARATE PAWL:     0000000638  0000023856  0000000266  000%   ----    MAIN CHARGER(C):   0000000408  0000008846       00266  000%   ----
+*p96XSEPARATE PLATE:    0000000638  0000023856  0000000266  000%   ----    MAIN CHARGER(M):   0000000408  0000008846       00266  000%   ----
+*p96XFUSING WEB UNIT:   ----------  ----------  ----------  ----   ----    MAIN CHARGER(Y):   0000000408  0000008846       00266  000%   ----
+*p96XFUSING WEB SEND:   ----------  ----------  ----------  ----   ----    MC CLEAN(K):       ----------  ----------  ----------  ----   ----
+*p96XFUSING LOAD:       ----------  0000000690  ----------  ----   ----    MC CLEAN(C):       ----------  ----------  ----------  ----   ----
+*p96XTC1 BELT:          0000000638  0000001190  0000000266  000%   ----    MC CLEAN(M):       ----------  ----------  ----------  ----   ----
+*p96XTRANSFER BLADE:    0000000638  0000001190  0000000266  000%   ----    MC CLEAN(Y):       ----------  ----------  ----------  ----   ----
+*p96XTC CL ROLLER:      0000000638  0000001190  0000000266  000%   ----    DRUM BLADE(K):     0000000638  0000011113       00266  000%   ----
+*p96XTC2 ROLLER:        0000000638  0000001190  0000000266  000%   ----    DRUM BLADE(C):     0000000408  0000008846       00266  000%   ----
+*p96XPTC:               0000000638  0000001190  0000000266  000%   ----    DRUM BLADE(M):     0000000408  0000008846       00266  000%   ----
+*p96XPS PAPER:          0000000638  ----------  0000000266  000%   ----    DRUM BLADE(Y):     0000000408  0000008846       00266  000%   ----
+*p96XOZONE FILTER:      0000000638  ----------  0000000266  000%   ----    TONER CTRG(K):     0000000634  0000000321       00266  001%   ----
+*p96XDEVE CTRG(K):      0000000638  0000010993       00266  000%   ----    TONER CTRG(C):     0000000406  0000000102       00266  000%   ----
+*p96XDEVE CTRG(C):      0000000408  0000008726       00266  000%   ----    TONER CTRG(M):     0000000406  0000000147       00266  001%   ----
+*p96XDEVE CTRG(M):      0000000408  0000008726       00266  000%   ----    TONER CTRG(Y):     0000000406  0000000181       00266  001%   ----
+*p96XDEVE CTRG(Y):      0000000408  0000008726       00266  000%   ----
+*p96X(SIM22-14)
+*p96X                 INSTALL     NN END        END   RESIDUAL
+*p96XTONER(K):            001        000        000    75-100%
+*p96XTONER(C):            001        000        000    75-100%
+*p96XTONER(M):            001        000        000    75-100%
+*p96XTONER(Y):            001        000        000    75-100%
+
+
+
+*p96X(MACHINE JAM)
+*p96XMACHINE JAM:          1
+*p96XHISTORY:            FNPS12
+
+
+
+
+*p96X(SPF JAM)
+*p96XRSPF/DSPF JAM:        0
+*p96XHISTORY:
+
+
+
+
+*p96X(TROUBLE)
+*p96XTROUBLE:              2
+*p96XHISTORY:         E7-47(00)   F1-34(00)
+
+
+
+*p96X(ENGINE SOFT SWITCH)
+*p96XSW   1 : 00000000          SW   2 : 00000000          SW   3 : 00000000          SW   4 : 00000000          SW   5 : 00000000
+*p96XSW   6 : 00000000          SW   7 : 00000000          SW   8 : 00000000          SW   9 : 00000000          SW  10 : 01000000
+*p96XSW  11 : 00010000          SW  12 : 00000000          SW  13 : 00000000          SW  14 : 00000000          SW  15 : 00000000
+*p96XSW  16 : 00000000          SW  17 : 00000000          SW  18 : 00000000          SW  19 : 00000000          SW  20 : 00000000
+*p96XSW  21 : 00000000          SW  22 : 00000000          SW  23 : 00100000          SW  24 : 00000000          SW  25 : 00000000
+*p96XSW  26 : 00000000          SW  27 : 00000000          SW  28 : 00000000          SW  29 : 00000000          SW  30 : 00000000
+*p96XSW  31 : 00000000          SW  32 : 00000000
+
+*p96X(SCANNER SOFT SWITCH)
+*p96XSW   1 : 00000000          SW   2 : 00000000          SW   3 : 00000000          SW   4 : 00000000          SW   5 : 00000000
+*p96XSW   6 : 00000000          SW   7 : 00000000          SW   8 : 00000000          SW   9 : 00000000          SW  10 : 00000000
+*p96XSW  11 : 00000000          SW  12 : 00000000          SW  13 : 00000000          SW  14 : 00000000          SW  15 : 00000000
+*p96XSW  16 : 00000000
+
+*p96X(MFP SOFT SWITCH)
+*p96XSW   1 : 00000000          SW   2 : 11001000          SW   3 : 00000000          SW   4 : 00000000          SW   5 : 00000000
+*p96XSW   6 : 00001000          SW   7 : 00000000          SW   8 : 00000000          SW   9 : 00000000          SW  10 : 00000000
+*p96XSW  11 : 00000000          SW  12 : 00000000          SW  13 : 00000000          SW  14 : 00000000          SW  15 : 00000000
+*p96XSW  16 : 00000000          SW  17 : 00000000          SW  18 : 00000000          SW  19 : 00000000          SW  20 : 00000000
+*p96XSW  21 : 00000000          SW  22 : 00001000          SW  23 : 00000000          SW  24 : 00000000          SW  25 : 00110000
+*p96XSW  26 : 00000000          SW  27 : 00000000          SW  28 : 00001010          SW  29 : 00000000          SW  30 : 00000000
+*p96XSW  31 : 00000000          SW  32 : 00000000          SW  33 : 00000000          SW  34 : 00000000          SW  35 : 00000000
+*p96XSW  36 : 00000000          SW  37 : 00000000          SW  38 : 00000000          SW  39 : 00000000          SW  40 : 00000000
+*p96XSW  41 : 00000000          SW  42 : 00000000          SW  43 : 00000000          SW  44 : 00000000          SW  45 : 00000000
+*p96XSW  46 : 00000000          SW  47 : 00000000          SW  48 : 00000000
+&l48D*p96X*p150Y(s17Ht4OCT/27/2016/t4THU 02:09 t4PM . (s17HMX-3550N
+*p96X&l48D*p96X*p150Y(s17H*p3264X t4S/N: 5507901Y00 *p4448X&l48D(s17H2 / 6
+(s18H
+
+*p96X(FAX SOFT SWITCH)
+*p96XSW   1 : 10110101          SW   2 : 10110100          SW   3 : 00000000          SW   4 : 10000111          SW   5 : 01010000
+*p96XSW   6 : 10000000          SW   7 : 01111000          SW   8 : 01011001          SW   9 : 00110010          SW  10 : 00100011
+*p96XSW  11 : 00000000          SW  12 : 00000000          SW  13 : 00000000          SW  14 : 00000000          SW  15 : 00110000
+*p96XSW  16 : 00000000          SW  17 : 01100000          SW  18 : 00000111          SW  19 : 00000000          SW  20 : 00000101
+*p96XSW  21 : 10100000          SW  22 : 00000000          SW  23 : 00000000          SW  24 : 00001011          SW  25 : 00100100
+*p96XSW  26 : 00000000          SW  27 : 00100011          SW  28 : 11111100          SW  29 : 00100000          SW  30 : 01010100
+*p96XSW  31 : 00010000          SW  32 : 11000001          SW  33 : 00000000          SW  34 : 00000000          SW  35 : 00000000
+*p96XSW  36 : 00000010          SW  37 : 00000000          SW  38 : 01010000          SW  39 : 00000000          SW  40 : 00000011
+*p96XSW  41 : 11000000          SW  42 : 00000000          SW  43 : 00000000          SW  44 : 00000000          SW  45 : 00000000
+*p96XSW  46 : 00001011          SW  47 : 01000000          SW  48 : 00001000          SW  49 : 01110101          SW  50 : 10000000
+*p96XSW  51 : 01111000          SW  52 : 01011000          SW  53 : 10001000          SW  54 : 00110000          SW  55 : 00000000
+*p96XSW  56 : 01100000          SW  57 : 00000111          SW  58 : 00000000          SW  59 : 00000000          SW  60 : 00001011
+*p96XSW  61 : 00000000          SW  62 : 10000000          SW  63 : 00000000          SW  64 : 00000000          SW  65 : 00000000
+*p96XSW  66 : 00000000          SW  67 : 00000000          SW  68 : 00001011          SW  69 : 01000000          SW  70 : 00001000
+*p96XSW  71 : 01110101          SW  72 : 10000000          SW  73 : 01111000          SW  74 : 01011000          SW  75 : 10001000
+*p96XSW  76 : 00110000          SW  77 : 00000000          SW  78 : 01100000          SW  79 : 00000111          SW  80 : 00000000
+*p96XSW  81 : 00000000          SW  82 : 00001011          SW  83 : 00000000          SW  84 : 10000000          SW  85 : 00000000
+*p96XSW  86 : 00000000          SW  87 : 00000000          SW  88 : 00000000          SW  89 : 00000000          SW  90 : 00110100
+*p96XSW  91 : 00000111          SW  92 : 00000000          SW  93 : 00000000          SW  94 : 00011110          SW  95 : 00000000
+*p96XSW  96 : 00000000          SW  97 : 00000000          SW  98 : 00000000          SW  99 : 10001000          SW 100 : 00001101
+*p96XSW 101 : 11010000          SW 102 : 10010000          SW 103 : 01000010          SW 104 : 00000010          SW 105 : 01010011
+*p96XSW 106 : 00000011          SW 107 : 00110011          SW 108 : 10101000          SW 109 : 01001000          SW 110 : 10010000
+*p96XSW 111 : 10000000          SW 112 : 00000000          SW 113 : 01011010          SW 114 : 00001101          SW 115 : 01000000
+*p96XSW 116 : 00000000          SW 117 : 00010010          SW 118 : 00110001          SW 119 : 00111000          SW 120 : 00011000
+*p96XSW 121 : 00000000          SW 122 : 01000100          SW 123 : 00100000          SW 124 : 00000000          SW 125 : 00000011
+*p96XSW 126 : 00001010          SW 127 : 10010010          SW 128 : 00000011          SW 129 : 00010000          SW 130 : 10000000
+*p96XSW 131 : 00000000          SW 132 : 10001000          SW 133 : 00100000          SW 134 : 00000000          SW 135 : 00000011
+*p96XSW 136 : 00001010          SW 137 : 10010010          SW 138 : 00000000          SW 139 : 00001011          SW 140 : 00001011
+*p96XSW 141 : 00001011          SW 142 : 00000000          SW 143 : 00000000          SW 144 : 00000000          SW 145 : 00000000
+*p96XSW 146 : 00000000          SW 147 : 00000000          SW 148 : 00000000          SW 149 : 00000000          SW 150 : 00000000
+*p96XSW 151 : 00000101          SW 152 : 00000000          SW 153 : 01011010          SW 154 : 00011110          SW 155 : 00000000
+*p96XSW 156 : 00101101          SW 157 : 01010110          SW 158 : 00001101          SW 159 : 00000000          SW 160 : 00110110
+*p96XSW 161 : 00010100          SW 162 : 01000000          SW 163 : 00000000          SW 164 : 00000000          SW 165 : 00000000
+*p96XSW 166 : 11000000          SW 167 : 00000000          SW 168 : 00001010          SW 169 : 00000000          SW 170 : 00000000
+*p96XSW 171 : 00000100          SW 172 : 10000011          SW 173 : 10000101          SW 174 : 00111000          SW 175 : 11101110
+*p96XSW 176 : 01000100          SW 177 : 10101000          SW 178 : 01100010          SW 179 : 00000000          SW 180 : 00001100
+*p96XSW 181 : 01000000          SW 182 : 10101101          SW 183 : 01011000          SW 184 : 10000000          SW 185 : 10000000
+*p96XSW 186 : 00000000          SW 187 : 00000000          SW 188 : 00100100          SW 189 : 00000101          SW 190 : 10001101
+*p96XSW 191 : 01001110          SW 192 : 00000000          SW 193 : 00000000          SW 194 : 00000000          SW 195 : 00000000
+*p96XSW 196 : 00000000          SW 197 : 01010100          SW 198 : 00000000          SW 199 : 00000011          SW 200 : 00010100
+*p96XSW 201 : 01000000          SW 202 : 00000000          SW 203 : 00000000          SW 204 : 00000000          SW 205 : 11000000
+*p96XSW 206 : 00001100          SW 207 : 00000100          SW 208 : 00001010          SW 209 : 11010101          SW 210 : 10001000
+*p96XSW 211 : 00001000          SW 212 : 01110000          SW 213 : 00010000          SW 214 : 00000000          SW 215 : 00000000
+*p96XSW 216 : 00000000          SW 217 : 10101100          SW 218 : 00011111          SW 219 : 00000000          SW 220 : 00000000
+*p96XSW 221 : 00000010          SW 222 : 01010100          SW 223 : 00000000          SW 224 : 00000011          SW 225 : 00000000
+*p96XSW 226 : 00000000          SW 227 : 11000000          SW 228 : 00001100          SW 229 : 00000100          SW 230 : 00001010
+*p96XSW 231 : 11010101          SW 232 : 10001000          SW 233 : 00001000          SW 234 : 01110000          SW 235 : 00000000
+*p96XSW 236 : 00000000          SW 237 : 00000000          SW 238 : 00010100          SW 239 : 01000000          SW 240 : 00000000
+*p96XSW 241 : 00000000          SW 242 : 00000000          SW 243 : 00000000          SW 244 : 00000000          SW 245 : 00000000
+*p96XSW 246 : 00000000          SW 247 : 00000000          SW 248 : 00000000          SW 249 : 00000000          SW 250 : 00000000
+*p96X21-01 MAINTENANCE CNT(TOTAL):         300      21-01 MAINTENANCE CNT(COLOR):    300
+*p96X26-01 RIGHT PAPER EXIT TRAY:            1      26-22 LANGUAGE:                   en           27-04 RETRY_ERROR:                 1
+*p96X26-01 JOB SEPARATOR:                    1      26-35 TROUBLE MEMORY MODE:         0           27-04 TIMER(MINUTE)_ERROR:         1
+*p96X26-02 TRAY4(TANDEM):               8.5x11      26-38 MAINTENANCE LIFE OVER:       0           27-04 FAX RETRY:                   2
+*p96X26-02 LCC:                         8.5x11      26-38 FUSER WEB END:               1           27-04 TONER ORDER TIMING(K):       3
+*p96X26-02 G/LBS SET:                      LBS      26-41 PAMPHLET MODE AMS:           0           27-04 TONER ORDER TIMING(C):       3
+*p96X26-05 TOTAL(B/W):                       2      26-49 POSTCARD:                  LOW           27-04 TONER ORDER TIMING(M):       3
+*p96X26-05 TOTAL(COL):                       2      26-50 BW REVERSE:                  1           27-04 TONER ORDER TIMING(Y):       3
+*p96X26-05 MAINTENANCE(B/W):                 2      26-50 COLOR MODE:                  0           27-04 TEMP HISTORY:               60
+*p96X26-05 MAINTENANCE(COL):                 2      26-50 FINISHER FUNCTION:           0           27-04 LOG OUTPUT CAPACITY(PCU):   30
+*p96X26-05 DEV(B/W):                         2      26-50 COLOR MODE(PRINTER):         2           27-04 TONER ORDER TIMING CONTROL:  0
+*p96X26-05 DEV(COL):                         2      26-50 FEED TRAY COLOR:             0           27-04 TONER ORDER DELIV SETTING:   0
+*p96X26-08 TOTAL(B/W) BANNER SIZE(S):        3      26-50 BANNER SIZE PRINT:           0           27-04 TONER ORDER DELIV INTERVAL:  3
+*p96X26-08 TOTAL(COL) BANNER SIZE(S):        3      26-50 WIRELESS SET:                0           27-04 REMOTE FIRMWARE UPDATE(PULL):1
+*p96X26-08 MAINTENANCE(B/W) BANNER SIZE(S):  3      26-50 POWER SHUT-OFF SET:          1           27-04 FW VER. SEARCH INTERVAL:     7
+*p96X26-08 MAINTENANCE(COL) BANNER SIZE(S):  3      26-50 USB DEVICE:                  1           27-05 TAG NUMBER:
+*p96X26-08 DEV(B/W) BANNER SIZE(S):          3      26-50 PUNCH UNIT DESTINATION:      2           27-07 FSS FUNCTION:                1
+*p96X26-08 DEV(COL) BANNER SIZE(S):          3      26-52 BLANK PAPER SETUP:           0           27-07 FSS ALERT:                   0
+*p96X26-08 TOTAL(B/W) BANNER SIZE(L):        5      26-60 UTILITY CNT MODE:       NORMAL           27-07 FSS CONNECTION:              0
+*p96X26-08 TOTAL(COL) BANNER SIZE(L):        5      26-61 BW LEVEL1:                  10           27-09 FEED TIME2:                 50
+*p96X26-08 MAINTENANCE(B/W) BANNER SIZE(L):  5      26-61 BW LEVEL2:                 150           27-09 GAIN ADJUSTMENT RETRY:      11
+*p96X26-08 MAINTENANCE(COL) BANNER SIZE(L):  5      26-61 COLOR LEVEL1:               10           27-09 JAM ALERT:                  10
+*p96X26-08 DEV(B/W) BANNER SIZE(L):          5      26-61 COLOR LEVEL2:              150           27-09 JAM ALERT PERIOD:           30
+*p96X26-08 DEV(COL) BANNER SIZE(L):          5      26-61 COVERAGE ITEMS:              0           27-16 MAINTENANCE ALERT:           0
+*p96X26-03 BUILT-IN AUDITOR:               P10      26-65 LIMIT COPIES:               ON           27-16 TONER ORDER ALERT:           0
+*p96X26-03 OUTSIDE AUDITOR:               NONE      26-69 TONER PREPARATION:           0           27-16 TONER CTRG ALERT:            0
+*p96X26-03 DOC ADJ:                        OFF      26-69 REMAINING TONER LEVEL:       1           27-16 JAM ALERT:                   0
+*p96X26-03 PF ADJ:                         OFF      26-69 TONER NEAR END:              0           27-16 TROUBLE ALERT:               0
+*p96X26-03 VENDOR MODE:                  MODE3      26-69 TONER END:                   2           27-16 PAPER ORDER ALERT:           1
+*p96X26-03 COUNTUP TIMING:            EXIT_OUT      26-69 TONER END COUNT:             1           27-17 PAPER TYPE SETTING:          0
+*p96X26-03 IMS CONTROL:                    OFF      26-69 TONER E-MAIL ALERT:          0           27-17 A3:                       1250
+*p96X26-03 PRINTER CONTROL:              MODE1      26-69 TONER MIB UNIT:              0           27-17 A4:                       2500
+*p96X26-06 DESTINATION SETTING:         CANADA      26-32 CLEANING PRINT SET:          0           27-17 B4:                       2500
+*p96X26-10 TRIAL MODE:                       1      26-74 OSA TRIAL MODE:              1           27-17 B5:                       2500
+*p96X26-30 CE MARK CONTROL:                  1      27-02 USER FAX_NO.:                            27-17 A3:FIRST:                 1000
+*p96X26-18 TONER SAVE MODE(COPY):            0      27-02 SERVA TEL_NO.:                           27-17 A4:FIRST:                 1000
+*p96X26-18 TONER SAVE MODE(PRINTER):         0      27-04 FSS MODE:                    1           27-17 B4:FIRST:                 1000
+*p96X26-18 COPY TS DISPLAY:                  0      27-04 RETRY_BUSY:                  2           27-17 B5:FIRST:                 1000
+*p96X26-18 PRINTER TS DISPLAY:               0      27-04 TIMER(MINUTE)_BUSY:          3
+*p96X(43-01)                 (A) (B)                           (A) (B)                           (A) (B)   (43-24)
+*p96XPLAIN PAP&WUP&RDY GR:     0   0   PLAIN PAP ADJ LL:         0   0   HI WU FM ON TMP:          0   0   COOL DOWN HEAVY:              8
+*p96XHEAVY PAPER GR:           0   0   HEAVY PAPER GR ADJ LL:    0   0   HI WU END TIME:           7  30   COOL DOWN OHP:                8
+*p96XTHIN PAPER GR:            0   0   SPECIAL PAPER ADJ LL:     0   0   LO WARMUP TIME:           0   0   COOL DOWN ENVELOPE:           8
+*p96XRECYCLED PAPER GR:        0   0   WUP&RDY GR ADJ HH:        0   0   HI WARMUP TIME:           0   0   FUS MOTOR:                   10
+*p96XGLOSSY PAPER GR:          0   0   PLAIN PAP ADJ HH:         0   0   HI WARMUP BORDER:        60  60   POWER SET:                    2
+*p96XENV PAPER GR:             0   0   HEAVY PAPER GR ADJ HH:    0   0   JOBEND FUMON TIME:        8   8   (43-32)
+*p96XEMBOSS PAPER GR:          0   0   SPECIAL PAPER ADJ HH:     0   0   TH_UM E-STAR:           135 135   JOB END COMP ACT CHECK:       1
+*p96XOHP PAPER:                0   0   (43-02)                           TH_LM E-STAR:           100 100   JOB END COMP ACT INTERVAL:  110
+*p96XFUSING CONDITION ADJ:     0   0   WARMUP FUMON TH_UM T:     0   0   TH_US E-STAR:           135 135   JOB END COMP ACT CNT:         5
+*p96XENV PAPER PRESS PATTERN:  0   0   WARMUP FUMOFF:           20  20   TH_UM PRE-JOB:          150 155
+*p96XWUP&RDY GR ADJ LL:        0   0   WARMUP END TIME:          7  30
+*p96X(FUSER INTERNAL PARAM) (A) (B)                           (A) (B)                           (A) (B)                           (A) (B)
+*p96XTH_UM READY:           150 155    TH_UM HEAVY1:          160 160    TH_UM THIN CL:         135 135    TH_UM HEAVY2 CL DUP:   165 165
+*p96XTH_LM READY:           100 105    TH_LM HEAVY1:          100 100    TH_LM THIN CL:          85  85    TH_LM HEAVY2 CL DUP:   100 100
+*p96XTH_US_DIF READY:        50  50    TH_US_DIF HEAVY GR:     50  50    TH_UM THIN READY:      143 143    TH_UM HEAVY3 BW DUP:   165 165
+*p96XTH_UM WARMUP 120L:     150 155    TH_UM HEAVY2:          165 165                                      TH_LM HEAVY3 BW DUP:   110 110
+*p96XTH_LM WARMUP 120L:     100 105    TH_LM HEAVY2:          100 100    TH_UM PLAIN BW DUP:    145 150    TH_UM HEAVY3 CL DUP:   165 165
+*p96XTH_UM WARMUP 120H:     150 155    TH_UM HEAVY3:          165 165    TH_LM PLAIN BW DUP:     95 100    TH_LM HEAVY3 CL DUP:   110 110
+*p96XTH_LM WARMUP 120H:     100 105    TH_LM HEAVY3:          110 110    TH_US_DIF PLAIN BW DUP: 50  50
+*p96XTH_US_DIF WARMUP:       50  50    TH_UM HEAVY4:          170 170    TH_UM PLAIN CL DUP:    155 160
+*p96XLO WU JOB SET TMP:     150 155    TH_LM HEAVY4:          110 110    TH_LM PLAIN CL DUP:    100 105
+*p96XLO WU JOB SET TMP BW:  145 150    TH_UM GLOSSY:          170 170    TH_US_DIF PLAIN CL DUP: 50  50
+*p96XHI WU JOB SET TMP:     150 155    TH_LM GLOSSY:          100 100    TH_UM REC BW DUP:      145 145
+*p96XTH_UM PLAIN BW:        145 150    TH_US_DIF SPECIAL:      50  50    TH_LM REC BW DUP:       95  95
+*p96XTH_LM PLAIN BW:         95 100    TH_UM EMBOSS:          175 175    TH_UM REC CL DUP:      155 155
+*p96XTH_US_DIF PLAIN BW:     50  50    TH_LM EMBOSS:          100 100    TH_LM REC CL DUP:      100 100
+*p96XTH_UM PLAIN CL:        155 160    TH_UM OHP:             165 165    TH_UM HEAVY1 BW DUP:   160 160
+*p96XTH_LM PLAIN CL:        100 105    TH_LM OHP:             100 100    TH_LM HEAVY1 BW DUP:   100 100
+*p96XTH_US_DIF PLAIN CL:     50  50    TH_UM ENV:             185 185    TH_US_DF HVY GR BW DUP: 50  50
+*p96XTH_UM REC BW:          145 145    TH_LM ENV:             125 125    TH_UM HEAVY1 CL DUP:   160 160
+*p96XTH_LM REC BW:           95  95    TH_US_DIF ENV:          50  50    TH_LM HEAVY1 CL DUP:   100 100
+*p96XTH_UM REC CL:          155 155    TH_UM THIN BW:         130 130    TH_US_DF HVY GR CL DUP: 50  50
+*p96XTH_LM REC CL:          100 100    TH_LM THIN BW:          80  80    TH_UM HEAVY2 BW DUP:   165 165
+*p96XTH_UM REC READY:       150 150    TH_US_DIF THIN:         50  50    TH_LM HEAVY2 BW DUP:   100 100
+*p96X22-18 START:            16/05/19 14:16         22-18 END:              16/05/19 15:02         26-79 DISP SET:                      0
+*p96X26-79 SIM PASSWORD DISP:             0
+*p96X26-07 MACHINE ID:
+&l48D*p96X*p150Y(s17Ht4OCT/27/2016/t4THU 02:09 t4PM . (s17HMX-3550N
+*p96X&l48D*p96X*p150Y(s17H*p3264X t4S/N: 5507901Y00 *p4448X&l48D(s17H3 / 6
+(s18H
+*p96X25-02 AT DEVE ADJ_L_K:     129    25-02 AT DEVE ADJ_M_K:     128    25-02 AT DEVE VO_L_K:      110    25-02 AT DEVE VO_M_K:      111
+*p96X25-02 AT DEVE ADJ_L_C:     128    25-02 AT DEVE ADJ_M_C:     127    25-02 AT DEVE VO_L_C:      104    25-02 AT DEVE VO_M_C:      105
+*p96X25-02 AT DEVE ADJ_L_M:     127    25-02 AT DEVE ADJ_M_M:     128    25-02 AT DEVE VO_L_M:      108    25-02 AT DEVE VO_M_M:      110
+*p96X25-02 AT DEVE ADJ_L_Y:     129    25-02 AT DEVE ADJ_M_Y:     128    25-02 AT DEVE VO_L_Y:      115    25-02 AT DEVE VO_M_Y:      116
+*p96X[K]                               [C]                               [M]                               [Y]
+*p96X25-04 YLD_CNT_FB:           63    25-04 YLD_CNT_FB:           60    25-04 YLD_CNT_FB:           60    25-04 YLD_CNT_FB:           60
+*p96X25-04 DELTA_DVB:          - 44    25-04 DELTA_DVB:          -108    25-04 DELTA_DVB:          -112    25-04 DELTA_DVB:          -103
+*p96X25-04 IDL_DVB:             351    25-04 IDL_DVB:             341    25-04 IDL_DVB:             345    25-04 IDL_DVB:             345
+*p96X25-04 PROCON_DVB:          307    25-04 PROCON_DVB:          233    25-04 PROCON_DVB:          233    25-04 PROCON_DVB:          242
+*p96X25-04 DV_LIFE:               5    25-04 DV_LIFE:               4    25-04 DV_LIFE:               4    25-04 DV_LIFE:               4
+*p96X25-04 COVERAGE_AREA:         3    25-04 COVERAGE_AREA:         2    25-04 COVERAGE_AREA:         1    25-04 COVERAGE_AREA:         1
+*p96X25-04 ENV_AREA:              7    25-04 ENV_AREA:              7    25-04 ENV_AREA:              7    25-04 ENV_AREA:              7
+*p96X25-04 MULTI_TIME:            1    25-04 MULTI_TIME:            1    25-04 MULTI_TIME:            1    25-04 MULTI_TIME:            1
+*p96X25-04 PRO_FB_CNT:           50    25-04 PRO_FB_CNT:          150    25-04 PRO_FB_CNT:          150    25-04 PRO_FB_CNT:          150
+*p96X25-04 PRO_FB_INT:         1500    25-04 PRO_FB_INT:          500    25-04 PRO_FB_INT:          500    25-04 PRO_FB_INT:          500
+*p96X25-04 PRO_FB_RATIO:        - 1    25-04 PRO_FB_RATIO:        - 1    25-04 PRO_FB_RATIO:        - 1    25-04 PRO_FB_RATIO:        - 1
+*p96X25-04 RECV_MODE_CNT(+):      0    25-04 RECV_MODE_CNT(+):      0    25-04 RECV_MODE_CNT(+):      0    25-04 RECV_MODE_CNT(+):      0
+*p96X25-04 RECV_MODE_CNT(-):      1    25-04 RECV_MODE_CNT(-):     11    25-04 RECV_MODE_CNT(-):      0    25-04 RECV_MODE_CNT(-):      0
+*p96X25-04 AUTO_DV_AREA:          7    25-04 AUTO_DV_AREA:          7    25-04 AUTO_DV_AREA:          7    25-04 AUTO_DV_AREA:          7
+*p96X[K]                               [C]                               [M]                               [Y]
+*p96X25-05 TCS_B_AVE.:          124    25-05 TCS_B_AVE.:          117    25-05 TCS_B_AVE.:          120    25-05 TCS_B_AVE.:          122
+*p96X25-05 TSG_HUM:               0    25-05 TSG_HUM:               0    25-05 TSG_HUM:               0    25-05 TSG_HUM:               0
+*p96X25-05 TSG_COV:            +  3    25-05 TSG_COV:            +  5    25-05 TSG_COV:            +  7    25-05 TSG_COV:            +  7
+*p96X25-05 TSG_LIFE:              0    25-05 TSG_LIFE:              0    25-05 TSG_LIFE:              0    25-05 TSG_LIFE:              0
+*p96X25-05 TSG_ENV:               0    25-05 TSG_ENV:               0    25-05 TSG_ENV:               0    25-05 TSG_ENV:               0
+*p96X25-05 DELTA_TSG:          - 35    25-05 DELTA_TSG:          - 38    25-05 DELTA_TSG:          - 23    25-05 DELTA_TSG:          - 19
+*p96X25-05 DELTA_VSPEED(M):       0    25-05 DELTA_VSPEED(M):       0    25-05 DELTA_VSPEED(M):       0    25-05 DELTA_VSPEED(M):       0
+*p96X25-05 DELTA_VSPEED(L):       0    25-05 DELTA_VSPEED(L):       0    25-05 DELTA_VSPEED(L):       0    25-05 DELTA_VSPEED(L):       0
+*p96X25-05 TSG_REF:             111    25-05 TSG_REF:             105    25-05 TSG_REF:             110    25-05 TSG_REF:             116
+*p96X25-05 TSG_TOTAL:            79    25-05 TSG_TOTAL:            72    25-05 TSG_TOTAL:            94    25-05 TSG_TOTAL:           104
+*p96X25-05 TCS_AVE.:            128    25-05 TCS_AVE.:            124    25-05 TCS_AVE.:            126    25-05 TCS_AVE.:            127
+*p96X25-05 TN_EMP_W:              0    25-05 TN_EMP_W:              0    25-05 TN_EMP_W:              0    25-05 TN_EMP_W:              0
+*p96X25-05 TN_EMP_X:              0    25-05 TN_EMP_X:              0    25-05 TN_EMP_X:              0    25-05 TN_EMP_X:              0
+*p96X25-05 TN_EMP_Y:              0    25-05 TN_EMP_Y:              0    25-05 TN_EMP_Y:              0    25-05 TN_EMP_Y:              0
+
+*p96X40-07 MAX POSITION:        246    41-03 PD3:                 128    48-01 CCD(SUB):             51    48-05 MR(MID):              50
+*p96X40-07 P1(A4) POSITION:     219    41-03 PD4:                 128    48-01 SPF(MAIN):            50    48-05 MR(LO):               50
+*p96X40-07 P2(A4R) POSITION:    134    41-03 PD5:                 128    48-01 SPF(SUB):             54    48-05 SPF(HI):              50
+*p96X40-07 MIN POSITION:         17    41-03 PD6:                 128    48-01 SPFB(MAIN):           50    48-05 SPF(MID):             50
+*p96X41-03 PD1:                 128    41-03 PD7:                 128    48-01 SPFB(SUB):            58
+*p96X41-03 PD2:                 128    48-01 CCD(MAIN):            50    48-05 MR(HI):               50
+
+*p96X48-06 RRM(COLOR):           53    48-06 FUM:                  39    48-06 PFM:                  50    48-06 SBM:                  50
+*p96X48-06 RRM(MONO):            53    48-06 CPFM:                 50    48-06 POM:                  50    48-06 POM(OUT):             50
+*p96X48-06 BTM:                  47    48-06 PFM:                  50    48-06 SBM:                  50    48-06 SBM(OUT):             50
+*p96X48-06 DM-K:                 45    48-06 POM:                  50    48-06 POM(OUT):             50    48-06 ADUM1(OUT):           50
+*p96X48-06 DM-CL:                45    48-06 SBM:                  50    48-06 SBM(OUT):             50    48-06 FUSER-SETTING:        50
+*p96X48-06 FUM:                  37    48-06 POM(OUT):             50    48-06 ADUM1(OUT):           50    48-06 RRM-START:           150
+*p96X48-06 CPFM:                 50    48-06 SBM(OUT):             50    48-06 FUSER-SETTING:        50    48-06 RRM-END:             200
+*p96X48-06 PFM:                  50    48-06 ADUM1(OUT):           50    48-06 RRM-START:           150    48-06 RRM-OFFSET:           50
+*p96X48-06 POM:                  50    48-06 FUSER-SETTING:        50    48-06 RRM-END:             200    48-06 COR-PP:               50
+*p96X48-06 SBM:                  50    48-06 RRM-START:           150    48-06 RRM-OFFSET:           50    46-48 AUTO:           600DPI DT
+*p96X48-06 POM(OUT):             50    48-06 RRM-END:             200    48-06 COR-PP:               50    46-48 TEXT/PRT PHOTO: 600DPI DT
+*p96X48-06 SBM(OUT):             50    48-06 RRM-OFFSET:           50    48-06 RRM(COLOR/MONO):      46
+*p96X48-06 ADUM1(OUT):           50    48-06 COR-PP:               50    48-06 FUM:                  39
+*p96X48-06 COR-IM:               50    48-06 RRM(COLOR/MONO):      46    48-06 CPFM:                 50
+*p96X48-06 COR-PP:               50    48-06 FUM:                  39    48-06 PFM:                  50
+*p96X48-06 RRM(COLOR/MONO):      46    48-06 CPFM:                 50    48-06 POM:                  50
+
+*p96X50-01 RRCA:                 62    50-01 RRCB-CS:              50    50-01 RRCB-DSK:             50    50-01 RRCB-LCC:             50
+*p96X50-01 RRCB-MFT:             43    50-01 RRCB-ADU:             50    50-01 LEAD:                 40    50-01 SIDE:                 20
+*p96X50-01 DENA:                 40    50-01 DENB:                 30    50-01 FRONT/REAR:           23    50-01 OFFSET_OC:            48
+*p96X50-01 SCAN_SPEED_OC:        51    50-01 DENB-MFT:             50    50-01 DENB-CS1:             50    50-01 DENB-CS2:             50
+*p96X50-01 DENB-CS3:             50    50-01 DENB-CS4:             50    50-01 DENB-LCC:             50    50-01 DENB-ADU:             50
+*p96X50-01 DENB-HV:              50
+*p96X51-01 TC2 ON TIMING:        55    51-01 TC2 OFF TIMING:       47    51-01 FRONT EDGE ON TIMING: 30    51-01 BACKEND OFF TIMING:   60
+*p96X51-01 DHV ON TIMING:        30    51-01 DHV OFF TIMING:       80
+*p96X50-06 SIDE1:                64    50-06 SIDE2:                33    50-06 LEAD_EDGE(SIDE1):     20    50-06 FRONT_REAR(SIDE1):    20
+*p96X50-06 TRAIL_EDGE(SIDE1):    40    50-06 LEAD_EDGE(SIDE2):     20    50-06 FRONT_REAR(SIDE2):    20    50-06 TRAIL_EDGE(SIDE2):    40
+*p96X50-06 OFFSET_SPF1:          41    50-06 OFFSET_SPF2:          36    50-06 SCAN_SPEED_SPF1:      54    50-06 SCAN_SPEED_SPF2:      58
+*p96X50-10 BK-MAG:              102    50-10 MAIN-MFT:             56    50-10 MAIN-CS1:             52    50-10 MAIN-CS2:             50
+*p96X50-10 MAIN-CS3:             50    50-10 MAIN-CS4:             50    50-10 MAIN-LC:              50    50-10 MAIN-ADU:             51
+*p96X50-10 SUB-MFT:              43    50-10 SUB-CS:               50    50-10 SUB-DSK:              50    50-10 SUB-LC:               50
+*p96X50-10 SUB-ADU:              50    50-10 MAIN-STD:             51    50-10 SUB-STD:              71    50-10 SUB-HV-A:             50
+*p96X50-10 SUB-HV-B:             50    50-10 SUB-GLOSSY PAPER:     50    50-10 SUB-EMBOSS:           50    50-10 SUB-OHP:              50
+*p96X50-10 SUB-ENV:              50
+*p96X50-12 OC:                   48    50-12 SPF(SIDE1):           41    50-12 SPF(SIDE2):           36
+*p96X53-07 AD_MAX:               68    53-07 AD_P1:               508    53-07 AD_P2:               803    53-07 AD_MIN:              960
+*p96X53-08 MANUAL ADJ VALUE:      5    62-12 HDD TROUBLE:           1
+
+*p96XFAX SEND                                       SCANNER SEND                                   SIDE1
+*p96X50-27 LEAD_EDGE_OC:               30           50-27 LEAD_EDGE_OC:                0           51-02 NORMAL_PLAIN_HIGH:          50
+*p96X50-27 FRONT_REAR_OC:              20           50-27 FRONT_REAR_OC:               0           51-02 NORMAL_PLAIN_LOW:           50
+*p96X50-27 TRAIL_EDGE_OC:              20           50-27 TRAIL_EDGE_OC:               0           51-02 NORMAL_THIN_HIGH:           50
+*p96X50-27 LEAD_EDGE_SPF_SIDE1:        20           50-27 LEAD_EDGE_SPF_SIDE1:         0           51-02 NORMAL_THIN_LOW:            50
+*p96X50-27 FRONT_REAR_SPF_SIDE1:       20           50-27 FRONT_REAR_SPF_SIDE1:        0           51-02 RANDOM_PLAIN_HIGH:          50
+*p96X50-27 TRAIL_EDGE_SPF_SIDE1:       30           50-27 TRAIL_EDGE_SPF_SIDE1:        0           51-02 RANDOM_PLAIN_LOW:           50
+*p96X50-27 LEAD_EDGE_SPF_SIDE2:        20           50-27 LEAD_EDGE_SPF_SIDE2:         0           51-02 RANDOM_THIN_HIGH:           50
+*p96X50-27 FRONT_REAR_SPF_SIDE2:       20           50-27 FRONT_REAR_SPF_SIDE2:        0           51-02 RANDOM_THIN_LOW:            50
+*p96X50-27 TRAIL_EDGE_SPF_SIDE2:       30           50-27 TRAIL_EDGE_SPF_SIDE2:        0
+
+*p96XSIDE2                                          51-02 TRAY2 HEAVY B PAPER(L):     40           51-02 ADU HEAVY B PAPER(L):       40
+*p96X51-02 NORMAL_PLAIN_HIGH_1:        50           51-02 MANUAL PLAIN PAPER(S):      40           51-02 DESK(S):                    40
+*p96X51-02 NORMAL_PLAIN_LOW_1:         50           51-02 MANUAL PLAIN PAPER(L):      40           51-02 DESK HEAVY A PAPER(S):      40
+*p96XENGINE                                         51-02 MANUAL HEAVY A PAPER(S):    40           51-02 DESK HEAVY B PAPER(S):      40
+*p96X51-02 TRAY1 PLAIN PAPER(S):       40           51-02 MANUAL HEAVY A PAPER(L):    40           51-02 DESK(L):                    40
+*p96X51-02 TRAY1 PLAIN PAPER(L):       40           51-02 MANUAL HEAVY B PAPER(S):    40           51-02 DESK HEAVY A PAPER(L):      40
+*p96X51-02 TRAY1 HEAVY A PAPER(S):     40           51-02 MANUAL HEAVY B PAPER(L):    40           51-02 DESK HEAVY B PAPER(L):      40
+*p96X51-02 TRAY1 HEAVY A PAPER(L):     40           51-02 MANUAL OHP:                 40           51-02 LCC(S):                     40
+*p96X51-02 TRAY1 HEAVY B PAPER(S):     40           51-02 MANUAL ENV:                 40           51-02 LCC HEAVY A PAPER(S):       40
+*p96X51-02 TRAY1 HEAVY B PAPER(L):     40           51-02 MANUAL LABEL:               30
+*p96X51-02 TRAY2 PLAIN PAPER(S):       40           51-02 ADU PLAIN PAPER(S):         30
+*p96X51-02 TRAY2 PLAIN PAPER(L):       40           51-02 ADU PLAIN PAPER(L):         30
+*p96X51-02 TRAY2 HEAVY A PAPER(S):     40           51-02 ADU HEAVY A PAPER(S):       40
+*p96X51-02 TRAY2 HEAVY A PAPER(L):     40           51-02 ADU HEAVY A PAPER(L):       40
+*p96X51-02 TRAY2 HEAVY B PAPER(S):     40           51-02 ADU HEAVY B PAPER(S):       40
+*p96X50-20 CYAN(FRONT):         213    50-20 CYAN(REAR):          219    50-20 MAGENTA(FRONT):      241    50-20 MAGENTA(REAR):       247
+*p96X50-20 YELLOW(FRONT):       175    50-20 YELLOW(REAR):        178    50-20 CYAN(SUB):           187    50-20 MAGENTA(SUB):        181
+*p96X50-20 YELLOW(SUB):         185    50-20 OFFSET_C_MAIN_F:      50    50-20 OFFSET_C_MAIN_R:      50    50-20 OFFSET_M_MAIN_F:      50
+*p96X50-20 OFFSET_M_MAIN_R:      50    50-20 OFFSET_Y_MAIN_F:      50    50-20 OFFSET_Y_MAIN_R:      50    50-20 OFFSET_C_SUB:         51
+*p96X50-20 OFFSET_M_SUB:         51    50-20 OFFSET_Y_SUB:         51    50-20 OFFSET_C_SUB_HV12:    50    50-20 OFFSET_M_SUB_HV12:    50
+*p96X50-20 OFFSET_Y_SUB_HV12:    50    50-20 OFFSET_C_SUB_HV34:    50    50-20 OFFSET_M_SUB_HV34:    50    50-20 OFFSET_Y_SUB_HV34:    50
+*p96X50-22 MAIN F(C):         212.7    50-22 MAIN F(M):         240.5    50-22 MAIN F(Y):         174.8    50-22 MAIN R(C):         219.4
+*p96X50-22 MAIN R(M):         247.3    50-22 MAIN R(Y):         178.3    50-22 SUB (C):           186.7    50-22 SUB (M):           180.7
+*p96X50-22 SUB (Y):           184.5    50-22 SKEW (C):          100.8    50-22 SKEW (M):          100.8    50-22 SKEW (Y):          102.4
+*p96X50-22 ALL_ROTATE:         98.5    50-22 PHASE:                 5
+*p96X50-23 CT_NORM_MAIN_F_C:    104    50-23 CT_NORM_SUB_Y:        97    50-23 CP_NORM_MAIN_R_Y:    100    50-23 CP_JOB_MAIN_C:       100
+*p96X50-23 CT_NORM_MAIN_R_C:    104    50-23 CP_NORM_MAIN_F_C:    100    50-23 CP_NORM_SUB_Y:       100    50-23 CP_JOB_SUB_C:        100
+*p96X50-23 CT_NORM_SUB_C:       103    50-23 CP_NORM_MAIN_R_C:    100    50-23 CT_JOB_MAIN_C:       104    50-23 CP_JOB_MAIN_M:       120
+*p96X50-23 CT_NORM_MAIN_F_M:    107    50-23 CP_NORM_SUB_C:       100    50-23 CT_JOB_SUB_C:        103    50-23 CP_JOB_SUB_M:        100
+*p96X50-23 CT_NORM_MAIN_R_M:    107    50-23 CP_NORM_MAIN_F_M:    100    50-23 CT_JOB_MAIN_M:       107    50-23 CP_JOB_MAIN_Y:       120
+*p96X50-23 CT_NORM_SUB_M:        97    50-23 CP_NORM_MAIN_R_M:    100    50-23 CT_JOB_SUB_M:         97    50-23 CP_JOB_SUB_Y:        100
+*p96X50-23 CT_NORM_MAIN_F_Y:    107    50-23 CP_NORM_SUB_M:       100    50-23 CT_JOB_MAIN_Y:       107
+*p96X50-23 CT_NORM_MAIN_R_Y:    107    50-23 CP_NORM_MAIN_F_Y:    100    50-23 CT_JOB_SUB_Y:         97
+*p96X53-09 SIDEA_SCAN_POSITION_SET_START: 0         53-09 OC_DIRT_LV:                    1         53-09 SIDEA_DIRT_SHADING_SET:        1
+*p96X53-09 SIDEA_SCAN_POSITION_SET_JOB:   1         53-09 SIDEA_DIRT_ALARM_LV:           1
+*p96X53-09 SIDEA_SCAN_POSITION_LV:        1
+&l48D*p96X*p150Y(s17Ht4OCT/27/2016/t4THU 02:09 t4PM . (s17HMX-3550N
+*p96X&l48D*p96X*p150Y(s17H*p3264X t4S/N: 5507901Y00 *p4448X&l48D(s17H4 / 6
+(s18H
+
+*p96X                              600DPI 300DPI                                  600DPI 300DPI                                  600DPI 300DPI
+*p96X63-01 ANALOG GAIN ODD (R):         4      4    63-01 ANALOG GAIN ODD (G):         3      2    63-01 ANALOG GAIN ODD (B):         4      4
+*p96X63-01 ANALOG GAIN EVEN (R):        4      4    63-01 ANALOG GAIN EVEN (G):        3      2    63-01 ANALOG GAIN EVEN (B):        4      4
+*p96X63-01 DIGITAL GAIN ODD (R):       25     11    63-01 DIGITAL GAIN ODD (G):       21     44    63-01 DIGITAL GAIN ODD (B):       32     17
+*p96X63-01 DIGITAL GAIN EVEN (R):      24     10    63-01 DIGITAL GAIN EVEN (G):      18     41    63-01 DIGITAL GAIN EVEN (B):      32     17
+*p96X63-01 SMP AVE ODD (R):           721    723    63-01 SMP AVE ODD (G):           723    722    63-01 SMP AVE ODD (B):           722    721
+*p96X63-01 SMP AVE EVEN (R):          721    723    63-01 SMP AVE EVEN (G):          724    722    63-01 SMP AVE EVEN (B):          723    721
+*p96X63-01 TARGET VALUE (R):          720    720    63-01 TARGET VALUE (G):          720    720    63-01 TARGET VALUE (B):          720    720
+*p96X63-01 BLACK LEVEL (R):            32     32    63-01 BLACK LEVEL (G):            32     32    63-01 BLACK LEVEL (B):            32     32
+*p96X63-01 ERROR CODE (R):              0      0    63-01 ERROR CODE (G):              0      0    63-01 ERROR CODE (B):              0      0
+*p96X63-01 RSPF WHITE LEVEL1 (R):       0      0    63-01 RSPF WHITE LEVEL1 (G):       0      0    63-01 RSPF WHITE LEVEL1 (B):       0      0
+*p96X63-01 RSPF WHITE LEVEL2 (R):       0      0    63-01 RSPF WHITE LEVEL2 (G):       0      0    63-01 RSPF WHITE LEVEL2 (B):       0      0
+
+
+
+
+
+
+
+
+
+
+
+*p96X(IMAGE PROCESSING DATA)        LO/HI                                          LO/HI                                          LO/HI
+*p96X46-01 AUTO:                    50/50           46-01 TEXT(COPY TO COPY):      50/50           46-01 MAP(CL TN ENH):          50/50
+*p96X46-01 TEXT:                    50/50           46-01 TXT/PRT PHT(C TO C):     50/50           46-01 LIGHT(CL TN ENH):        50/50
+*p96X46-01 TEXT/PRINTED PHOTO:      50/50           46-01 PRT PHOTO(COPY TO COPY): 50/50           46-01 SINGLE COLOR:            50/50
+*p96X46-01 TEXT/PHOTO:              50/50           46-01 TEXT(CL TONE ENH):       50/50           46-01 SINGLE COLOR(C TO C):    50/50
+*p96X46-01 PRINTED PHOTO:           50/50           46-01 TXT/PRT PHT(CL TN ENH):  50/50           46-01 TWO COLOR:               50/50
+*p96X46-01 PHOTOGRAPH:              50/50           46-01 TXT/PHT(CL TN ENH):      50/50           46-01 TWO COLOR(C TO C):       50/50
+*p96X46-01 MAP:                     50/50           46-01 PRT PHT(CL TN ENH):      50/50
+*p96X46-01 LIGHT:                   50/50           46-01 PHOTOGRAPH(CL TN ENH):   50/50
+*p96X46-02 AUTO1:                   50/50           46-02 PRINTED PHOTO:           50/50           46-02 TEXT(COPY TO COPY):      50/50
+*p96X46-02 AUTO2:                   50/50           46-02 PHOTOGRAPH:              50/50           46-02 TXT/PRT PHT(C TO C):     50/50
+*p96X46-02 AUTO3:                   50/50           46-02 MAP:                     50/50           46-02 PRINTED PHOTO(C TO C):   50/50
+*p96X46-02 TEXT:                    50/50           46-02 AUTO1(COPY TO COPY):     50/50           46-02 LIGHT:                   50/50
+*p96X46-02 TEXT/PRINTED PHOTO:      50/50           46-02 AUTO2(COPY TO COPY):     50/50
+*p96X46-02 TEXT/PHOTO:              50/50           46-02 AUTO3(COPY TO COPY):     50/50
+*p96X46-09 COPY:LOW:                   48
+*p96X46-09 SCAN:LOW:                   48
+*p96X46-09 FAX:LOW:                    48
+*p96X46-09 COPY:HIGH:                  53
+*p96X46-09 FAX:HIGH:                   53
+*p96X                   POINT  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
+*p96X46-16 ALL(B/W):PG       :500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500
+*p96X46-21 ALL(COLOR):PG  [K]:500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500
+*p96X                     [C]:500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500
+*p96X                     [M]:500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500
+*p96X                     [Y]:500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500 500
+*p96X46-19 AE_MODE:                 MODE2           46-27 BLACK TEXT(SLOPE):          50           63-03 OC   R:191   5
+*p96X46-19 AE_STOP_COPY:          PRESCAN           46-27 BLACK TEXT(INTERCEPT):      50                      G:184   5
+*p96X46-19 AE_STOP_FAX:                ON           46-27 COLOR TEXT(SLOPE):          50                      B:183   5
+*p96X46-19 AE_STOP_SCAN:             STOP           46-27 COLOR TEXT(INTERCEPT):      50
+*p96X46-19 AE_FILTER:              NORMAL           46-27 ED TEXT(SLOPE):             50
+*p96X46-19 AE_WIDTH:                 FULL           46-27 ED TEXT(INTERCEPT):         50
+*p96X46-23 CMY(0:ENABLE 1:DISABLE):     0           46-30 SCAN RESOLUTION SW:          0
+*p96X46-23 K(0:ENABLE 1:DISABLE):       1                               COPY  SCAN   FAX
+*p96X46-23 CYAN MAX TARGET:           500           46-32 OC:            196   196   196
+*p96X46-23 MAGENTA MAX TARGET:        500           46-32 RSPF:          196   196   196
+*p96X46-23 YELLOW MAX TARGET:         500
+*p96X46-23 BLACK MAX TARGET:          500
+*p96X46-25 COL BALANCE RED(C):          0           46-25 COL BALANCE RED(M):        255           46-25 COL BALANCE RED(Y):        200
+*p96X46-25 COL BALANCE GREEN(C):      255           46-25 COL BALANCE GREEN(M):        0           46-25 COL BALANCE GREEN(Y):      255
+*p96X46-25 COL BALANCE BLUE(C):       255           46-25 COL BALANCE BLUE(M):       150           46-25 COL BALANCE BLUE(Y):         0
+*p96X46-25 COL BALANCE CYAN(C):       255           46-25 COL BALANCE CYAN(M):         0           46-25 COL BALANCE CYAN(Y):         0
+*p96X46-25 COL BALANCE MAGENTA(C):      0           46-25 COL BALANCE MAGENTA(M):    255           46-25 COL BALANCE MAGENTA(Y):      0
+*p96X46-25 COL BALANCE YELLOW(C):       0           46-25 COL BALANCE YELLOW(M):       0           46-25 COL BALANCE YELLOW(Y):     255
+*p96X46-25 COL BALANCE ORANGE(C):       0           46-25 COL BALANCE ORANGE(M):     150           46-25 COL BALANCE ORANGE(Y):     255
+*p96X46-25 COL BALANCE NAVY(C):       255           46-25 COL BALANCE NAVY(M):       200           46-25 COL BALANCE NAVY(Y):         0
+*p96X46-25 COL BALANCE LIGHT GREEN(C):150           46-25 COL BALANCE LIGHT GREEN(M):  0           46-25 COL BALANCE LIGHT GREEN(Y):150
+*p96X46-25 COL BALANCE LIGHT BLUE(C): 150           46-25 COL BALANCE LIGHT BLUE(M):  20           46-25 COL BALANCE LIGHT BLUE(Y):   0
+*p96X46-25 COL BALANCE AQUA MARINE(C):170           46-25 COL BALANCE AQUA MARINE(M):  0           46-25 COL BALANCE AQUA MARINE(Y): 50
+*p96X46-25 COL BALANCE PURPLE(C):     128           46-25 COL BALANCE PURPLE(M):     255           46-25 COL BALANCE PURPLE(Y):       0
+*p96X46-25 COL BALANCE PINK(C):         0           46-25 COL BALANCE PINK(M):       150           46-25 COL BALANCE PINK(Y):        20
+*p96X46-25 COL BALANCE YELLOW GREEN(C)128           46-25 COL BALANCE YELLOW GREEN(M)  0           46-25 COL BALANCE YELLOW GREEN(Y)255
+*p96X46-25 COL BALANCE BEIGE(C):        0           46-25 COL BALANCE BEIGE(M):       50           46-25 COL BALANCE BEIGE(Y):      170
+*p96X46-36 OUTCOLOR RED(C):             0           46-36 OUTCOLOR RED(M):           255           46-36 OUTCOLOR RED (Y):          200
+*p96X46-36 OUTCOLOR GREEN(C):         255           46-36 OUTCOLOR GREEN(M):           0           46-36 OUTCOLOR GREEN (Y):        255
+*p96X46-36 OUTCOLOR BLUE(C):          255           46-36 OUTCOLOR BLUE(M):          150           46-36 OUTCOLOR BLUE (Y):           0
+*p96X46-36 OUTCOLOR CYAN(C):          255           46-36 OUTCOLOR CYAN(M):            0           46-36 OUTCOLOR CYAN (Y):           0
+*p96X46-36 OUTCOLOR MAGENTA(C):         0           46-36 OUTCOLOR MAGENTA(M):       255           46-36 OUTCOLOR MAGENTA (Y):        0
+*p96X46-36 OUTCOLOR YELLOW(C):          0           46-36 OUTCOLOR YELLOW(M):          0           46-36 OUTCOLOR YELLOW (Y):       255
+*p96X46-36 OUTCOLOR ORANGE(C):          0           46-36 OUTCOLOR ORANGE(M):        150           46-36 OUTCOLOR ORANGE(Y):        255
+*p96X46-36 OUTCOLOR NAVY(C):          255           46-36 OUTCOLOR NAVY(M):          200           46-36 OUTCOLOR NAVY(Y):            0
+*p96X46-36 OUTCOLOR LIGHT GREEN(C):   150           46-36 OUTCOLOR LIGHT GREEN(M):     0           46-36 OUTCOLOR LIGHT GREEN(Y):   150
+*p96X46-36 OUTCOLOR LIGHT BLUE(C):    150           46-36 OUTCOLOR LIGHT BLUE(M):     20           46-36 OUTCOLOR LIGHT BLUE(Y):      0
+*p96X46-36 OUTCOLOR AQUA MARINE(C):   170           46-36 OUTCOLOR AQUA MARINE(M):     0           46-36 OUTCOLOR AQUA MARINE(Y):    50
+*p96X46-36 OUTCOLOR PURPLE(C):        128           46-36 OUTCOLOR PURPLE(M):        255           46-36 OUTCOLOR PURPLE(Y):          0
+*p96X46-36 OUTCOLOR PINK(C):            0           46-36 OUTCOLOR PINK(M):          150           46-36 OUTCOLOR PINK(Y):           20
+*p96X46-36 OUTCOLOR YELLOW GREEN(C):  128           46-36 OUTCOLOR YELLOW GREEN(M):    0           46-36 OUTCOLOR YELLOW GREEN(Y):  255
+*p96X46-36 OUTCOLOR BEIGE(C):           0           46-36 OUTCOLOR BEIGE(M):          50           46-36 OUTCOLOR BEIGE(Y):         170
+*p96X46-36 CHROMA RED/BLACK:            3           46-36 CHROMA KS:CHROMATIC:         3
+
+*p96X46-38 MANUAL TEXT PRT:           NORMAL        46-38 MANUAL TEXT PHOTO:         NORMAL        46-38 MANUAL CPY TO CPY/PHOTO:   NORMAL
+*p96X46-38 MANUAL TEXT:               NORMAL        46-38 MANUAL MAP:                NORMAL        46-38 MANUAL LIGHT ORIGINAL:     NORMAL
+*p96X46-38 MANUAL PRINTED PHOTO:      NORMAL        46-38 MANUAL CPY TO CPY/TXT PRT: NORMAL        46-38 AUTO AUTO:                 NORMAL
+*p96X46-38 MANUAL PHOTO:              NORMAL        46-38 MANUAL CPY TO CPY/TEXT:    NORMAL
+
+*p96X46-39 200x100[DPI] OFF:            1           46-39 200x400[DPI] OFF:            1           46-39 400x400[DPI] ON:             1
+*p96X46-39 200x200[DPI] OFF:            1           46-39 200x400[DPI] ON:             1           46-39 600x600[DPI] OFF:            1
+*p96X46-39 200x200[DPI] ON:             1           46-39 400x400[DPI] OFF:            1           46-39 600x600[DPI] ON:             1
+*p96X46-41 AUTO:                 50    46-41 EXPOSURE2:            50    46-41 EXPOSURE4:            50
+*p96X46-41 EXPOSURE1:            50    46-41 EXPOSURE3:            50    46-41 EXPOSURE5:            50
+*p96X46-42 AUTO:                 50    46-43 AUTO:                 50    46-44 AUTO:                 50    46-45 AUTO:                 50
+*p96X46-42 EXPOSURE1:            50    46-43 EXPOSURE1:            50    46-44 EXPOSURE1:            50    46-45 EXPOSURE1:            50
+*p96X46-42 EXPOSURE2:            50    46-43 EXPOSURE2:            50    46-44 EXPOSURE2:            50    46-45 EXPOSURE2:            50
+*p96X46-42 EXPOSURE3:            50    46-43 EXPOSURE3:            50    46-44 EXPOSURE3:            50    46-45 EXPOSURE3:            50
+*p96X46-42 EXPOSURE4:            50    46-43 EXPOSURE4:            50    46-44 EXPOSURE4:            50    46-45 EXPOSURE4:            50
+*p96X46-42 EXPOSURE5:            50    46-43 EXPOSURE5:            50    46-44 EXPOSURE5:            50    46-45 EXPOSURE5:            50
+*p96X46-42 AUTO H_TONE:          50    46-43 AUTO H_TONE:          50    46-44 AUTO H_TONE:          50    46-45 AUTO H_TONE:          50
+*p96X46-42 EXPOSURE1 H_TONE:     50    46-43 EXPOSURE1 H_TONE:     50    46-44 EXPOSURE1 H_TONE:     50    46-45 EXPOSURE1 H_TONE:     50
+*p96X46-42 EXPOSURE2 H_TONE:     50    46-43 EXPOSURE2 H_TONE:     50    46-44 EXPOSURE2 H_TONE:     50    46-45 EXPOSURE2 H_TONE:     50
+*p96X46-42 EXPOSURE3 H_TONE:     50    46-43 EXPOSURE3 H_TONE:     50    46-44 EXPOSURE3 H_TONE:     50    46-45 EXPOSURE3 H_TONE:     50
+*p96X46-42 EXPOSURE4 H_TONE:     50    46-43 EXPOSURE4 H_TONE:     50    46-44 EXPOSURE4 H_TONE:     50    46-45 EXPOSURE4 H_TONE:     50
+*p96X46-42 EXPOSURE5 H_TONE:     50    46-43 EXPOSURE5 H_TONE:     50    46-44 EXPOSURE5 H_TONE:     50    46-45 EXPOSURE5 H_TONE:     50
+*p96X46-47 FILLING(C):            0    46-47 PRINT(C):              0    46-47 SCAN(C):               1    46-55 CHROMA:                3
+*p96X46-47 FILLING(G):            0    46-47 PRINT(G):              0    46-47 SCAN(G):               1
+*p96X46-58 COL  AUTO:             0    46-58 COL  MAP:              1    46-58 MONO TEXT:             1    46-58 MONO LIGHT:            0
+*p96X46-58 COL  TEXT:             1    46-58 COL  LIGHT:            0    46-58 MONO TEXT PRT:         0    46-58 MONO CPY TO CPY/AUTO:  0
+*p96X46-58 COL  TEXT PRT:         0    46-58 COL  CPY TO CPY/TEXT:  1    46-58 MONO PRINTED PHOTO:    0    46-58 MONO CPY TO CPY/TEXT:  1
+*p96X46-58 COL  PRINTED PHOTO:    0    46-58 COL  CPY TO CPY/TXTPRT:0    46-58 MONO TEXT PHOTO:       0    46-58 MONO CPY TO CPY/TXTPRT:0
+*p96X46-58 COL  TEXT PHOTO:       0    46-58 COL  CPY TO CPY/PHOTO: 0    46-58 MONO PHOTO:            0    46-58 MONO CPY TO CPY/PHOTO: 0
+*p96X46-58 COL  PHOTO:            0    46-58 MONO AUTO:             0    46-58 MONO MAP:              1
+&l48D*p96X*p150Y(s17Ht4OCT/27/2016/t4THU 02:09 t4PM . (s17HMX-3550N
+*p96X&l48D*p96X*p150Y(s17H*p3264X t4S/N: 5507901Y00 *p4448X&l48D(s17H5 / 6
+(s18H
+
+*p96X46-60 SCR FIL LEVEL:      AUTO    46-60 COLOR COPY:K:         ON    46-60 B/W COPY:             ON    46-60 COLOR PRINT:K:        ON
+*p96X46-60 CPY CL AT FIL LV: CENTER    46-60 SINGLE COLOR:CMY:     ON    46-60 COLOR PUSH:RGB:       ON    46-60 B/W PRINT:            ON
+*p96X46-60 CPY PSH AT FIL LV:CENTER    46-60 2 COLOR COPY:CMY:     ON    46-60 B/W PUSH:             ON
+*p96X46-60 COLOR COPY:CMY:       ON    46-60 2 COLOR COPY:K:       ON    46-60 COLOR PRINT:CMY:      ON
+*p96X[COLOR]
+*p96XAUTO
+*p96X46-61 SEG:SW[TXT ON SCR]:               0      46-61 SEG:SW[LINE SCR]:                 0      46-61 SEG:SW[SMALL SCR]:                0
+*p96X46-61 SEG:SW[HIGH LPI]:                 0      46-61 SEG:SW[TXT ON SCR IMG SND]:       0      46-61 SEG:ADJ[BK TXT1]:                50
+*p96X46-61 SEG:ADJ[CL TXT1]:                50      46-61 SEG:ADJ[BK TXT2,CL TXT2]:        25      46-61 SEG:ADJ[THIN LINE]:              50
+*p96X46-61 SEG:ADJ[TXT ON SCR1]:            50      46-61 SEG:ADJ[TXT ON SCR2]:            50      46-61 SEG:ADJ[TXT ON SCR AREA1]:        8
+*p96X46-61 SEG:ADJ[TXT ON SCR AREA2]:       50      46-61 SEG:ADJ[HIGH LPI]:               25      46-61 SEG:ADJ[BK]:                     50
+*p96X46-61 SEG:ADJ[CL]:                     50      46-61 SEG:ADJ[TXT ON BG]:              50      46-61 SEG:ADJ[SCR1 HIGH]:              25
+*p96X46-61 SEG:ADJ[SCR1 MIDDLE]:            25      46-61 SEG:ADJ[SCR1 LOW]:               25      46-61 SEG:ADJ[SCR2]:                    8
+*p96X46-61 SEG:ADJ[SCR3]:                    8      46-61 SEG:ADJ[LINE HALFTONE]:          25      46-61 SEG:ADJ[SMALL SCR1]:             25
+*p96X46-61 SEG:ADJ[SMALL SCR2]:             50      46-61 SEG:ADJ[SWITCH LOCK]:             0
+*p96XTPP
+*p96X46-61 SEG:SW[TXT ON SCR]:               0      46-61 SEG:SW[LINE SCR]:                 0      46-61 SEG:SW[SMALL SCR]:                0
+*p96X46-61 SEG:SW[HIGH LPI]:                 0      46-61 SEG:SW[TXT ON SCR IMG SND]:       0      46-61 SEG:ADJ[BK TXT1]:                50
+*p96X46-61 SEG:ADJ[CL TXT1]:                50      46-61 SEG:ADJ[BK TXT2,CL TXT2]:        25      46-61 SEG:ADJ[THIN LINE]:              50
+*p96X46-61 SEG:ADJ[TXT ON SCR1]:            50      46-61 SEG:ADJ[TXT ON SCR2]:            50      46-61 SEG:ADJ[TXT ON SCR AREA1]:        8
+*p96X46-61 SEG:ADJ[TXT ON SCR AREA2]:       50      46-61 SEG:ADJ[HIGH LPI]:               25      46-61 SEG:ADJ[BK]:                     50
+*p96X46-61 SEG:ADJ[CL]:                     50      46-61 SEG:ADJ[TXT ON BG]:              50      46-61 SEG:ADJ[SCR1 HIGH]:              25
+*p96X46-61 SEG:ADJ[SCR1 MIDDLE]:            25      46-61 SEG:ADJ[SCR1 LOW]:               25      46-61 SEG:ADJ[SCR2]:                    8
+*p96X46-61 SEG:ADJ[SCR3]:                    8      46-61 SEG:ADJ[LINE HALFTONE]:          25      46-61 SEG:ADJ[SMALL SCR1]:             25
+*p96X46-61 SEG:ADJ[SMALL SCR2]:             50      46-61 SEG:ADJ[SWITCH LOCK]:             0
+*p96X46-62 SW_ACS:                           1      46-62 AE_JUDGE_LV_L_O:                  0      46-62 MODE5_UNDER:                      0
+*p96X46-62 TEXT_IMAGE:                       3      46-62 AE_JUDGE_LV_C:                    5      46-62 MODE6_UNDER:                      0
+*p96X46-62 TEXT_BLANK:                       4      46-62 AE_ONOFF_CC:                      0      46-62 SW_CHANGE_MODE0:                  0
+*p96X46-62 HT_LV:                            1      46-62 AE_ONOFF_MC:                      0      46-62 SW_CHANGE_MODE1:                  1
+*p96X46-62 AE_AREA_LV:                       3      46-62 AE_ONOFF_CS:                      0      46-62 SW_CHANGE_MODE2:                  2
+*p96X46-62 AE_LV_CC:                         4      46-62 AE_ONOFF_MS:                      0      46-62 SW_CHANGE_MODE3:                  3
+*p96X46-62 AE_LV_MC:                         4      46-62 BLANK_JUDGE_LV_L:                 0      46-62 SW_CHANGE_MODE4:                  4
+*p96X46-62 AE_LV_CS:                         4      46-62 BLANK_JUDGE_LV_C:                 0      46-62 SW_CHANGE_MODE5:                  5
+*p96X46-62 AE_LV_MS:                         4      46-62 MODE0_UNDER:                      0      46-62 SW_CHANGE_MODE6:                  6
+*p96X46-62 AE_JUDGE_LV_L_U:                  0      46-62 MODE1_UNDER:                      0
+*p96X46-63 COLOR COPY:TEXT/PRINTED PHOTO:    3      46-63 COLOR COPY:LIGHT:                 6      46-63 COLOR PUSH:PRINTED PHOTO:         5
+*p96X46-63 COLOR COPY:TEXT:                  3      46-63 COLOR COPY:TEXT/PRT PHT(C TO C):  5      46-63 COLOR PUSH:PHOTOGRAPH:            5
+*p96X46-63 COLOR COPY:PRINTED PHOTO:         5      46-63 COLOR COPY:TEXT(COPY TO COPY):    5      46-63 COLOR PUSH:TEXT/PHOTO:            5
+*p96X46-63 COLOR COPY:PHOTOGRAPH:            5      46-63 COLOR COPY:PRT PHT(C TO C):       5      46-63 COLOR PUSH:MAP:                   5
+*p96X46-63 COLOR COPY:TEXT/PHOTO:            3      46-63 COLOR PUSH:TEXT/PRINTED PHOTO:    5      26-73 DELETING SHADOW ADJ(M):           0
+*p96X46-63 COLOR COPY:MAP:                   5      46-63 COLOR PUSH:TEXT:                  5      26-73 DELETING SHADOW ADJ(S):           0
+*p96X                         [OC]  [SPF1]
+*p96X                         CP PV  CP PV          46-66 WOVEN DEN BK LOW:           15           46-66 LIGHT:                       1
+*p96X46-65 TEXT PRT:           0  0   4  4          46-66 WOVEN DEN BK MIDDLE:        19           46-66 TEXT/PRINTED PHOTO (C TO C): 1
+*p96X46-65 TEXT:               3  3   7  7          46-66 WOVEN DEN BK HIGH:          23           46-66 TEXT (C TO C):               1
+*p96X46-65 PRINTED PHOTO:      0  0   4  4          46-66 WOVEN DEN C LOW:            19           46-66 PRINTED PHOTO (C TO C):      1
+*p96X46-65 PHOTO:              1  1   5  5          46-66 WOVEN DEN C MIDDLE:         23           46-66 AUTO:                        1
+*p96X46-65 TEXT PHOTO:         1  1   5  5          46-66 WOVEN DEN C HIGH:           27           46-66 DEFAULT MODE:                0
+*p96X46-65 MAP:                3  3   7  7          46-66 WOVEN DEN M LOW:            15           46-66 LINE SPACE 1:               20
+*p96X46-65 LIGHT:              0  0   4  4          46-66 WOVEN DEN M MIDDLE:         18           46-66 LINE SPACE 2:               20
+*p96X46-65 CPY TO CPY/TXT PRT: 2  2   6  6          46-66 WOVEN DEN M HIGH:           21           46-66 LINE SPACE 3:               20
+*p96X46-65 CPY TO CPY/TEXT:    3  3   7  7          46-66 CONTRAST:                    2           46-66 LINE SPACE 4:               20
+*p96X46-65 CPY TO CPY/PHOTO:   2  2   6  6          46-66 HT TYPE (POSI):             42           46-66 BLANK H/B 1:                10
+*p96X46-65 AUTO0:              0  0   4  4          46-66 HT TYPE (NEGA):             42           46-66 BLANK H/B 2:                10
+*p96X46-65 AUTO1:              0  0   4  4          46-66 TEXT/PRINTED PHOTO:          1           46-66 BLANK H/B 3:                10
+*p96X46-65 AUTO2:              1  1   5  5          46-66 TEXT:                        1           46-66 BLANK H/B 4:                10
+*p96X46-65 AUTO3:              1  1   5  5          46-66 PRINTED PHOTO:               1           46-66 BLANK L/R 1:                60
+*p96X46-65 AUTO4:              0  0   4  4          46-66 PHOTOGRAPH:                  1           46-66 BLANK L/R 2:                90
+*p96X46-65 AUTO5:              0  0   4  4          46-66 TEXT/PHOTO:                  1           46-66 BLANK L/R 3:               120
+*p96X46-65 AUTO6:              0  0   4  4          46-66 MAP:                         1           46-66 BLANK L/R 4:               150
+
+*p96X46-90 GLYPH SENSITIVITY(TEXT):             0   46-91 BG:JPEG QUALITY LV[COL:COMPACT]:     1   46-46 ULTRA FINE RIP H_TONE:              50
+*p96X46-90 BG SW FOR FINDLINES(TEXT):           0   46-91 BG:JPEG QUALITY LV[COL:ULTRA FINE]:  1   46-46 600DPI RIP:                         50
+*p96X46-90 HOR FINDLINES SW(TEXT):              0   46-91 BG:JPEG QUALITY LV[GRY:COMPACT]:     1   46-46 600DPI RIP H_TONE:                  50
+*p96X46-90 VERT FINDLINES SW(TEXT):             0   46-91 BG:JPEG QUALITY LV[GRY:ULTRA FINE]:  1
+*p96X46-90 FGCOLOR INDEXING SEL(TEXT):          0   46-91 FG:TARGET AREA:                      0
+*p96X46-90 FGCOLOR INDEXING ADJ(TEXT):          2   46-91 FG:TEXT DENSITY[COL]:                5
+*p96X46-90 LUMINANCE ADJUSTMENT(COLOR):         2   46-91 FG:TEXT DENSITY[GRY]:                5
+*p96X46-90 CHROMA INTENT(COLOR):                1   46-91 ULTRA FINE MODE:                     0
+*p96X46-90 NEUTRAL ADJUSTMENT(COLOR):           0   46-46 STANDARD RIP:                       50
+*p96X46-90 R-RATIO ADJUSTMENT(COLOR):         299   46-46 FINE RIP:                           50
+*p96X46-90 G-RATIO ADJUSTMENT(COLOR):         587   46-46 FINE RIP H_TONE:                    50
+*p96X46-90 BG LAYER INTENT1(BG LAYER):          1   46-46 SUPER FINE RIP:                     50
+*p96X46-90 BG LAYER INTENT2(BG LAYER):          1   46-46 SUPER FINE RIP H_TONE:              50
+*p96X46-91 SEGMENT PARAM:                       0   46-46 ULTRA FINE RIP:                     50
+*p96X46-24 K:2016 2007 2006 2006 2004 2002 1972 1937 1899 1867 1841 1811 1802 1784 1770 1780 1776  67-34 CMY(0:ENABLE 1:DISABLE):           0
+*p96X      C:2026 2018 2022 2024 2030 2037 2013 1979 1936 1878 1839 1803 1786 1784 1823 2023 2000  67-34 K(0:ENABLE 1:DISABLE):             1
+*p96X      M:2023 2014 2016 2016 2018 2020 1999 1969 1938 1903 1870 1845 1832 1839 1906 2023 2000  67-34 CYAN MAX TARGET:                 500
+*p96X      Y:2013 2006 2004 2004 2001 1999 1989 1967 1946 1905 1878 1854 1833 1819 1837 1868 1943  67-34 MAGENTA MAX TARGET:              500
+*p96X67-24 K:2000 1999 1999 1998 1998 1999 1988 2012 2027 2081 2119 2135 2127 2121 2133 2079 1801  67-34 YELLOW MAX TARGET:               500
+*p96X      C:2000 2025 2026 2026 2029 2035 2039 2056 2063 2098 2105 2114 2119 2116 2130 2224 2000  67-34 BLACK MAX TARGET:                500
+*p96X      M:2000 2010 2017 2017 2016 2021 2020 2028 2060 2105 2135 2161 2165 2189 2244 2309 2000  67-34 PRINTER TOTAL TONER LIMIT SETUP:   0
+*p96X      Y:2000 2008 2009 2009 2009 2010 2012 2034 2045 2095 2133 2169 2151 2194 2182 2161 2000
+*p96X67-36 A PATCH INPUT:C        1    67-36 A PATCH INPUT:M        1    67-36 A PATCH INPUT:Y        1    67-36 A PATCH INPUT:K        1
+*p96X67-41 C1:                              5     67-43 GREEN(C):                      180     67-43 MAGENTA(M):                    217
+*p96X67-41 V1:                              0     67-43 BLUE(C):                       235     67-43 YELLOW(M):                       0
+*p96X67-41 C2:                              5     67-43 CYAN(C):                       182     67-43 RED(Y):                        224
+*p96X67-41 V2:                              0     67-43 MAGENTA(C):                      0     67-43 GREEN(Y):                      241
+*p96X67-42 MODE1 BLACK:                     1     67-43 YELLOW(C):                       0     67-43 BLUE(Y):                         0
+*p96X67-42 MODE1 COLOR:                     1     67-43 RED(M):                        235     67-43 CYAN(Y):                        25
+*p96X67-42 MODE2 BLACK:                     1     67-43 GREEN(M):                        0     67-43 MAGENTA(Y):                      0
+*p96X67-42 MODE2 COLOR:                     1     67-43 BLUE(M):                       159     67-43 YELLOW(Y):                     234
+*p96X67-43 RED(C):                          0     67-43 CYAN(M):                         0
+*p96X(USAGE ESTIMATOR)
+*p96XACCUM:                 0/ 0/ 0    PERIODICAL:            0/ 0/ 0    USER:                  0/ 0/ 0    ALL:                   0/ 0/ 0
+
+*p96XCOPY  HALF_TONE_TARGET:   2016/02/01           TONER HIS LIFE (K):         00/00/00           TONER REST PERCENT (K):           99
+*p96XPRINT HALF_TONE_TARGET:   2016/02/01           TONER HIS LIFE (C):         00/00/00           TONER REST PERCENT (C):          100
+*p96XCOPY  COLOR_BALANCE_ADJ:  2016/02/01           TONER HIS LIFE (M):         00/00/00           TONER REST PERCENT (M):           99
+*p96XPRINT COLOR_BALANCE_ADJ:  2016/02/01           TONER HIS LIFE (Y):         00/00/00           TONER REST PERCENT (Y):           99
+
+*p96XSMART:                      0     DEVICE MODEL:     TOSHIBA MQ01ABF032                         SERIAL NUMBER:               X5LEC693T
+*p96X62-07 SMART INFO:           00 00 00 00 00 00 00 00 / 00 00 00 00 00 00 00 00 / 00 00 00 00 00 00 00 00 /
+*p96X                            00 00 00 00 00 00 00 00 / 00 00 00 00 00 00 00 00
+*p96X08-01 MIDDLE SPEED DVB_K:  456    08-01 LOW SPEED DVB_K:     456    08-02 MIDDLE SPEED GB_K:   595    08-02 LOW SPEED GB_K:      587
+*p96X08-01 MIDDLE SPEED DVB_C:  453    08-01 LOW SPEED DVB_C:     453    08-02 MIDDLE SPEED GB_C:   597    08-02 LOW SPEED GB_C:      587
+*p96X08-01 MIDDLE SPEED DVB_M:  455    08-01 LOW SPEED DVB_M:     455    08-02 MIDDLE SPEED GB_M:   599    08-02 LOW SPEED GB_M:      587
+*p96X08-01 MIDDLE SPEED DVB_Y:  455    08-01 LOW SPEED DVB_Y:     455    08-02 MIDDLE SPEED GB_Y:   596    08-02 LOW SPEED GB_Y:      587
+*p96X08-06 TC1 LOW SPD_CL K:        85 08-06 TC2 HEAVY2 CL SPX:       90 08-06 TC2 EMBOSS CL:           90 08-06 PTC LOW SPEED CL:       109
+*p96X08-06 TC1 MID SPD_CL K:        94 08-06 TC2 HEAVY2 CL DPX:       96 08-06 TC2 EMBOSS BW:           90 08-06 PTC MIDDLE SPEED CL:    206
+*p96X08-06 TC1 LOW SPD_CL C:        85 08-06 TC2 HEAVY2 BW SPX:       90 08-06 TC2 LABEL CL:            90 08-06 PTC LOW SPEED BW:       109
+*p96X08-06 TC1 MID SPD_CL C:        94 08-06 TC2 HEAVY2 BW DPX:       96 08-06 TC2 LABEL BW:            90 08-06 PTC MIDDLE SPEED BW;    206
+*p96X08-06 TC1 LOW SPD_CL M:        85 08-06 TC2 HEAVY3 CL SPX:       90 08-06 TC2 FRONT EDGE LOW SPX:  76 08-06 CASE VOLT LOW CL:         0
+*p96X08-06 TC1 MID SPD_CL M:        94 08-06 TC2 HEAVY3 CL DPX:       96 08-06 TC2 FRONT EDGE LOW DPX:  69 08-06 CASE VOLT MIDDLE CL:      0
+*p96X08-06 TC1 LOW SPD_CL Y:        85 08-06 TC2 HEAVY3 BW SPX:       90 08-06 TC2 FRONT EDGE MID SPX:  76 08-06 CASE VOLT LOW BW:         0
+*p96X08-06 TC1 MID SPD_CL Y:        94 08-06 TC2 HEAVY3 BW DPX:       96 08-06 TC2 FRONT EDGE MID DPX:  69 08-06 CASE VOLT MIDDLE BW:      0
+*p96X08-06 TC1 LOW SPD_BW K:        85 08-06 TC2 HEAVY4 CL:           90 08-06 TC2 BACKEND LOW SPX:     76 08-06 DHV LOW SPEED CL SPX:    80
+*p96X08-06 TC1 MID SPD_BW K:        94 08-06 TC2 HEAVY4 BW:           90 08-06 TC2 BACKEND LOW DPX:     69 08-06 DHV LOW SPEED CL DPX:   109
+*p96X08-06 TC2 PLAIN CL SPX:        90 08-06 TC2 OHP CL:             103 08-06 TC2 BACKEND MIDDLE SPX:   0 08-06 DHV LOW SPEED BW SPX:    80
+*p96X08-06 TC2 PLAIN CL DPX:        90 08-06 TC2 OHP BW:             103 08-06 TC2 BACKEND MIDDLE DPX:   0 08-06 DHV LOW SPEED BW DPX:   109
+*p96X08-06 TC2 PLAIN BW SPX:        90 08-06 TC2 ENVELOPE CL:         90 08-06 TC2 INTERVAL LOW SPEED:  66 08-06 DHV MIDLLE SPD CL SPX:  226
+*p96X08-06 TC2 PLAIN BW DPX:        90 08-06 TC2 ENVELOPE BW:         90 08-06 TC2 INTERVAL MID SPEED:  95 08-06 DHV MIDLLE SPD CL DPX:  226
+*p96X08-06 TC2 HEAVY1 CL SPX:       90 08-06 TC2 THIN CL:             90 08-06 TC2 CLEANING - LOW SPD:  54 08-06 DHV MIDLLE SPD BW SPX:  226
+*p96X08-06 TC2 HEAVY1 CL DPX:       96 08-06 TC2 THIN BW:             90 08-06 TC2 CLEANING - MID SPD:  59 08-06 DHV MIDLLE SPD BW DPX:  226
+*p96X08-06 TC2 HEAVY1 BW SPX:       90 08-06 TC2 GLOSSY PAPER CL:     90 08-06 TC2 CLEANING + LOW SPD:  66
+*p96X08-06 TC2 HEAVY1 BW DPX:       96 08-06 TC2 GLOSSY PAPER BW:     90 08-06 TC2 CLEANING + MID SPD:  95
+*p96X08-10 MIDDLE SPEED MC_K:    83
+*p96X08-10 LOW1   SPEED MC_K:    83
+&l48D*p96X*p150Y(s17Ht4OCT/27/2016/t4THU 02:09 t4PM . (s17HMX-3550N
+*p96X&l48D*p96X*p150Y(s17H*p3264X t4S/N: 5507901Y00 *p4448X&l48D(s17H6 / 6
+(s18H
+
+*p96X     1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32
+*p96X(61-11) MODE:-
+*p96X[K]: 43  43  43  41  42  44  47  49  51  52  53  53  53  53  53  53  53  54  54  55  55  55  54  53  51  49  46  44  43  45  45  45
+*p96X[C]: 53  53  53  52  52  53  53  54  54  54  54  54  53  53  52  51  51  50  50  49  49  48  47  47  46  45  44  43  43  45  45  45
+*p96X[M]: 50  50  50  48  47  47  47  48  49  50  50  51  52  52  52  53  53  53  53  53  53  52  51  50  49  48  47  46  46  48  48  48
+*p96X[Y]: 48  48  48  47  48  49  50  52  53  53  53  53  53  52  52  52  51  51  51  51  51  50  50  49  48  47  46  46  45  47  47  47
+*p96X(61-12) MODE:-
+*p96X[K]: 50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50
+*p96X[C]: 50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50
+*p96X[M]: 50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50
+*p96X[Y]: 50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50  50
+
+*p96X61-14 K/BW:  0                    61-14 C:     0                    61-14 M:     0                    61-14 Y:     0
+
+*p96X(TONER CONTROL DATA)
+*p96X     DATE           TOTAL_OUT K     C     M     Y             DATE           TOTAL_OUT K     C     M     Y
+*p96X[YLD_CNT_FB]                                             [DELTA_TSG]
+*p96X 01: 16/10/27 14:08      628     63    60    60    60     01: 16/10/27 14:08      628   - 34  - 34  - 19  - 15
+*p96X 02: 16/10/25 14:05      628     63    60    60    60     02: 16/10/25 14:05      628   - 32  - 29  - 15  - 11
+*p96X 03: 16/10/25 11:02      627     64    60    60    60     03: 16/10/25 11:02      627   - 29  - 28  - 15  - 11
+*p96X 04: 16/10/25 11:02      627     64    60    60    60     04: 16/10/25 11:02      627   - 29  - 24  - 11  -  7
+*p96X 05: 16/10/21 12:06      627     64    60    60    60     05: 16/10/21 12:06      627   - 26  - 23  - 10  -  6
+*p96X 06: 16/10/19 13:51      626     64    60    60    60     06: 16/10/19 13:51      626   - 26  - 23  - 10  -  6
+*p96X 07: 16/10/19 13:51      626     64    60    60    60     07: 16/10/19 13:51      626   - 26  - 20  -  7  -  4
+*p96X 08: 16/10/19 13:50      626     63    60    60    60     08: 16/10/19 13:50      626   - 26  - 20  -  7  -  4
+*p96X 09: 16/10/17 16:21      626     63    60    60    60     09: 16/10/17 16:21      626   - 31  - 27  - 14  - 11
+*p96X 10: 16/10/17 10:07      626     62    60    60    60     10: 16/10/17 10:07      626   - 34  - 34  - 22  - 19
+*p96X[DELTA_DVB]                                              [DELTA_VSPEED]
+*p96X 01: 16/10/27 14:08      628   - 44  -108  -112  -103     01: 16/10/27 14:08      628      0     0     0     0
+*p96X 02: 16/10/25 14:05      628   - 43  -125  -118  -118     02: 16/10/25 14:05      628      0     0     0     0
+*p96X 03: 16/10/25 11:02      627   -  8  -115  -124  -110     03: 16/10/25 11:02      627      0     0     0     0
+*p96X 04: 16/10/25 11:02      627   + 12  - 97  -108  -101     04: 16/10/25 11:02      627      0     0     0     0
+*p96X 05: 16/10/21 12:06      627   + 12  - 97  -108  -101     05: 16/10/21 12:06      627      0     0     0     0
+*p96X 06: 16/10/19 13:51      626   + 62  - 88  - 88  - 78     06: 16/10/19 13:51      626      0     0     0     0
+*p96X 07: 16/10/19 13:51      626   + 49  - 73  - 71  - 66     07: 16/10/19 13:51      626      0     0     0     0
+*p96X 08: 16/10/19 13:50      626   + 49  - 73  - 71  - 66     08: 16/10/19 13:50      626      0     0     0     0
+*p96X 09: 16/10/17 16:21      626   + 49  - 73  - 71  - 66     09: 16/10/17 16:21      626      0     0     0     0
+*p96X 10: 16/10/17 10:07      626   +  1  - 92  - 88  - 88     10: 16/10/17 10:07      626      0     0     0     0
+*p96X[TCS_B_AVE.]
+*p96X 01: 16/10/27 14:08      628    130   130   132   133
+*p96X 02: 16/10/25 14:05      628    128   130   129   130
+*p96X 03: 16/10/25 11:02      627    135   139   139   139
+*p96X 04: 16/10/25 11:02      627    140   147   146   147
+*p96X 05: 16/10/21 12:06      627    146   152   150   153
+*p96X 06: 16/10/19 13:51      626    127   127   128   126
+*p96X 07: 16/10/19 13:51      626    127   128   131   128
+*p96X 08: 16/10/19 13:50      626    134   138   140   139
+*p96X 09: 16/10/17 16:21      626    122   120   119   120
+*p96X 10: 16/10/17 10:07      626    132   128   126   126
+
+*p96X(TEST COMMAND)
+*p96X(INNER FIN)
+*p96X03-10 ALIGNMENT:              90  03-10 ALIGNMENT CENTER:      100  03-10 STAPLE FRONT:           90  03-10 STAPLE REAR:            95
+*p96X03-10 STAPLE BOTH:           100  03-10 MANUAL STAPLE POSITION:100  03-10 STAPLELESS STAPLE Y:    88  03-10 STAPLELESS STAPLE X:   103
+*p96X03-10 STAPLELESS STAPLE PRES:100  03-10 BELT PRESSURE:         106  03-10 MANUAL STAPLE TIME:      2  03-10 MANUAL STAPLE PULLOUT:   0
+*p96X03-10 PUNCH X:                80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*p96X25-10 DEVE_K:                     25-10 DEVE_C:                     25-10 DEVE_M:                     25-10 DEVE_Y:
+*p96X25-10 DRUM_K:                     25-10 DRUM_C:                     25-10 DRUM_M:                     25-10 DRUM_Y:
+

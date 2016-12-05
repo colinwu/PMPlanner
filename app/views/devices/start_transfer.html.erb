@@ -21,7 +21,7 @@
     <ul>
       <% @dev_list.each do |dev| %>
         <%= hidden_field_tag "device[#{dev.id}]", dev.id %>
-        <li>CRM ID: <%= dev.crm_object_id %>, Model: <%= dev.model.name %>, s/n: <%= dev.serial_number %></li>
+        <li>CRM ID: <%= dev.crm_object_id %>, Model: <%= dev.model.nm %>, s/n: <%= dev.serial_number %></li>
       <% end %>
     </ul>
     Do you wish to add a personalized message? <br />

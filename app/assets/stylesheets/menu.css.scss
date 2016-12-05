@@ -2,17 +2,18 @@
 
 #menu {
   list-style:none;
-  width:85%x;
+  width:96%;
   margin:10px auto 0px auto;
   height:30px;
   padding:0px 20px 0px 20px;
 
   /* Rounded Corners */
-  @include border-radius(5px,5px,5px,5px);
+  @include border-radius(4px,4px,0,0);
 
   /* Background color and gradients */
-  @include background-gradient(#014464,#0272a7,#013953);
-
+/*   @include background-gradient(#014464,#0272a7,#013953); */
+  background-color: #0272a7;
+  
   /* Borders */
   border: 1px solid #002232;
 
@@ -26,7 +27,7 @@
     position:relative;
     padding: 4px 8px 4px 8px;
     margin-right:5px;
-    margin-top:2px;
+    margin-top:4px;
     border:none;
     color: yellow;
     a {
@@ -62,5 +63,15 @@
 #menu li:active a {
   color:yellow;
   text-shadow: 1px 1px 1px #FFFFFF;
+}
+
+.context_menu {
+  border: 1px solid gray;
+  padding: 5px;
+  margin: 0 auto;
+  height: 1.5em;
+  /* Rounded Corners */
+  @include border-radius(0,0,4px,4px);
+  background-color: silver;
 }
 

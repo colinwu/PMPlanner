@@ -36,7 +36,7 @@
         <li><%= link_to_unless_current "#{replace_my} Contacts", contacts_path %></li>
         <li><%= link_to_unless_current "#{replace_my} PM List", my_pm_list_devices_url %></li>
         <% 
-          if @device.nil?
+          if @device.nil? or @device.id.nil?
             @device = 0
           end
         %>
@@ -47,9 +47,8 @@
           <li><%= link_to_unless_current "My Team", technicians_path %></li>
           <li><%= link_to_unless_current "Transfers", transfers_path %></li>
           <li>
-            <%= form_tag select_territory_technicians_path do %>
+            <%= form_tag select_territory_technicians_path, :id => 'tech_select' do %>
               <%= select_tag :tech_id, options_from_collection_for_select(current_technician.my_techs, :id, :friendly_name, session[:tech_id]), include_blank: true %>
-              <%= submit_tag 'Select Territory' %>
             <% end %>
           </li>
         <% end %>

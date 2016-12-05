@@ -16,6 +16,7 @@ a {
 
 input {
   font-size: 12px;
+  @include border-radius(2px, 2px, 2px, 2px);
 }
 
 fieldset {
@@ -33,6 +34,10 @@ fieldset:first-of-type {
 legend {
   font-size: 130%;
   color: gray;
+}
+
+th {
+  vertical-align: middle;
 }
 
 th, caption {

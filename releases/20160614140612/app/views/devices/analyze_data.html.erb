@@ -1,0 +1,27 @@
+<% title @title, false %>
+<br />
+<%= render partial: "header_table", locals: {button: "analysis"} %>
+
+<% unless @device.nil? or @last_reading.nil? %>
+<table width="100%">
+  <tr>
+    <th>PM Code</th>
+    <th>PM Description</th>
+    <th>Previous Readings<br /><%= @last_reading.nil? ? ' ' : @last_reading.taken_at.strftime('%b %-d, %Y') %></th>
+    <th>Current Estimate<br /><%= @now.strftime('%b %-d, %Y') %></th>
+    <th>Progress to next PM</th>
+    <th>Next PM Date</th>
+  </tr>
+
+  <% @rows.each do |r| %>
+    <tr class=<%= r[0] %>>
+      <td><%= r[1].upcase %></td>
+      <td><%= r[2] %></td>
+      <td class=rightjustify><%= number_with_delimiter(r[3]) %></td>
+      <td class=rightjustify><%= number_with_delimiter(r[4]) %></td>
+      <td class=rightjustify><%= progress_bar(r[5], :color => 'blue', :tiny => true, :rounded => false) %></td>
+      <td class=rightjustify><%= r[6] %> </td>
+    </tr>
+  <% end %>
+</table>
+<% end %>

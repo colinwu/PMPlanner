@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from_team_id: 1
+  to_team_id: 1
+  device_id: 1
+  accepted: false
+
+two:
+  from_team_id: 1
+  to_team_id: 1
+  device_id: 1
+  accepted: false

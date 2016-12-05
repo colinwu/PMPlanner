@@ -1,0 +1,55 @@
+<table width="100%">
+  <tr>
+    <td rowspan=2 width="25%" >
+    <%= form_tag search_devices_path, method: :get do %>
+      <%= text_field_tag 'search_str', @search_str %>
+      <%= submit_tag "Search" %>
+    <% end %>
+    <br />
+    <% unless @device.nil? %>
+      <% case button
+        when "enter" %>
+          <%= form_tag analyze_data_device_path(@device), method: :get do %>
+            <% unless @device.readings.size <= 1 %>
+              <%= submit_tag "View estimated counters and PM dates" %>
+            <% end %>
+          <% end %>
+      <% when "analysis" %>
+          <%= form_tag enter_data_device_path(@device), method: :get do %>
+            <%= submit_tag "Enter actual counter values" %>
+          <% end %>
+          <br />
+          <%= form_tag handle_checked_devices_path do %>
+            <%= hidden_field_tag "device[#{@device.id}]", @device.id %>
+            <%= submit_tag "Generate Parts List", name: 'parts' %>
+          <% end %>
+      <% when "history" %>
+        <%= form_tag service_history_device_path(@device), method: :get do %>
+          <% if @rows.nil? %>
+            <%= submit_tag 'Show counters' %>
+          <% else %>
+            <%= submit_tag 'Show totals' %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+    </td>
+    <th>Equipment Details - <%= link_to_unless @device.nil?, "Edit", {controller: "devices", action: "edit", id: @device} %></th>
+  </tr>
+  <tr>
+    <td class=boxed>
+    <% unless @device.nil? %>
+      <%=h @device.model.name %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %><br />
+      <%=h @device.client.name %><br />
+      <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br />
+      Monthly average: BW = <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; COL = <%= number_with_delimiter(@c_monthly.round) %><% else %>; COL = Unknown<% end %><br />
+      <% if @vpy > 0 -%>
+        PM visits per year: <%= number_with_precision(@vpy, precision: 2) %><br />
+        <% unless @last_reading.nil? %>
+          <strong>Notes from <%= @last_reading.taken_at.strftime('%b %-d, %Y') %>:</strong> <%=h @last_reading.notes %>
+        <% end %>
+      <% end %>
+    <% end %>
+    </td>
+  </tr>
+</table>

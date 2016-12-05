@@ -5,7 +5,7 @@ gem 'rails', '4.2.0'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'mysql2', '0.3.17'
 gem 'minitest'
 gem 'responders', '~> 2.0'
 # gem 'passenger', '~> 5.0.28'
@@ -39,6 +39,8 @@ gem 'jquery-datetimepicker-rails'
 gem 'css3-progress-bar-rails'
 gem 'rails4-autocomplete'
 gem 'best_in_place', '~> 3.1'
+gem "paperclip", "~> 5.0.0"
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

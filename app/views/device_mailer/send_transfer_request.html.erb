@@ -9,7 +9,7 @@
       The following devices are being transfered to you from <%= @from_region %>:
       <ul>
         <% @dev_list.each do |dev| %>
-          <li>CRM ID: <%= dev.crm_object_id %>, Model: <%= dev.model.name %>, s/n: <%= dev.serial_number %></li>
+          <li>CRM ID: <%= dev.crm_object_id %>, Model: <%= dev.model.nm %>, s/n: <%= dev.serial_number %></li>
         <% end %>
       </ul>
     </p>

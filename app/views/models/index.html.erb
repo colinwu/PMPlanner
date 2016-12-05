@@ -2,11 +2,11 @@
 
 <table>
   <tr>
-    <th>Name</th><th>Model Group</th><th>Color</th><th>Description</th>
+    <th>Model</th><th>Model Group</th><th>Color</th><th>Description</th>
   </tr>
   <% for model in @models %>
     <tr class="<%= cycle('light','dark') %>">
-      <td><%= model.name %></td>
+      <td><%= model.nm %></td>
       <td><%= model.model_group.name %></td>
       <td><%= model.model_group.color_flag %></td>
       <td><%= model.model_group.description %></td>
@@ -16,5 +16,7 @@
     </tr>
   <% end %>
 </table>
-
-<p><%= link_to "New Model", new_model_path %></p>
+<% if current_technician.admin %>
+  <p><%= link_to "New Model", new_model_path %></p>
+<% end %>
+<p><%= will_paginate(@models) %></p>

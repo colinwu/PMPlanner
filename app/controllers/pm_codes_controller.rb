@@ -1,6 +1,11 @@
 class PmCodesController < ApplicationController
+  before_action :authorize
   def index
     @pm_codes = PmCode.all
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @pm_codes }
+    end
   end
 
   def show
@@ -26,10 +31,14 @@ class PmCodesController < ApplicationController
 
   def update
     @pm_code = PmCode.find(params[:id])
-    if @pm_code.update_attributes(params[:pm_code])
-      redirect_to @pm_code, :notice  => "Successfully updated pm code."
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @pm_code.update_attributes(params[:pm_code])
+        format.html {redirect_to @pm_code, :notice  => "Successfully updated pm code."}
+        format.json {respond_with_bip(@pm_code)}
+      else
+        format.html {render :action => 'edit'}
+        format.json {respond_with_bip(@pm_code)}
+      end
     end
   end
 

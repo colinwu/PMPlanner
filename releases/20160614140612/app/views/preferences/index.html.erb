@@ -1,0 +1,61 @@
+<% title "Preferences" %>
+
+<table>
+  <tr>
+    <th>Zoom</th>
+    <th>Zoom Level</th>
+    <th>Zoom Start</th>
+    <th>Limit To Region</th>
+    <th>Limit To Territory</th>
+    <th>Previous Pm</th>
+    <th>Data Entry Date Prompt</th>
+    <th>Data Entry Notes Prompt</th>
+    <th>Default Notes</th>
+    <th>Select Territory</th>
+    <th>Territory To Explore</th>
+    <th>Default Units To Show</th>
+    <th>Upcoming Interval</th>
+    <th>Use Default Email</th>
+    <th>Default To Email</th>
+    <th>Default Subject</th>
+    <th>Default From Email</th>
+    <th>Default Message</th>
+    <th>Default Sig</th>
+    <th>Max Lines</th>
+    <th>Email Edit</th>
+    <th>Popup Equip List</th>
+    <th>Technician</th>
+  </tr>
+  <% for preference in @preferences %>
+    <tr>
+      <td><%= preference.zoom %></td>
+      <td><%= preference.zoom_level %></td>
+      <td><%= preference.zoom_start %></td>
+      <td><%= preference.limit_to_region %></td>
+      <td><%= preference.limit_to_territory %></td>
+      <td><%= preference.previous_pm %></td>
+      <td><%= preference.data_entry_date_prompt %></td>
+      <td><%= preference.data_entry_notes_prompt %></td>
+      <td><%= preference.default_notes %></td>
+      <td><%= preference.select_territory %></td>
+      <td><%= preference.territory_to_explore %></td>
+      <td><%= preference.default_units_to_show %></td>
+      <td><%= preference.upcoming_interval %></td>
+      <td><%= preference.use_default_email %></td>
+      <td><%= preference.default_to_email %></td>
+      <td><%= preference.default_subject %></td>
+      <td><%= preference.default_from_email %></td>
+      <td><%= preference.default_message %></td>
+      <td><%= preference.default_sig %></td>
+      <td><%= preference.max_lines %></td>
+      <td><%= preference.email_edit %></td>
+      <td><%= preference.popup_equip_list %></td>
+      <td><%= preference.technician_id %></td>
+      <td><%= link_to "Show", preference %></td>
+      <td><%= link_to "Edit", edit_preference_path(preference) %></td>
+      <td><%= link_to "Destroy", preference, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Preference", new_preference_path %></p>

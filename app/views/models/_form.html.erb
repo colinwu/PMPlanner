@@ -1,11 +1,174 @@
 <%= form_for @model do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <%= f.label 'Name' %><br />
+    <%= f.text_field :nm %>
   </p>
   <p>
-    <%= f.label :model_group %><br />
-    <%= f.collection_select(:model_group_id, ModelGroup.all, :id, :name) %>
+    <%= f.label "Model Group (Leave blank to auto-create a new group)" %><br />
+    <%= text_field_tag :model_group, @model.model_group.nil? ? '' :@model.model_group.name %>
+  </p>
+  <div>
+    <table>
+      <tr>
+        <td>
+<!--          <p id=BWTOTAL_field>
+            BWTOTAL<br />
+            <%= text_field_tag 'pm_code[BWTOTAL]',number_with_delimiter(@pm_code['BWTOTAL']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[BWTOTAL]',@section['BWTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[BWTOTAL]',@label['BWTOTAL'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=CTOTAL_field>
+            CTOTAL<br />
+            <%= text_field_tag 'pm_code[CTOTAL]',number_with_delimiter(@pm_code['CTOTAL']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[CTOTAL]]',@section['CTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[CTOTAL]',@label['CTOTAL'], {size:15, placeholder: '22-6 label'} %>
+          </p>-->
+          <p id=TA_field>
+            TA<br />
+            <%= text_field_tag 'pm_code[TA]',number_with_delimiter(@pm_code['TA']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[TA]',@section['TA'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[TA]',@label['TA'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=CA_field>
+            CA<br />
+            <%= text_field_tag 'pm_code[CA]',number_with_delimiter(@pm_code['CA']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[CA]',@section['CA'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[CA]',@label['CA'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=MREQ_field>
+            MREQ<br />
+            <%= text_field_tag 'pm_code[MREQ]',number_with_delimiter(@pm_code['MREQ']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[MREQ]',@section['MREQ'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[MREQ]',@label['MREQ'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=AA_field>
+            AA<br />
+            <%= text_field_tag 'pm_code[AA]',number_with_delimiter(@pm_code['AA']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[AA]',@section['AA'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[AA]',@label['AA'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+        </td>
+        <td>
+          <p id=DK_field>
+            DK<br />
+            <%= text_field_tag 'pm_code[DK]',number_with_delimiter(@pm_code['DK']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[DK]',@section['DK'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[DK]',@label['DK'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=DC_field>
+            DC<br />
+            <%= text_field_tag 'pm_code[DC]',number_with_delimiter(@pm_code['DC']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[DC]',@section['DC'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[DC]',@label['DC'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=DM_field>
+            DM<br />
+            <%= text_field_tag 'pm_code[DM]',number_with_delimiter(@pm_code['DM']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[DM]',@section['DM'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[DM]',@label['DM'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=DY_field>
+            DY<br />
+            <%= text_field_tag 'pm_code[DY]',number_with_delimiter(@pm_code['DY']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[DY]',@section['DY'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[DY]',@label['DY'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=DRC_field>
+            DRC<br />
+            <%= text_field_tag 'pm_code[DRC]',number_with_delimiter(@pm_code['DRC']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[DRC]',@section['DRC'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[DRC]',@label['DRC'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+        </td>
+        <td>
+          <p id=VK_field>
+            VK<br />
+            <%= text_field_tag 'pm_code[VK]',number_with_delimiter(@pm_code['VK']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[VK]',@section['VK'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[VK]',@label['VK'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=VC_field>
+            VC<br />
+            <%= text_field_tag 'pm_code[VC]',number_with_delimiter(@pm_code['VC']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[VC]',@section['VC'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[VC]',@label['VC'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=VM_field>
+            VM<br />
+            <%= text_field_tag 'pm_code[VM]',number_with_delimiter(@pm_code['VM']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[VM]',@section['VM'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[VM]',@label['VM'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=VY_field>
+            VY<br />
+            <%= text_field_tag 'pm_code[VY]',number_with_delimiter(@pm_code['VY']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[VY]',@section['VY'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[VY]',@label['VY'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id=DVC_field>
+            DVC<br />
+            <%= text_field_tag 'pm_code[DVC]',number_with_delimiter(@pm_code['DVC']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[DVC]',@section['DVC'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[DVC]',@label['DVC'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+        </td>
+        <td>
+          <p id= TK_field>
+            TK<br />
+            <%= text_field_tag 'pm_code[TK]',number_with_delimiter(@pm_code['TK']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[TK]',@section['TK'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[TK]',@label['TK'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id= TK1_field>
+            TK1<br />
+            <%= text_field_tag 'pm_code[TK1]',number_with_delimiter(@pm_code['TK1']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[TK1]',@section['TK1'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[TK1]',@label['TK1'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id= TK2_field>
+            TK2<br />
+            <%= text_field_tag 'pm_code[TK2]',number_with_delimiter(@pm_code['TK2']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[TK2]',@section['TK2'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[TK2]',@label['TK2'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id= TK3_field>
+            TK3<br />
+            <%= text_field_tag 'pm_code[TK3]',number_with_delimiter(@pm_code['TK3']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[TK3]',@section['TK3'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[TK3]',@label['TK3'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+        </td>
+        <td>
+          <p id= FK_field>
+            FK<br />
+            <%= text_field_tag 'pm_code[FK]',number_with_delimiter(@pm_code['FK']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[FK]',@section['FK'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[FK]',@label['FK'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id= FK1_field>
+            FK1<br />
+            <%= text_field_tag 'pm_code[FK1]',number_with_delimiter(@pm_code['FK1']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[FK1]',@section['FK1'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[FK1]',@label['FK1'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id= FK2_field>
+            FK2<br />
+            <%= text_field_tag 'pm_code[FK2]',number_with_delimiter(@pm_code['FK2']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[FK2]',@section['FK2'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[FK2]',@label['FK2'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+            <p id= FK3_field>
+            FK3<br />
+            <%= text_field_tag 'pm_code[FK3]',number_with_delimiter(@pm_code['FK3']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[FK3]',@section['FK3'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[FK3]',@label['FK3'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+        
+        </td>
+      </tr>
+    </table>
+      
+  </div>
   <p><%= f.submit %></p>
 <% end %>

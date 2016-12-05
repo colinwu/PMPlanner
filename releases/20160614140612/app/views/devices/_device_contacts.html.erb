@@ -1,0 +1,40 @@
+<div id="device_contacts">
+  <fieldset>
+  <legend>Contacts</legend>
+  <p>Note: only the <strong>name</strong> and <strong>email address</strong> are used to find an existing contact. If the search comes up empty a new contact record will be created.</p>
+  <p><strong>Name</strong> and <strong>email</strong> are both required to create a new contact.</p>
+  <table width="100%">
+    <tr>
+      <th>Name*</th>
+      <th>Phone1</th>
+      <th>Phone2</th>
+      <th>Email*</th>
+      <th>Notes</th>
+      <th> </th>
+    </tr>
+    <% @contacts.each do |c| %>
+    <tr>
+      <td><%=h c.name %></td>
+      <td><%=h number_to_phone(c.phone1, area_code: true) %></td>
+      <td><%=h number_to_phone(c.phone2, area_code: true) %></td>
+      <td><%=h c.email %></td>
+      <td><%=h c.notes %></td>
+      <td><%= link_to 'Remove', "/devices/rm_contact?dev=#{@device.id}&contact=#{c.id}", method: :delete %>
+    </tr>
+    <% end %>
+    <tr>
+<!-- TODO want to be able to fill in name and email address and have any existing 
+contacts populate the list above. If no matches found then create new Contact
+record and add to list above. -->
+    <%= form_tag add_contact_for_device_path(@device) do %>
+      <td><%= text_field_tag 'contact[name]', @contact_name, size: 20%></td>
+      <td><%= text_field_tag 'contact[phone1]', @contact_phone1, size: 10 %></td>
+      <td><%= text_field_tag 'contact[phone2]', @contact_phone2, size: 10 %></td>
+      <td><%= text_field_tag 'contact[email]', @contact_email, size: 30 %></td>
+      <td><%= text_field_tag 'contact[notes]', @contact_notes, size: 30 %></td>
+      <td><%= submit_tag "Add Contact" %></td>
+    <% end %>
+    </tr>
+  </table>
+  </fieldset>
+</div>

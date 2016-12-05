@@ -14,7 +14,7 @@
     <tr class="<%= cycle('light','dark') %>">
       <td><%= reading.taken_at %></td>
       <td><%= reading.device.crm_object_id %></td>
-      <td><%= reading.technician.first_name %> <%= reading.technician.last_name %></td>
+      <td><%= reading.technician.full_name %></td>
       <% for code in allcodes %>
       <% c = reading.counter_for(code.name) %>
       <% if c.nil? %>

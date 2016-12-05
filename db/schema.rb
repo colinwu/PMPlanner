@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160614150042) do
+ActiveRecord::Schema.define(version: 20161124031210) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -120,10 +120,12 @@ ActiveRecord::Schema.define(version: 20160614150042) do
     t.string   "unit",           limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "label",          limit: 255
+    t.string   "section",        limit: 255
   end
 
   create_table "models", force: :cascade do |t|
-    t.string   "name",           limit: 255
+    t.string   "nm",             limit: 255
     t.integer  "model_group_id", limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
@@ -209,11 +211,15 @@ ActiveRecord::Schema.define(version: 20160614150042) do
 
   create_table "readings", force: :cascade do |t|
     t.date     "taken_at"
-    t.string   "notes",         limit: 255
-    t.integer  "device_id",     limit: 4
-    t.integer  "technician_id", limit: 4
+    t.string   "notes",             limit: 255
+    t.integer  "device_id",         limit: 4
+    t.integer  "technician_id",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ptn1_file_name",    limit: 255
+    t.string   "ptn1_content_type", limit: 255
+    t.integer  "ptn1_file_size",    limit: 4
+    t.datetime "ptn1_updated_at"
   end
 
   create_table "ship_tos", force: :cascade do |t|
@@ -237,6 +243,7 @@ ActiveRecord::Schema.define(version: 20160614150042) do
     t.datetime "updated_at",               null: false
     t.string   "crm_name",     limit: 255
     t.string   "warehouse_id", limit: 255
+    t.integer  "manager_id",   limit: 4
   end
 
   create_table "technicians", force: :cascade do |t|

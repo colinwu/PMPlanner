@@ -14,9 +14,18 @@ class ReadingsController < ApplicationController
   end
 
   def create
-    @reading = Reading.new(params[:reading])
+    @reading = Reading.new(reading_params)
+    # have to save the instance before we can process the attached file
     if @reading.save
-      redirect_to @reading, :notice => "Successfully created reading."
+      if @reading.ptn1_file_name
+        msg = @reading.process_ptn1
+        if msg =~ /processed/
+          redirect_to back_or_go_here(@reading), :notice => "Reading successfully saved."
+        else
+          @reading.destroy
+          redirect_to back_or_go_here(root_url), :alert => msg
+        end
+      end
     else
       render :action => 'new'
     end
@@ -28,7 +37,7 @@ class ReadingsController < ApplicationController
 
   def update
     @reading = Reading.find(params[:id])
-    if @reading.update_attributes(params[:reading])
+    if @reading.update_attributes(reading_params)
       redirect_to @reading, :notice  => "Successfully updated reading."
     else
       render :action => 'edit'
@@ -38,6 +47,12 @@ class ReadingsController < ApplicationController
   def destroy
     @reading = Reading.find(params[:id])
     @reading.destroy
-    redirect_to readings_url, :notice => "Successfully destroyed reading."
+    redirect_to back_or_go_here(readings_url)
   end
+end
+
+private
+
+def reading_params
+  params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1)
 end

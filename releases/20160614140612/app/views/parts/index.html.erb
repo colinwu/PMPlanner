@@ -1,0 +1,36 @@
+<% title "Parts", false %>
+
+<table>
+  <tr>
+  <%= form_tag parts_path, :method => :get do %>
+    <td><%= text_field_tag 'pn', params[:pn], size: 15 %></td>
+    <td><%= text_field_tag 'desc', params[:desc], size: 30 %></td>
+    <td></td>
+    <td></td>
+    <td><%= submit_tag 'Search' %></td>
+  <% end %>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>New Name</th>
+    <th>Action</th>
+  </tr>
+  <% for part in @parts %>
+    <tr>
+      <td><%= part.name %></td>
+      <td><%= part.description %></td>
+      <td><%= part.price %></td>
+      <td><%= part.new_name %></td>
+      <td><%= link_to "Edit", edit_part_path(part) %> |
+      <%= link_to "Del", part, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+  <tr><td colspan=20><%= debug @uri %></td></tr>
+</table>
+
+<%= will_paginate @parts %>
+<% if current_technician.admin? %>
+<p><%= link_to "New Part", new_part_path %></p>
+<% end %>

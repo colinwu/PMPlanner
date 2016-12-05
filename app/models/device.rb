@@ -19,6 +19,7 @@ class Device < ActiveRecord::Base
   validates_associated :model
   
   delegate :name, to: :client , prefix: true, allow_nil: true
+  delegate :nm, to: :model, prefix: true, allow_nil: true
   
   def target_for(code)
     self.model.model_group.model_targets.where(["maint_code = ?",code]).first

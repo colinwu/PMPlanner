@@ -10,6 +10,7 @@ PmPlanner::Application.routes.draw do
       post 'handle_checked'
     end
   end
+  
   resources :logs
   resources :counter_data
   resources :counters
@@ -19,7 +20,13 @@ PmPlanner::Application.routes.draw do
   resources :pm_codes
   resources :parts
   resources :preferences
-  resources :teams
+  
+  resources :teams do
+    member do
+      get 'manager'
+      get 'techs'
+    end
+  end
 
   resources :technicians, except: :show do
     member do
@@ -71,7 +78,11 @@ PmPlanner::Application.routes.draw do
   end
 
   resources :models
-  resources :model_groups
+  resources :model_groups do
+    member do
+      get 'get_targets'
+    end
+  end
 
   root to: 'technicians#root_dispatch'
 end

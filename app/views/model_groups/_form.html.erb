@@ -1,12 +1,16 @@
 <%= form_for @model_group do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :name %><br />
+    <%= f.label "Model Group" %><br />
     <%= f.text_field :name %>
   </p>
   <p>
     <%= f.label :description %><br />
     <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.label "Colour?" %><br />
+    <%= f.select :color_flag, [['Yes',true],['No',false]] %>
   </p>
   <p><%= f.submit %></p>
 <% end %>

@@ -205,19 +205,7 @@
 }
 
 .dark {
-  background-color: #F2F2F2;
-}
-
-.context_menu {
-  border: 1px solid gray;
-  padding: 5px;
-  margin: 0 auto;
-  height: 1.5em;
-  /* Rounded Corners */
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  background-color: silver;
+  background-color: #D2D2D2;
 }
 
 .search_fields {
