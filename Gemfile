@@ -14,6 +14,7 @@ group :development, :test do
   gem 'railroady'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'bullet'
 end
 
 # Gems used only for assets and not required
@@ -40,6 +41,7 @@ gem 'css3-progress-bar-rails'
 gem 'rails4-autocomplete'
 gem 'best_in_place', '~> 3.1'
 gem "paperclip", "~> 5.0.0"
+gem 'activerecord-session_store'
 
 
 # To use ActiveModel has_secure_password

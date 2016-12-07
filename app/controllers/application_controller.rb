@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   protected
   
   def current_technician
-    Technician.where(id: session[:tech_id]).first
+    session[:tech]
   end
   helper_method :current_technician
   

@@ -283,7 +283,7 @@ class DevicesController < ApplicationController
     params[:counter].each do |code,value|
       p = PmCode.find_by_name(code)
       begin
-        value.gsub!(/[^0-9]/,'')
+#         value.gsub!(/[^0-9]/,'')
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
         c.update_attributes(value: value, unit: 'count')
       rescue
@@ -503,9 +503,10 @@ class DevicesController < ApplicationController
   def my_pm_list
     you_are_here
     @search_params = params[:search] || Hash.new
+    byebug
     if current_technician.admin? or current_technician.manager?
-      unless session[:tech_id].nil?
-        my_team = Technician.where(["id = ?", session[:tech_id]])
+      unless session[:tech].nil?
+        my_team = Technician.where(["id = ?", session[:tech]])
         @title = "PM List for #{my_team.first.friendly_name}"
       else
         my_team = Technician.where(["team_id = ?",current_technician.team_id])
@@ -536,10 +537,10 @@ class DevicesController < ApplicationController
       
       # toggle to show devices for which the current tech is the backup tech
       if @showbackup
-        where_ar = ["primary_tech_id = ? or backup_tech_id = ?"]
+        where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true"]
         search_ar = ["",tech.id, tech.id]
       else
-        where_ar = ["primary_tech_id = ?"]
+        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true"]
         search_ar = ["", tech.id]
       end
       
@@ -569,8 +570,8 @@ class DevicesController < ApplicationController
           search_ar <<  @search_params['city']
           where_ar << "locations.city regexp ?"
         end
-        search_ar[0] = where_ar.join(' and ')
       end
+      search_ar[0] = where_ar.join(' and ')
       
       if (sort_column == 'outstanding_pms')
         code_count = {}
@@ -591,12 +592,12 @@ class DevicesController < ApplicationController
           @dev_list << devs.find(c[0])
         end
       else
-        Device.where(search_ar).joins(:location, :client, :model).order(@order).each do |dev|
-          if dev.active and dev.under_contract and dev.do_pm
+        Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).each do |dev|
+#           if dev.active and dev.under_contract and dev.do_pm
             if !dev.outstanding_pms.empty? or (!dev.neglected.nil? and (dev.neglected.next_visit < (@now + range*2)))
               @dev_list << dev
             end # if
-          end # if
+#           end # if
         end # Device.each
       end
     end
@@ -620,7 +621,7 @@ class DevicesController < ApplicationController
         @device = @devices.first
         redirect_to "/devices/#{@device.id}/#{session[:search_caller]}"
       when 0
-        redirect_to back_or_go_here()
+        redirect_to devices_url, alert: "Nothing found."
       else
         render :index
       end

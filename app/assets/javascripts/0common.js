@@ -8,7 +8,7 @@
    $("a").click(function() {
      $("body").css({"cursor": "wait"});
    });
-   $("submit").click(function() {
+   $("input[type='submit']").click(function() {
      $("body").css({"cursor": "wait"});
    });
    $("input[readonly!='readonly']").focus(function() {

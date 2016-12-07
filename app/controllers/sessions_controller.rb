@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
       params[:username] =~ /\\(.+)$/
       sAMAccountName = $1
       if ldap.bind
-        session[:tech_id] = tech.id
+        session[:tech] = tech
         session[:active_at] = Time.now
         current_technician.logs.create(message: "Logged in")
         current_technician.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
 
   def destroy
     current_technician.logs.create(message: "Logged out")
-    session[:tech_id] = nil
+    session[:tech] = nil
     session[:active_at] = nil
     redirect_to root_url, notice: "Logged out."
   end
