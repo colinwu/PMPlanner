@@ -4,6 +4,15 @@
   <tr>
     <th>Model</th><th>Model Group</th><th>Color</th><th>Description</th>
   </tr>
+  <tr>
+    <%= form_tag models_url, method: :get do %>
+    <td><%= text_field_tag "search[nm]", @search_params['nm'], :size => 1 %></td>
+    <td><%= text_field_tag "search[mg]", @search_params['mg'], :size => 1 %></td>
+    <td></td>
+    <td><%= text_field_tag "search[desc]", @search_params['desc'], :size => 1 %></td>
+    <td colspan=3><%= submit_tag 'Search' %></td>
+    <% end %>
+  </tr>
   <% for model in @models %>
     <tr class="<%= cycle('light','dark') %>">
       <td><%= model.nm %></td>

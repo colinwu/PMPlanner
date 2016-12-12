@@ -503,10 +503,9 @@ class DevicesController < ApplicationController
   def my_pm_list
     you_are_here
     @search_params = params[:search] || Hash.new
-    byebug
     if current_technician.admin? or current_technician.manager?
       unless session[:tech].nil?
-        my_team = Technician.where(["id = ?", session[:tech]])
+        my_team = Technician.where(["team_id = ?", session[:tech].team_id])
         @title = "PM List for #{my_team.first.friendly_name}"
       else
         my_team = Technician.where(["team_id = ?",current_technician.team_id])

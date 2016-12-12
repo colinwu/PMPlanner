@@ -93,13 +93,13 @@ class TechniciansController < ApplicationController
   end
   
   def select_territory
-    unless params[:tech_id].blank? or Technician.find(params[:tech_id]).nil?
-      session[:tech_id] = params[:tech_id]
+    session[:tech] = Technician.find params[:tech_id]
+    unless params[:tech_id].blank? or session[:tech].nil?
       flash[:notice] = "Territory selected"
       current_technician.logs.create(message: "Working with territory for technician #{params[:tech_id]}")
-    else
-      session[:tech_id] = nil
+#     else
+#       session[:tech] = nil
     end
-    redirect_to devices_path
+    redirect_to current_technician.preference.default_root_path
   end
 end

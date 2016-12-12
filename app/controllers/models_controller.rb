@@ -1,6 +1,7 @@
 class ModelsController < ApplicationController
   before_action :authorize
   def index
+    @search_params = {}
     respond_to do |format|
       format.html {
         @models = Model.page(params[:page]).order(:nm)
@@ -18,13 +19,13 @@ class ModelsController < ApplicationController
   end
 
   def new
-    if current_technician.admin?
+    if current_technician.admin? or current_technician.manager?
       @model = Model.new
       @pm_code = {}
       @section = {}
       @label = {}
     else
-      redirect_to back_or_go_here(models_url), warning: "You are not permitted here."
+      redirect_to back_or_go_here(models_url), alert: "You are not permitted here."
     end
   end
 
@@ -55,8 +56,9 @@ class ModelsController < ApplicationController
     # Update or create model targets
     counters.keys.each do |c|
       unless counters[c].empty? and sections[c].empty? and labels[c].empty?
+        val = counters[c].gsub(/[^0-9]/,'')
         mt = @model_group.model_targets.find_or_create_by(maint_code: c)
-        mt.update_attributes(target: counters[c], section: sections[c], label: labels[c], unit: 'count')
+        mt.update_attributes(target: val, section: sections[c], label: labels[c], unit: 'count')
         mt.save
       end
     end
@@ -68,7 +70,7 @@ class ModelsController < ApplicationController
   end
 
   def edit
-    if current_technician.admin?
+    if current_technician.admin? or current_technician.manager?
       @model = Model.find(params[:id])
       @pm_code = {}
       @section = {}
@@ -109,8 +111,9 @@ class ModelsController < ApplicationController
     # Update or create model targets
     counters.keys.each do |c|
       unless counters[c].empty? and sections[c].empty? and labels[c].empty?
+        val = counters[c].gsub(/[^0-9]/,'')
         mt = @model_group.model_targets.find_or_create_by(maint_code: c)
-        mt.update_attributes(target: counters[c], section: sections[c], label: labels[c], unit: 'count')
+        mt.update_attributes(target: val, section: sections[c], label: labels[c], unit: 'count')
         mt.save
       end
     end
