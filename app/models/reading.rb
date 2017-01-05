@@ -55,7 +55,7 @@ class Reading < ActiveRecord::Base
     while (row = f.gets)
       unless (seen[:model])
         if (row =~ /MACHINE:\s+([A-Z0-9-]+)/)
-          model = $1
+          model = $1.gsub(/\W/,'')
           seen[:model] = true
         end
       end

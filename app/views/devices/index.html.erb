@@ -30,7 +30,7 @@
     <%= submit_tag "Create Parts List", name: 'parts' %> | 
     <%= submit_tag "Create Service Order", name: 'service' %> | 
     <%= submit_tag "List All Parts", name: 'all_parts' %>
-    <% if current_technician.admin? or current_technician.manager? %>
+    <% if current_user.admin? or current_user.manager? %>
       | Transfer device(s) to <%= select_tag :to_team_id, options_from_collection_for_select(Team.all, :id, :name), include_blank: true %><%= submit_tag "Go", name: 'transfer' %>
     <% end %>
   </div>

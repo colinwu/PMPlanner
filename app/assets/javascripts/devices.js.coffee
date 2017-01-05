@@ -97,7 +97,6 @@ jQuery ->
       change_val_of code, deltaBW for code in bw
   #     change_val_of code, deltaC for code in color
       change_val_of code, (deltaBW + deltaC) for code in all
-
       root.changed = true
 
 # When CTOTAL has changed ...
@@ -176,7 +175,15 @@ jQuery ->
     root.changed = true
 
 # Reset changed flag when "Save Reading" button clicked
-  $("[value='Save Reading']").click (e) ->
+  $("#counter_form").submit (e) ->
+    bwt = $("#counter_BWTOTAL").val().replace(/,/g, '')
+    ct = $("#counter_CTOTAL").val().replace(/,/g, '')
+    ta = $("#counter_TA").val().replace(/,/g, '')
+    ca = $("#counter_CA").val().replace(/,/g, '')
+    if ((bwt.length == 0 || isNaN(bwt)) || (ct.length == 0 || isNaN(ct)) || (ta.length == 0 || isNaN(ta)) || (ca.length == 0 || isNaN(ca)))
+      alert("Please ensure you have entered values for each of 'BWTOTAL', 'CTOTAL', 'TA' and 'CA'")
+      $("body").css({"cursor": "default"})
+      return false
     root.changed = false
     true
     

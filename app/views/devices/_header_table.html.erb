@@ -7,12 +7,14 @@
     <% end %>
     <br />
     <% unless @reading.nil? %>
-      <%= form_for @reading do |f| %>
-        <%= f.label "Upload 22-6 file for this device" %>
-        <%= f.file_field :ptn1 %>
-        <%= f.hidden_field :device_id, { value: @reading.device_id } %>
-        <%= f.hidden_field :technician_id, { value: @reading.technician_id} %>
-        <%= f.submit "Upload" %>
+      <% unless Device.find(@reading.device_id).model.model_group.model_targets.where("maint_code = 'TK' or maint_code = 'TA'").first.label.nil? %>
+        <%= form_for @reading do |f| %>
+          <%= f.label "Upload 22-6 file for this device" %>
+          <%= f.file_field :ptn1 %>
+          <%= f.hidden_field :device_id, { value: @reading.device_id } %>
+          <%= f.hidden_field :technician_id, { value: @reading.technician_id} %>
+          <%= f.submit "Upload" %>
+        <% end %>
       <% end %>
     <% end %>
     <br />

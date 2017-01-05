@@ -5,7 +5,7 @@ class ClientsController < ApplicationController
   def index
     you_are_here
     @title = "Clients"
-    @tech = current_technician.admin? ? Technician.find(params[:tech_id]) : current_technician
+    @tech = current_user.admin? ? Technician.find(params[:tech_id]) : current_user
     @clients = Client.order(:name).page(params[:page])
   end
 
@@ -54,10 +54,7 @@ class ClientsController < ApplicationController
   def get_locations
     selected_client = Client.find(params[:id])
     @locations = Array.new
-#     Client.where(["name = ?", selected_client.name]).each do |c|
-      @locations += selected_client.locations.where(["team_id = ?", current_technician.team_id])
-#     end
-    @locations.paginate(page: params[:page])
+    @locations += selected_client.locations
     render 'locations/index'
   end
   

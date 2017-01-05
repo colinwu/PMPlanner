@@ -30,7 +30,7 @@ if (File.exists?(csv_file))
       unless m.model_targets.empty?
         # If yes, are any of them the one we're looking for
         m.model_targets.each do |rt|
-          if rt.maint_code == t
+          if rt.maint_code == t.upcase
             model_target = rt
             found_target = true
             break;
@@ -38,7 +38,7 @@ if (File.exists?(csv_file))
         end
       end
       if (found_target == false)
-        rt = m.model_targets.create(:target => row[t], :maint_code => t, :unit => 'count')
+        rt = m.model_targets.create(:target => row[t], :maint_code => t.upcase, :unit => 'count')
       else
         model_target.target = row[t] # update the target value
         model_target.save

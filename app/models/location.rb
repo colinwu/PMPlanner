@@ -10,7 +10,7 @@ class Location < ActiveRecord::Base
   validates :address1, :city, :province, :post_code, presence: true
   
   def to_s
-    if self.address2.empty?
+    if self.address2.nil? or self.address2.empty?
       [self.address1.titleize, self.city.titleize, self.province, self.post_code.upcase].join(', ')
     else
       [self.address1.titleize, self.address2.titleize, self.city.titleize, self.province, self.post_code.upcase].join(', ')

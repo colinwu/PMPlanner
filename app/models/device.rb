@@ -63,7 +63,7 @@ class Device < ActiveRecord::Base
 
   def update_pm_visit_tables
     now = Date.today
-    prev_reading = self.last_non_zero_reading_on_or_before(now-1)
+    prev_reading = self.last_non_zero_reading_on_or_before(now)
     unless prev_reading.nil? 
       first_outstanding = self.outstanding_pms.first
       unless first_outstanding.nil?

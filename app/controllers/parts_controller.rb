@@ -25,7 +25,7 @@ class PartsController < ApplicationController
 
   def new
     @title = "Add new part"
-    if current_technician.admin?
+    if current_user.admin?
       @part = Part.new
     else
       @uri = back_or_default()

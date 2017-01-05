@@ -2,10 +2,10 @@ class TechniciansController < ApplicationController
   before_action :authorize
   
   def index
-    if current_technician.admin?
+    if current_user.admin?
       @title = "Technicians"
       @technicians = Technician.all
-    elsif current_technician.manager?
+    elsif current_user.manager?
       @title = "My techs"
       @technicians = current_technician.my_techs
     end
@@ -17,7 +17,7 @@ class TechniciansController < ApplicationController
   end
 
   def new
-    if current_technician.admin?
+    if current_user.admin?
       @technician = Technician.new
     else
       flash[:notice] = "Sorry, only admins can add technicians."
@@ -37,7 +37,7 @@ class TechniciansController < ApplicationController
         default_to_email: 'sharpdirectparts@sharpsec.com',
         default_from_email: 'landriaultl@sharpsec.com'
         )
-      current_technician.logs.create(message: "Successfully created technician #{@technician.id}")
+      current_user.logs.create(message: "Successfully created technician #{@technician.id}")
       redirect_to @technician, :notice => "Successfully created technician."
     else
       render :action => 'new'
@@ -45,7 +45,7 @@ class TechniciansController < ApplicationController
   end
 
   def edit
-    if current_technician.admin?
+    if current_user.admin?
       @technician = Technician.find(params[:id])
       @title = "Edit Info for #{@technician.first_name} #{@technician.last_name}"
     else
@@ -55,7 +55,7 @@ class TechniciansController < ApplicationController
   end
 
   def update
-    if current_technician.admin?
+    if current_user.admin?
       @technician = Technician.find(params[:id])
     else
       @technician = current_technician
@@ -73,7 +73,7 @@ class TechniciansController < ApplicationController
   end
 
   def destroy
-    if current_technician.admin?
+    if current_user.admin?
       if param[:id] == current_technician.id
         flash[:error] = "You can not delete yourself."
         redirect_to root_url
@@ -93,13 +93,13 @@ class TechniciansController < ApplicationController
   end
   
   def select_territory
-    session[:tech] = Technician.find params[:tech_id]
-    unless params[:tech_id].blank? or session[:tech].nil?
+    unless params[:tech_id].blank?
+      session[:tech] = Technician.find params[:tech_id]
       flash[:notice] = "Territory selected"
-      current_technician.logs.create(message: "Working with territory for technician #{params[:tech_id]}")
-#     else
-#       session[:tech] = nil
+      current_user.logs.create(message: "Working with territory for technician #{params[:tech_id]} (#{current_technician.full_name})")
+    else
+      session[:tech] = nil
     end
-    redirect_to current_technician.preference.default_root_path
+    redirect_to current_user.preference.default_root_path
   end
 end

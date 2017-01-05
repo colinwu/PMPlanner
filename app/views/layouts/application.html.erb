@@ -16,12 +16,12 @@
         <% end %>
         </div>
         <div id="tech_navbar">
-          <% if current_technician %>
+          <% if current_user %>
             <% session[:active_at] = Time.now %>
-            <% WillPaginate.per_page = current_technician.preference.lines_per_page %>
-            Signed in as <%= current_technician.friendly_name -%> | 
+            <% WillPaginate.per_page = current_user.preference.lines_per_page %>
+            Signed in as <%= current_user.friendly_name -%> | 
             <%= link_to "Sign out", logout_path %> |
-            <%= link_to "My profile", edit_preference_path(current_technician) %>
+            <%= link_to "My profile", edit_preference_path(current_user) %>
           <% else %>
             <%= link_to "Sign in", login_path %>
           <% end %>
@@ -43,12 +43,12 @@
         <!--<li><%= link_to_unless_current "Data Entry", {controller: "/devices", action: "enter_data", id: @device}, id: "enter_data_link" %></li>-->
         <li><%= link_to_unless_current "PM Status", {controller: '/devices', action: 'analyze_data', id: @device}, id: "analyze_data_link" %></li>
         <li><%= link_to_unless_current "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_link" %></li>
-        <% if current_technician and (current_technician.admin? or current_technician.manager?) %>
+        <% if not current_user.nil? and (current_user.admin? or current_user.manager?) %>
           <li><%= link_to_unless_current "My Team", technicians_path %></li>
           <li><%= link_to_unless_current "Transfers", transfers_path %></li>
           <li>
             <%= form_tag select_territory_technicians_path, :id => 'tech_select' do %>
-              <%= select_tag :tech_id, options_from_collection_for_select(current_technician.my_techs, :id, :friendly_name, current_technician.id), include_blank: true %>
+              <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs, :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), include_blank: true %>
             <% end %>
           </li>
         <% end %>

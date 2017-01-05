@@ -33,13 +33,14 @@ module ApplicationHelper
   end
   
   def replace_my
-    if current_technician and (current_technician.admin? or current_technician.manager?)
-      unless session[:tech_id].nil?
-        tech = Technician.find(session[:tech_id])
-        "#{tech.friendly_name}'s"
-      else
-        'Regional'
+    if current_technician.nil?
+      if current_user.admin?
+        'All'
+      elsif current_user.manager?
+        "#{current_user.team.name}"
       end
+    elsif not current_user.nil? and (current_user.admin? or current_user.manager?)
+        "#{current_technician.friendly_name}'s"
     else
       'My'
     end

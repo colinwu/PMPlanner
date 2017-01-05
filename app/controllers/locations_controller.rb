@@ -43,16 +43,18 @@ class LocationsController < ApplicationController
     else
       @order = sort_column + ' ' + sort_direction
     end
-    if current_technician.admin?
-      search_ar[0] = where_ar.join(' and ')
-      @locations = Location.joins(:client).order(@order).where(search_ar).page(params[:page])
-      @title = "All Locations"
-    elsif current_technician.manager?
-      where_ar << "team_id = ?"
-      search_ar << current_technician.team_id
-      search_ar[0] = where_ar.join(' and ')
-      @title = "Locations in Region"
-      @locations = Location.joins(:client).order(@order).where(search_ar).page(params[:page])
+    if current_technician.nil?
+      if current_user.admin?
+        search_ar[0] = where_ar.join(' and ')
+        @locations = Location.joins(:client).order(@order).where(search_ar).page(params[:page])
+        @title = "All Locations"
+      elsif current_user.manager?
+        where_ar << "team_id = ?"
+        search_ar << current_user.team_id
+        search_ar[0] = where_ar.join(' and ')
+        @title = "Locations in Region"
+        @locations = Location.joins(:client).order(@order).where(search_ar).page(params[:page])
+      end
     else
       where_ar << "devices.primary_tech_id = ?"
       search_ar << current_technician.id

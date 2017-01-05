@@ -6,9 +6,9 @@ class DevicesController < ApplicationController
   def index
     you_are_here
     @search_params = params[:search] || Hash.new
+    search_ar = ['placeholder']
+    where_ar = []
     if params[:search]
-      search_ar = ['placeholder']
-      where_ar = []
       unless @search_params['crm'].nil? or @search_params['crm'].blank?
         search_ar <<  @search_params[:crm]
         where_ar << "crm_object_id regexp ?"
@@ -34,39 +34,46 @@ class DevicesController < ApplicationController
         where_ar << "locations.city regexp ?"
       end
       search_ar[0] = where_ar.join(' and ')
+    else
+      search_ar = []
     end
     if params[:sort].nil? or params[:sort].empty?
       @order = 'crm_object_id'
     else
       @order = sort_column + ' ' + sort_direction
     end
-    if current_technician.admin?
-      if not session[:tech_id].nil?
-        @tech = Technician.find(session[:tech_id])
-        @title = "Devices in "
-      else
+    # an empty current_technician means we're not working with any specific tech
+    if current_technician.nil?
+      if current_user.admin?
         @title = "All Devices"
         @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page])
-      end
-    elsif current_technician.manager?
-      if session[:tech_id]
-        @tech = Technician.find(session[:tech_id])
-        @title = "Devices in #{@tech.friendly_name}'s territory"
-        @devices = @tech.primary_devices.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page])
-      else
-        @title = "Devices in #{current_technician.team.name}"
-        unless search_ar.nil?
+      elsif current_user.manager?
+        @title = "Devices in #{current_user.team.name}"
+        @tech = current_user
+        unless where_ar.empty?
           search_ar[0] = [search_ar[0], 'devices.team_id = ?'].join(' and ')
-          search_ar << current_technician.team_id
+          search_ar << current_user.team_id
         else
-          search_ar = ["devices.team_id = ?", current_technician.team_id]
+          search_ar = ["devices.team_id = ?", current_user.team_id]
         end
         @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
+      else
+# should never reach this
+#         @title = "My Territory"
+#         @tech = current_user
       end
     else
-      @title = "My Territory"
+      @title = "#{current_technician.friendly_name}'s Devices"
       @tech = current_technician
+      unless where_ar.empty?
+        search_ar[0] = [search_ar[0], 'primary_tech_id = ?'].join(' and ')
+        search_ar << @tech.id
+      else
+        search_ar = ["primary_tech_id = ?", @tech.id]
+      end
+      @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
     end
+    
     if @devices.nil? or @devices.empty?
       @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page])
     end
@@ -74,7 +81,7 @@ class DevicesController < ApplicationController
 
   def show
     @device = Device.find(params[:id])
-    if current_technician.can_manage?(@device)
+    if current_user.can_manage?(@device)
       you_are_here
       @manager = Technician.where(["team_id = ? and manager = TRUE", @device.team_id]).first
       @contacts = @device.location.contacts
@@ -87,13 +94,11 @@ class DevicesController < ApplicationController
   def new
     @title = "Add a new device"
     session[:caller] = request.path_parameters[:action]
-    
-    if current_technician.admin? or current_technician.manager?
-      you_are_here
-      @device = Device.new
-      if current_technician.manager?
-        @device.team_id = current_technician.team_id
-      end
+    you_are_here
+    @device = Device.new
+# only admin or manager can add devices
+    if current_user.admin? or current_user.manager?
+      @device.team_id = current_technician.team_id
       @readonly_flag = false
       @contacts = []
       @locations = []
@@ -122,7 +127,7 @@ class DevicesController < ApplicationController
     end
       
     if @device.update_attributes(params[:device])
-      current_technician.logs.create(device_id: @device.id, message: "Created device record with #{params[:device].inspect}")
+      current_user.logs.create(device_id: @device.id, message: "Created device record with #{params[:device].inspect}")
       flash[:alert] = nil
       flash[:error] = nil
       flash[:notice] = "Successfully created device record."
@@ -130,7 +135,7 @@ class DevicesController < ApplicationController
     else
       @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
       @contacts = @device.location.contacts
-      if current_technician.can_manage?(@device)
+      if current_user.can_manage?(@device)
         you_are_here
         @readonly_flag =  true
       else
@@ -144,11 +149,11 @@ class DevicesController < ApplicationController
   def edit
     @title = "Edit device info"
     session[:caller] = request.path_parameters[:action]
+    you_are_here
     @device = Device.find(params[:id])
     @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
     @contacts = @device.location.contacts
-    if current_technician.can_manage?(@device)
-      you_are_here
+    if current_user.can_manage?(@device)
       @readonly_flag =  false
     else
       @readonly_flag =  true
@@ -166,7 +171,7 @@ class DevicesController < ApplicationController
       params[:device][:location_id] = loc.id
     end
     if @device.update_attributes(params[:device])
-      current_technician.logs.create(device_id: @device.id, message: "Updated device with #{params[:device].inspect}")
+      current_user.logs.create(device_id: @device.id, message: "Updated device with #{params[:device].inspect}")
       flash[:alert] = nil
       flash[:error] = nil
       flash[:notice] = "Successfully updated device."
@@ -174,8 +179,7 @@ class DevicesController < ApplicationController
     else
       @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
       @contacts = @device.location.contacts
-      if current_technician.can_manage?(@device)
-        you_are_here
+      if current_user.can_manage?(@device)
         @readonly_flag =  true
       else
         @readonly_flag =  false
@@ -187,12 +191,12 @@ class DevicesController < ApplicationController
 
   def destroy
     @device = Device.find(params[:id])
-    if current_technician.can_manage?(@device)
+    if current_user.can_manage?(@device)
       @device.destroy
       flash[:notice] = "Successfully removed device record."
-      current_technician.logs.create(device_id: @device.id, message: "Deleted device")
+      current_user.logs.create(device_id: @device.id, message: "Deleted device")
     else
-      current_technician.logs.create(device_id: @device.id, message: "Not authorized to delete device")
+      current_user.logs.create(device_id: @device.id, message: "Not authorized to delete device")
       flash[:alert] = "Only admin or managers can delete devices."
     end
     redirect_to devices_url
@@ -202,7 +206,7 @@ class DevicesController < ApplicationController
     contact_id = params['contact']
     dev = Device.find(params['dev']) 
     dev.location.contacts.delete(contact_id)
-    current_technician.logs.create(device_id: dev.id, message: "contact #{contact_id} no longer associated with device")
+    current_user.logs.create(device_id: dev.id, message: "contact #{contact_id} no longer associated with device")
     redirect_to back_or_go_here
   end
   
@@ -212,10 +216,10 @@ class DevicesController < ApplicationController
     @contact = Contact.where(["name = ? or email = ?", contact_param[:name], contact_param[:email]]).first
     if @contact.nil?
       @contact = @device.location.contacts.create(contact_param)
-      current_technician.logs.create(device_id: @device.id, message: "New contact #{@contact.id} created and associated with device.")
+      current_user.logs.create(device_id: @device.id, message: "New contact #{@contact.id} created and associated with device.")
     else
       @device.location.contacts << @contact
-      current_technician.logs.create(device_id: @device.id, message: "Contact #{@contact.id} associated with the device.")
+      current_user.logs.create(device_id: @device.id, message: "Contact #{@contact.id} associated with the device.")
     end
     redirect_to back_or_go_here
   end
@@ -234,8 +238,8 @@ class DevicesController < ApplicationController
     rescue
       @device = nil
     end
-    if @device and current_technician.can_manage?(@device)
-      @reading = @device.readings.build(technician_id: current_technician.id)
+    if @device and current_user.can_manage?(@device)
+      @reading = @device.readings.build(technician_id: current_user.id)
       @device.pm_codes.each do |code|
         if code.colorclass == 'BW'
           @bw_list << code.name
@@ -267,11 +271,11 @@ class DevicesController < ApplicationController
         end
       end
       
-      @reading = @device.readings.build(technician_id: current_technician.id, taken_at: Date.today, notes: current_technician.preference.default_notes)
+      @reading = @device.readings.build(technician_id: current_user.id, taken_at: Date.today, notes: current_user.preference.default_notes)
       @codes = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
     else
       @device = nil
-      flash[:alert] = "No, or invalid, device specified."
+      flash[:alert] = "No valid device specified."
     end
   end
   
@@ -283,15 +287,15 @@ class DevicesController < ApplicationController
     params[:counter].each do |code,value|
       p = PmCode.find_by_name(code)
       begin
-#         value.gsub!(/[^0-9]/,'')
+        v = value.gsub(/[^0-9-]/,'')
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
-        c.update_attributes(value: value, unit: 'count')
+        c.update_attributes(value: v, unit: 'count')
       rescue
-        flash[:alert] += "Error saving counter for #{p.name}. Value = #{value}"
-        current_technician.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
+        flash[:alert] += "Error saving counter for #{p.name}. Value = #{v}"
+        current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
       end
     end
-    current_technician.logs.create(device_id: @device.id, message: "Counter data saved.")
+    current_user.logs.create(device_id: @device.id, message: "Counter data saved.")
     @device.update_pm_visit_tables
     redirect_to analyze_data_device_url(@device)
   end
@@ -310,8 +314,13 @@ class DevicesController < ApplicationController
     rescue
       @device = nil
     end
-    if @device and current_technician.can_manage?(@device)
-      @reading = @device.readings.build(technician_id: current_technician.id)
+    unless current_technician.nil?
+      @tech = current_technician
+    else
+      @tech = @device.primary_tech
+    end
+    if @device and current_user.can_manage?(@device)
+      @reading = @device.readings.build(technician_id: current_user.id)
       @device.pm_codes.each do |code|
         if code.colorclass == 'BW'
           @bw_list << code.name
@@ -336,7 +345,7 @@ class DevicesController < ApplicationController
       
       unless @prev_reading.nil?
         last_now_interval = @now - @prev_reading.taken_at
-        range = current_technician.preference.upcoming_interval * 7
+        range = @tech.preference.upcoming_interval * 7
         dailyc = 0
         if @device.model.model_group.color_flag
           dailyc = @c_monthly / 30.5
@@ -415,7 +424,7 @@ class DevicesController < ApplicationController
               next_pm_date = (@now + (30.5*(target_val - estimate) / monthlyaverage))
             end
             # CSS class 
-            range = current_technician.preference.upcoming_interval * 7
+            range = @tech.preference.upcoming_interval * 7
             # set background color and also remember the ones that are either 'emerg' or 'urgent' state
             case
             when next_pm_date <= @now
@@ -503,26 +512,26 @@ class DevicesController < ApplicationController
   def my_pm_list
     you_are_here
     @search_params = params[:search] || Hash.new
-    if current_technician.admin? or current_technician.manager?
-      unless session[:tech].nil?
-        my_team = Technician.where(["team_id = ?", session[:tech].team_id])
-        @title = "PM List for #{my_team.first.friendly_name}"
+    if params[:showbackup].nil?
+      @showbackup = current_user.preference.showbackup.to_s
+    else
+      if params[:showbackup] == 'true'
+        @showbackup = "true"
       else
-        my_team = Technician.where(["team_id = ?",current_technician.team_id])
-        @title = "PM List for Region"
+        @showbackup = "false"
+      end
+    end
+    if current_technician.nil?
+      if (current_user.admin?)
+        my_team = Technician.all
+        @title = "PM List for all devices"
+      elsif current_user.manager?
+        my_team = Technician.where(["team_id = ?",current_user.team_id])
+        @title = "PM List #{current_user}.team.name"
       end
     else
       my_team = [current_technician]
-      if params[:showbackup].nil?
-        @showbackup = current_technician.preference.showbackup
-      else
-        if params[:showbackup] == 'true'
-          @showbackup = true
-        else
-          @showbackup = false
-        end
-      end
-      @title = "My PM List"
+      @title = ""
     end
     @now = Date.today
     @dev_list = []
@@ -535,7 +544,7 @@ class DevicesController < ApplicationController
       range = tech.preference.upcoming_interval*7
       
       # toggle to show devices for which the current tech is the backup tech
-      if @showbackup
+      if @showbackup == "true"
         where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true"]
         search_ar = ["",tech.id, tech.id]
       else
@@ -608,9 +617,9 @@ class DevicesController < ApplicationController
     if params[:commit] == 'Search' and not params[:search_str].blank?
       @search_str = params[:search_str]
       @title = "Search: #{@search_str}"
-      if current_technician.admin?
+      if current_user.admin?
         @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page])
-      elsif current_technician.manager?
+      elsif current_user.manager?
         @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page])
       else
         @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page])
@@ -630,7 +639,7 @@ class DevicesController < ApplicationController
   end
   
   def parts_for_multi_pm
-    @tech = current_technician.admin? ? Technician.find(session[:tech_id]) : current_technician
+    @tech = current_user
     
     # @dev_list controls which devs we generate parts list for. Must send back to form.
     @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
@@ -680,7 +689,7 @@ class DevicesController < ApplicationController
   end
   
   def write_parts_order
-    @tech = current_technician.admin? ? Technician.find(session[:tech_id]) : current_technician
+    @tech = current_user
     part_list = params[:part]
     @msg_body = @tech.preference.default_message + "\n\n"
     part_list.each do |id,qty|
@@ -691,7 +700,7 @@ class DevicesController < ApplicationController
   end
   
   def handle_checked
-    @tech = current_technician
+    @tech = current_user
     @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
     @devices = Device.find(@dev_list)
     if params[:service]
@@ -699,7 +708,7 @@ class DevicesController < ApplicationController
       @devices.each do |dev|
         @msg_body += "#{dev.crm_object_id} : #{dev.model.nm} s/n #{dev.serial_number} : #{dev.client.name}, #{dev.location.address1}, #{dev.location.city}\n"
       end
-      @msg_body += "\n" + (current_technician.preference.default_sig || '')
+      @msg_body += "\n" + (current_user.preference.default_sig || '')
       render 'write_service_order'
     elsif params[:parts]
       @parts_hash = {}
@@ -772,7 +781,7 @@ class DevicesController < ApplicationController
       render "all_parts"
     elsif params[:transfer]
       @title = "Start Device Transfer"
-      @tech = current_technician
+      @tech = current_user
       @dev_list = []
       @from_region = current_technician.team.name
       unless params[:to_team_id].blank? or Team.find(params[:to_team_id]).nil?
@@ -782,7 +791,7 @@ class DevicesController < ApplicationController
           if dev.transfer_to(params[:to_team_id])
             @dev_list << dev
           else
-            current_technician.logs.create(device_id: dev.id, message: "Could not initiate transfer for this device.")
+            current_user.logs.create(device_id: dev.id, message: "Could not initiate transfer for this device.")
           end
         end
         # find receiving manager
@@ -834,7 +843,7 @@ class DevicesController < ApplicationController
     unless params[:email].nil?
       email = params[:email]
       email_to = email[:to]
-      email_from = current_technician.email
+      email_from = current_user.email
       email_sub = email[:subject]
       email_cc = email[:cc]
       msg_body = email[:msg]
@@ -845,11 +854,11 @@ class DevicesController < ApplicationController
         PartsMailer.send_order(email_to, email_cc, email_from, email_sub, msg_body).deliver_now
         flash[:notice] = "Message has been sent."
         if request.referer =~ /write_parts_order\Z/
-          current_technician.logs.create(message: "Parts order sent\n==============\n#{msg_body}")
+          current_user.logs.create(message: "Parts order sent\n==============\n#{msg_body}")
         elsif request.referer =~ /write_service_order\Z/
-          current_technician.logs.create(message: "Service order sent\n==============\n#{msg_body}")
+          current_user.logs.create(message: "Service order sent\n==============\n#{msg_body}")
         else
-          current_technician.logs.create(message: "Message of unknown origin sent to:#{email_to} from:#{email_from} subject:#{email_sub}\n==============\n#{msg_body}")
+          current_user.logs.create(message: "Message of unknown origin sent to:#{email_to} from:#{email_from} subject:#{email_sub}\n==============\n#{msg_body}")
         end
         redirect_to back_or_go_here
       end

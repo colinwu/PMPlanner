@@ -1,4 +1,4 @@
-<% title @title, false %>
+<% title @title, true %>
 <div id="bw_hidden"><%= @bw_list %></div>
 <div id="c_hidden"><%= @c_list %></div>
 <div id="all_hidden"><%= @all_list %></div>
@@ -19,7 +19,7 @@
     <th>Progress to next PM</th>
     <th>Next PM Date</th>
   </tr>
-  <%= form_tag(record_data_device_url) do %>
+  <%= form_tag(record_data_device_url,  id: "counter_form") do %>
     <%= hidden_field_tag 'reading[technician_id]', @prev_reading.technician_id %>
     <%= hidden_field_tag 'reading[device_id]', @prev_reading.device_id %>
     <%= hidden_field_tag 'reading[taken_at]', @now %>

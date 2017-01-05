@@ -19,7 +19,7 @@ jQuery ->
         codeNames.push(item.pm_code.name)
       return true
   
-  $("#model_group").change (e) ->
+  $("#model_group").focusout (e) ->
     mg = $(e.currentTarget).val()
     to_show = ['BWTOTAL', 'CTOTAL']
     to_hide = []

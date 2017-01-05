@@ -40,14 +40,14 @@ class ContactsController < ApplicationController
       @order = 'name'
     end
     @tech = current_technician
-    if current_technician.admin?
+    if current_user.admin?
       @title = "All contacts"
-      
+      @contacts = Contact.joins(:location).where(search_ar).order(@order).page(params[:page])
     else
       @title = "My Contacts"
-#       @contacts = current_technician.find_contacts(search_ar, sort_column.to_sym, sort_direction, current_technician.preference.limit_to_territory).paginate(:page => params[:page])
+      @contacts = current_technician.find_contacts(search_ar, sort_column.to_sym, sort_direction, current_technician.preference.limit_to_territory).page(:page => params[:page])
     end 
-    @contacts = Contact.joins(:location).where(search_ar).order(@order).page(params[:page])
+    
   end
 
   def show

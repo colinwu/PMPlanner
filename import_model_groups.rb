@@ -10,8 +10,8 @@ if File.exists?(csv_file)
     if mg.nil?
       mg = ModelGroup.create(:name => row.group)
     end
-    if Model.find_by_name(row.model).nil?
-      mg.models.create(:name => row.model)
+    if Model.find_by_nm(row.model).nil?
+      mg.models.create(:nm => row.model)
     end
   end
 else

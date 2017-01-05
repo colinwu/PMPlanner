@@ -1,4 +1,6 @@
 class CountersController < ApplicationController
+  before_action :authorize
+  
   def index
     @counters = Counter.all
   end

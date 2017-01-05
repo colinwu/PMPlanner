@@ -31,15 +31,15 @@
       <%= submit_tag "Create Parts List", name: 'parts' %> | 
       <%= submit_tag "Create Service Order", name: 'service' %> | 
       <%= submit_tag "List All Parts", name: 'all_parts' %>
-      <% if current_technician.admin? or current_technician.manager? %>
+      <% if current_user.admin? or current_user.manager? %>
         | Transfer device(s) to <%= select_tag :to_team_id, options_from_collection_for_select(Team.all, :id, :name), include_blank: true %><%= submit_tag "Go", name: 'transfer' %>
       <% else %>
         <span class=right_end>
-        <% if @showbackup %>
-          <%= hidden_field_tag 'showbackup', false %>
+        <% if @showbackup == 'true' %>
+          <%= hidden_field_tag 'showbackup', "false" %>
           <%= submit_tag "Hide Backup Devices" %>
         <% else %>
-          <%= hidden_field_tag 'showbackup', true %>
+          <%= hidden_field_tag 'showbackup', "true" %>
           <%= submit_tag "Show Backup Devices" %>
         <% end %>
         </span>
@@ -48,7 +48,7 @@
     <br />
   <% @dev_list.each do |dev| %>
     <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
-    <tr class="<%= cycle('light','dark') %><% if dev.backup_tech_id == current_technician.id %> backup_tech<% end %>">
+    <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and  dev.backup_tech_id == current_technician.id %> backup_tech<% end %>">
       <td><%= check_box_tag "device[#{dev.id}]", dev.id %></td>
       <td class=rightjustify><%= link_to dev.crm_object_id, analyze_data_device_path(dev), title: "PM Analysis" %></td>
       <td><%= dev.model.nm %></td>

@@ -5,6 +5,9 @@ if File.exists?(csv_file)
     [crm_region_id,crm_regionName,regionName,warehouse_id]
   end
 
+  if (Team.find_by_name('Admin').nil?)
+    Team.create(team_id: 1, name: 'Admin', crm_name: 'Admin')
+  end
   r.each do |row|
     t = Team.find_by_team_id(row.crm_region_id)
     if t.nil?

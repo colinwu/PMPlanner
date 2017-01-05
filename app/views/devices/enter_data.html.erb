@@ -7,7 +7,7 @@
 
 <% unless @device.nil? %>
 <table width="100%">
-<%= form_tag(record_data_device_url) do %>
+<%= form_tag(record_data_device_url, id: 'counter_form') do %>
   <%= hidden_field_tag 'reading[technician_id]', @reading.technician_id %>
   <%= hidden_field_tag 'reading[device_id]', @reading.device_id %>
   <tr>

@@ -1,14 +1,33 @@
 class ModelsController < ApplicationController
   before_action :authorize
   def index
-    @search_params = {}
+    @search_params = params[:search] || {}
+    search_ar = ["place holder"]
+    where_ar = []
+    unless (@search_params[:nm].nil? or @search_params[:nm].empty?)
+      search_ar << @search_params[:nm]
+      where_ar << "models.nm regexp ?"
+    end
+    unless (@search_params[:mg].nil? or @search_params[:mg].empty?)
+      search_ar << @search_params[:mg]
+      where_ar << "model_groups.name regexp ?"
+    end
+    unless (@search_params[:desc].nil? or @search_params[:desc].empty?)
+      search_ar << @search_params[:desc]
+      where_ar << "model_groups.description regexp ?"
+    end
+    if where_ar.length > 0
+      search_ar[0] = where_ar.join(" and ")
+    else
+      search_ar = []
+    end
     respond_to do |format|
       format.html {
-        @models = Model.page(params[:page]).order(:nm)
+        @models = Model.joins(:model_group).where(search_ar).page(params[:page]).order(:nm)
         render erb: @models
       }
       format.json {
-        @models = Model.all.order(:nm)
+        @models = Model.where(search_ar).order(:nm)
         render json: @models
       }
     end
@@ -19,7 +38,7 @@ class ModelsController < ApplicationController
   end
 
   def new
-    if current_technician.admin? or current_technician.manager?
+    if current_user.admin? or current_user.manager?
       @model = Model.new
       @pm_code = {}
       @section = {}
@@ -30,9 +49,10 @@ class ModelsController < ApplicationController
   end
 
   def create
-    @model = Model.new(nm: params[:model][:nm])
+    name = params[:model][:nm].gsub(/\W/,'')
+    @model = Model.new(nm: name)
     # Make sure model group exists and is properly associated with the model
-    mg_name = params[:model_group].empty? ? params[:model][:nm] : params[:model_group]
+    mg_name = params[:model_group].empty? ? name : params[:model_group]
     @model_group = ModelGroup.find_or_create_by(name: mg_name)
     @model.model_group_id = @model_group.id
     counters = params[:pm_code]
@@ -42,17 +62,15 @@ class ModelsController < ApplicationController
       counters['TA'] = counters['DK'] || counters['DRC']
     end
     
-#     if @model_group.color_flag.nil?
-      if (counters['DC'].empty?)
-        @model_group.color_flag = false
-      else
-        if (counters['CA'].empty?)
-          counters['CA'] = counters['DC']
-        end
-        @model_group.color_flag = true
+    if (counters['DC'].empty?)
+      @model_group.color_flag = false
+    else
+      if (counters['CA'].empty?)
+        counters['CA'] = counters['DC']
       end
-      @model_group.save
-#     end
+      @model_group.color_flag = true
+    end
+    @model_group.save
     # Update or create model targets
     counters.keys.each do |c|
       unless counters[c].empty? and sections[c].empty? and labels[c].empty?
@@ -70,7 +88,7 @@ class ModelsController < ApplicationController
   end
 
   def edit
-    if current_technician.admin? or current_technician.manager?
+    if current_user.admin? or current_user.manager?
       @model = Model.find(params[:id])
       @pm_code = {}
       @section = {}

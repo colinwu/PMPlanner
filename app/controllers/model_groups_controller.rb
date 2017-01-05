@@ -36,11 +36,47 @@ class ModelGroupsController < ApplicationController
   end
 
   def new
-    @model_group = ModelGroup.new
+    if current_user.admin? or current_user.manager?
+      @model_group = ModelGroup.new
+      @pm_code = {}
+      @section = {}
+      @label = {}
+    else
+      redirect_to back_or_go_here(model_groups_url), alert: "You are not permitted here."
+    end
   end
 
   def create
     @model_group = ModelGroup.new(params[:model_group])
+    @pm_code = params[:pm_code]
+    @section = params[:section]
+    @label = params[:label]
+    if @model_group.color_flag
+    end
+    if @pm_code['TA'].empty?
+      @pm_code['TA'] = @pm_code['DK'] || @pm_code['DRC']
+    end
+    
+    if (@model_group.color_flag)
+      if @pm_code['DC'].empty? or @pm_code['DM'].empty? or @pm_code['DY'].empty? or @pm_code['VC'].empty? or @pm_code['VM'].empty? or @pm_code['VY'].empty?
+        render action: 'new', notice: "Some colour-dependent fields were left empty."
+        return
+      end
+      if (@pm_code['CA'].empty?)
+        @pm_code['CA'] = @pm_code['DC']
+      end
+    end
+    @model_group.save
+    # Update or create model targets
+    @pm_code.keys.each do |c|
+      unless @pm_code[c].empty? and @section[c].empty? and @label[c].empty?
+        val = @pm_code[c].gsub(/[^0-9]/,'')
+        mt = @model_group.model_targets.find_or_create_by(maint_code: c)
+        mt.update_attributes(target: val, section: @section[c], label: @label[c], unit: 'count')
+        mt.save
+      end
+    end
+    
     if @model_group.save
       redirect_to model_groups_url, :notice => "Successfully created model group."
     else
@@ -50,6 +86,17 @@ class ModelGroupsController < ApplicationController
 
   def edit
     @model_group = ModelGroup.find(params[:id])
+    @pm_code = {}
+    @section = {}
+    @label = {}
+    @model_group.model_targets.each do |t|
+      unless t.maint_code == 'AMV'
+        c = t.maint_code
+        @pm_code[c] = t.target
+        @section[c] = t.section
+        @label[c] = t.label
+      end
+    end
   end
 
   def update

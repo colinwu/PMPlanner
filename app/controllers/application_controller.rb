@@ -10,11 +10,11 @@ class ApplicationController < ActionController::Base
   end
   
   def authorize
-    if current_technician.nil?
+    if current_user.nil?
       redirect_to login_url, alert: "Please log in."
-    elsif (Time.now - session[:active_at]) > 6000
+    elsif session[:active_at].nil? or ((Time.now - session[:active_at]) > 6000)
       you_are_here
-      current_technician.logs.create(message: "Session timed out.")
+      current_user.logs.create(message: "Session timed out.")
       redirect_to login_url, alert: "Your session has timed out. Please log in."
     else
       session[:active_at] = Time.now
@@ -26,6 +26,11 @@ class ApplicationController < ActionController::Base
   def current_technician
     session[:tech]
   end
-  helper_method :current_technician
+    
+  def current_user
+    session[:user]
+  end
   
+  helper_method :current_user
+  helper_method :current_technician
 end

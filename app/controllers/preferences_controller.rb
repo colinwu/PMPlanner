@@ -2,7 +2,7 @@ class PreferencesController < ApplicationController
   before_action :authorize
   
   def index
-    unless current_technician.admin?
+    unless current_user.admin?
       redirect_to edit_preferences_path(current_technician)
     else
       @preferences = Preference.all
@@ -15,7 +15,7 @@ class PreferencesController < ApplicationController
   end
 
   def new
-    unless current_technician.admin?
+    unless current_user.admin?
       redirect_to edit_preferences_path(current_technician), :alert => "Only admin can create new technician profile."
     else
       @preference = Preference.new(
@@ -40,15 +40,15 @@ class PreferencesController < ApplicationController
   end
 
   def edit
-    if current_technician.admin?
+    if current_user.admin?
       @technician = Technician.find params[:id]
       @title = "Edit Preferences for #{@technician.first_name} #{@technician.last_name}"
     else
-      if params[:id].to_i != current_technician.id
+      if params[:id].to_i != current_user.id
         flash[:notice] = "You can only edit your own profile."
       end
-      @title = "Edit Preferences for #{current_technician.first_name} #{current_technician.last_name}"
-      @technician = current_technician
+      @title = "Edit Preferences for #{current_user.first_name} #{current_user.last_name}"
+      @technician = current_user
     end
     @preference = @technician.preference
   end
@@ -56,7 +56,7 @@ class PreferencesController < ApplicationController
   def update
     @preference = Preference.find(params[:id])
     if @preference.update_attributes(params[:preference])
-      current_technician.logs.create(message: "Preference data updated: #{params[:preference].inspect}")
+      current_user.logs.create(message: "Preference data updated: #{params[:preference].inspect}")
       redirect_to @preference.default_root_path
     else
       render :action => 'edit'
@@ -64,12 +64,12 @@ class PreferencesController < ApplicationController
   end
 
   def destroy
-    unless current_technician.admin?
+    unless current_user.admin?
       redirect_to back_or_go_here, :alert => "You are not permitted to delete technician profiles."
     else
       @preference = Preference.find(params[:id])
       @preference.destroy
-      current_technician.logs.create(message: "Preference for technician #{params[:id]} deleted.")
+      current_user.logs.create(message: "Preference for technician #{params[:id]} deleted.")
       redirect_to preferences_url, :notice => "Successfully destroyed preference."
     end
   end
