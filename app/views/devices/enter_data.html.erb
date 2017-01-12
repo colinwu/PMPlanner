@@ -24,7 +24,7 @@
     <td class=rightjustify><%= number_with_delimiter(@lastbw) %></td>
     <td class=rightjustify><%= text_field_tag "counter[BWTOTAL]" %></td>
   </tr>
-  <% unless @lastc.nil? %>
+  <% if @device.model.model_group.color_flag %>
     <tr>
       <td>TotC</td>
       <td>Total Counter: TotC</td>

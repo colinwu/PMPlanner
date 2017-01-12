@@ -8,6 +8,6 @@
     <%= f.label "Model Group (Leave blank to auto-create a new group using the model name)" %><br />
     <%= text_field_tag :model_group, @model.model_group.nil? ? '' :@model.model_group.name %>
   </p>
-  <%= render 'model_groups/targets' %>
+  <%= render partial: 'model_groups/targets', locals: {mg: @model.model_group} %>
   <p><%= f.submit %></p>
 <% end %>

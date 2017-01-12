@@ -175,15 +175,35 @@ jQuery ->
     root.changed = true
 
 # Reset changed flag when "Save Reading" button clicked
+
   $("#counter_form").submit (e) ->
-    bwt = $("#counter_BWTOTAL").val().replace(/,/g, '')
-    ct = $("#counter_CTOTAL").val().replace(/,/g, '')
-    ta = $("#counter_TA").val().replace(/,/g, '')
-    ca = $("#counter_CA").val().replace(/,/g, '')
-    if ((bwt.length == 0 || isNaN(bwt)) || (ct.length == 0 || isNaN(ct)) || (ta.length == 0 || isNaN(ta)) || (ca.length == 0 || isNaN(ca)))
-      alert("Please ensure you have entered values for each of 'BWTOTAL', 'CTOTAL', 'TA' and 'CA'")
-      $("body").css({"cursor": "default"})
-      return false
+    if ($("#counter_MREQ").val() != undefined) # This is a BW machine that uses MREQ
+      bwt = $("#counter_BWTOTAL").val().replace(/,/g, '')
+      ta = $("#counter_MREQ").val().replace(/,/g,'')
+      console.log("An older BW machine.")
+      if ((ta.length == 0 || isNaN(ta)) || (bwt.length == 0 || isNaN(bwt)))
+        alert("You must enter a value for MREQ and TotBW.")
+        $("body").css({"cursor": "default"})
+        return false
+    else if ($("#counter_CA").val() == undefined && $("#counter_TA").val() != undefined) # a newer BW machine that uses TA, DK, VK
+      ta = $("#counter_TA").val().replace(/,/g,'')
+      bwt = $("#counter_BWTOTAL").val().replace(/,/g, '')
+      console.log("A newer BW machine.")
+      if ((ta.length == 0 || isNaN(ta)) || (bwt.length == 0 || isNaN(bwt)))
+        alert ("You must enter a value for TotBW and TA.")
+        $("body").css({"cursor": "default"})
+        return false
+    else   # a colour machine 
+      console.log("Colour machine.")
+      bwt = $("#counter_BWTOTAL").val().replace(/,/g, '')
+      ct = $("#counter_CTOTAL").val().replace(/,/g, '')
+      ta = $("#counter_TA").val().replace(/,/g, '')
+      ca = $("#counter_CA").val().replace(/,/g, '')
+      if ((bwt.length == 0 || isNaN(bwt)) || (ct.length == 0 || isNaN(ct)) || (ta.length == 0 || isNaN(ta)) || (ca.length == 0 || isNaN(ca)))
+        alert("Please ensure you have entered values for each of 'TotBW', 'TotC', 'TA' and 'CA'")
+        $("body").css({"cursor": "default"})
+        return false
+  
     root.changed = false
     true
     

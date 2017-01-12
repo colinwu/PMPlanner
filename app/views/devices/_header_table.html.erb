@@ -7,7 +7,7 @@
     <% end %>
     <br />
     <% unless @reading.nil? %>
-      <% unless Device.find(@reading.device_id).model.model_group.model_targets.where("maint_code = 'TK' or maint_code = 'TA'").first.label.nil? %>
+      <% unless @reading.device.model.model_group.model_targets.where("maint_code = 'DK' or maint_code = 'MREQ'").first.label.nil? %>
         <%= form_for @reading do |f| %>
           <%= f.label "Upload 22-6 file for this device" %>
           <%= f.file_field :ptn1 %>

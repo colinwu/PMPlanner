@@ -2,18 +2,20 @@
     <table>
       <tr>
         <td>
-<!--          <p id=BWTOTAL_field>
+          <p id=BWTOTAL_field>
             BWTOTAL<br />
-            <%= text_field_tag 'pm_code[BWTOTAL]',number_with_delimiter(@pm_code['BWTOTAL']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'pm_code[BWTOTAL]',number_with_delimiter(@pm_code['BWTOTAL']), {size: 10, placeholder: 'counter', readonly: true} %><br />
             <%= text_field_tag 'section[BWTOTAL]',@section['BWTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
             <%= text_field_tag 'label[BWTOTAL]',@label['BWTOTAL'], {size:15, placeholder: '22-6 label'} %>
           </p>
-          <p id=CTOTAL_field>
-            CTOTAL<br />
-            <%= text_field_tag 'pm_code[CTOTAL]',number_with_delimiter(@pm_code['CTOTAL']), {size: 10, placeholder: 'counter'} %><br />
-            <%= text_field_tag 'section[CTOTAL]]',@section['CTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
-            <%= text_field_tag 'label[CTOTAL]',@label['CTOTAL'], {size:15, placeholder: '22-6 label'} %>
-          </p>-->
+          <% if mg.nil? or mg.color_flag %>
+            <p id=CTOTAL_field>
+              CTOTAL<br />
+              <%= text_field_tag 'pm_code[CTOTAL]',number_with_delimiter(@pm_code['CTOTAL']), {size: 10, placeholder: 'counter', readonly: true} %><br />
+              <%= text_field_tag 'section[CTOTAL]]',@section['CTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
+              <%= text_field_tag 'label[CTOTAL]',@label['CTOTAL'], {size:15, placeholder: '22-6 label'} %>
+            </p>
+          <% end %>
           <p id=TA_field>
             TA<br />
             <%= text_field_tag 'pm_code[TA]',number_with_delimiter(@pm_code['TA']), {size: 10, placeholder: 'counter'} %><br />
@@ -128,6 +130,12 @@
             <%= text_field_tag 'section[TK3]',@section['TK3'], {size:10, placeholder: '22-6 section'} %><br />
             <%= text_field_tag 'label[TK3]',@label['TK3'], {size:15, placeholder: '22-6 label'} %>
           </p>
+          <p id= TK4_field>
+            TK4<br />
+            <%= text_field_tag 'pm_code[TK4]',number_with_delimiter(@pm_code['TK4']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[TK4]',@section['TK4'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[TK4]',@label['TK4'], {size:15, placeholder: '22-6 label'} %>
+          </p>
         </td>
         <td>
           <p id= FK_field>
@@ -154,7 +162,13 @@
             <%= text_field_tag 'section[FK3]',@section['FK3'], {size:10, placeholder: '22-6 section'} %><br />
             <%= text_field_tag 'label[FK3]',@label['FK3'], {size:15, placeholder: '22-6 label'} %>
           </p>
-        
+          <p id= FK4_field>
+            FK4<br />
+            <%= text_field_tag 'pm_code[FK4]',number_with_delimiter(@pm_code['FK4']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[FK4]',@section['FK4'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[FK4]',@label['FK4'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          
         </td>
       </tr>
     </table>

@@ -8,12 +8,12 @@ csv_file = ARGV.shift
 if (File.exists?(csv_file))
   r = CsvMapper.import(csv_file) do 
     start_at_row 1
-    [groupname,groupdescription,groupcolor,amv,counterkey,mreq,ta,ca,aa,drc,dvc,dk,dc,dm,dy,vk,vc,vm,vy,tk,tk1,tk2,fl,fk1,fk2,fk3,spf,ppf,ink,wst,othr]
+    [groupname,groupdescription,groupcolor,amv,counterkey,mreq,ta,ca,aa,drc,dvc,dk,dc,dm,dy,vk,vc,vm,vy,mc,tk,tk1,tk2,tk3,tk4,fk,fk1,fk2,fk3,fk4,spf,ppf,ink,wst,othr]
   end
   
-  target_names = %w[amv counterkey mreq ta ca aa drc dvc dk dc dm dy vk vc vm vy tk tk1 tk2 fl fk1 fk2 fk3 spf ppf ink wst othr]
+  target_names = %w[amv mreq ta ca aa drc dvc dk dc dm dy vk vc vm vy tk tk1 tk2 tk3 tk4 fk fk1 fk2 fk3 fk4 spf ppf ink wst othr]
   r.each do |row|
-    color_flag = (row.groupcolor == '=FALSE()') ? false : true
+    color_flag = (row.groupcolor == 'FALSE') ? false : true
     m = ModelGroup.find_by_name row.groupname
     unless m.nil?
       m.description = row.groupdescription
@@ -22,19 +22,19 @@ if (File.exists?(csv_file))
     else
       m = ModelGroup.create(:name => row.groupname, :description => row.groupdescription, :color_flag => color_flag)
     end
-    model_target = ModelTarget.new
+    m.model_targets.find_or_create_by(target: 0, maint_code: 'BWTOTAL', unit: 'count')
+    if m.color_flag
+      m.model_targets.find_or_create_by(target: 0, maint_code: 'CTOTAL', unit: 'count')
+    end
     target_names.each do |t|
       next if row[t].nil?
       found_target = false
       # See if there are any targets already associated with this model
       unless m.model_targets.empty?
         # If yes, are any of them the one we're looking for
-        m.model_targets.each do |rt|
-          if rt.maint_code == t.upcase
-            model_target = rt
-            found_target = true
-            break;
-          end
+        model_target = m.model_targets.where(["maint_code = ?", t]).first
+        unless model_target.nil?
+          found_target = true
         end
       end
       if (found_target == false)

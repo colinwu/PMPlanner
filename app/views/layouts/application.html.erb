@@ -48,7 +48,7 @@
           <li><%= link_to_unless_current "Transfers", transfers_path %></li>
           <li>
             <%= form_tag select_territory_technicians_path, :id => 'tech_select' do %>
-              <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs, :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), include_blank: true %>
+              <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), include_blank: true %>
             <% end %>
           </li>
         <% end %>

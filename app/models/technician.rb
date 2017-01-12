@@ -12,7 +12,7 @@ class Technician < ActiveRecord::Base
   
   validates :crm_id, :email, :first_name, :last_name, presence: true
   validates :crm_id, numericality: true
-  validates :crm_id, :email, uniqueness: true
+  validates :crm_id, :friendly_name, uniqueness: true
   validates :email, format: { with: /\A[a-zA-Z0-9.\-_]+@[a-zA-Z0-9\-_]+\.[a-zA-Z]+\Z/, message: "is not a valid email address" }
   validates_associated :team
   

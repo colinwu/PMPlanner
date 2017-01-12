@@ -95,7 +95,7 @@ class DevicesController < ApplicationController
     @title = "Add a new device"
     session[:caller] = request.path_parameters[:action]
     you_are_here
-    @device = Device.new
+    @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
 # only admin or manager can add devices
     if current_user.admin? or current_user.manager?
       @device.team_id = current_technician.team_id
@@ -162,6 +162,7 @@ class DevicesController < ApplicationController
   end
 
   def update
+    byebug
     @device = Device.find(params[:id])
     unless params[:location][:address1].empty?
       loc = Location.find_or_create_by(params[:location])
@@ -309,6 +310,7 @@ class DevicesController < ApplicationController
     @c_list = []
     @all_list = []
     @title = "Analysis and Estimate"
+    
     begin
       @device = Device.find(params[:id])
     rescue

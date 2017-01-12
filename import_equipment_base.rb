@@ -48,24 +48,58 @@ if File.exists?(csv_file)
                             :notes => row.equipnotes, 
                             :client_id => client.id,
                             :team_id => row.serviceorgid,
-                            :pm_counter_type => 'counter'
+                            :pm_counter_type => 'counter',
+                            :pm_visits_min => 2
                             )
+        else
+          tech = Technician.find_by_friendly_name("Dealers")
+          dev = tech.primary_devices.create(:crm_object_id => row.crm_objectid, 
+                                     :model_id => m.id,
+                                     :serial_number => row.serialnumber, 
+                                     :location_id => loc.id,
+                                     :active => (row.inactive == '0') ? true : false,
+                                     :under_contract => (row.nocontract == '0') ? true : false,
+                                     :do_pm => (row.nopm == '0') ? true : false,
+                                     :notes => row.equipnotes, 
+                                     :client_id => client.id,
+                                     :team_id => row.serviceorgid,
+                                     :pm_counter_type => 'counter'
+                                    )
         end
       else
-        dev.update_attributes(:crm_object_id => row.crm_objectid, 
-                              :model_id => m.id,
-                              :serial_number => row.serialnumber, 
-                              :location_id => loc.id,
-                              :primary_tech_id => row.primarytechid.nil? ? nil : primary_tech.id,
-                              :backup_tech_id => row.backuptechid.nil? ? nil : backup_tech.id,
-                              :active => (row.inactive == '0') ? true : false,
-                              :under_contract => (row.nocontract == '0') ? true : false,
-                              :do_pm => (row.nopm == '0') ? true : false,
-                              :notes => row.equipnotes, 
-                              :client_id => client.id,
-                              :team_id => row.serviceorgid,
-                              :pm_counter_type => 'counter'
-                             )
+        unless row.primarytechid.nil?
+          dev.update_attributes(:crm_object_id => row.crm_objectid, 
+                                :model_id => m.id,
+                                :serial_number => row.serialnumber, 
+                                :location_id => loc.id,
+                                :primary_tech_id => row.primarytechid.nil? ? nil : primary_tech.id,
+                                :backup_tech_id => row.backuptechid.nil? ? nil : backup_tech.id,
+                                :active => (row.inactive == '0') ? true : false,
+                                :under_contract => (row.nocontract == '0') ? true : false,
+                                :do_pm => (row.nopm == '0') ? true : false,
+                                :notes => row.equipnotes, 
+                                :client_id => client.id,
+                                :team_id => row.serviceorgid,
+                                :pm_counter_type => 'counter',
+                                :pm_visits_min => 2
+                              )
+        else
+          tech = Technician.find_by_friendly_name("Dealers")
+          dev.update_attributes(:crm_object_id => row.crm_objectid, 
+                                :model_id => m.id,
+                                :serial_number => row.serialnumber, 
+                                :location_id => loc.id,
+                                :primary_tech_id => tech.id,
+                                :active => (row.inactive == '0') ? true : false,
+                                :under_contract => (row.nocontract == '0') ? true : false,
+                                :do_pm => (row.nopm == '0') ? true : false,
+                                :notes => row.equipnotes, 
+                                :client_id => client.id,
+                                :team_id => row.serviceorgid,
+                                :pm_counter_type => 'counter',
+                                :pm_visits_min => 2
+                               )
+        end
       end
       contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
       unless (contacts.empty? or dev.nil?)

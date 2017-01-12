@@ -4,7 +4,9 @@ if File.exists?(csv_file)
     start_at_row 1
     [id,name,description,colorclass]
   end
-
+  
+  PmCode.find_or_create_by(name: 'BWTOTAL', description: 'Total BW Count', colorclass: 'ALL')
+  PmCode.find_or_create_by(name: 'CTOTAL', description: 'Total Colour Count', colorclass: 'COLOR')
   r.each do |row|
     p = PmCode.find_by_name row.name
     if (p.nil?)

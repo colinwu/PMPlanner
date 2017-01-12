@@ -21,7 +21,7 @@
     <tr>
       <td width="33%">
         <span class='left_field_label'>Team</span>
-        <% if current_technician.admin? %>
+        <% if current_user.admin? %>
           <%= f.select :team_id, options_from_collection_for_select(Team.all, :id, :name, @device.team.nil? ? nil : @device.team_id), include_blank: true %>
           <br />
         <% else %>
@@ -29,8 +29,8 @@
           <br />
         <% end %>
         <span class="left_field_label">Primary tech</span>
-        <% if current_technician.manager? or current_technician.admin? %>
-          <%= f.select :primary_tech_id, options_from_collection_for_select(current_technician.my_techs, :id, :full_name, @device.primary_tech_id.nil? ? nil : @device.primary_tech_id), include_blank: true %>
+        <% if current_user.manager? or current_user.admin? %>
+          <%= f.select :primary_tech_id, options_from_collection_for_select(current_user.my_techs, :id, :full_name, @device.primary_tech_id.nil? ? nil : @device.primary_tech_id), include_blank: true %>
           <br />
         <% else %>
           <%= text_field_tag :primary_tech, "#{@device.primary_tech.first_name} #{@device.primary_tech.last_name}", :readonly => @readonly_flag %>

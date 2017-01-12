@@ -37,7 +37,7 @@ class ModelGroupsController < ApplicationController
 
   def new
     if current_user.admin? or current_user.manager?
-      @model_group = ModelGroup.new
+      @model_group = ModelGroup.new(color_flag: true)
       @pm_code = {}
       @section = {}
       @label = {}
@@ -101,6 +101,36 @@ class ModelGroupsController < ApplicationController
 
   def update
     @model_group = ModelGroup.find(params[:id])
+    @pm_code = params[:pm_code]
+    @section = params[:section]
+    @label = params[:label]
+    if @pm_code['TA'].empty?
+      @pm_code['TA'] = @pm_code['DK'] || @pm_code['DRC']
+    end
+    
+    if (@model_group.color_flag)
+      if @pm_code['DC'].empty? or @pm_code['DM'].empty? or @pm_code['DY'].empty? or @pm_code['VC'].empty? or @pm_code['VM'].empty? or @pm_code['VY'].empty?
+        render action: 'edit', notice: "Some colour-dependent fields were left empty."
+        return
+      end
+      if (@pm_code['CA'].empty?)
+        @pm_code['CA'] = @pm_code['DC']
+      end
+    end
+    @pm_code.keys.each do |c|
+      unless @pm_code[c].empty? and @section[c].empty? and @label[c].empty?
+        val = @pm_code[c].gsub(/[^0-9]/,'')
+        mt = @model_group.model_targets.find_or_create_by(maint_code: c)
+        mt.update_attributes(target: val, section: @section[c], label: @label[c], unit: 'count')
+        mt.save
+      end
+      if @pm_code[c].empty?
+        mt = @model_group.model_targets.find_by maint_code: c
+        unless mt.nil?
+          mt.destroy
+        end
+      end
+    end
     if @model_group.update_attributes(params[:model_group])
       redirect_to @model_group, :notice  => "Successfully updated model group."
     else

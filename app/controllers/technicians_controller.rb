@@ -49,8 +49,7 @@ class TechniciansController < ApplicationController
       @technician = Technician.find(params[:id])
       @title = "Edit Info for #{@technician.first_name} #{@technician.last_name}"
     else
-      @title = "Change Your Password"
-      @technician = current_technician
+      redirect_to current_user.preference.default_root_path, alert: "You are not permitted to edit technicians."
     end
   end
 

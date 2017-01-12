@@ -20,7 +20,7 @@
       <td><%= model_group.name %></td>
       <td><%= model_group.description %></td>
       <td><%= model_group.color_flag %></td>
-      <td><% if current_technician.admin? %>
+      <td><% if current_user.admin? %>
             <%= link_to "Edit", edit_model_group_path(model_group) %> |
             <%= link_to "Del", model_group, :confirm => 'Are you sure?', :method => :delete %>
           <% end %>

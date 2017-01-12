@@ -31,17 +31,14 @@ class Reading < ActiveRecord::Base
   # Parse uploaded 22-6 file
   def process_ptn1
     seen = {date: false, model: false, sn: false}
-    codes = {'TOTAL OUT(BW):' => 'BWTOTAL', 'TOTAL OUT(COL):' => 'CTOTAL'}
+    codes = {'TOTAL OUT(BW):' => 'BWTOTAL'}
     counter_column = {0 => 'COUNTER', 1 => 'TURN', 2 => 'DAY', 3 => 'LIFE', 4 => 'REMAIN'}
-    section = Hash.new
+    section = {'BWTOTAL' => '22-01'}
 #     counter = Hash.new
 #     turn = Hash.new
 #     day = Hash.new
 #     life = Hash.new
 #     remain = Hash.new
-    
-    byebug
-    
     dev = self.device
     ptn1_dev = nil
     if dev.nil?
@@ -85,6 +82,11 @@ class Reading < ActiveRecord::Base
                 section[c.maint_code] = c.section
               end
             end
+            # if it's a colour model add the CTOTAL code
+            if dev.model.model_group.color_flag
+              codes['TOTAL OUT(COL):'] = 'CTOTAL'
+              section['CTOTAL'] = '22-01'
+            end
           end
         else
           codes.each do |label,name|
@@ -106,7 +108,7 @@ class Reading < ActiveRecord::Base
                 end #if
               end # else
               pm = PmCode.find_by_name name
-              self.counters.create(pm_code_id: pm.id, value: counter, unit: 'counter')
+              self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: 'counter')
             end # unless (seen[name])
           end # codes.each
         end
