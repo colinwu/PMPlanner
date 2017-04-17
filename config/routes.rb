@@ -1,4 +1,6 @@
 PmPlanner::Application.routes.draw do
+  get 'admin', to: 'admin#index'
+
   resources :sessions, only: [:new, :create, :destroy]
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
@@ -16,7 +18,14 @@ PmPlanner::Application.routes.draw do
   resources :counters
   resources :readings
   resources :model_targets
-  resources :parts_for_pms
+  
+  resources :parts_for_pms do
+    get :autocomplete_part_name, on: :collection
+    collection do
+      post 'new1'
+    end
+  end
+  
   resources :pm_codes
   resources :parts
   resources :preferences

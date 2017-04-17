@@ -1,11 +1,12 @@
 class ClientsController < ApplicationController
   respond_to :json
   before_action :authorize
+  before_action :require_admin
   
   def index
     you_are_here
     @title = "Clients"
-    @tech = current_user.admin? ? Technician.find(params[:tech_id]) : current_user
+#     @tech = current_user.admin? ? Technician.find(params[:tech_id]) : current_user
     @clients = Client.order(:name).page(params[:page])
   end
 

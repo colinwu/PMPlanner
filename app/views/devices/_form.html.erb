@@ -37,8 +37,8 @@
           <br />
         <% end %>
         <span class="left_field_label">Backup tech</span>
-        <% if current_technician.manager? or current_technician.admin? %>
-          <%= f.select :backup_tech_id, options_from_collection_for_select(current_technician.my_techs, :id, :full_name, @device.backup_tech_id.nil? ? nil : @device.backup_tech_id), include_blank: true %>
+        <% if current_user.manager? or current_user.admin? %>
+          <%= f.select :backup_tech_id, options_from_collection_for_select(current_user.my_techs, :id, :full_name, @device.backup_tech_id.nil? ? nil : @device.backup_tech_id), include_blank: true %>
           <br />
         <% else %>
           <%= text_field_tag :backup_tech, @device.backup_tech.nil? ? '' : "#{@device.backup_tech.first_name} #{@device.backup_tech.last_name}", :readonly => @readonly_flag %>
@@ -46,7 +46,7 @@
         <% end %>
         <span class="left_field_label">Manager</span>
         <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.full_name}" %>
-        <%= text_field_tag :manager, manager, :readonly => true %>
+        <%= text_field_tag :manager, manager, :readonly => @readonly_flag %>
       </td>
       <td width=33%>
         Equipment Status:<br /><br />
@@ -69,13 +69,13 @@
     <tr><td>
       <span class="left_field_label">Customer</span>
       <%= f.hidden_field :client_id %>
-      <%= hidden_field_tag 'device[location_id]', 0 %>
+      <%= f.hidden_field 'location_id' %>
       <%= autocomplete_field_tag :client_name, @device.client_name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', :size => 60 %>
     <br />
       <span class="left_field_label">Location</span>
       <div id="device_location">
         <% @locations.each do |loc| %>
-          <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc)  %><br />
+          <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc) %><br />
         <% end %>
         <br /><hr />
         <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>

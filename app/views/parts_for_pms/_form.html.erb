@@ -1,20 +1,23 @@
 <%= form_for @parts_for_pm do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :model_group_id %><br />
-    <%= f.number_field :model_group_id %>
+    <%= f.label 'Model Group' %><br />
+    <%= text_field_tag :model_group_name, @parts_for_pm.model_group.nil? ? '' : @parts_for_pm.model_group.name %>
+    <%= f.hidden_field :model_group_id %>
   </p>
   <p>
-    <%= f.label :pm_code_id %><br />
-    <%= f.number_field :pm_code_id %>
+    <%= f.label 'PM Code' %><br />
+    <%= text_field_tag :pm_code_name, @parts_for_pm.pm_code.nil? ? '' : @parts_for_pm.pm_code.name, id_element: '#parts_for_pm_pm_code_id' %>
+    <%= f.hidden_field :pm_code_id %>
   </p>
   <p>
     <%= f.label :choice %><br />
     <%= f.number_field :choice %>
   </p>
   <p>
-    <%= f.label :part_id %><br />
-    <%= f.number_field :part_id %>
+    <%= f.label 'Part Name' %><br />
+    <%= autocomplete_field_tag :part_name, @parts_for_pm.part_name, autocomplete_part_name_parts_for_pms_path, id_element: '#parts_for_pm_part_id' %>
+    <%= f.hidden_field :part_id %>
   </p>
   <p>
     <%= f.label :quantity %><br />

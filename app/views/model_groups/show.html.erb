@@ -12,7 +12,7 @@
   <strong>Colour Flag:</strong>
   <%= @model_group.color_flag %>
 </p>
-
+<%= render partial: 'targets', locals: {mg: @model_group} %>
 <p>
   <%= link_to "Edit", edit_model_group_path(@model_group) %> |
   <%= link_to "Destroy", @model_group, :confirm => 'Are you sure?', :method => :delete %> |

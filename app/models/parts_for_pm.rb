@@ -13,4 +13,6 @@ class PartsForPm < ActiveRecord::Base
   validates_associated :model_group
   validates_associated :pm_code
   validates_associated :part
+  
+  delegate :name, to: :part, prefix: true, allow_nil: true
 end

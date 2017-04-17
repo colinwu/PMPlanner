@@ -1,5 +1,6 @@
 class DevicesController < ApplicationController
   before_action :authorize
+  before_action :require_manager, only: [:new, :create, :destroy, :send_transfer]
   helper_method :sort_column, :sort_direction
   autocomplete :client, :name, full: true
   
@@ -98,7 +99,8 @@ class DevicesController < ApplicationController
     @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
 # only admin or manager can add devices
     if current_user.admin? or current_user.manager?
-      @device.team_id = current_technician.team_id
+      @all_dev_ids = Device.all.map { |d| "#{d.crm_object_id}" }
+      @device.team_id = current_technician.team_id || Team.find_by(name: 'Admin').id
       @readonly_flag = false
       @contacts = []
       @locations = []
@@ -162,7 +164,6 @@ class DevicesController < ApplicationController
   end
 
   def update
-    byebug
     @device = Device.find(params[:id])
     unless params[:location][:address1].empty?
       loc = Location.find_or_create_by(params[:location])

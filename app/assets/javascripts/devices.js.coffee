@@ -1,4 +1,4 @@
-fields = ['#dev_notes', '#search_crm', "#search_model", "#search_sn", "#search_client_name","#search_addr1", "#search_city" ]
+fields = ['#dev_notes', '#search_crm', "#search_model", "#search_sn", "#search_client_name","#search_addr1", "#search_city", "#model_group_name", "#pm_code_name", "#parts_for_pm_choice", "#part_name", "#part_description", "#parts_for_pm_quantity" ]
 
 root = exports ? this
 root.changed = false
@@ -24,7 +24,11 @@ jQuery ->
         mfp_model_id[m.model.nm] = m.model.id
       $("#model_nm").autocomplete({ source: mfp_models })
       $("#model_nm").show()
-        
+  
+  if url.match(/\/devices\/new$/)
+    all_ids = JSON.parse($("#all_dev_ids_hidden").text())
+    $("#device_crm_object_id").autocomplete({ source: all_ids})
+
   # Set the size of the input field to be the same as the enclosing element 
   # (usually this is a table cell) when the browser window is resized
   set_size_of field for field in fields
@@ -60,7 +64,7 @@ jQuery ->
     $.ajax(url: "/clients/" + data.item.id + "/get_locations.json").done (html) ->
       content = ''
       for c in html
-        content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + c.to_s + '<br />'
+        content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + '<a href="/locations/' + c.id + '/edit">' + c.to_s + '</a><br />'
       content += '<hr />
         <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
         <span class="left_field_label">Address1</span>

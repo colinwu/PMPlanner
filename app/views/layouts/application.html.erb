@@ -43,7 +43,7 @@
         <!--<li><%= link_to_unless_current "Data Entry", {controller: "/devices", action: "enter_data", id: @device}, id: "enter_data_link" %></li>-->
         <li><%= link_to_unless_current "PM Status", {controller: '/devices', action: 'analyze_data', id: @device}, id: "analyze_data_link" %></li>
         <li><%= link_to_unless_current "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_link" %></li>
-        <% if not current_user.nil? and (current_user.admin? or current_user.manager?) %>
+        <% if (current_user.admin? or current_user.manager?) %>
           <li><%= link_to_unless_current "My Team", technicians_path %></li>
           <li><%= link_to_unless_current "Transfers", transfers_path %></li>
           <li>
@@ -51,6 +51,7 @@
               <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), include_blank: true %>
             <% end %>
           </li>
+          <li><%= link_to "Admin Page", admin_path %></li>
         <% end %>
         </ul>
       </div>

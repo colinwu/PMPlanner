@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    current_technician.logs.create(message: "Logged out")
+    current_user.logs.create(message: "Logged out")
     session[:tech] = nil
     session[:act_as] = nil
     session[:active_at] = nil

@@ -42,5 +42,9 @@
 <p>
 <%= will_paginate @devices %>
 </p>
+<p>
+<% if current_user.admin? or current_user.manager? %>
+  <%= link_to "New Device", new_device_path %>
+<% end %>
 
 <% session[:search_caller] = nil %>

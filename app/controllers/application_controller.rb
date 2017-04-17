@@ -21,6 +21,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_admin
+    unless current_user.admin?
+      current_user.logs.create(message: "Admin privileges required to access #{request.env['REQUEST_URI']}")
+      redirect_to current_user.preference.default_root_path, alert: "Access Denied."
+    end
+  end
+  
+  def require_manager
+    unless current_user.manager? or current_user.admin?
+      current_user.logs.create(message: "Manager privileges required to access #{request.env['REQUEST_URI']}")
+      redirect_to current_user.preference.default_root_path, alert: "Access Denied."
+    end
+  end
+  
   protected
   
   def current_technician

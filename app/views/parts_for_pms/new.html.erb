@@ -1,5 +1,9 @@
-<% title "New Parts For Pm" %>
-
-<%= render 'form' %>
-
-<p><%= link_to "Back to List", parts_for_pms_path %></p>
+<%= form_tag new1_parts_for_pms_path do %>
+<p>
+  <%= label_tag 'model_group_name', 'Model Group' %>
+  <%= text_field_tag 'model_group_name' %>
+</p>
+<p>
+  <%= submit_tag %>
+</p>
+<% end %>

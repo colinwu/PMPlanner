@@ -1,5 +1,7 @@
 class ModelsController < ApplicationController
   before_action :authorize
+  before_action :require_admin, only: [:destroy, :new, :create]
+  
   def index
     @search_params = params[:search] || {}
     search_ar = ["place holder"]

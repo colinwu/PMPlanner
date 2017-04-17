@@ -17,19 +17,17 @@
   </tr>
   <% for model_group in @model_groups %>
     <tr>
-      <td><%= model_group.name %></td>
+      <td><%= link_to model_group.name, model_group_path(model_group) %></td>
       <td><%= model_group.description %></td>
       <td><%= model_group.color_flag %></td>
-      <td><% if current_user.admin? %>
-            <%= link_to "Edit", edit_model_group_path(model_group) %> |
-            <%= link_to "Del", model_group, :confirm => 'Are you sure?', :method => :delete %>
-          <% end %>
+      <td><%= link_to "Edit", edit_model_group_path(model_group) %> |
+          <%= link_to "Del", model_group, :confirm => 'Are you sure?', :method => :delete %>
       </td>
     </tr>
   <% end %>
 </table>
 
 <%= will_paginate @model_groups %>
-<% if current_technician.admin? %>
+<% if current_user.admin? %>
 <p><%= link_to "New Model Group", new_model_group_path %></p>
 <% end %>

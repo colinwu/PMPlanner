@@ -16,6 +16,7 @@ class Device < ActiveRecord::Base
   
   validates :crm_object_id, :location_id, :client_id, numericality: { greater_than: 0 }
   validates :crm_object_id, :serial_number, :location_id, presence: true
+  validates :crm_object_id, :serial_number, uniqueness: true
   validates_associated :model
   
   delegate :name, to: :client , prefix: true, allow_nil: true

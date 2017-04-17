@@ -1,5 +1,6 @@
 class ModelGroupsController < ApplicationController
   before_action :authorize
+  before_action :require_admin, except: [:get_targets, :index, :show]
   def index
     respond_to do |format|
       format.html {
@@ -33,6 +34,17 @@ class ModelGroupsController < ApplicationController
 
   def show
     @model_group = ModelGroup.find(params[:id])
+    @pm_code = {}
+    @section = {}
+    @label = {}
+    @model_group.model_targets.each do |t|
+      unless t.maint_code == 'AMV'
+        c = t.maint_code
+        @pm_code[c] = t.target
+        @section[c] = t.section
+        @label[c] = t.label
+      end
+    end
   end
 
   def new

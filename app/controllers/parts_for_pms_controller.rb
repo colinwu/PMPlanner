@@ -1,6 +1,9 @@
 class PartsForPmsController < ApplicationController
   before_action :authorize
+  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
+  
+  autocomplete :part, :name, full: true
   
   def index
     you_are_here
@@ -31,11 +34,20 @@ class PartsForPmsController < ApplicationController
       search_ar[0] = where_ar.join(' and ')
     end
     if params[:sort].nil? or params[:sort].empty?
-      @order = 'model_groups.name'
+      @order = 'model_groups.name,pm_codes.name'
     else
       @order = sort_column + ' ' + sort_direction
     end
     @parts_for_pms = PartsForPm.joins(:model_group,:part, :pm_code).where(search_ar).order(@order).page(params[:page])
+    if @parts_for_pms.group(:model_group_id).length == 1
+      @new_pfp = PartsForPm.new(model_group_id: @parts_for_pms[0].model_group_id)
+    else
+      @new_pfp = PartsForPm.new()
+    end
+    respond_to do |format|
+      format.html {}
+      format.json { render json: @parts_for_pms }
+    end
   end
 
   def show
@@ -43,15 +55,22 @@ class PartsForPmsController < ApplicationController
   end
 
   def new
-    @parts_for_pm = PartsForPm.new
+    redirect_to parts_for_pms_url, notice: "Add new parts link at the bottom."
   end
-
+  
   def create
-    @parts_for_pm = PartsForPm.new(params[:parts_for_pm])
-    if @parts_for_pm.save
-      redirect_to @parts_for_pm, :notice => "Successfully created parts for pm."
+    mg = ModelGroup.find_by params[:model_group]
+    code = PmCode.find_or_create_by params[:pm_code]
+    part = Part.find_or_create_by params[:part]
+    if mg.nil?
+      redirect_to new_model_group_url, :alert => "Specified Model Group (#{params[:model_group][:name]}) does not exist. Either create it first or correct your entry."
     else
-      render :action => 'new'
+      @parts_for_pm = PartsForPm.new(model_group_id: mg.id, pm_code_id: code.id, part_id: part.id, choice: params[:parts_for_pm][:choice], quantity: params[:parts_for_pm][:quantity])
+      if @parts_for_pm.save
+        redirect_to back_or_go_here, :notice => "Successfully created parts for pm."
+      else
+        redirect_to back_or_go_here, :alert => "Failed to create Part Link."
+      end
     end
   end
 

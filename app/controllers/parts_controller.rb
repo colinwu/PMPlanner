@@ -1,4 +1,7 @@
 class PartsController < ApplicationController
+  before_action :authorize
+  before_action :require_manager, only: [:new, :create, :destroy]
+  
   def index
     if params[:commit] == 'Search'
       search_ar = ['placeholder']
@@ -25,12 +28,7 @@ class PartsController < ApplicationController
 
   def new
     @title = "Add new part"
-    if current_user.admin?
-      @part = Part.new
-    else
-      @uri = back_or_default()
-      redirect_to @uri, :notice => "Sorry, you are not allowed to add new parts."
-    end
+    @part = Part.new
   end
 
   def create

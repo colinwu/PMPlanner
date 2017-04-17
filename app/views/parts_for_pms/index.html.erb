@@ -2,29 +2,29 @@
 
 <table width=100%>
   <tr class=pretty>
-    <th><%= sortable 'model_groups.name', 'Model Group', params[:search] %></th>
-    <th><%= sortable 'pm_codes.name', 'Pm Code', params[:search] %></th>
-    <th><%= sortable 'choice', 'Choice', params[:search] %></th>
-    <th><%= sortable 'parts.name', 'Part Number', params[:search] %></th>
+    <th width='10%'><%= sortable 'model_groups.name', 'Model Group', params[:search] %></th>
+    <th width='10%'><%= sortable 'pm_codes.name', 'Pm Code', params[:search] %></th>
+    <th width='10%'><%= sortable 'choice', 'Choice', params[:search] %></th>
+    <th width='15%'><%= sortable 'parts.name', 'Part Name', params[:search] %></th>
     <th><%= sortable 'parts.description', 'Description', params[:search] %></th>
-    <th>Quantity</th>
+    <th width='10%'>Quantity</th>
     <th>Action</th>
   </tr>
   <tr class=search_fields>
   <%= form_tag parts_for_pms_url, method: :get do %>
     <%= hidden_field_tag 'sort', sort_column %>
     <%= hidden_field_tag 'direction', sort_direction %>
-    <td><%= text_field_tag 'search[model_group]', @search_params[:model_group], :size => 10 %></td>
-    <td><%= text_field_tag 'search[pmcode]', @search_params[:pmcode], :size => 5 %></td>
-    <td><%= text_field_tag 'search[choice]', @search_params[:choice], :size => 3 %></td>
-    <td><%= text_field_tag 'search[pn]', @search_params[:pn], :size => 14 %></td>
-    <td><%= text_field_tag 'search[desc]', @search_params[:desc], :size => 20 %></td>
+    <td><%= text_field_tag 'search[model_group]', @search_params[:model_group], :size => 1 %></td>
+    <td><%= text_field_tag 'search[pmcode]', @search_params[:pmcode], :size => 1 %></td>
+    <td><%= text_field_tag 'search[choice]', @search_params[:choice], :size => 1 %></td>
+    <td><%= text_field_tag 'search[pn]', @search_params[:pn], :size => 1 %></td>
+    <td><%= text_field_tag 'search[desc]', @search_params[:desc], :size => 1 %></td>
     <td></td>
     <td><%= submit_tag 'Search', name: nil %></td>
   <% end %>
   </tr>
   <% for parts_for_pm in @parts_for_pms %>
-    <tr>
+    <tr class="<%= cycle('light','dark') %>">
       <td><%= parts_for_pm.model_group.name %></td>
       <td><%= parts_for_pm.pm_code.name %></td>
       <td><%= parts_for_pm.choice %></td>
@@ -38,6 +38,17 @@
       </td>
     </tr>
   <% end %>
+  <tr class="search_fields">
+    <%= form_tag parts_for_pms_url do %>
+      <td><%= text_field_tag 'model_group[name]', @new_pfp.model_group.nil? ? '' : @new_pfp.model_group.name, size: 1 %></td>
+      <td><%= text_field_tag 'pm_code[name]','',size: 1 %></td>
+      <td><%= text_field_tag 'parts_for_pm[choice]', @new_pfp.choice, size: 1 %></td>
+      <td><%= text_field_tag 'part[name]','',size: 1 %></td>
+      <td><%= text_field_tag 'part[description]','',size: 1 %></td>
+      <td><%= text_field_tag 'parts_for_pm[quantity]', @new_pfp.quantity, size: 1 %></td>
+      <td><%= submit_tag 'Add', name: nil %></td>
+    <% end %>
+  </tr>
 </table>
 <%= will_paginate @parts_for_pms %>
 <% if current_technician.admin? %>

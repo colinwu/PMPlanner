@@ -43,19 +43,20 @@ class TeamsController < ApplicationController
     redirect_to teams_url, :notice => "Successfully destroyed team."
   end
   
+  # [NOTE] This assumes there's only one manager per region
   def manager
-    @technician = Team.find(params[:id]).manager
+    @technician = Team.find(params[:id]).technicians.where("manager is true").first
     respond_to do |format|
-      format.html { render html: "/technicians/#{@technician.id}"}
+      format.html { render html: "/technicians/#{@technician.id}" }
       format.json { render json: @technician }
     end
   end
   
   def techs
-    @techs = Team.find(params[:id]).technicians
+    @technicians = Team.find(params[:id]).technicians
     respond_to do |format|
-      format.html {}
-      format.json { render json: @techs }
+      format.html { render html: "/technicians/index" }
+      format.json { render json: @technicians }
     end
   end
 end
