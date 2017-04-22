@@ -34,7 +34,7 @@ module ApplicationHelper
   
   def replace_my
     if current_technician.nil?
-      if current_user.admin?
+      if current_user.nil? or current_user.admin?
         'All'
       elsif current_user.manager?
         "#{current_user.team.name}"

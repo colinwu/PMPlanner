@@ -101,4 +101,9 @@ class TechniciansController < ApplicationController
     end
     redirect_to current_user.preference.default_root_path
   end
+  
+  def remember_location
+    session[:location] = [params['lat'],params['long']]
+    redirect_to back_or_go_here
+  end
 end

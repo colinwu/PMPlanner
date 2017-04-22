@@ -89,6 +89,7 @@ GEM
     erubis (2.7.0)
     execjs (2.7.0)
     fastercsv (1.5.5)
+    geocoder (1.4.3)
     getopt (1.4.3)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -223,6 +224,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   css3-progress-bar-rails
   csv-mapper
+  geocoder (~> 1.4, >= 1.4.3)
   getopt
   jbuilder (~> 2.0)
   jquery-datetimepicker-rails

@@ -1,6 +1,10 @@
 <% title @title, false %>
 <table width=100%>
-  <caption>Devices with outstanding PMs</caption>
+  <caption>Devices with outstanding PMs within 
+  <%= form_tag set_radius_devices_path, :id => 'set_radius' do %>
+    <%= select_tag :radius, options_for_select(['0.2', '0.5', '1.0', '2.0', '5.0', '10.0', 'All'], @radius) %>
+  <% end %> km
+  </caption>
   <tr class=pretty>
   <th></th>
   <th><%= sortable 'crm_object_id', 'CRM ID' %></th>

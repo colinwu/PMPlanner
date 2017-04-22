@@ -8,6 +8,7 @@
     <th><%= sortable 'city', 'City', params[:search] %></th>
     <th><%= sortable 'province', 'Province', params[:search] %></th>
     <th><%= sortable 'post_code', 'Postal Code', params[:search] %></th>
+    <th>Co-ords</th>
     <th>Notes</th>
     <th># Devs</th>
     <th></th>
@@ -22,6 +23,7 @@
     <td><%= text_field_tag 'search[city]', @search_params['city'], :size => 1 %></td>
     <td><%= text_field_tag 'search[province]', @search_params['province'], :size => 1 %></td>
     <td><%= text_field_tag 'search[post_code]', @search_params['post_code'], :size => 1 %></td>
+    <td></td>
     <td><%= text_field_tag 'search[loc_notes]', @search_params['loc_notes'], :size => 1 %></td>
     <td></td>
     <td><%= submit_tag 'Search' %></td>
@@ -35,6 +37,7 @@
       <td><%= location.city.titleize %></td>
       <td><%= location.province %></td>
       <td><%= location.post_code %></td>
+      <td><%= location.latitude %><br /><%= location.longitude %></td>
       <td><%= location.notes %>; <%= location.team.nil? ? '' : location.team.name %></td>
       <td><%= location.devices.length %></td>
       <td><%= link_to "Edit", edit_location_path(location) %> |

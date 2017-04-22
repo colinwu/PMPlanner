@@ -42,7 +42,7 @@ gem 'rails4-autocomplete'
 gem 'best_in_place', '~> 3.1'
 gem "paperclip", "~> 5.0.0"
 gem 'activerecord-session_store'
-
+gem 'geocoder', '~> 1.4', '>= 1.4.3'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

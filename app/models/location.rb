@@ -8,6 +8,16 @@ class Location < ActiveRecord::Base
   belongs_to :team, :foreign_key => :team_id
   
   validates :address1, :city, :province, :post_code, presence: true
+  geocoded_by :geo_address
+  after_validation :geocode, if: ->(obj){obj.geo_address.present? and obj.latitude.nil?}
+  
+  def geo_address
+    if (not address1.nil? and address1.present?) and (not city.nil? and city.present?) and (not province.nil? and province.present?)
+      [address1,city,province].compact.join(', ')
+    else
+      ''
+    end
+  end
   
   def to_s
     if self.address2.nil? or self.address2.empty?

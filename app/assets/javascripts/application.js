@@ -21,3 +21,44 @@
 //= require autocomplete-rails
 //= require jquery.datetimepicker
 //= require_tree .
+
+if (navigator.geolocation) {
+  var timeoutVal = 10 * 1000 * 1000;
+  var age = 1000 * 600
+  navigator.geolocation.getCurrentPosition(
+    displayPosition, 
+    displayError,
+    { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: age }
+  );
+}
+else {
+  alert("Geolocation is not supported by this browser");
+}
+
+function displayPosition(position) {
+  console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+//   var data = "lat=" + position.coords.latitude + "&long=" + position.coords.longitude
+  var data = "lat=45.3517699&long=-75.6523359"
+  $.ajax({
+    url: '/technicians/remember_location',
+    data: data,
+    type: 'get'
+  })
+  
+  .done(function(response) {
+    console.log("data successfully sent back to rails app")
+  })
+  
+  .fail(function(error) {
+    console.log("Save error: "+error);
+  });
+}
+
+function displayError(error) {
+  var errors = { 
+    1: 'Permission denied',
+    2: 'Position unavailable',
+    3: 'Request timeout'
+  };
+  alert("Error: " + errors[error.code]);
+}

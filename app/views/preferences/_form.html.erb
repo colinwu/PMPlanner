@@ -33,6 +33,8 @@
     <div class="left_field_label">Units to show:</div> <%= f.text_field :default_units_to_show %></p>
     <p>
     <div class="left_field_label">Forecast range:</div> <%= f.number_field :upcoming_interval %> weeks</p>
+    <p>
+    <div class="left_field_label">Radius:</div> Show only PM devices within <%= f.select :radius, options_for_select(['0.2', '0.5', '1.0', '2.0', 'All'], @preference.radius) %> km of your current position. 
   </fieldset>
   <fieldset>
   <legend>E-Mail Defaults</legend>

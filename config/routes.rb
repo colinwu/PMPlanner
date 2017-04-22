@@ -36,6 +36,7 @@ PmPlanner::Application.routes.draw do
     collection do
       get 'root_dispatch'
       post 'select_territory'
+      get 'remember_location'
     end
   end
 
@@ -64,6 +65,7 @@ PmPlanner::Application.routes.draw do
       post 'send_order'
       post 'send_transfer'
       get 'autocomplete_client_name'
+      post 'set_radius'
     end
     member do
       get 'enter_data'

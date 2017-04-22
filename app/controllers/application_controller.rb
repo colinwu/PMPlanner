@@ -31,6 +31,16 @@ class ApplicationController < ActionController::Base
     session[:user]
   end
   
+  def current_lat
+    session[:location][0]
+  end
+  
+  def current_long
+    session[:location][1]
+  end
+  
   helper_method :current_user
   helper_method :current_technician
+  helper_method :current_lat
+  helper_method :current_long
 end

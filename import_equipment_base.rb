@@ -33,7 +33,6 @@ if File.exists?(csv_file)
       primary_tech = Technician.find_by_crm_id(row.primarytechid)
       backup_tech = Technician.find_by_crm_id(row.backuptechid)
       
-      # Ignore device if no techs assigned
       if dev.nil?
         unless (primary_tech.nil? or backup_tech.nil? or row.primarytechid.nil? or row.backuptechid.nil?)
           dev = Device.create(:crm_object_id => row.crm_objectid, 

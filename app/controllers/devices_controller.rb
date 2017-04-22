@@ -513,6 +513,7 @@ class DevicesController < ApplicationController
   
   def my_pm_list
     you_are_here
+    @radius = session[:radius]
     @search_params = params[:search] || Hash.new
     if params[:showbackup].nil?
       @showbackup = current_user.preference.showbackup.to_s
@@ -581,6 +582,20 @@ class DevicesController < ApplicationController
           where_ar << "locations.city regexp ?"
         end
       end
+      
+#       byebug
+      
+      if @radius.to_f > 0
+        my_location = session[:location]
+        loc_id_str = Location.near(my_location, @radius.to_f).map{|loc| loc.id}.join(',')
+        if loc_id_str.length > 0
+          where_ar << "location_id IN (#{loc_id_str})"
+        else
+          flash[:notice] = "No devices found within #{@radius} km. Switching to 'All'."
+          @radius = session[:radius] = 'All'
+        end
+      end
+      
       search_ar[0] = where_ar.join(' and ')
       
       if (sort_column == 'outstanding_pms')
@@ -881,6 +896,11 @@ class DevicesController < ApplicationController
       format.js {}
       format.json { render json: d.pm_codes }
     end
+  end
+  
+  def set_radius
+    @radius = session[:radius] = params['radius']
+    redirect_to back_or_go_here
   end
   
   private

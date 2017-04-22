@@ -17,6 +17,7 @@ class SessionsController < ApplicationController
         session[:tech] = tech
         session[:user] = tech
         session[:active_at] = Time.now
+        session[:radius] = tech.preference.radius
         current_user.logs.create(message: "Logged in")
         current_user.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
         redirect_to back_or_go_here(root_url), notice: "Log in successful."
@@ -36,6 +37,7 @@ class SessionsController < ApplicationController
     session[:tech] = nil
     session[:act_as] = nil
     session[:active_at] = nil
+    session[:location] = nil
     redirect_to root_url, notice: "Logged out."
   end
 end

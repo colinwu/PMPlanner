@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206213025) do
+ActiveRecord::Schema.define(version: 20170421170306) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -95,6 +95,8 @@ ActiveRecord::Schema.define(version: 20161206213025) do
     t.integer  "shiptoid",   limit: 4
     t.integer  "client_id",  limit: 4
     t.integer  "team_id",    limit: 4
+    t.float    "latitude",   limit: 24
+    t.float    "longitude",  limit: 24
   end
 
   create_table "logs", force: :cascade do |t|
@@ -198,6 +200,7 @@ ActiveRecord::Schema.define(version: 20161206213025) do
     t.integer  "lines_per_page",          limit: 4
     t.string   "default_root_path",       limit: 255,   default: "/devices/my_pm_list"
     t.boolean  "showbackup",              limit: 1
+    t.string   "radius",                  limit: 255
   end
 
   create_table "reading_targets", force: :cascade do |t|
