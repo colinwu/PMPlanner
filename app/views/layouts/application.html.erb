@@ -43,7 +43,7 @@
         <!--<li><%= link_to_unless_current "Data Entry", {controller: "/devices", action: "enter_data", id: @device}, id: "enter_data_link" %></li>-->
         <li><%= link_to_unless_current "PM Status", {controller: '/devices', action: 'analyze_data', id: @device}, id: "analyze_data_link" %></li>
         <li><%= link_to_unless_current "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_link" %></li>
-        <% if (current_user.admin? or current_user.manager?) %>
+        <% if not current_user.nil? and (current_user.admin? or current_user.manager?) %>
           <li><%= link_to_unless_current "My Team", technicians_path %></li>
           <li><%= link_to_unless_current "Transfers", transfers_path %></li>
           <li>
