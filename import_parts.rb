@@ -2,13 +2,16 @@ csv_file = ARGV.shift
 if File.exists?(csv_file)
   r = CsvMapper.import(csv_file) do
     start_at_row 1
-    [number,description,price,newname]
+    [part_number,description]
   end
 
   r.each do |row|
-    p = Part.find_by_name row.number
+    p = Part.find_by_name row.part_number
     if (p.nil?)
-      p = Part.create(:name => row.number, :description => row.description, :price => row.price, :new_name => row.newname)
+      p = Part.new(:name => row.part_number, :description => row.description)
+      unless p.save
+        puts "Part is invalid: #{p.errors.messages}"
+      end
     end
   end
 else

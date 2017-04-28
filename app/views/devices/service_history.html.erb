@@ -22,7 +22,7 @@
       <tr class="<%= cycle('light','dark') %>">
         <td><span title="<%=h reading.notes %>"><%=h reading.taken_at.strftime('%b %-d, %Y') %></span></td>
         <% counter = reading.counter_for('bwtotal') %>
-        <td class=rightjustify><%= best_in_place counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6} %></td>
+        <td class=rightjustify><%= best_in_place(counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
         <% counter = reading.counter_for('ctotal') %>
         <td class=rightjustify><%= counter.nil? ? '' : best_in_place(counter, :value,  display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
         <% @all_codes.each do |c| %>

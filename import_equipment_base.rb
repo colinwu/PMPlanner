@@ -1,15 +1,12 @@
-# Updates Location and Contact models in addition to Device. Contact should already exist
-if Contact.all.size == 0
-  puts "You must first import Contacts: run import_contacts.rb"
-  exit
-end
+# Updates Location and Client models in addition to Device.
 
 csv_file = ARGV.shift
 
 if File.exists?(csv_file)
   r = CsvMapper.import(csv_file) do
-    # crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, serviceorgid, serviceorg="SD Ottawa", primarytechid, backuptechid, accountmgrid, accountmgr, equipnotes, inactive, nocontract, nopm
-    read_attributes_from_file
+    [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, equipnotes, inactive, nocontract, nopm]
+    start_at_row 1
+#     read_attributes_from_file
   end
   
   r.each do |row|
@@ -27,12 +24,17 @@ if File.exists?(csv_file)
       dev = Device.find_by_crm_object_id(row.crm_objectid)
       m = Model.find_by_nm(row.model)
       if m.nil?
-        puts "Model #{row.model} not found."
-        next;
+        mg = ModelGroup.find_by_name 'OTHERS'
+        m = mg.models.create(nm: row.model)
       end
       primary_tech = Technician.find_by_crm_id(row.primarytechid)
       backup_tech = Technician.find_by_crm_id(row.backuptechid)
-      
+      if primary_tech.nil?
+        puts "Primary tech (#{row.primarytechid}) is not in the database."
+      end
+      if backup_tech.nil?
+        puts "Backup tech (#{row.backuptechid}) is not in the database."
+      end
       # Ignore device if no techs assigned
       if dev.nil?
         unless (primary_tech.nil? or backup_tech.nil? or row.primarytechid.nil? or row.backuptechid.nil?)
@@ -72,8 +74,8 @@ if File.exists?(csv_file)
                                 :model_id => m.id,
                                 :serial_number => row.serialnumber, 
                                 :location_id => loc.id,
-                                :primary_tech_id => row.primarytechid.nil? ? nil : primary_tech.id,
-                                :backup_tech_id => row.backuptechid.nil? ? nil : backup_tech.id,
+                                :primary_tech_id => primary_tech.nil? ? nil : primary_tech.id,
+                                :backup_tech_id => backup_tech.nil? ? nil : backup_tech.id,
                                 :active => (row.inactive == '0') ? true : false,
                                 :under_contract => (row.nocontract == '0') ? true : false,
                                 :do_pm => (row.nopm == '0') ? true : false,
@@ -101,12 +103,12 @@ if File.exists?(csv_file)
                                )
         end
       end
-      contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
-      unless (contacts.empty? or dev.nil?)
-        contacts.each do |c|
-          c.update_attribute(:location_id, loc.id)
-        end
-      end
+#       contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
+#       unless (contacts.empty? or dev.nil?)
+#         contacts.each do |c|
+#           c.update_attribute(:location_id, loc.id)
+#         end
+#       end
     end
   end
 else

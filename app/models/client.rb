@@ -4,6 +4,7 @@ class Client < ActiveRecord::Base
   has_many :locations, :dependent => :nullify
   has_many :ship_tos, :dependent => :nullify
   has_many :sold_tos, :dependent => :nullify
+  has_many :contacts, :dependent => :nullify
   
   validates :name, presence: true
 end

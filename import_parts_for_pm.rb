@@ -11,7 +11,7 @@ csv_file = ARGV.shift
 if File.exists?(csv_file)
   r = CsvMapper.import(csv_file) do
     start_at_row 1
-    [id,model,pm,choice,part,quantity]
+    [model,pm,choice,part,quantity]
   end
 
   r.each do |row|
@@ -19,7 +19,7 @@ if File.exists?(csv_file)
     pm = PmCode.find_by name: row.pm
     p = Part.find_by name: row.part
     if (p.nil? or pm.nil? or g.nil?)
-      puts "Something in row #{row.id} is not in the database."
+      puts "Something in row #{row.to_s} is not in the database."
       next
     end
     pmp = PartsForPm.where("model_group_id = #{g.id} and pm_code_id = #{pm.id} and part_id = #{p.id}")

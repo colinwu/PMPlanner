@@ -8,10 +8,10 @@ csv_file = ARGV.shift
 if (File.exists?(csv_file))
   r = CsvMapper.import(csv_file) do 
     start_at_row 1
-    [groupname,groupdescription,groupcolor,amv,counterkey,mreq,ta,ca,aa,drc,dvc,dk,dc,dm,dy,vk,vc,vm,vy,mc,tk,tk1,tk2,tk3,tk4,fk,fk1,fk2,fk3,fk4,spf,ppf,ink,wst,othr]
+    [groupname,groupdescription,groupcolor,amv,counterkey,mreq,ta,ca,aa,drc,dvc,dk,dc,dm,dy,vk,vc,vm,vy,tk,tk1,tk2,tk3,fk,fk1,fk2,fk3,spf,ppf,ink,wst,othr]
   end
   
-  target_names = %w[amv mreq ta ca aa drc dvc dk dc dm dy vk vc vm vy tk tk1 tk2 tk3 tk4 fk fk1 fk2 fk3 fk4 spf ppf ink wst othr]
+  target_names = %w[amv mreq ta ca aa drc dvc dk dc dm dy vk vc vm vy tk tk1 tk2 tk3 fk fk1 fk2 fk3 spf ppf ink wst othr]
   r.each do |row|
     color_flag = (row.groupcolor == 'FALSE') ? false : true
     m = ModelGroup.find_by_name row.groupname
@@ -20,6 +20,7 @@ if (File.exists?(csv_file))
       m.color_flag = color_flag
       m.save
     else
+      puts "Created new group #{row.groupname}"
       m = ModelGroup.create(:name => row.groupname, :description => row.groupdescription, :color_flag => color_flag)
     end
     m.model_targets.find_or_create_by(target: 0, maint_code: 'BWTOTAL', unit: 'count')
@@ -32,16 +33,21 @@ if (File.exists?(csv_file))
       # See if there are any targets already associated with this model
       unless m.model_targets.empty?
         # If yes, are any of them the one we're looking for
-        model_target = m.model_targets.where(["maint_code = ?", t]).first
+        model_target = m.model_targets.find_by(maint_code: t)
         unless model_target.nil?
           found_target = true
         end
       end
       if (found_target == false)
         rt = m.model_targets.create(:target => row[t], :maint_code => t.upcase, :unit => 'count')
+        puts "Create new target for model group #{m.name}, code #{t}, value #{row[t]}"
       else
         model_target.target = row[t] # update the target value
-        model_target.save
+        if model_target.save
+          puts "Updated target for model group #{m.name}, code #{t}, value #{row[t]}"
+        else
+          puts "Error saving target for model group #{m.name}, code #{t}, value #{row[t]}"
+        end
       end
     end
   end

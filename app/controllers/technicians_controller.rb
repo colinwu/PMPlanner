@@ -38,7 +38,7 @@ class TechniciansController < ApplicationController
         default_from_email: 'landriaultl@sharpsec.com'
         )
       current_user.logs.create(message: "Successfully created technician #{@technician.id}")
-      redirect_to @technician, :notice => "Successfully created technician."
+      redirect_to back_or_go_here, :notice => "Successfully created technician."
     else
       render :action => 'new'
     end

@@ -30,11 +30,19 @@ if (File.exists?(csv_file))
     team = Team.find_by_team_id(row.team_id)
     if team.nil?
       team = Team.create(:team_id => row.team_id, :name => row.region)
+      if team.nil?
+        puts "Problem creating team #{row.region}, #{row.team_id}"
+        next
+      end
     end
     if Technician.find_by_crm_id(row.crm_id).nil?
       row.email =~ /^([^@]+)@/
       sharpname = "sec\\" + $1
       t = team.technicians.create(:crm_id => row.crm_id, :first_name => row.first_name, :last_name => row.last_name, :friendly_name => row.friendly_name, :email => row.email, :car_stock_number => row.car_stock_number, :sharp_name => sharpname)
+      if t.nil?
+        puts "Problem creating technician:\n #{row.to_s}"
+        next
+      end
       t.create_preference(
         limit_to_region: true, 
         limit_to_territory: true, 
