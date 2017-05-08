@@ -58,7 +58,7 @@ class Reading < ActiveRecord::Base
       end
       unless (seen[:sn])
         if (row =~ /S\/N: (\w+)/)
-          sn = $1
+          sn = $1.slice(0,8)
           seen[:sn] = true
         end
       end
