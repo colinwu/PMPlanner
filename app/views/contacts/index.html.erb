@@ -43,8 +43,8 @@
   <% end %>
 </table>
 
-<%= will_paginate @contacts %>
+  <%= will_paginate @contacts %>
 
 <% if current_technician.admin? %>
-<p><%= link_to "New Contact", new_contact_path %></p>
+  <p><%= link_to "New Contact", new_contact_path %></p>
 <% end %>

@@ -16,28 +16,31 @@ class Technician < ActiveRecord::Base
   validates :email, format: { with: /\A[a-zA-Z0-9.\-_]+@[a-zA-Z0-9\-_]+\.[a-zA-Z]+\Z/, message: "is not a valid email address" }
   validates_associated :team
   
-  def find_contacts(filter = [], sort_attribute = :name, direction = 'asc', territory = true)
-    contacts = []
-    unless territory
-      self.team.locations.find_each do |loc|
-        contacts += loc.contacts.where(filter)
+  def find_contacts(filter = [], sort_attribute = 'name', direction = 'asc', territory = true, page = 1)
+    unless territory # Look in team territory
+      loc_list = Location.where("team_id = #{self.team_id}").map{|l| l.id}.join(', ')
+      if loc_list.blank?
+        return Contact.where("id = -1")
       end
-    else
-      if filter.nil?
-        filter = ['devices.primary_tech_id = ?']
+      if filter.empty?
+        filter = "location_id in (#{loc_list})"
       else
-        filter[0] += ' and devices.primary_tech_id = ?'
+        filter[0] += " and location_id in (#{loc_list})"
       end
-      filter << self.id
-      Location.joins(:devices,:contacts).where(filter).find_each do |loc|
-        contacts += loc.contacts
+      contacts = Contact.joins(:location).where(filter).order("#{sort_attribute} #{direction}").page(page)
+    else  # Look only in own territory
+      loc_list = Location.joins(:devices).where("devices.primary_tech_id = #{self.id}").map{|l| l.id}.join(', ')
+      if loc_list.blank?
+        return Contact.where("id = -1")
       end
+      if filter.empty?
+        filter = "location_id in (#{loc_list})"
+      else
+        filter[0] += " and location_id in (#{loc_list})"
+      end
+      contacts = Contact.joins(:location).where(filter).order("#{sort_attribute} #{direction}").page(page)
     end
-    if direction =~ /desc/i
-      contacts.sort_by(&sort_attribute).uniq.reverse
-    else
-      contacts.sort_by(&sort_attribute).uniq
-    end
+    return contacts
   end
   
   def my_techs

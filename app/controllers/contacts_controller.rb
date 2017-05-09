@@ -5,6 +5,7 @@ class ContactsController < ApplicationController
   def index
     you_are_here
     @search_params = params[:search] || Hash.new
+    search_ar = []
     if params[:search]
       search_ar = ['placeholder']
       where_ar = []
@@ -45,7 +46,7 @@ class ContactsController < ApplicationController
       @contacts = Contact.joins(:location).where(search_ar).order(@order).page(params[:page])
     else
       @title = "My Contacts"
-      @contacts = current_technician.find_contacts(search_ar, sort_column.to_sym, sort_direction, current_technician.preference.limit_to_territory).page(:page => params[:page])
+      @contacts = current_technician.find_contacts(search_ar, sort_column, sort_direction, current_technician.preference.limit_to_territory,params[:page])
     end 
     
   end
