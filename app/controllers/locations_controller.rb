@@ -79,6 +79,7 @@ class LocationsController < ApplicationController
   def create
     @location = Location.new(params[:location])
     if @location.save
+      current_user.logs.create(message: "New location data: " + @location.inspect)
       flash[:notice] = "Successfully created location."
       redirect_to back_or_go_here(locations_url)
     else
@@ -88,11 +89,13 @@ class LocationsController < ApplicationController
 
   def edit
     @location = Location.find(params[:id])
+    current_user.logs.create(message: "Editing location data: " + @location.inspect)
   end
 
   def update
     @location = Location.find(params[:id])
     if @location.update_attributes(params[:location])
+      current_user.logs.create(message: "Location updated: " + @location.inspect)
       flash[:notice]  = "Successfully updated location."
       redirect_to back_or_go_here(locations_url) 
     else
@@ -102,8 +105,13 @@ class LocationsController < ApplicationController
 
   def destroy
     @location = Location.find(params[:id])
-    @location.destroy
-    flash[:notice] = "Successfully destroyed location."
+    if @location.devices.empty?
+      current_user.logs.create(message: "Location deleted: " + @location.inspect)
+      @location.destroy
+      flash[:notice] = "Location data deleted."
+    else
+      flash[:error] = "This location has a device. Can not be deleted."
+    end
     redirect_to back_or_go_here(locations_url)
   end
   

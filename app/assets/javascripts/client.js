@@ -1,11 +1,3 @@
-$(function() {
-  $('#reading_taken_at').datetimepicker({
-    timepicker: false,
-    format: 'Y-m-d',
-    closeOnDateSelect: true
-  });
-});
-
 // $($("#client_select").change(function(eventObject) {
 //   var newValue = eventObject.delegateTarget.value;
 //   $.ajax({ url: "/clients/get_location",

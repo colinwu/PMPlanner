@@ -21,7 +21,6 @@
 //= require autocomplete-rails
 //= require jquery.datetimepicker
 //= require_tree .
-
 set_size_of = function(e) {
   $(e).outerWidth(1);
   console.log($(e).parent().innerWidth());

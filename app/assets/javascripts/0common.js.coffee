@@ -1,6 +1,10 @@
-
 jQuery ->
-  
+  $("#reading_taken_at").datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    closeOnDateSelect: true
+    })
+
   $("body").css({"cursor": "default"})
   $("a").click ->
     $("body").css({"cursor": "wait"})
@@ -19,4 +23,5 @@ jQuery ->
 
   $("#tech_id").change (e) ->
     $("#tech_select").submit()
+   
    

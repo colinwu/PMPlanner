@@ -26,11 +26,11 @@
   </p>
   <p>
     <%= f.label 'Team' %><br />
-    <%= f.collection_select :team_id, Team.all, :id, :name %>
+    <%= f.collection_select :team_id, Team.all.order(:name), :id, :name %>
   </p>
   <p>
     Client:<br />
-    <%= @location.client.name %>
+    <%= f.collection_select :client_id, Client.all.order(:name), :id, :name %>
   </p>
   <p><%= f.submit %></p>
 <% end %>
