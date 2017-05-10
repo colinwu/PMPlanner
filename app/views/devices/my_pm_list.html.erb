@@ -54,8 +54,8 @@
       <td><%= dev.model.nm %></td>
       <td><%= dev.serial_number %></td>
       <td><%= dev.client.name %></td>
-      <td><%= dev.location.address1 %></td>
-      <td><%= dev.location.city %></td>
+      <td><%= dev.location.nil? ? '' : dev.location.address1 %></td>
+      <td><%= dev.location.nil? ? '' : dev.location.city %></td>
       <td class='<%= pm_status_class(dev) %>'><%= dev.outstanding_pms.length %></td>
     </tr>
   <% end %>

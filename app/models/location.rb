@@ -1,7 +1,7 @@
 class Location < ActiveRecord::Base
   attr_accessible :address1, :address2, :city, :province, :post_code, :notes, :shiptoid, :client_id, :team_id
   
-  has_many :devices, :dependent => :nullify
+  has_many :devices, :dependent => :restrict_with_error
   has_many :contacts, :dependent => :nullify
   has_many :ship_tos, :dependent => :nullify
   belongs_to :client

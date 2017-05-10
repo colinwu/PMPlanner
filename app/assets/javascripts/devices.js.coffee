@@ -83,7 +83,7 @@ jQuery ->
 
 # Automatically fill in appropriate counter fields when the maintenance counters have been changed
   change_val_of = (code, diff) ->
-    if code != 'TA' and code != 'CA' and code != 'MREQ' and code != 'AA'
+    if code != 'TA' and code != 'CA' and code != 'MREQ' and code != 'AA' and code != 'BWTOTAL' and code != 'CTOTAL'
       $("#counter_#{code}").val(Number($("#prev_#{code}").text().replace(/[^0-9]/g,'')) + diff)
 
 # When BWTOTAL has changed ...
@@ -213,6 +213,6 @@ jQuery ->
     
   $(window).on "beforeunload", (e) ->
     if root.changed
-      "Are you sure?"
+      e.returnValue = "There is unsaved data. Are you sure you want to leave this page?"
    
     
