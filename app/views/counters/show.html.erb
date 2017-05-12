@@ -1,16 +1,12 @@
 <% title "Counter" %>
 
 <p>
-  <strong>Name:</strong>
-  <%= @counter.name %>
-</p>
-<p>
-  <strong>Description:</strong>
-  <%= @counter.description %>
-</p>
-<p>
   <strong>Maint Code:</strong>
-  <%= @counter.maint_code %>
+  <%= @counter.pm_code.name %>
+</p>
+<p>
+  <strong>Value:</strong>
+  <%= @counter.value %>
 </p>
 
 <p>
@@ -18,3 +14,4 @@
   <%= link_to "Destroy", @counter, :confirm => 'Are you sure?', :method => :delete %> |
   <%= link_to "View All", counters_path %>
 </p>
+

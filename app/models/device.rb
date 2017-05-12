@@ -26,7 +26,7 @@ class Device < ActiveRecord::Base
     self.model.model_group.model_targets.where(["maint_code = ?",code]).first
   end
   
-# Returns {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0} if 0 or 1 reading available,
+  # Returns {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0} if 0 or 1 reading available,
   def calculate_stats
     if self.readings.count > 1
       first_reading = self.readings.order(:taken_at).first      
