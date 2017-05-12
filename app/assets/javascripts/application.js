@@ -23,6 +23,5 @@
 //= require_tree .
 set_size_of = function(e) {
   $(e).outerWidth(1);
-  console.log($(e).parent().innerWidth());
   return($(e).outerWidth($(e).parent().innerWidth()));
 };

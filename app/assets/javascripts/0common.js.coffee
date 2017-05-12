@@ -24,4 +24,3 @@ jQuery ->
   $("#tech_id").change (e) ->
     $("#tech_select").submit()
    
-   

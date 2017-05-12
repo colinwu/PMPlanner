@@ -31,7 +31,7 @@ class Device < ActiveRecord::Base
     if self.readings.count > 1
       first_reading = self.readings.order(:taken_at).first      
       last_reading = self.last_non_zero_reading_on_or_before(Date.today) 
-      first_last_interval = last_reading.taken_at - first_reading.taken_at
+      first_last_interval = (last_reading.taken_at - first_reading.taken_at).to_i
       if first_last_interval == 0  # for the case where there is only 1 non-zero reading
         return {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0}
       end

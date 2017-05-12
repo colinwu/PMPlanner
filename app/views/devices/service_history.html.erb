@@ -27,12 +27,9 @@
         <td class=rightjustify><%= counter.nil? ? '' : best_in_place(counter, :value,  display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
         <% @all_codes.each do |c| %>
           <% counter = reading.counter_for(c) %>
-          <% zero_reading = false if (!counter.nil? and counter.value > 0) %>
           <td class=rightjustify><%= best_in_place(counter, :value, display_with: :number_with_delimiter, html_attrs: {size: 6}) %></td>
         <% end %>
-        <% if zero_reading %>
-          <td><%= link_to "Remove", reading, :confirm => 'Are you sure?', :method => :delete %></td>
-        <% end %>
+        <td><%= link_to "Remove", reading, :confirm => 'Are you sure?', :method => :delete %></td>
       </tr>
     <% end %>
   </table>

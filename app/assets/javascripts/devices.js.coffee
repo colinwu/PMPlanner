@@ -41,10 +41,10 @@ jQuery ->
 # Detects the last device to be "checked" and makes it the target for "service history", "PM status" and "Data Entry"
   $("[id^='device_']").change (e) ->
     if $(this).is(":checked")
-      $("#service_history_link").attr("href", "/devices/" + $(this).val() + "/service_history")
-      $("#enter_data_link").attr("href", "/devices/" + $(this).val() + "/enter_data")
-      $("#analyze_data_link").attr("href", "/devices/" + $(this).val() + "/analyze_data")
-      $("#transfer_link").attr("href", "/devices/" + $(this).val() + "/transfer")
+      $("#service_history_menu").attr("href", "/devices/" + $(this).val() + "/service_history")
+      $("#enter_data_menu").attr("href", "/devices/" + $(this).val() + "/enter_data")
+      $("#analyze_data_menu").attr("href", "/devices/" + $(this).val() + "/analyze_data")
+      $("#transfer_menu").attr("href", "/devices/" + $(this).val() + "/transfer")
 
 # When hovering over a part in an aggregate parts list, make the text colour blue
   $("[id^='part_list_']").hover (e) ->
