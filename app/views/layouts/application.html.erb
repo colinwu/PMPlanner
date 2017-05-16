@@ -45,7 +45,7 @@
               <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), include_blank: true %>
             <% end %>
           </li>
-          <li><%= link_to "Admin Page", admin_path, id: "admin_menu" %></li>
+          <% if current_user.admin? %><li><%= link_to "Admin Page", admin_path, id: "admin_menu" %></li><% end %>
         <% end %>
         </ul>
       </div>

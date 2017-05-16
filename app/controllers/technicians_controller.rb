@@ -45,16 +45,16 @@ class TechniciansController < ApplicationController
   end
 
   def edit
-    if current_user.admin?
+    if current_user.admin? or current_user.manager?
       @technician = Technician.find(params[:id])
       @title = "Edit Info for #{@technician.first_name} #{@technician.last_name}"
     else
-      redirect_to current_user.preference.default_root_path, alert: "You are not permitted to edit technicians."
+      redirect_to back_or_go_here(current_user.preference.default_root_path), alert: "You are not permitted to edit technicians."
     end
   end
 
   def update
-    if current_user.admin?
+    if current_user.admin? or current_user.manager?
       @technician = Technician.find(params[:id])
     else
       @technician = current_technician
