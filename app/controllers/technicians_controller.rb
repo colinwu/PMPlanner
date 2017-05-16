@@ -7,7 +7,7 @@ class TechniciansController < ApplicationController
       @technicians = Technician.all
     elsif current_user.manager?
       @title = "My techs"
-      @technicians = current_technician.my_techs
+      @technicians = current_user.my_techs
     end
   end
 
@@ -99,6 +99,6 @@ class TechniciansController < ApplicationController
     else
       session[:tech] = nil
     end
-    redirect_to current_user.preference.default_root_path
+    redirect_to back_or_go_here(current_user.preference.default_root_path)
   end
 end
