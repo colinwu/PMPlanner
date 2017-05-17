@@ -54,13 +54,14 @@ class Technician < ActiveRecord::Base
   end
   
   def can_manage?(device)
-    if self.admin?
-      true
-    elsif self.manager?
-      self.team_id == device.team_id
-    else
-      device.primary_tech_id == self.id or device.backup_tech_id == self.id
-    end
+    return true
+#     if self.admin?
+#       true
+#     elsif self.manager?
+#       self.team_id == device.team_id
+#     else
+#       device.primary_tech_id == self.id or device.backup_tech_id == self.id
+#     end
   end
       
   def get_manager

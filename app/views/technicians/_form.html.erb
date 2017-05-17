@@ -21,7 +21,10 @@
   <div class=field>
     <div class=leftdiv>
       Team<br />
-      <%= f.collection_select :team_id, Team.all, :id, :name, selected: @technician.team_id %>&nbsp;<%= f.label "Manager? " %> <%= f.check_box :manager %>
+      <%= f.collection_select :team_id, Team.all, :id, :name, selected: @technician.team_id %>&nbsp;
+      <% if current_user.manager? or current_user.admin? %>
+        <%= f.label "Manager? " %> <%= f.check_box :manager %>
+      <% end %>
     </div> 
      <div class=leftdiv>
       CRM ID<br />
@@ -33,9 +36,11 @@
     </div>
   </div>
   
-  <div class=field>
-    <%= f.label "Admin? " %> <%= f.check_box :admin %>
-  </div>
+  <% if current_user.admin? %>
+    <div class=field>
+      <%= f.label "Admin? " %> <%= f.check_box :admin %>
+    </div>
+  <% end %>
   
   <p><%= f.submit "Update" %></p>
 <% end %>

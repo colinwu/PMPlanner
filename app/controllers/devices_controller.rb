@@ -619,10 +619,11 @@ class DevicesController < ApplicationController
     @search_params = {}
     if params[:commit] == 'Search' and not params[:search_str].blank?
       @search_str = params[:search_str]
+      @target = params[:target]
       @title = "Search: #{@search_str}"
-      if current_user.admin?
+      if @target == 'All'
         @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page])
-      elsif current_user.manager?
+      elsif @target == 'Region'
         @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page])
       else
         @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page])
@@ -632,7 +633,7 @@ class DevicesController < ApplicationController
         @device = @devices.first
         redirect_to "/devices/#{@device.id}/#{session[:search_caller]}"
       when 0
-        redirect_to devices_url, alert: "Nothing found."
+        redirect_to back_or_go_here, alert: "Nothing found."
       else
         render :index
       end

@@ -2,7 +2,10 @@
   <tr>
     <td rowspan=2 width="30%" class="boxed" >
     <%= form_tag search_devices_path, method: :get do %>
-      <%= text_field_tag 'search_str', @search_str, size: 10 %>
+      <%= text_field_tag 'search_str', @search_str, size: 10 %><br />
+      <%= radio_button_tag 'target', 'Territory', true %> Territory
+      <%= radio_button_tag 'target', 'Region' %> Region
+      <%= radio_button_tag 'target', 'All' %> All
       <%= submit_tag "Search" %>
     <% end %>
     <br />
