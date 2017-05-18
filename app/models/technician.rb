@@ -54,6 +54,7 @@ class Technician < ActiveRecord::Base
   end
   
   def can_manage?(device)
+    # turns out techs need to be able to search and record data for all devices in inventory
     return true
 #     if self.admin?
 #       true

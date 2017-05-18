@@ -64,15 +64,16 @@ PmPlanner::Application.routes.draw do
 
   resources :devices do
     collection do
+      get 'autocomplete_client_name'
+      get 'do_search'
+      post 'handle_checked'
+      get 'my_pm_list'
+      post 'parts_for_multi_pm'
       delete 'rm_contact'
       get 'search'
-      post 'parts_for_multi_pm'
-      get 'my_pm_list'
-      post 'write_parts_order'
-      post 'handle_checked'
       post 'send_order'
       post 'send_transfer'
-      get 'autocomplete_client_name'
+      post 'write_parts_order'
     end
     member do
       get 'enter_data'

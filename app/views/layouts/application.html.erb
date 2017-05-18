@@ -32,6 +32,9 @@
       </div>
       <div>
         <ul id=menu>
+        <% unless current_user.nil? %>
+          <li><%= link_to "Home", current_user.preference.default_root_path %></li>
+        <% end %>
         <li><%= link_to "#{replace_my} Territory", devices_path, id: "territory_menu" %></li>
         <li><%= link_to "#{replace_my} Contacts", contacts_path, id: "contacts_menu" %></li>
         <li><%= link_to "#{replace_my} PM List", my_pm_list_devices_path, id: "pm_list_menu" %></li>

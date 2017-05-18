@@ -204,14 +204,6 @@ class DevicesController < ApplicationController
     redirect_to devices_url
   end
   
-  def rm_contact
-    contact_id = params['contact']
-    dev = Device.find(params['dev']) 
-    dev.location.contacts.delete(contact_id)
-    current_user.logs.create(device_id: dev.id, message: "contact #{contact_id} no longer associated with device")
-    redirect_to back_or_go_here
-  end
-  
   def add_contact_for
     @device = Device.find(params[:id])
     contact_param = params[:contact]
@@ -224,82 +216,6 @@ class DevicesController < ApplicationController
       current_user.logs.create(device_id: @device.id, message: "Contact #{@contact.id} associated with the device.")
     end
     redirect_to back_or_go_here
-  end
-  
-  def enter_data
-    session[:search_caller] = request.path_parameters[:action]
-    you_are_here
-    
-    @bw_list = []
-    @c_list = []
-    @all_list = []
-    @now = Date.today
-    @title = "Enter Counter Data"
-    begin
-      @device = Device.find(params[:id])
-    rescue
-      @device = nil
-    end
-    if @device and current_user.can_manage?(@device)
-      @reading = @device.readings.build(technician_id: current_user.id)
-      @device.pm_codes.each do |code|
-        if code.colorclass == 'BW'
-          @bw_list << code.name
-        elsif code.colorclass == 'COLOR'
-          @c_list << code.name
-        elsif code.colorclass == 'ALL'
-          @all_list << code.name
-        end
-      end
-      if @device.device_stat.nil?
-        stats = @device.calculate_stats
-      else
-        stats = @device.device_stat
-      end
-      @bw_monthly = stats['bw_monthly']
-      @c_monthly = stats['c_monthly']
-      @vpy = stats['vpy']
-      @last_reading = @device.last_non_zero_reading_on_or_before(@now)
-#       @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
-      if @last_reading.nil?
-        @last_reading = Reading.new(taken_at: Date.today)
-        @lastbw = 0
-        @lastc = 0
-      else
-        @lastbw = @last_reading.counter_for('bwtotal').value
-        @lastc = 0
-        if (@device.model.model_group.color_flag)
-          @lastc = @last_reading.counter_for('ctotal').value
-        end
-      end
-      
-      @reading = @device.readings.build(technician_id: current_user.id, taken_at: Date.today, notes: current_user.preference.default_notes)
-      @codes = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
-    else
-      @device = nil
-      flash[:alert] = "No valid device specified."
-    end
-  end
-  
-  def record_data
-#     TODO: Should do some value sanity checking here
-    @device = Device.find(params[:id])
-    @reading = @device.readings.find_or_create_by(taken_at: params[:reading][:taken_at])
-    @reading.update_attributes(params[:reading])
-    params[:counter].each do |code,value|
-      p = PmCode.find_by_name(code)
-      begin
-        v = value.gsub(/[^0-9-]/,'')
-        c = @reading.counters.find_or_create_by(pm_code_id: p.id)
-        c.update_attributes(value: v, unit: 'count')
-      rescue
-        flash[:alert] += "Error saving counter for #{p.name}. Value = #{v}"
-        current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
-      end
-    end
-    current_user.logs.create(device_id: @device.id, message: "Counter data saved.")
-    @device.update_pm_visit_tables
-    redirect_to analyze_data_device_url(@device)
   end
   
   def analyze_data
@@ -468,154 +384,8 @@ class DevicesController < ApplicationController
     end
   end
   
-  def service_history
-    session[:search_caller] = request.path_parameters[:action]
-    you_are_here
-    
-    begin
-      @device = Device.find(params[:id])
-    rescue
-      @device = nil
-    end
-    @title = "Service History"
-    if @device.nil?
-      flash[:alert] = "No valid device specified."
-      render "service_history"
-      return
-    end
-    
-    if @device and current_technician.can_manage?(@device)      
-      @reading = @device.readings.build(technician_id: current_technician.id)
-      @last_reading = @device.readings.order(:taken_at).last
-      
-      if @device.device_stat.nil?
-        stats = @device.calculate_stats
-        @device.create_device_stat(c_monthly: stats['c_monthly'], bw_monthly: stats['bw_monthly'], vpy: stats['vpy'])
-      else
-        stats = @device.device_stat
-      end
-        
-      @bw_monthly = stats['bw_monthly']
-      @c_monthly = stats['c_monthly']
-      @vpy = stats['vpy']
-      
-      @readings = @device.readings.order(taken_at: :desc)
-      @all_codes = @device.model.model_group.model_targets.map do |t|
-        if !t.target.nil? and t.target > 0
-          t.maint_code
-        end
-      end
-      @all_codes.delete(nil)
-      @all_codes.delete('AMV')
-    else
-      flash[:alert] = "No valid device specified."
-    end
-  end
-  
-  def my_pm_list
-    you_are_here
-    @search_params = params[:search] || Hash.new
-    if params[:showbackup].nil?
-      @showbackup = current_user.preference.showbackup.to_s
-    else
-      if params[:showbackup] == 'true'
-        @showbackup = "true"
-      else
-        @showbackup = "false"
-      end
-    end
-    if current_technician.nil?
-      if (current_user.admin?)
-        my_team = Technician.all
-        @title = "PM List for all devices"
-      elsif current_user.manager?
-        my_team = Technician.where(["team_id = ?",current_user.team_id])
-        @title = "PM List #{current_user}.team.name"
-      end
-    else
-      my_team = [current_technician]
-      @title = ""
-    end
-    @now = Date.today
-    @dev_list = []
-    unless params[:sort].nil?
-      @order = sort_column + ' ' + sort_direction
-    else
-      @order = 'locations.address1'
-    end
-    my_team.each do |tech|
-      range = tech.preference.upcoming_interval*7
-      
-      # toggle to show devices for which the current tech is the backup tech
-      if @showbackup == "true"
-        where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true"]
-        search_ar = ["",tech.id, tech.id]
-      else
-        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true"]
-        search_ar = ["", tech.id]
-      end
-      
-      # Build condition based on search fields
-      if params[:search]
-        unless @search_params['crm'].nil? or @search_params['crm'].blank?
-          search_ar <<  @search_params[:crm]
-          where_ar << "crm_object_id regexp ?"
-        end
-        unless  @search_params['model'].nil? or  @search_params['model'].blank?
-          search_ar <<  @search_params[:model]
-          where_ar << "models.nm regexp ?"
-        end
-        unless  @search_params['sn'].nil? or  @search_params['sn'].blank?
-          search_ar <<  @search_params[:sn]
-          where_ar << "serial_number regexp ?"
-        end
-        unless  @search_params['client_name'].nil? or  @search_params['client_name'].blank?
-          search_ar <<  @search_params['client_name']
-          where_ar << "clients.name regexp ?"
-        end
-        unless  @search_params['addr1'].nil? or  @search_params['addr1'].blank?
-          search_ar <<  @search_params['addr1']
-          where_ar << "locations.address1 regexp ?"
-        end
-        unless  @search_params['city'].nil? or  @search_params['city'].blank?
-          search_ar <<  @search_params['city']
-          where_ar << "locations.city regexp ?"
-        end
-      end
-      search_ar[0] = where_ar.join(' and ')
-      
-      if (sort_column == 'outstanding_pms')
-        code_count = {}
-        sorted_count = []
-        devs = Device.where(search_ar).joins(:location, :client, :model)
-        devs.each do |d| 
-          if d.active and d.under_contract and d.do_pm
-            if !d.outstanding_pms.empty? or (!d.neglected.nil? and (d.neglected.next_visit < (@now + range*2)))
-              code_count[d.id] = d.outstanding_pms.count
-            end
-          end
-        end
-        sorted_count = code_count.sort_by { |k,v| v }
-        if (sort_direction == 'desc')
-          sorted_count.reverse!
-        end
-        sorted_count.each do |c|
-          @dev_list << devs.find(c[0])
-        end
-      else
-        Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).each do |dev|
-#           if dev.active and dev.under_contract and dev.do_pm
-            if !dev.outstanding_pms.empty? or (!dev.neglected.nil? and (dev.neglected.next_visit < (@now + range*2)))
-              @dev_list << dev
-            end # if
-#           end # if
-        end # Device.each
-      end
-    end
-  end
-  
   # This action handles searching from the "Analysis", "Data Entry" and "History" screens.
-  def search
+  def do_search
     @search_params = {}
     if params[:commit] == 'Search' and not params[:search_str].blank?
       @search_str = params[:search_str]
@@ -642,65 +412,59 @@ class DevicesController < ApplicationController
     end
   end
   
-  def parts_for_multi_pm
-    @tech = current_user
+  def enter_data
+    session[:search_caller] = request.path_parameters[:action]
+    you_are_here
     
-    # @dev_list controls which devs we generate parts list for. Must send back to form.
-    @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
-    @devices = Device.find(@dev_list)
-    # create @parts_hash = {dev1_id => [[code, choice, Part], [code, choice, Part], ...], ...}
-    
-    if params[:service]
-      @msg_body = "Please create service orders for the following units:\n\n"
-      @devices.each do |dev|
-        @msg_body += "#{dev.crm_object_id} : #{dev.model.nm} s/n #{dev.serial_number} : #{dev.client.name}, #{dev.location.address1}, #{dev.location.city}\n"
-      end
-      render 'write_service_order'
-    else
-      @parts_hash = {}
-      @all_parts = {}
-      @choice = params[:choice] || Hash.new
-      @devices.each do |dev|
-        unless dev.nil?
-          @parts_hash[dev] = []
-          # See if any part has been checked to find alternate
-          # params[:checked] = {'dev_N1' => {PmCode => choice, ...}, 'dev_N2' => {...}}, controls alternate parts
-          choice_hash = {}
-          @choice["dev_#{dev.id}"] = @choice["dev_#{dev.id}"].nil? ? {} : @choice["dev_#{dev.id}"]
-          if params[:checked]
-            checked = params[:checked]
-            if checked["dev_#{dev.id}"]
-              code_hash = checked["dev_#{dev.id}"]
-              code_hash.each_key do |code|
-                choice = @choice["dev_#{dev.id}"][code]
-                num_choices = dev.model.model_group.parts_for_pms.joins(:pm_code).where("pm_codes.name = ?", code).order(:choice).group(:choice).map(&:choice).length
-                @choice["dev_#{dev.id}"][code] = (choice.to_i + 1) % num_choices
-              end  # code_hash.each
-            end  # if checked[]
-          end  # if params[:checked]
-          dev.pm_parts(@choice["dev_#{dev.id}"]).each do |code, parts|
-            parts.each do |p|
-              @all_parts[p.part_id] = @all_parts[p.part_id].nil? ? p.quantity.to_f : (@all_parts[p.part_id] + p.quantity.to_f)
-              if @choice["dev_#{dev.id}"][code].nil?
-                @choice["dev_#{dev.id}"][code] = 0
-              end
-              @parts_hash[dev] << [code,@choice["dev_#{dev.id}"][code].to_i, p]
-            end
-          end  # dev.m_parts.each
+    @bw_list = []
+    @c_list = []
+    @all_list = []
+    @now = Date.today
+    @title = "Enter Counter Data"
+    begin
+      @device = Device.find(params[:id])
+    rescue
+      @device = nil
+    end
+    if @device and current_user.can_manage?(@device)
+      @reading = @device.readings.build(technician_id: current_user.id)
+      @device.pm_codes.each do |code|
+        if code.colorclass == 'BW'
+          @bw_list << code.name
+        elsif code.colorclass == 'COLOR'
+          @c_list << code.name
+        elsif code.colorclass == 'ALL'
+          @all_list << code.name
         end
       end
+      if @device.device_stat.nil?
+        stats = @device.calculate_stats
+      else
+        stats = @device.device_stat
+      end
+      @bw_monthly = stats['bw_monthly']
+      @c_monthly = stats['c_monthly']
+      @vpy = stats['vpy']
+      @last_reading = @device.last_non_zero_reading_on_or_before(@now)
+#       @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
+      if @last_reading.nil?
+        @last_reading = Reading.new(taken_at: Date.today)
+        @lastbw = 0
+        @lastc = 0
+      else
+        @lastbw = @last_reading.counter_for('bwtotal').value
+        @lastc = 0
+        if (@device.model.model_group.color_flag)
+          @lastc = @last_reading.counter_for('ctotal').value
+        end
+      end
+      
+      @reading = @device.readings.build(technician_id: current_user.id, taken_at: Date.today, notes: current_user.preference.default_notes)
+      @codes = @device.model.model_group.model_targets.where("maint_code <> 'AMV'").map(&:maint_code)
+    else
+      @device = nil
+      flash[:alert] = "No valid device specified."
     end
-  end
-  
-  def write_parts_order
-    @tech = current_user
-    part_list = params[:part]
-    @msg_body = @tech.preference.default_message + "\n\n"
-    part_list.each do |id,qty|
-      p = Part.find id
-      @msg_body += "#{qty} X #{p.name} (#{p.description})\n"
-    end
-    @msg_body += "\n" + (@tech.preference.default_sig || '')
   end
   
   def handle_checked
@@ -708,7 +472,7 @@ class DevicesController < ApplicationController
     @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
     @devices = Device.find(@dev_list)
     if params[:service]
-      @msg_body = "Please create service orders for the following units:\n\n"
+      @msg_body = "Please create PM order(s) for the following unit(s):\n\n"
       @devices.each do |dev|
         @msg_body += "#{dev.crm_object_id} : #{dev.model.nm} s/n #{dev.serial_number} : #{dev.client.name}, #{dev.location.address1}, #{dev.location.city}\n"
       end
@@ -822,27 +586,237 @@ class DevicesController < ApplicationController
     end
   end
 
-  def send_transfer
-    unless params[:email].nil? or params[:device].nil?
-      dev_id_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
-      @dev_list = Device.find(dev_id_list)
-      @from_region = current_technician.team.name
-      email = params[:email]
-      email_to = email[:to]
-      email_from = email[:from]
-      email_sub = email[:subject]
-      email_cc = email[:cc]
-      msg = email[:msg]
-      DeviceMailer.send_transfer_request(email_to, email_cc, email_from, email_sub, msg, @from_region, @dev_list).deliver_now
-      flash[:notice] = "Transfer request has been sent"
-      redirect_to back_or_go_here
+  def my_pm_list
+    you_are_here
+    @search_params = params[:search] || Hash.new
+    if params[:showbackup].nil?
+      @showbackup = current_user.preference.showbackup.to_s
     else
-      flash[:error] = 'Appropriate email parameters not found or no valid devices selected.'
-      redirect_to back_or_go_here
+      if params[:showbackup] == 'true'
+        @showbackup = "true"
+      else
+        @showbackup = "false"
+      end
+    end
+    if current_technician.nil?
+      if (current_user.admin?)
+        my_team = Technician.all
+        @title = "PM List for all devices"
+      elsif current_user.manager?
+        my_team = Technician.where(["team_id = ?",current_user.team_id])
+        @title = "PM List #{current_user}.team.name"
+      end
+    else
+      my_team = [current_technician]
+      @title = ""
+    end
+    @now = Date.today
+    @dev_list = []
+    unless params[:sort].nil?
+      @order = sort_column + ' ' + sort_direction
+    else
+      @order = 'locations.address1'
+    end
+    my_team.each do |tech|
+      range = tech.preference.upcoming_interval*7
+      
+      # toggle to show devices for which the current tech is the backup tech
+      if @showbackup == "true"
+        where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true"]
+        search_ar = ["",tech.id, tech.id]
+      else
+        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true"]
+        search_ar = ["", tech.id]
+      end
+      
+      # Build condition based on search fields
+      if params[:search]
+        unless @search_params['crm'].nil? or @search_params['crm'].blank?
+          search_ar <<  @search_params[:crm]
+          where_ar << "crm_object_id regexp ?"
+        end
+        unless  @search_params['model'].nil? or  @search_params['model'].blank?
+          search_ar <<  @search_params[:model]
+          where_ar << "models.nm regexp ?"
+        end
+        unless  @search_params['sn'].nil? or  @search_params['sn'].blank?
+          search_ar <<  @search_params[:sn]
+          where_ar << "serial_number regexp ?"
+        end
+        unless  @search_params['client_name'].nil? or  @search_params['client_name'].blank?
+          search_ar <<  @search_params['client_name']
+          where_ar << "clients.name regexp ?"
+        end
+        unless  @search_params['addr1'].nil? or  @search_params['addr1'].blank?
+          search_ar <<  @search_params['addr1']
+          where_ar << "locations.address1 regexp ?"
+        end
+        unless  @search_params['city'].nil? or  @search_params['city'].blank?
+          search_ar <<  @search_params['city']
+          where_ar << "locations.city regexp ?"
+        end
+      end
+      search_ar[0] = where_ar.join(' and ')
+      
+      if (sort_column == 'outstanding_pms')
+        code_count = {}
+        sorted_count = []
+        devs = Device.where(search_ar).joins(:location, :client, :model)
+        devs.each do |d| 
+          if d.active and d.under_contract and d.do_pm
+            if !d.outstanding_pms.empty? or (!d.neglected.nil? and (d.neglected.next_visit < (@now + range*2)))
+              code_count[d.id] = d.outstanding_pms.count
+            end
+          end
+        end
+        sorted_count = code_count.sort_by { |k,v| v }
+        if (sort_direction == 'desc')
+          sorted_count.reverse!
+        end
+        sorted_count.each do |c|
+          @dev_list << devs.find(c[0])
+        end
+      else
+        Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).each do |dev|
+#           if dev.active and dev.under_contract and dev.do_pm
+            if !dev.outstanding_pms.empty? or (!dev.neglected.nil? and (dev.neglected.next_visit < (@now + range*2)))
+              @dev_list << dev
+            end # if
+#           end # if
+        end # Device.each
+      end
     end
   end
   
-# TODO Need to record the referer URI in log
+  def parts_for_multi_pm
+    @tech = current_user
+    
+    # @dev_list controls which devs we generate parts list for. Must send back to form.
+    @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
+    @devices = Device.find(@dev_list)
+    # create @parts_hash = {dev1_id => [[code, choice, Part], [code, choice, Part], ...], ...}
+    
+    if params[:service]
+      @msg_body = "Please create service orders for the following units:\n\n"
+      @devices.each do |dev|
+        @msg_body += "#{dev.crm_object_id} : #{dev.model.nm} s/n #{dev.serial_number} : #{dev.client.name}, #{dev.location.address1}, #{dev.location.city}\n"
+      end
+      render 'write_service_order'
+    else
+      @parts_hash = {}
+      @all_parts = {}
+      @choice = params[:choice] || Hash.new
+      @devices.each do |dev|
+        unless dev.nil?
+          @parts_hash[dev] = []
+          # See if any part has been checked to find alternate
+          # params[:checked] = {'dev_N1' => {PmCode => choice, ...}, 'dev_N2' => {...}}, controls alternate parts
+          choice_hash = {}
+          @choice["dev_#{dev.id}"] = @choice["dev_#{dev.id}"].nil? ? {} : @choice["dev_#{dev.id}"]
+          if params[:checked]
+            checked = params[:checked]
+            if checked["dev_#{dev.id}"]
+              code_hash = checked["dev_#{dev.id}"]
+              code_hash.each_key do |code|
+                choice = @choice["dev_#{dev.id}"][code]
+                num_choices = dev.model.model_group.parts_for_pms.joins(:pm_code).where("pm_codes.name = ?", code).order(:choice).group(:choice).map(&:choice).length
+                @choice["dev_#{dev.id}"][code] = (choice.to_i + 1) % num_choices
+              end  # code_hash.each
+            end  # if checked[]
+          end  # if params[:checked]
+          dev.pm_parts(@choice["dev_#{dev.id}"]).each do |code, parts|
+            parts.each do |p|
+              @all_parts[p.part_id] = @all_parts[p.part_id].nil? ? p.quantity.to_f : (@all_parts[p.part_id] + p.quantity.to_f)
+              if @choice["dev_#{dev.id}"][code].nil?
+                @choice["dev_#{dev.id}"][code] = 0
+              end
+              @parts_hash[dev] << [code,@choice["dev_#{dev.id}"][code].to_i, p]
+            end
+          end  # dev.m_parts.each
+        end
+      end
+    end
+  end
+  
+  def record_data
+#     TODO: Should do some value sanity checking here
+    @device = Device.find(params[:id])
+    @reading = @device.readings.find_or_create_by(taken_at: params[:reading][:taken_at])
+    @reading.update_attributes(params[:reading])
+    params[:counter].each do |code,value|
+      p = PmCode.find_by_name(code)
+      begin
+        v = value.gsub(/[^0-9-]/,'')
+        c = @reading.counters.find_or_create_by(pm_code_id: p.id)
+        c.update_attributes(value: v, unit: 'count')
+      rescue
+        flash[:alert] += "Error saving counter for #{p.name}. Value = #{v}"
+        current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
+      end
+    end
+    current_user.logs.create(device_id: @device.id, message: "Counter data saved.")
+    @device.update_pm_visit_tables
+    redirect_to analyze_data_device_url(@device)
+  end
+  
+  def rm_contact
+    contact_id = params['contact']
+    dev = Device.find(params['dev']) 
+    dev.location.contacts.delete(contact_id)
+    current_user.logs.create(device_id: dev.id, message: "contact #{contact_id} no longer associated with device")
+    redirect_to back_or_go_here
+  end
+  
+  def search
+    you_are_here
+    session[:search_caller] = 'analyze_data'
+    
+  end
+  
+  def service_history
+    session[:search_caller] = request.path_parameters[:action]
+    you_are_here
+    
+    begin
+      @device = Device.find(params[:id])
+    rescue
+      @device = nil
+    end
+    @title = "Service History"
+    if @device.nil?
+      flash[:alert] = "No valid device specified."
+      render "service_history"
+      return
+    end
+    
+    if @device and current_technician.can_manage?(@device)      
+      @reading = @device.readings.build(technician_id: current_technician.id)
+      @last_reading = @device.readings.order(:taken_at).last
+      
+      if @device.device_stat.nil?
+        stats = @device.calculate_stats
+        @device.create_device_stat(c_monthly: stats['c_monthly'], bw_monthly: stats['bw_monthly'], vpy: stats['vpy'])
+      else
+        stats = @device.device_stat
+      end
+        
+      @bw_monthly = stats['bw_monthly']
+      @c_monthly = stats['c_monthly']
+      @vpy = stats['vpy']
+      
+      @readings = @device.readings.order(taken_at: :desc)
+      @all_codes = @device.model.model_group.model_targets.map do |t|
+        if !t.target.nil? and t.target > 0
+          t.maint_code
+        end
+      end
+      @all_codes.delete(nil)
+      @all_codes.delete('AMV')
+    else
+      flash[:alert] = "No valid device specified."
+    end
+  end
+  
   def send_order
     unless params[:email].nil?
       email = params[:email]
@@ -872,6 +846,38 @@ class DevicesController < ApplicationController
     end
   end
   
+  def send_transfer
+    unless params[:email].nil? or params[:device].nil?
+      dev_id_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
+      @dev_list = Device.find(dev_id_list)
+      @from_region = current_technician.team.name
+      email = params[:email]
+      email_to = email[:to]
+      email_from = email[:from]
+      email_sub = email[:subject]
+      email_cc = email[:cc]
+      msg = email[:msg]
+      DeviceMailer.send_transfer_request(email_to, email_cc, email_from, email_sub, msg, @from_region, @dev_list).deliver_now
+      flash[:notice] = "Transfer request has been sent"
+      redirect_to back_or_go_here
+    else
+      flash[:error] = 'Appropriate email parameters not found or no valid devices selected.'
+      redirect_to back_or_go_here
+    end
+  end
+  
+  def write_parts_order
+    @tech = current_user
+    part_list = params[:part]
+    @msg_body = @tech.preference.default_message + "\n\n"
+    part_list.each do |id,qty|
+      p = Part.find id
+      @msg_body += "#{qty} X #{p.name} (#{p.description})\n"
+    end
+    @msg_body += "\n" + (@tech.preference.default_sig || '')
+  end
+  
+# TODO Need to record the referer URI in log
   def get_autocomplete_items(parameters)
     super(parameters).joins(:locations).where(["locations.team_id = ?", params[:team_id]]).group(:name)
   end

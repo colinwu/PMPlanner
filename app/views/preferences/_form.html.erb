@@ -5,9 +5,9 @@
     <legend>General Display and Pager Setting</legend>
     <div class="left_field_label">Initial Screen</div>
     <%= f.select 'default_root_path', [
+        ['Search Screen', '/devices/search'],
         ['My PM List', '/devices/my_pm_list'],
         ['My Territory', '/devices'],
-        ['Data Entry', '/devices/0/enter_data'],
         ['Data Analysis', '/devices/0/analyze_data'],
         ['Service History', '/devices/0/service_history']
       ]
