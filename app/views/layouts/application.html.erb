@@ -36,8 +36,8 @@
         <li><%= link_to "#{replace_my} Territory", devices_path, id: "territory_menu" %></li>
         <li><%= link_to "#{replace_my} Contacts", contacts_path, id: "contacts_menu" %></li>
         <li><%= link_to "#{replace_my} PM List", my_pm_list_devices_path, id: "pm_list_menu" %></li>
-        <li><%= link_to_unless @device.nil?, "PM Status", {controller: '/devices', action: 'analyze_data', id: @device}, id: "analyze_data_menu" %></li>
-        <li><%= link_to_unless @device.nil?, "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_menu" %></li>
+        <li><%= link_to_unless (@device.nil? or @device.id.nil?), "PM Status", {controller: '/devices', action: 'analyze_data', id: @device}, id: "analyze_data_menu" %></li>
+        <li><%= link_to_unless (@device.nil? or @device.id.nil?), "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_menu" %></li>
         <% if not current_user.nil? and (current_user.admin? or current_user.manager?) %>
           <li><%= link_to "My Team", technicians_path, id: "team_menu" %></li>
           <li><%= link_to "Transfers", transfers_path, id: "transfer_menu" %></li>
