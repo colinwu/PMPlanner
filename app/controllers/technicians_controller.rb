@@ -88,7 +88,7 @@ class TechniciansController < ApplicationController
   end
   
   def root_dispatch
-    redirect_to current_technician.preference.default_root_path
+    redirect_to current_user.preference.default_root_path
   end
   
   def select_territory

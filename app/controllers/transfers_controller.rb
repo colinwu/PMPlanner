@@ -24,27 +24,29 @@ class TransfersController < ApplicationController
   end
   
   def handle_checked
-    dev_ids = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
-    devices = Device.find(dev_ids)
-    devices.each do |dev|
-      if params[:accept]
-        t = dev.transfers.first
-        t.accepted = true
-        t.save
-        dev.team_id = t.to_team_id
-        dev.primary_tech_id = nil
-        dev.backup_tech_id = nil
-        dev.location.contacts.delete
-        dev.save
-        current_technician.logs.create(device_id: dev.id, message: "Accepted transfer of device")
-        flash[:notice] = "Transfer accepted"
-      elsif params[:cancel]
-        dev.transfers.first.destroy
-        current_technician.logs.create(device_id: dev.id, message: "Cancelled transfer of device")
-        flash[:notice] = "Transfer cancelled"
-        # TODO Should send email to notify original receiving manager
+    unless params[:device].nil?
+      dev_ids = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
+      devices = Device.find(dev_ids)
+      devices.each do |dev|
+        if params[:accept]
+          t = dev.transfers.first
+          t.accepted = true
+          t.save
+          dev.team_id = t.to_team_id
+          dev.primary_tech_id = nil
+          dev.backup_tech_id = nil
+          dev.location.contacts.delete
+          dev.save
+          current_technician.logs.create(device_id: dev.id, message: "Accepted transfer of device")
+          flash[:notice] = "Transfer accepted"
+        elsif params[:cancel]
+          dev.transfers.first.destroy
+          current_technician.logs.create(device_id: dev.id, message: "Cancelled transfer of device")
+          flash[:notice] = "Transfer cancelled"
+          # TODO Should send email to notify original receiving manager
+        end
       end
     end
-    redirect_to back_or_go_here()
+    redirect_to back_or_go_here()      
   end
 end
