@@ -31,7 +31,7 @@ class TechniciansController < ApplicationController
       @technician.create_preference(
         limit_to_region: true,
         limit_to_territory: true,
-        default_root_path: '/devices/my_pm_list',
+        default_root_path: '/devices/search',
         lines_per_page: 25,
         upcoming_interval: 2,
         default_to_email: 'sharpdirectparts@sharpsec.com',
@@ -73,7 +73,7 @@ class TechniciansController < ApplicationController
 
   def destroy
     if current_user.admin?
-      if param[:id] == current_technician.id
+      if param[:id] == current_user.id
         flash[:error] = "You can not delete yourself."
         redirect_to root_url
       else
@@ -88,7 +88,7 @@ class TechniciansController < ApplicationController
   end
   
   def root_dispatch
-    redirect_to current_user.preference.default_root_path
+    redirect_to current_technician.preference.default_root_path
   end
   
   def select_territory

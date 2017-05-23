@@ -58,6 +58,7 @@ class PreferencesController < ApplicationController
     if @preference.update_attributes(params[:preference])
       current_user.logs.create(message: "Preference data updated: #{params[:preference].inspect}")
       redirect_to @preference.default_root_path
+      current_user.preference(true)
     else
       render :action => 'edit'
     end
