@@ -37,6 +37,7 @@ class SessionsController < ApplicationController
     session[:act_as] = nil
     session[:active_at] = nil
     session[:user] = nil
+    session[:uri] = nil
     redirect_to root_url, notice: "Logged out."
   end
 end
