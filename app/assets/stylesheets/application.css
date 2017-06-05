@@ -37,10 +37,10 @@
 }
 
 #container {
-  width: 90%;
+  width: 95%;
   margin: 0 auto;
   background-color: #FFFFDD;
-  padding: 20px 30px;
+  padding: 10px 10px;
   border: solid 1px black;
   margin-top: 20px;
 }
@@ -64,6 +64,7 @@
 
 #flash_alert {
   color: #FF8000;
+  font-weight: bold;
 }
 #flash_error {
   color: red;
@@ -200,6 +201,9 @@
   text-align: right;
 }
 
+.center {
+  text-align: center;
+}
 .light {
   background-color: #FFFFDD;
 }

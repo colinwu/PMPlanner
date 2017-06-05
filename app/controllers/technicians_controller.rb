@@ -73,27 +73,34 @@ class TechniciansController < ApplicationController
 
   def destroy
     if current_user.admin?
-      if param[:id] == current_user.id
+      if params[:id] == current_user.id
         flash[:error] = "You can not delete yourself."
         redirect_to root_url
       else
         @technician = Technician.find(params[:id])
-        @technician.destroy
-        redirect_to technicians_url, :notice => "Successfully removed technician."
+        if @technician.primary_devices.empty? and @technician.backup_devices.empty?
+          current_user.logs.create(message: "Technician #{@technician.full_name} deleted.")
+          @technician.destroy
+          flash[:notice] = "Successfully removed technician."
+          redirect_to technicians_url
+        else
+          flash[:alert] = "#{@technician.full_name} still has devices assigned. Please reassign them first."
+          redirect_to technicians_url
+        end
       end
     else
-      flash[:notice] = "Only admins can delete technicians."
+      flash[:error] = "Only admins can delete technicians."
       redirect_to root_url
     end
   end
   
   def root_dispatch
-    redirect_to current_technician.preference.default_root_path
+    redirect_to current_user.preference.default_root_path
   end
   
   def select_territory
     unless params[:tech_id].blank?
-      session[:tech] = Technician.find params[:tech_id]
+      session[:tech] = params[:tech_id]
       flash[:notice] = "Territory selected"
       current_user.logs.create(message: "Working with territory for technician #{params[:tech_id]} (#{current_technician.full_name})")
     else

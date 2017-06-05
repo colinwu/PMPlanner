@@ -95,7 +95,6 @@ class DevicesController < ApplicationController
   def new
     @title = "Add a new device"
     session[:caller] = request.path_parameters[:action]
-    you_are_here
     @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
 # only admin or manager can add devices
     if current_user.admin? or current_user.manager?
@@ -133,6 +132,12 @@ class DevicesController < ApplicationController
       flash[:alert] = nil
       flash[:error] = nil
       flash[:notice] = "Successfully created device record."
+      @device.create_neglected(next_visit: nil)
+      @device.create_device_stat()
+      @device.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
+        op = OutstandingPm.find_or_create_by(device_id: @device.id, code: t.maint_code)
+        op.update_attributes(next_pm_date: params[:first_visit])
+      end
       redirect_to back_or_go_here(edit_device_url(@device))
     else
       @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
@@ -549,35 +554,29 @@ class DevicesController < ApplicationController
       render "all_parts"
     elsif params[:transfer]
       @title = "Start Device Transfer"
-      @tech = current_user
-      @dev_list = []
-      @from_region = current_technician.team.name
-      unless params[:to_team_id].blank? or Team.find(params[:to_team_id]).nil?
-        to_team_id = params[:to_team_id]
-        # TODO add each device to message body.
+      from_tech = current_technician
+      to_tech_id = params[:to_tech_id]
+      unless params[:to_tech_id].blank? and Technician.exists?(to_tech_id)
         @devices.each do |dev|
-          if dev.transfer_to(params[:to_team_id])
-            @dev_list << dev
+          if dev.primary_tech_id = from_tech.id
+            dev.update_attributes(primary_tech_id: to_tech_id)
+            current_user.logs.create(message: "Device s/n #{dev.serial_number} transfered to #{Technician.find(to_tech_id).friendly_name} as primary.")
+          elsif dev.backup_tech_id = from_tech.id
+            dev.update_attributes(backup_tech_id: to_tech_id)
+            current_user.logs.create(message: "Device s/n #{dev.serial_number} transfered to #{Technician.find(to_tech_id).friendly_name} as backup.")
           else
-            current_user.logs.create(device_id: dev.id, message: "Could not initiate transfer for this device.")
+            flash[:error] = "Device s/n #{dev.serial_number} was not assigned to #{from_tech} as either primary or backup."
           end
         end
-        # find receiving manager
-        @to_manager = Technician.where(["team_id = ? and manager = TRUE", to_team_id]).first
-        if @to_manager.nil?
-          flash[:error] = "Could not find a manager for the 'to' region"
-          redirect_to back_or_go_here()
-        elsif @dev_list.empty?
-          flash[:error] = "No devices selected for transfer"
-          redirect_to back_or_go_here()
-        else
-          render 'start_transfer'
-        end
       else
-        flash[:error] = 'Unknown "to region" for transfer.'
-        redirect_to back_or_go_here()
+        flash[:error] = "No valid 'to' technician specified."
       end
-    elsif params[:showbackup] == 'true'
+      redirect_to back_or_go_here
+    end
+  end
+  
+  def show_or_hide_backup
+    if params[:showbackup] == 'true'
       redirect_to action: 'my_pm_list', showbackup: 'true'
     elsif params[:showbackup] == 'false'
       redirect_to action: 'my_pm_list', showbackup: 'false'
@@ -622,10 +621,10 @@ class DevicesController < ApplicationController
       
       # toggle to show devices for which the current tech is the backup tech
       if @showbackup == "true"
-        where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true"]
+        where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
         search_ar = ["",tech.id, tech.id]
       else
-        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true"]
+        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
         search_ar = ["", tech.id]
       end
       
@@ -659,27 +658,23 @@ class DevicesController < ApplicationController
       search_ar[0] = where_ar.join(' and ')
       
       if (sort_column == 'outstanding_pms')
-        code_count = {}
-        sorted_count = []
-        devs = Device.where(search_ar).joins(:location, :client, :model)
+        code_date = {}
+        sorted_counts = []
+        devs = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).uniq
         devs.each do |d| 
-          if d.active and d.under_contract and d.do_pm
-            if !d.outstanding_pms.empty? or (!d.neglected.nil? and (d.neglected.next_visit < (@now + range*2)))
-              code_count[d.id] = d.outstanding_pms.count
-            end
-          end
+          code_date[d.id] = d.outstanding_pms.where("next_pm_date is not NULL").empty? ? d.neglected.next_visit : d.outstanding_pms.where("next_pm_date is not NULL").order(:next_pm_date).first.next_pm_date
         end
-        sorted_count = code_count.sort_by { |k,v| v }
+        sorted_dates = code_date.sort_by { |k,v| v }
         if (sort_direction == 'desc')
-          sorted_count.reverse!
+          sorted_dates.reverse!
         end
-        sorted_count.each do |c|
+        sorted_dates.each do |c|
           @dev_list << devs.find(c[0])
         end
       else
         Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).each do |dev|
 #           if dev.active and dev.under_contract and dev.do_pm
-            if !dev.outstanding_pms.empty? or (!dev.neglected.nil? and (dev.neglected.next_visit < (@now + range*2)))
+          if !dev.outstanding_pms.where("next_pm_date is not NULL").empty? or (!dev.neglected.next_visit.nil? and (dev.neglected.next_visit < (@now + range*2)))
               @dev_list << dev
             end # if
 #           end # if
@@ -776,7 +771,6 @@ class DevicesController < ApplicationController
   def service_history
     session[:search_caller] = request.path_parameters[:action]
     you_are_here
-    
     begin
       @device = Device.find(params[:id])
     rescue
@@ -789,8 +783,7 @@ class DevicesController < ApplicationController
       return
     end
     
-    if @device and current_technician.can_manage?(@device)      
-      @reading = @device.readings.build(technician_id: current_technician.id)
+    if @device and current_user.can_manage?(@device)      
       @last_reading = @device.readings.order(:taken_at).last
       
       if @device.device_stat.nil?
@@ -842,26 +835,6 @@ class DevicesController < ApplicationController
       end
     else
       flash[:error] = 'Appropriate email parameters not found.'
-      redirect_to back_or_go_here
-    end
-  end
-  
-  def send_transfer
-    unless params[:email].nil? or params[:device].nil?
-      dev_id_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
-      @dev_list = Device.find(dev_id_list)
-      @from_region = current_technician.team.name
-      email = params[:email]
-      email_to = email[:to]
-      email_from = email[:from]
-      email_sub = email[:subject]
-      email_cc = email[:cc]
-      msg = email[:msg]
-      DeviceMailer.send_transfer_request(email_to, email_cc, email_from, email_sub, msg, @from_region, @dev_list).deliver_now
-      flash[:notice] = "Transfer request has been sent"
-      redirect_to back_or_go_here
-    else
-      flash[:error] = 'Appropriate email parameters not found or no valid devices selected.'
       redirect_to back_or_go_here
     end
   end

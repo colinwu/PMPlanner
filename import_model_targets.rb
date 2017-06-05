@@ -28,7 +28,7 @@ if (File.exists?(csv_file))
       m.model_targets.find_or_create_by(target: 0, maint_code: 'CTOTAL', unit: 'count')
     end
     target_names.each do |t|
-      next if row[t].nil?
+      next if row[t].nil? or row[t] == '0'
       found_target = false
       # See if there are any targets already associated with this model
       unless m.model_targets.empty?

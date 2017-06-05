@@ -8,13 +8,13 @@ module ApplicationHelper
   
   def pm_status_class(dev)
     range = dev.primary_tech.preference.upcoming_interval * 7
-    if (not dev.outstanding_pms.where("next_pm_date < ?", Date.today).empty?)
+    if (not dev.outstanding_pms.where("next_pm_date is not NULL and next_pm_date < ?", Date.today).empty?)
       'past_due'
     elsif (not dev.outstanding_pms.empty?)
-      npd = dev.outstanding_pms.order(:next_pm_date).first.next_pm_date
-      if (npd < Date.today + range)
+      npd = dev.outstanding_pms.order(:next_pm_date).where("next_pm_date is not NULL").first
+      if (not npd.nil? and npd.next_pm_date < (Date.today + range))
         'in_range'
-      elsif (npd < Date.today + range*2)
+      elsif (not npd.nil? and npd.next_pm_date < Date.today + range*2)
         'range2'
       end
     elsif not dev.neglected.nil?

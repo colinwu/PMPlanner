@@ -16,7 +16,7 @@
       Current Estimate
       <% else %>
       Today's Entry
-      <% end %><br /><%= text_field_tag 'reading[taken_at]', Date::today %></th>
+      <% end %><br /><%= text_field_tag 'reading[taken_at]', Date::today.to_s(:MdY), {class: 'center'} %></th>
     <th>Progress to next PM</th>
     <th>Next PM Date</th>
   </tr>
@@ -28,8 +28,8 @@
         <td><%= r[1].upcase %></td>
         <td><%= r[2] %></td>
         <td class=rightjustify><span id="prev_<%= r[1].upcase %>"><%= number_with_delimiter(r[3]) %></span></td>
-        <td class=rightjustify><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]) %></td>
-        <td class=rightjustify><%= progress_bar(r[5], :color => 'blue', :tiny => true, :rounded => false) %></td>
+        <td class=rightjustify><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify'} %></td>
+        <td class=rightjustify><%= progress_bar(r[5], :color => 'white', :tiny => true, :rounded => false) %></td>
         <td class=rightjustify><%= r[6] %> </td>
       </tr>
     <% end %>

@@ -14,10 +14,10 @@ class Device < ActiveRecord::Base
   has_one :device_stat, :dependent => :destroy
   has_many :transfers, :dependent => :destroy
   
-  validates :crm_object_id, :location_id, :client_id, numericality: { greater_than: 0 }
+  validates :primary_tech_id, :backup_tech_id, :location_id, :client_id, numericality: { greater_than: 0 }
   validates :crm_object_id, :serial_number, :location_id, presence: true
   validates :crm_object_id, :serial_number, uniqueness: true
-  validates_associated :model
+  validates_associated :model, :outstanding_pms
   
   delegate :name, to: :client , prefix: true, allow_nil: true
   delegate :nm, to: :model, prefix: true, allow_nil: true
@@ -43,14 +43,14 @@ class Device < ActiveRecord::Base
         last_ctotal = last_reading.counter_for('ctotal')
         last_c_val = last_ctotal.nil? ? 0 : last_ctotal.value
         c_daily = 1.0*(last_c_val - first_c_val)/first_last_interval
-        c_monthly = 30.5*c_daily
+        c_monthly = (c_daily > 0) ? 30.5*c_daily : 0
       end
       first_bwtotal = first_reading.counter_for('bwtotal')
       first_bw_val = first_bwtotal.nil? ? 0 : first_bwtotal.value
       last_bwtotal = last_reading.counter_for('bwtotal')
       last_bw_val = last_bwtotal.nil? ? 0 : last_bwtotal.value
       bw_daily = 1.0*(last_bw_val - first_bw_val)/first_last_interval
-      bw_monthly = 30.5*bw_daily
+      bw_monthly = (bw_daily > 0) ? 30.5*bw_daily : 0
       
       vpy = 2.0
       if (self.active and self.do_pm)
@@ -62,16 +62,18 @@ class Device < ActiveRecord::Base
     end
   end
 
-  def update_pm_visit_tables
+  def update_pm_visit_tables(codes_list = [])
     now = Date.today
+    ds = DeviceStat.find_or_create_by(device_id: self.id)
+    neg = Neglected.find_or_create_by(device_id: self.id)
+    midnight = Time.parse(now.to_s)
     prev_reading = self.last_non_zero_reading_on_or_before(now)
     unless prev_reading.nil? 
-      first_outstanding = self.outstanding_pms.first
-      unless first_outstanding.nil?
-        midnight = Time.parse(now.to_s)
-        if (first_outstanding.created_at > midnight) and (first_outstanding.created_at > self.readings.order(:taken_at).last.created_at) 
-          return nil
-        end
+      oldest_outstanding = self.outstanding_pms.order(:updated_at).first
+      unless oldest_outstanding.nil?
+#         if (oldest_outstanding.updated_at > midnight) and (oldest_outstanding.updated_at > self.readings.order(:updated_at).last.updated_at) 
+#           return nil
+#         end
       end
       # See if this will help with making it run faster
       pm_code = Hash.new
@@ -81,17 +83,14 @@ class Device < ActiveRecord::Base
       
       range = self.primary_tech.preference.upcoming_interval * 7 # in days
       
-      # clear the outsanding and neglected records
-      self.outstanding_pms.clear
-      self.neglected.destroy unless self.neglected.nil?
-      self.device_stat.destroy unless self.device_stat.nil?
-      
       stats = self.calculate_stats
       bw_monthly = stats['bw_monthly']
       c_monthly = stats['c_monthly']
       vpy = stats['vpy']
-      self.create_device_stat(c_monthly: c_monthly, bw_monthly: bw_monthly, vpy: vpy)
-            
+      
+      ds.update_attributes(c_monthly: c_monthly, bw_monthly: bw_monthly, vpy: vpy)
+      self.device_stat(true)
+      
       last_now_interval = Date.today - prev_reading.taken_at
       
       ### NOTE May be able to skip this section if Total counters are not included,
@@ -106,10 +105,12 @@ class Device < ActiveRecord::Base
       
       # BW and C progress % and PM Dates depend on @vpy
       visit_interval = 365 / vpy
-      next_pm_date = prev_reading.taken_at + visit_interval.round
+#       next_pm_date = prev_reading.taken_at + visit_interval.round
       ###
       # Now calculate stuff for all the other PM codes
-      codes_list = self.model.model_group.model_targets.where("maint_code <> 'amv'").map {|t| t.maint_code }
+      if codes_list.empty?
+        codes_list = self.model.model_group.model_targets.where("maint_code <> 'amv'").map {|t| t.maint_code }
+      end
       codes_list.each do |c|
         target = self.target_for(c)
         unless target.nil? or target.target == 0
@@ -130,20 +131,22 @@ class Device < ActiveRecord::Base
           else
             next_pm_date = (now + ((target_val - estimate) / daily))
           end
+          if next_pm_date > now + 366
+            next_pm_date = now + 366
+          end
           unless (c == 'TA' or c == 'CA')
-            if (next_pm_date < now + 2*range)
-              self.outstanding_pms.create(code: c, next_pm_date: next_pm_date)
-            end
+            op = OutstandingPm.find_or_create_by(device_id: self.id, code: c)
+            op.update_attributes(next_pm_date: next_pm_date)
           end
         end # unless target.nil? or target.target == 0
       end # codes_list.each do |c|
-      if self.outstanding_pms.empty?
-        self.create_neglected(next_visit: (prev_reading.taken_at + (365/vpy).round))
+      if self.outstanding_pms.where("next_pm_date is not NULL").empty?
+        # basically, no outstanding PMs so just schedule the next PM based on vpy
+        neg.update_attributes(next_visit: (prev_reading.taken_at + (365/vpy).round))
       end
-    else
-      self.create_neglected(next_visit: Date.today)
-    end # unless self.readings.empty?
-    
+    else # no previous readings, so no stats and no outstanding_pms
+      neg.update_attributes(next_visit: Date.today)
+    end
   end
 
   def last_non_zero_reading_on_or_before(date = Date.today)

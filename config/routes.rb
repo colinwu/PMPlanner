@@ -72,8 +72,8 @@ PmPlanner::Application.routes.draw do
       delete 'rm_contact'
       get 'search'
       post 'send_order'
-      post 'send_transfer'
       post 'write_parts_order'
+      post 'show_or_hide_backup'
     end
     member do
       get 'enter_data'
@@ -82,7 +82,6 @@ PmPlanner::Application.routes.draw do
       post 'record_data'
       post 'parts_for_pm'
       post 'add_contact_for'
-      get 'transfer'
       get 'get_pm_codes_list'
     end
   end

@@ -47,6 +47,9 @@
         <span class="left_field_label">Manager</span>
         <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.full_name}" %>
         <%= text_field_tag :manager, manager, :readonly => @readonly_flag %>
+        <br />
+        <span class="left_field_label" title="When do you want the tech to make the first visit?">Date of 1st visit (?)</span>
+        <%= text_field_tag 'first_visit', Date::today.to_s(:MdY), {class: 'center'} %>
       </td>
       <td width=33%>
         Equipment Status:<br /><br />
@@ -67,12 +70,12 @@
   <p><hr /></p>
   <table width="100%">
     <tr><td>
-      <span class="left_field_label">Customer</span>
+      <span class="left_field_label" title="Start typing the customer's name...">Customer (?)</span>
       <%= f.hidden_field :client_id %>
       <%= f.hidden_field 'location_id' %>
       <%= autocomplete_field_tag :client_name, @device.client_name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', :size => 60 %>
     <br />
-      <span class="left_field_label">Location</span>
+      <span class="left_field_label" title="Select from the list once you've entered a valid customer name.">Location (?)</span>
       <div id="device_location">
         <% @locations.each do |loc| %>
           <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc) %><br />
@@ -86,7 +89,7 @@
         <span class='left_field_label'>City</span>
           <%= text_field_tag 'location[city]', '', size: 40 %><br />
         <span class='left_field_label'>Province</span>
-          <%= select_tag 'location[province]', options_for_select([['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]) %><br />
+          <%= select_tag 'location[province]', options_for_select([['',''],['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]) %><br />
         <span class='left_field_label'>Postal Code</span>
           <%= text_field_tag 'location[post_code]', '', size: 7 %>
         </fieldset>

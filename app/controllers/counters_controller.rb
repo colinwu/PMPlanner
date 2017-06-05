@@ -30,6 +30,7 @@ class CountersController < ApplicationController
     @counter = Counter.find(params[:id])
     respond_to do |format|
       if @counter.update_attributes(params[:counter])
+        @counter.reading.device.update_pm_visit_tables([@counter.pm_code.name])
         format.html {redirect_to((back_or_go_here(root_path)), :notice => "Update successful") }
         format.json {respond_with_bip(@counter)}
       else

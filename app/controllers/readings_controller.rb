@@ -36,11 +36,16 @@ class ReadingsController < ApplicationController
   end
 
   def update
+    byebug
     @reading = Reading.find(params[:id])
-    if @reading.update_attributes(reading_params)
-      redirect_to @reading, :notice  => "Successfully updated reading."
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @reading.update_attributes(reading_params)
+        format.html {redirect_to @reading, :notice  => "Successfully updated reading."}
+        format.json {respond_with_bip(@reading)}
+      else
+        format.html {render :action => 'edit', :notice => "Problem with data."}
+        format.json {respond_with_bip(@reading)}
+      end
     end
   end
 

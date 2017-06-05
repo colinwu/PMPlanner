@@ -40,14 +40,14 @@
   <tr>
     <td class=boxed>
     <% unless @device.nil? %>
-      <strong><%=h @device.model.nm %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %></strong><br /><br />
+      <strong><%=h @device.model.nm %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %></strong><br />
       <%=h @device.client.name %><br />
-      <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br /><br />
-      Monthly average: BW = <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; COL = <%= number_with_delimiter(@c_monthly.round) %><% else %>; COL = Unknown<% end %>
+      <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br />
+      <strong>Monthly average: BW = <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; COL = <%= number_with_delimiter(@c_monthly.round) %><% else %>; COL = Unknown<% end %>
       <% if @vpy > 0 -%>
-        ; PM visits per year: <%= number_with_precision(@vpy, precision: 2) %><br />
+        ; PM visits per year: <%= number_with_precision(@vpy, precision: 2) %><br /></strong>
         <% unless @last_reading.nil? %>
-          <strong>Notes from <%= @last_reading.taken_at.strftime('%b %-d, %Y') %>:</strong> <%=h @last_reading.notes %>
+          <strong>Notes from <%= @last_reading.taken_at.to_s(:MdY) %>:</strong> <%=h @last_reading.notes %>
         <% end %>
       <% end %>
     <% end %>

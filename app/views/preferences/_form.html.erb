@@ -5,7 +5,7 @@
     <legend>General Display and Pager Setting</legend>
     <div class="left_field_label">Initial Screen</div>
     <%= f.select 'default_root_path', [
-        ['Search Screen', '/devices/search'],
+        ['Home', '/devices/search'],
         ['My PM List', '/devices/my_pm_list'],
         ['My Territory', '/devices'],
         ['Data Analysis', '/devices/0/analyze_data'],
@@ -27,10 +27,6 @@
     Allow selection of territory<br />-->
     <%= f.check_box :showbackup %>
     Show devices for which I am the backup technician<br />
-    <p>
-    <div class="left_field_label">Territory:</div><%= f.text_field :territory_to_explore %></p>
-    <p>
-    <div class="left_field_label">Units to show:</div> <%= f.text_field :default_units_to_show %></p>
     <p>
     <div class="left_field_label">Forecast range:</div> <%= f.number_field :upcoming_interval %> weeks</p>
   </fieldset>

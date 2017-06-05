@@ -22,14 +22,14 @@
     <td>TotBW</td>
     <td>Total Counter: TotBW</td>
     <td class=rightjustify><%= number_with_delimiter(@lastbw) %></td>
-    <td class=rightjustify><%= text_field_tag "counter[BWTOTAL]" %></td>
+    <td class=rightjustify><%= text_field_tag "counter[BWTOTAL]", '', {class: 'rightjustify'} %></td>
   </tr>
   <% if @device.model.model_group.color_flag %>
     <tr>
       <td>TotC</td>
       <td>Total Counter: TotC</td>
       <td class=rightjustify><%= number_with_delimiter(@lastc) %></td>
-      <td class=rightjustify><%= text_field_tag "counter[CTOTAL]" %></td>
+      <td class=rightjustify><%= text_field_tag "counter[CTOTAL]", '', {class: 'rightjustify'} %></td>
     </tr>
   <% end %>
 
@@ -41,7 +41,7 @@
         <td><%= c.upcase %></td>
         <td><%= pm_code.description %></td>
         <td class=rightjustify><span id="prev_<%= c.upcase %>"><%= prev.nil? ? '' : number_with_delimiter(prev.value) %></span></td>
-        <td class=rightjustify><%= text_field_tag "counter[#{c.upcase}]" %></td>
+        <td class=rightjustify><%= text_field_tag "counter[#{c.upcase}]", '', {class: 'rightjustify'} %></td>
       </tr>
     <% end %>
   <% end %>

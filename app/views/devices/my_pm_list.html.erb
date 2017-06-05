@@ -1,40 +1,8 @@
 <% title @title, false %>
 <table width=100%>
-  <caption>Devices with outstanding PMs</caption>
-  <tr class=pretty>
-  <th></th>
-  <th><%= sortable 'crm_object_id', 'CRM ID' %></th>
-  <th><%= sortable 'models.nm', 'Model' %></th>
-  <th><%= sortable 'serial_number', 'Serial Number' %></th>
-  <th><%= sortable 'clients.name', 'Client Name' %></th>
-  <th><%= sortable 'locations.address1', 'Address' %></th>
-  <th><%= sortable 'locations.city', 'City' %></th>
-  <th><%= sortable 'outstanding_pms', 'Codes' %></th>
-  </tr>
-  <tr class=search_fields>
-  <%= form_tag my_pm_list_devices_url, :method => :get do %>
-  <%= hidden_field_tag 'sort', sort_column('locations.address1') %>
-  <%= hidden_field_tag 'direction', sort_direction %>
-  <td></td>
-  <td id="search_crm_cell"><%= text_field_tag "search[crm]", @search_params['crm'], :size => 1 %></td>
-  <td id="search_model_cell"><%= text_field_tag "search[model]", @search_params[:model], :size => 1 %></td>
-  <td id="search_sn_cell"><%= text_field_tag "search[sn]", @search_params[:sn], :size => 1 %></td>
-  <td id="search_client_name_cell"><%= text_field_tag "search[client_name]", @search_params[:client_name], :size => 1 %></td>
-  <td id="search_addr1_cell"><%= text_field_tag "search[addr1]", @search_params[:addr1], :size => 1 %></td>
-  <td id="search_city_cell"><%= text_field_tag "search[city]", @search_params[:city], :size => 1 %></td>
-  <td><%= submit_tag 'Search', :name => nil %></td>
-  <% end %>
-  </tr>
-  <%= form_tag handle_checked_devices_url do %>
-    <div class=context_menu>
-      For selected devices (or all devices if none selected): 
-      <%= submit_tag "Create Parts List", name: 'parts' %> | 
-      <%= submit_tag "Create PM Order", name: 'service' %> | 
-      <%= submit_tag "List All Parts", name: 'all_parts' %>
-      <% if current_user.admin? or current_user.manager? %>
-        | Transfer device(s) to <%= select_tag :to_team_id, options_from_collection_for_select(Team.all, :id, :name), include_blank: true %><%= submit_tag "Go", name: 'transfer' %>
-      <% else %>
-        <span class=right_end>
+  <caption>Devices with outstanding PMs
+    <span class=right_end>
+      <%= form_tag show_or_hide_backup_devices_url do %>
         <% if @showbackup == 'true' %>
           <%= hidden_field_tag 'showbackup', "false" %>
           <%= submit_tag "Hide Backup Devices" %>
@@ -42,23 +10,56 @@
           <%= hidden_field_tag 'showbackup', "true" %>
           <%= submit_tag "Show Backup Devices" %>
         <% end %>
-        </span>
+      <% end %>
+    </span>
+  </caption>
+  <tr class=pretty>
+    <th></th>
+    <th><%= sortable 'crm_object_id', 'CRM ID' %></th>
+    <th><%= sortable 'models.nm', 'Model' %></th>
+    <th><%= sortable 'serial_number', 'Serial Number' %></th>
+    <th><%= sortable 'clients.name', 'Client Name' %></th>
+    <th><%= sortable 'locations.address1', 'Address' %></th>
+    <th><%= sortable 'locations.city', 'City' %></th>
+    <th><%= sortable 'outstanding_pms', 'Earliest PM' %></th>
+  </tr>
+  <tr class=search_fields>
+    <%= form_tag my_pm_list_devices_url, :method => :get do %>
+      <%= hidden_field_tag 'sort', sort_column('locations.address1') %>
+      <%= hidden_field_tag 'direction', sort_direction %>
+      <td></td>
+      <td id="search_crm_cell"><%= text_field_tag "search[crm]", @search_params['crm'], :size => 1 %></td>
+      <td id="search_model_cell"><%= text_field_tag "search[model]", @search_params[:model], :size => 1 %></td>
+      <td id="search_sn_cell"><%= text_field_tag "search[sn]", @search_params[:sn], :size => 1 %></td>
+      <td id="search_client_name_cell"><%= text_field_tag "search[client_name]", @search_params[:client_name], :size => 1 %></td>
+      <td id="search_addr1_cell"><%= text_field_tag "search[addr1]", @search_params[:addr1], :size => 1 %></td>
+      <td id="search_city_cell"><%= text_field_tag "search[city]", @search_params[:city], :size => 1 %></td>
+      <td><%= submit_tag 'Search', :name => nil %></td>
+    <% end %>
+  </tr>
+  <%= form_tag handle_checked_devices_url do %>
+    <div class=context_menu>
+      For selected devices (or all devices if none selected): 
+      <%= submit_tag "Create Parts List", name: 'parts' %> | 
+      <%= submit_tag "Create PM Order", name: 'service' %>
+      <% if current_user.admin? or current_user.manager? %>
+        | Transfer device(s) to <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), include_blank: true %> <%= submit_tag "Go", name: 'transfer' %>
       <% end %>
     </div>
     <br />
-  <% @dev_list.each do |dev| %>
-    <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
-    <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and  dev.backup_tech_id == current_technician.id %> backup_tech<% end %>">
-      <td><%= check_box_tag "device[#{dev.id}]", dev.id %></td>
-      <td class=rightjustify><%= link_to dev.crm_object_id, analyze_data_device_path(dev), title: "PM Analysis" %></td>
-      <td><%= dev.model.nm %></td>
-      <td><%= dev.serial_number %></td>
-      <td><%= dev.client.name %></td>
-      <td><%= dev.location.nil? ? '' : dev.location.address1 %></td>
-      <td><%= dev.location.nil? ? '' : dev.location.city %></td>
-      <td class='<%= pm_status_class(dev) %>'><%= dev.outstanding_pms.length %></td>
-    </tr>
+    <% @dev_list.each do |dev| %>
+      <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
+      <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and  dev.backup_tech_id == current_technician.id %> backup_tech<% end %>">
+        <td><%= check_box_tag "device[#{dev.id}]", dev.id %></td>
+        <td class=rightjustify><%= link_to dev.crm_object_id, analyze_data_device_path(dev), title: "PM Analysis" %></td>
+        <td><%= dev.model.nm %></td>
+        <td><%= dev.serial_number %></td>
+        <td><%= dev.client.name %></td>
+        <td><%= dev.location.nil? ? '' : dev.location.address1 %></td>
+        <td><%= dev.location.nil? ? '' : dev.location.city %></td>
+        <td class='<%= pm_status_class(dev) %>'><%= dev.outstanding_pms.order(:next_pm_date).where("next_pm_date is not NULL").first.next_pm_date.to_s(:MdY) %></td>
+      </tr>
+    <% end %>
   <% end %>
-<% end %>
 </table>
 <br />

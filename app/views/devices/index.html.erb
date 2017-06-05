@@ -8,7 +8,7 @@
     <th><%= sortable 'clients.name', 'Client Name', params[:search] %></th>
     <th><%= sortable 'locations.address1', 'Location', params[:search] %></th>
     <th><%= sortable 'locations.city', 'City', params[:search] %></th>
-    <th></th>
+    <th>Earliest PM</th>
   </tr>
   <tr class=search_fields>
   <%= form_tag devices_url, :method => :get do %>
@@ -25,18 +25,19 @@
   <% end %>
   </tr>
   
-  <%= form_tag handle_checked_devices_url do %>
-  <div class=context_menu>For selected devices (or all devices if none selected): 
-    <%= submit_tag "Create Parts List", name: 'parts' %> | 
-    <%= submit_tag "Create PM Order", name: 'service' %> | 
-    <%= submit_tag "List All Parts", name: 'all_parts' %>
-    <% if current_user.admin? or current_user.manager? %>
-      | Transfer device(s) to <%= select_tag :to_team_id, options_from_collection_for_select(Team.all, :id, :name), include_blank: true %><%= submit_tag "Go", name: 'transfer' %>
+  <% unless @devices.empty? %>
+    <%= form_tag handle_checked_devices_url do %>
+      <div class=context_menu>For selected devices (or all devices if none selected): 
+        <%= submit_tag "Create Parts List for PMs", name: 'parts' %> | 
+        <%= submit_tag "Create PM Order", name: 'service' %>
+        <% if current_user.admin? or current_user.manager? %>
+          | Transfer device(s) to <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), include_blank: true %> <%= submit_tag "Go", name: 'transfer' %>
+        <% end %>
+      </div>
     <% end %>
-  </div>
-    <br />
-    <%= render @devices %>
   <% end %>
+  <br />
+  <%= render @devices %>
   
 </table>
 <p>

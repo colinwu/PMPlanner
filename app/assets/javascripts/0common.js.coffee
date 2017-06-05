@@ -1,10 +1,20 @@
 jQuery ->
   $("#reading_taken_at").datetimepicker({
     timepicker: false,
-    format: 'Y-m-d',
+    format: 'M d, Y',
     closeOnDateSelect: true
     })
 
+  $("#first_visit").datetimepicker({
+    timepicker: false,
+    format: 'M d, Y',
+    closeOnDateSelect: true
+  })
+  
+  $.datepicker.setDefaults({
+    dateFormat: "yy-mm-dd"
+  })
+  
   $("body").css({"cursor": "default"})
   $("a").click ->
     $("body").css({"cursor": "wait"})

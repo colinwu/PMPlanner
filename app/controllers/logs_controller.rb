@@ -22,6 +22,9 @@ class LogsController < ApplicationController
 
   def create
     @log = Log.new(log_params)
+    if params[:log][:technician_id].nil? or params[:log][:technician_id].empty?
+      @log.technician_id = current_user.id
+    end
     @log.save
     respond_with(@log)
   end
@@ -42,6 +45,6 @@ class LogsController < ApplicationController
     end
 
     def log_params
-      params.require(:log).permit(:tech_id, :device_id, :message)
+      params.require(:log).permit(:technician_id, :device_id, :message)
     end
 end

@@ -38,11 +38,19 @@ class ApplicationController < ActionController::Base
   protected
   
   def current_technician
-    session[:tech]
+    unless session[:tech].nil?
+      Technician.find session[:tech]
+    else
+      nil
+    end
   end
     
   def current_user
-    session[:user]
+    unless session[:user].nil?
+      Technician.find session[:user]
+    else
+      nil
+    end
   end
   
   helper_method :current_user
