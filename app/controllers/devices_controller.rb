@@ -6,6 +6,9 @@ class DevicesController < ApplicationController
   
   def index
     you_are_here
+    if session[:showbackup].nil?
+      session[:showbackup] = current_user.preference.showbackup.to_s
+    end
     @search_params = params[:search] || Hash.new
     search_ar = ['placeholder']
     where_ar = []
@@ -67,10 +70,20 @@ class DevicesController < ApplicationController
       @title = "#{current_technician.friendly_name}'s Devices"
       @tech = current_technician
       unless where_ar.empty?
-        search_ar[0] = [search_ar[0], 'primary_tech_id = ?'].join(' and ')
-        search_ar << @tech.id
+        if session[:showbackup]
+          search_ar[0] = [search_ar[0], '(primary_tech_id = ? or backup_tech_id = ?)'].join(' and ')
+          search_ar << @tech.id
+          search_ar << @tech.id
+        else
+          search_ar[0] = [search_ar[0], 'primary_tech_id = ?'].join(' and ')
+          search_ar << @tech.id
+        end
       else
-        search_ar = ["primary_tech_id = ?", @tech.id]
+        if session[:showbackup]
+          search_ar = ['primary_tech_id = ? or backup_tech_id = ?', @tech.id, @tech.id]
+        else
+          search_ar = ["primary_tech_id = ?", @tech.id]
+        end
       end
       @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
     end
@@ -553,12 +566,13 @@ class DevicesController < ApplicationController
       end
       render "all_parts"
     elsif params[:transfer]
+      byebug
       @title = "Start Device Transfer"
       from_tech = current_technician
       to_tech_id = params[:to_tech_id]
       unless params[:to_tech_id].blank? and Technician.exists?(to_tech_id)
         @devices.each do |dev|
-          if dev.primary_tech_id = from_tech.id
+          if dev.primary_tech_id == from_tech.id
             dev.update_attributes(primary_tech_id: to_tech_id)
             current_user.logs.create(message: "Device s/n #{dev.serial_number} transfered to #{Technician.find(to_tech_id).friendly_name} as primary.")
           elsif dev.backup_tech_id = from_tech.id
@@ -577,9 +591,11 @@ class DevicesController < ApplicationController
   
   def show_or_hide_backup
     if params[:showbackup] == 'true'
-      redirect_to action: 'my_pm_list', showbackup: 'true'
+      session[:showbackup] = true
+      redirect_to request.env['HTTP_REFERER']
     elsif params[:showbackup] == 'false'
-      redirect_to action: 'my_pm_list', showbackup: 'false'
+      session[:showbackup] = false
+      redirect_to request.env['HTTP_REFERER']
     else
       redirect_to back_or_go_here()
     end
@@ -588,14 +604,8 @@ class DevicesController < ApplicationController
   def my_pm_list
     you_are_here
     @search_params = params[:search] || Hash.new
-    if params[:showbackup].nil?
-      @showbackup = current_user.preference.showbackup.to_s
-    else
-      if params[:showbackup] == 'true'
-        @showbackup = "true"
-      else
-        @showbackup = "false"
-      end
+    if session[:showbackup].nil?
+      session[:showbackup] = current_user.preference.showbackup.to_s
     end
     if current_technician.nil?
       if (current_user.admin?)
@@ -620,7 +630,7 @@ class DevicesController < ApplicationController
       range = tech.preference.upcoming_interval*7
       
       # toggle to show devices for which the current tech is the backup tech
-      if @showbackup == "true"
+      if session[:showbackup]
         where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
         search_ar = ["",tech.id, tech.id]
       else
@@ -657,7 +667,7 @@ class DevicesController < ApplicationController
       end
       search_ar[0] = where_ar.join(' and ')
       
-      if (sort_column == 'outstanding_pms')
+      if (sort_column == 'outstanding_pms' or sort_column.empty?)
         code_date = {}
         sorted_counts = []
         devs = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).uniq
@@ -736,7 +746,8 @@ class DevicesController < ApplicationController
   def record_data
 #     TODO: Should do some value sanity checking here
     @device = Device.find(params[:id])
-    @reading = @device.readings.find_or_create_by(taken_at: params[:reading][:taken_at])
+    taken_at = Date.parse(params[:reading][:taken_at])
+    @reading = @device.readings.find_or_create_by(taken_at: taken_at)
     @reading.update_attributes(params[:reading])
     params[:counter].each do |code,value|
       p = PmCode.find_by_name(code)

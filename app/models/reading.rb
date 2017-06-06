@@ -11,6 +11,7 @@ class Reading < ActiveRecord::Base
   validates_associated :device
   validates_associated :technician
   validate :taken_at_is_date
+#   validates :taken_at, uniqueness: true
   
   def counter_for(code)
     self.counters.joins(:pm_code).where(["pm_codes.name = ?", code]).first    

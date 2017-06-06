@@ -14,7 +14,7 @@
     <th>PM Code</th>
     <th>PM Description</th>
     <th>Previous Readings<br /><%= @last_reading.taken_at.strftime('%b %-d, %Y') %></th>
-    <th>Current Readings<br /><%= text_field_tag 'reading[taken_at]', @reading.taken_at %></th>
+    <th>Current Readings<br /><%= text_field_tag 'reading[taken_at]', @reading.taken_at, class: 'center' %></th>
     <th>Progress to next PM</th>
     <th>Next PM Date</th>
   </tr>

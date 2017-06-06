@@ -4,17 +4,13 @@
 
 <% unless @device.nil? %>
   <table width="100%">
+    <caption>Counter History</caption>
     <tr>
-      <th rowspan=2>Date</th>
-      <th colspan=2>Total Counters</th>
-      <th colspan=99>Maintenance Counters</th>
-    </tr>
-    <tr>
+      <th>Date Readings Taken</th>
       <th>BW</th>
-      <th><% if @device.model.model_group.color_flag %>
-        Colour
+      <% if @device.model.model_group.color_flag %>
+        <th>Colour</th>
       <% end %>
-      </th>
       <% @all_codes.each do |c| %>
         <th><%=h c %></th>
       <% end %>

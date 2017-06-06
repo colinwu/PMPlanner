@@ -22,11 +22,6 @@
     <% unless @device.nil? %>
       <% case button
         when "enter" %>
-          <%= form_tag analyze_data_device_path(@device), method: :get do %>
-            <% unless @device.readings.size <= 1 %>
-              <%= submit_tag "View estimated counters and PM dates" %>
-            <% end %>
-          <% end %>
       <% when "analysis" %>
           <%= form_tag handle_checked_devices_path do %>
             <%= hidden_field_tag "device[#{@device.id}]", @device.id %>

@@ -40,7 +40,6 @@
         <li><%= link_to_unless (@device.nil? or @device.id.nil?), "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_menu" %></li>
         <% if not current_user.nil? and (current_user.admin? or current_user.manager?) %>
           <li><%= link_to "My Team", technicians_path, id: "team_menu" %></li>
-          <li><%= link_to "Transfers", transfers_path, id: "transfer_menu" %></li>
           <li>
             <%= form_tag select_territory_technicians_path, :id => 'tech_select' do %>
               <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), include_blank: true %>

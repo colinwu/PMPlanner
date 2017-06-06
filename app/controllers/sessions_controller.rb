@@ -14,7 +14,6 @@ class SessionsController < ApplicationController
       params[:username] =~ /\\(.+)$/
       sAMAccountName = $1
       if ldap.bind
-#         session[:tech] = nil
         session[:user] = tech.id
         session[:active_at] = Time.now
         current_user.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
@@ -38,6 +37,7 @@ class SessionsController < ApplicationController
     session[:active_at] = nil
     session[:user] = nil
     session[:uri] = nil
+    session[:showbackup] = nil
     redirect_to root_url, notice: "Logged out."
   end
 end
