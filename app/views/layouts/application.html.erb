@@ -21,7 +21,8 @@
             <% WillPaginate.per_page = current_user.preference.lines_per_page %>
             Signed in as <%= current_user.friendly_name -%> | 
             <%= link_to "Sign out", logout_path %> |
-            <%= link_to "My profile", edit_preference_path(current_user) %>
+            <%= link_to "My profile", edit_preference_path(current_user) %> |
+            <%= link_to "Bug Report/Feature Request", "mailto://wuc@sharpsec.com?subject=PM Planner issue" %>
           <% else %>
             <%= link_to "Sign in", login_path %>
           <% end %>
@@ -51,5 +52,6 @@
       </div>
       <%= yield %>
     </div>
+    <%= debug(session[:uri]) %>
   </body>
 </html>

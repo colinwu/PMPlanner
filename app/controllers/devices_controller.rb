@@ -566,7 +566,6 @@ class DevicesController < ApplicationController
       end
       render "all_parts"
     elsif params[:transfer]
-      byebug
       @title = "Start Device Transfer"
       from_tech = current_technician
       to_tech_id = params[:to_tech_id]

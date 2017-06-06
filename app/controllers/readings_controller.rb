@@ -36,7 +36,6 @@ class ReadingsController < ApplicationController
   end
 
   def update
-    byebug
     @reading = Reading.find(params[:id])
     respond_to do |format|
       if @reading.update_attributes(reading_params)
