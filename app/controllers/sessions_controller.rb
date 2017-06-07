@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
         render :new
       end
     else
-      Log.create(message: "Unknown tech: #{username}")
+      Log.create(message: "Unknown tech: #{username }")
       flash[:notice] = "Sorry, you are not authorized to use this application."
       render :new
     end
