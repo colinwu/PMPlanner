@@ -15,7 +15,7 @@
     <% @logs.each do |log| %>
       <tr>
         <td><%= log.created_at.to_formatted_s(:rfc822) %></td>
-        <td><%= log.technician.friendly_name %></td>
+        <td><%= log.technician.nil? ? '' : log.technician.friendly_name %></td>
         <td><%= log.device.nil? ? '' : log.device.crm_object_id %></td>
         <td><%= log.message %></td>
       </tr>
