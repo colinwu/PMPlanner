@@ -20,10 +20,12 @@ class SessionsController < ApplicationController
         current_user.logs.create(message: "Logged in from #{request.env['REMOTE_ADDR']}")
         redirect_to back_or_go_here(root_url), notice: "Log in successful."
       else
+        Log.create(message: "Failed authentication: user = #{username}")
         flash[:error] = "Name and/or password incorrect."
         render :new
       end
     else
+      Log.create(message: "Unknown tech: #{username}")
       flash[:notice] = "Sorry, you are not authorized to use this application."
       render :new
     end

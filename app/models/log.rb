@@ -4,6 +4,6 @@ class Log < ActiveRecord::Base
   belongs_to :technician
   belongs_to :device
   
-  validates :technician_id, :message, presence: true
-  validates :technician_id, numericality: { greater_than: 0 }
+  validates :message, presence: true
+  validates :technician_id, numericality: { greater_than: 0 }, allow_nil: true
 end
