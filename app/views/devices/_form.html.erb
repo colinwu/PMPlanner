@@ -47,9 +47,11 @@
         <span class="left_field_label">Manager</span>
         <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.full_name}" %>
         <%= text_field_tag :manager, manager, :readonly => @readonly_flag %>
-        <br />
-        <span class="left_field_label" title="When do you want the tech to make the first visit?">Date of 1st visit (?)</span>
-        <%= text_field_tag 'first_visit', Date::today.to_s(:MdY), {class: 'center'} %>
+        <% if @device.id.nil? %>
+          <br />
+          <span class="left_field_label" title="When do you want the tech to make the first visit?">Date of 1st visit (?)</span>
+          <%= text_field_tag 'first_visit', Date::today.to_s(:MdY), {class: 'center'} %>
+        <% end %>
       </td>
       <td width=33%>
         Equipment Status:<br /><br />

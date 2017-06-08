@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  def back_or_go_here(where = root_path)
+  def back_or_go_here(where)
     session[:uri].nil? ? where : session[:uri]
   end
   

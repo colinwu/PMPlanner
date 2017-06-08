@@ -107,12 +107,17 @@ class DevicesController < ApplicationController
 
   def new
     @title = "Add a new device"
-    session[:caller] = request.path_parameters[:action]
-    @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
+    you_are_here
+    begin
+      @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
+    rescue
+      flash[:error] = "Could not create new device: #{@device.errors.message}"
+      redirect_to back_or_go_here(root_url)
+    end
 # only admin or manager can add devices
     if current_user.admin? or current_user.manager?
       @all_dev_ids = Device.all.map { |d| "#{d.crm_object_id}" }
-      @device.team_id = current_technician.team_id || Team.find_by(name: 'Admin').id
+      @device.team_id = (current_technician.nil? or current_technician.team_id.nil?) ? Team.find_by(name: 'Admin').id : current_technician.team_id
       @readonly_flag = false
       @contacts = []
       @locations = []
