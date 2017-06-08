@@ -18,6 +18,9 @@ class SessionsController < ApplicationController
         session[:active_at] = Time.now
         current_user.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
         current_user.logs.create(message: "Logged in from #{request.env['REMOTE_ADDR']}")
+        unless current_user.admin? or current_user.manager?
+          session[:tech] = tech.id
+        end
         redirect_to back_or_go_here(root_url), notice: "Log in successful."
       else
         Log.create(message: "Failed authentication: user = #{username}")
@@ -34,12 +37,13 @@ class SessionsController < ApplicationController
 
   def destroy
     current_user.logs.create(message: "Logged out")
-    session[:tech] = nil
-    session[:act_as] = nil
-    session[:active_at] = nil
-    session[:user] = nil
-    session[:uri] = nil
-    session[:showbackup] = nil
+#     session[:tech] = nil
+#     session[:act_as] = nil
+#     session[:active_at] = nil
+#     session[:user] = nil
+#     session[:uri] = nil
+#     session[:showbackup] = nil
+    session.destroy
     redirect_to root_url, notice: "Logged out."
   end
 end

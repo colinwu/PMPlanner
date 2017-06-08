@@ -426,7 +426,8 @@ class DevicesController < ApplicationController
         @device = @devices.first
         redirect_to "/devices/#{@device.id}/#{session[:search_caller]}"
       when 0
-        redirect_to back_or_go_here, alert: "Nothing found."
+        flash[:error] = "Nothing found."
+        redirect_to back_or_go_here()
       else
         render :index
       end
