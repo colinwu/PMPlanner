@@ -135,10 +135,10 @@ class Device < ActiveRecord::Base
           if next_pm_date > now + 366
             next_pm_date = now + 366
           end
-          unless (c == 'TA' or c == 'CA')
+#           unless (c == 'TA' or c == 'CA')
             op = OutstandingPm.find_or_create_by(device_id: self.id, code: c)
             op.update_attributes(next_pm_date: next_pm_date)
-          end
+#           end
         end # unless target.nil? or target.target == 0
       end # codes_list.each do |c|
       if self.outstanding_pms.where("next_pm_date is not NULL").empty?

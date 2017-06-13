@@ -2,9 +2,9 @@ class ModelGroupsController < ApplicationController
   before_action :authorize
   before_action :require_admin, except: [:get_targets, :index, :show]
   def index
-    you_are_here
     respond_to do |format|
       format.html {
+        you_are_here
         if params[:commit] == 'Search'
           search_ar = ['placeholder']
           where_ar = []

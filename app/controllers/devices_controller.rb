@@ -671,13 +671,15 @@ class DevicesController < ApplicationController
         end
       end
       search_ar[0] = where_ar.join(' and ')
-      
       if (sort_column == 'outstanding_pms' or sort_column.empty?)
         code_date = {}
-        sorted_counts = []
+        @code_count = {}
+        @code_date = {}
         devs = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).uniq
         devs.each do |d| 
-          code_date[d.id] = d.outstanding_pms.where("next_pm_date is not NULL").empty? ? d.neglected.next_visit : d.outstanding_pms.where("next_pm_date is not NULL").order(:next_pm_date).first.next_pm_date
+          pm_list = d.outstanding_pms.where("next_pm_date is not NULL and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})")
+          code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
+          @code_count[d.id] = pm_list.length
         end
         sorted_dates = code_date.sort_by { |k,v| v }
         if (sort_direction == 'desc')
@@ -685,6 +687,7 @@ class DevicesController < ApplicationController
         end
         sorted_dates.each do |c|
           @dev_list << devs.find(c[0])
+          @code_date[c[0]] = c[1]
         end
       else
         Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).each do |dev|
@@ -779,7 +782,6 @@ class DevicesController < ApplicationController
   end
   
   def search
-    you_are_here
     session[:search_caller] = 'analyze_data'
     
   end

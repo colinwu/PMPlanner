@@ -22,6 +22,7 @@
     <th><%= sortable 'locations.address1', 'Address' %></th>
     <th><%= sortable 'locations.city', 'City' %></th>
     <th><%= sortable 'outstanding_pms', 'Earliest PM' %></th>
+    <th><%= sortable 'pm_count', 'Count' %></th>
   </tr>
   <tr class=search_fields>
     <%= form_tag my_pm_list_devices_url, :method => :get do %>
@@ -34,7 +35,7 @@
       <td id="search_client_name_cell"><%= text_field_tag "search[client_name]", @search_params[:client_name], :size => 1 %></td>
       <td id="search_addr1_cell"><%= text_field_tag "search[addr1]", @search_params[:addr1], :size => 1 %></td>
       <td id="search_city_cell"><%= text_field_tag "search[city]", @search_params[:city], :size => 1 %></td>
-      <td><%= submit_tag 'Search', :name => nil %></td>
+      <td col_span=2><%= submit_tag 'Search', :name => nil %></td>
     <% end %>
   </tr>
   <%= form_tag handle_checked_devices_url do %>
@@ -57,7 +58,8 @@
         <td><%= dev.client.name %></td>
         <td><%= dev.location.nil? ? '' : dev.location.address1 %></td>
         <td><%= dev.location.nil? ? '' : dev.location.city %></td>
-        <td class='<%= pm_status_class(dev) %>'><%= dev.outstanding_pms.order(:next_pm_date).where("next_pm_date is not NULL").first.next_pm_date.to_s(:MdY) %></td>
+        <td class='<%= pm_status_class(dev) %>'><%= @code_date[dev.id].to_s(:MdY) %></td>
+        <td class='<%= pm_status_class(dev) %>'><%= @code_count[dev.id] %></td>
       </tr>
     <% end %>
   <% end %>
