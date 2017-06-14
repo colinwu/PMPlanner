@@ -47,7 +47,7 @@ class Reading < ActiveRecord::Base
     end
     
     ptn1_file = self.ptn1.path
-    ptn1_file =~ /_(\d{12,12})_PTN/
+    ptn1_file =~ /_(\d{11,12})_PTN/
     file_date = $1.slice(0,8)
     f = File.open(ptn1_file)
     while (row = f.gets)

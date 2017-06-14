@@ -147,7 +147,7 @@ class ModelGroupsController < ApplicationController
           end
         end
       end
-      redirect_to back_or_go_here(@model_group), :notice  => "Successfully updated model group."
+      redirect_to back_or_go_here(model_groups_path), :notice  => "Successfully updated model group."
     else
       render :action => 'edit'
     end
