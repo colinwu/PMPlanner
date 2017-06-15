@@ -322,9 +322,9 @@ class DevicesController < ApplicationController
                 'BWTOTAL',
                 'Total Counter: BW',
                 last_bw_val,
-                @bw_monthly != 0 ? bw_estimate.round : 0,
-                @bw_monthly != 0 ? prog : 0,
-                @bw_monthly != 0 ? next_pm_date.strftime("%b %-d, %Y") : '']
+                bw_estimate.round,
+                prog,
+                next_pm_date.strftime("%b %-d, %Y")]
         
         if @device.model.model_group.color_flag
         # Record TotC row if there's any
@@ -332,9 +332,9 @@ class DevicesController < ApplicationController
                   'CTOTAL',
                   'Total Counter: Color',
                   last_c_val,
-                  @c_monthly != 0 ? c_estimate.round : 0,
-                  @c_monthly != 0 ? prog : 0,
-                  @c_monthly != 0 ? next_pm_date.strftime("%b %-d, %Y") : '']
+                  c_estimate.round,
+                  prog,
+                  next_pm_date.strftime("%b %-d, %Y")]
         end
         
         # Now calculate stuff for all the other PM codes
@@ -391,8 +391,8 @@ class DevicesController < ApplicationController
                       c,
                       pm_code.description, 
                       last_val, 
-                      @bw_monthly != 0 ? estimate.round : 0, 
-                      @bw_monthly != 0 ? prog : 0,
+                      estimate.round, 
+                      prog,
                       npd]
           end # unless target.nil? or target.target == 0
         end # codes_list.each do |c|
@@ -635,7 +635,7 @@ class DevicesController < ApplicationController
       range = tech.preference.upcoming_interval*7
       
       # toggle to show devices for which the current tech is the backup tech
-      if session[:showbackup]
+      if session[:showbackup] == 'true'
         where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
         search_ar = ["",tech.id, tech.id]
       else
@@ -671,13 +671,13 @@ class DevicesController < ApplicationController
         end
       end
       search_ar[0] = where_ar.join(' and ')
+      @code_count = {}
+      @code_date = {}
+      code_date = {}
       if (sort_column == 'outstanding_pms' or sort_column.empty?)
-        code_date = {}
-        @code_count = {}
-        @code_date = {}
         devs = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).uniq
         devs.each do |d| 
-          pm_list = d.outstanding_pms.where("next_pm_date is not NULL and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})")
+          pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
           @code_count[d.id] = pm_list.length
         end
@@ -690,12 +690,12 @@ class DevicesController < ApplicationController
           @code_date[c[0]] = c[1]
         end
       else
-        Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).each do |dev|
-#           if dev.active and dev.under_contract and dev.do_pm
-          if !dev.outstanding_pms.where("next_pm_date is not NULL").empty? or (!dev.neglected.next_visit.nil? and (dev.neglected.next_visit < (@now + range*2)))
-              @dev_list << dev
-            end # if
-#           end # if
+        devs = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).uniq
+        devs.each do |dev|
+          pm_list = dev.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
+          @dev_list << dev
+          @code_date[dev.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
+          @code_count[dev.id] = pm_list.length
         end # Device.each
       end
     end
