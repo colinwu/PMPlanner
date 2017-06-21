@@ -220,13 +220,13 @@ class DevicesController < ApplicationController
       dev = @device.to_s
       if @device.destroy
         flash[:notice] = "Successfully removed device record."
-        current_user.logs.create(device_id: dev_id, message: "Deleted device #{dev}")
+        current_user.logs.create(message: "Deleted device #{dev}")
       else
-        flash[:error] = "Could not delete device #{dev_id}: #{@device.errors.messages}"
-        current_user.logs.create(device_id: dev_id, message: "Could not delete device #{dev_id}: #{@device.errors.messages}")
+        flash[:error] = "Could not delete device: #{@device.errors.messages}"
+        current_user.logs.create(message: "Could not delete device: #{@device.errors.messages}")
       end
     else
-      current_user.logs.create(device_id: @device.id, message: "Not authorized to delete device")
+      current_user.logs.create(device_id: @device.crm_object_id, message: "Not authorized to delete device")
       flash[:alert] = "Only admin or managers can delete devices."
     end
     redirect_to devices_url
