@@ -1,6 +1,6 @@
 <% title @title %>
 <table width="100%">
-  <caption>Devices with outstanding PMs
+  <caption>
     <span class=right_end>
       <%= form_tag show_or_hide_backup_devices_url do %>
         <% if session[:showbackup] %>
@@ -23,6 +23,9 @@
     <th><%= sortable 'locations.address1', 'Location', params[:search] %></th>
     <th><%= sortable 'locations.city', 'City', params[:search] %></th>
     <th>Earliest PM</th>
+    <% if current_user.manager? or current_user.admin? %>
+      <th></th>
+    <% end %>
   </tr>
   <tr class=search_fields>
   <%= form_tag devices_url, :method => :get do %>

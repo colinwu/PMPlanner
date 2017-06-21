@@ -217,9 +217,14 @@ class DevicesController < ApplicationController
   def destroy
     @device = Device.find(params[:id])
     if current_user.can_manage?(@device)
-      @device.destroy
-      flash[:notice] = "Successfully removed device record."
-      current_user.logs.create(device_id: @device.id, message: "Deleted device")
+      dev = @device.to_s
+      if @device.destroy
+        flash[:notice] = "Successfully removed device record."
+        current_user.logs.create(device_id: dev_id, message: "Deleted device #{dev}")
+      else
+        flash[:error] = "Could not delete device #{dev_id}: #{@device.errors.messages}"
+        current_user.logs.create(device_id: dev_id, message: "Could not delete device #{dev_id}: #{@device.errors.messages}")
+      end
     else
       current_user.logs.create(device_id: @device.id, message: "Not authorized to delete device")
       flash[:alert] = "Only admin or managers can delete devices."
