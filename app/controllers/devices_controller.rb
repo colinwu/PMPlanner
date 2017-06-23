@@ -10,7 +10,7 @@ class DevicesController < ApplicationController
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
     @search_params = params[:search] || Hash.new
-    search_ar = ['placeholder']
+    search_ar = ["active = true"]
     where_ar = []
     if params[:search]
       unless @search_params['crm'].nil? or @search_params['crm'].blank?
@@ -37,9 +37,7 @@ class DevicesController < ApplicationController
         search_ar <<  @search_params['city']
         where_ar << "locations.city regexp ?"
       end
-      search_ar[0] = where_ar.join(' and ')
-    else
-      search_ar = []
+      search_ar[0] = (search_ar[0]+where_ar).join(' and ')
     end
     if params[:sort].nil? or params[:sort].empty?
       @order = 'crm_object_id'
