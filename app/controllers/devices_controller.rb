@@ -37,7 +37,7 @@ class DevicesController < ApplicationController
         search_ar <<  @search_params['city']
         where_ar << "locations.city regexp ?"
       end
-      search_ar[0] = (search_ar[0]+where_ar).join(' and ')
+      search_ar[0] = ([search_ar[0]]+where_ar).join(' and ')
     end
     if params[:sort].nil? or params[:sort].empty?
       @order = 'crm_object_id'
@@ -126,8 +126,10 @@ class DevicesController < ApplicationController
 
   def create
     @device = Device.new(params[:device])
+    @readonly_flag = 'false'
     if params[:device][:model_id].empty?
       flash[:alert] = "The model you specified is not known to PM Planner. Please make sure it is in the system before proceeding."
+      @locations = []
       render action: 'new'
       return
     end
@@ -143,7 +145,7 @@ class DevicesController < ApplicationController
       params[:device][:location_id] = loc.id
     end
       
-    if @device.update_attributes(params[:device])
+    if @device.save
       current_user.logs.create(device_id: @device.id, message: "Created device record with #{params[:device].inspect}")
       flash[:alert] = nil
       flash[:error] = nil
@@ -156,13 +158,14 @@ class DevicesController < ApplicationController
       end
       redirect_to back_or_go_here(edit_device_url(@device))
     else
+      flash[:error] = "Please see error messages below."
       @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
-      @contacts = @device.location.contacts
+      @contacts = @device.location.nil? ? [] : @device.location.contacts
       if current_user.can_manage?(@device)
         you_are_here
-        @readonly_flag =  true
-      else
         @readonly_flag =  false
+      else
+        @readonly_flag =  true
         flash[:alert] = "You are only allowed to edit some settings."
       end
       render :action => 'new'

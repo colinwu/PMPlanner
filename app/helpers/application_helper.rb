@@ -7,7 +7,7 @@ module ApplicationHelper
   end
   
   def pm_status_class(dev)
-    range = dev.primary_tech.preference.upcoming_interval * 7
+    range = dev.primary_tech.nil? ? current_user.preference.upcoming_interval * 7 : dev.primary_tech.preference.upcoming_interval * 7
     if (not dev.outstanding_pms.where("next_pm_date is not NULL and next_pm_date < ?", Date.today).empty?)
       'past_due'
     elsif (not dev.outstanding_pms.empty?)
