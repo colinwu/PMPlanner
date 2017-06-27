@@ -675,6 +675,10 @@ class DevicesController < ApplicationController
           search_ar <<  @search_params['city']
           where_ar << "locations.city regexp ?"
         end
+        unless @search_params['post_code'].nil? or @search_params['post_code'].blank?
+          search_ar << @search_params['post_code']
+          where_ar << "locations.post_code regexp ?"
+        end
       end
       search_ar[0] = where_ar.join(' and ')
       @code_count = {}

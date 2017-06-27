@@ -21,6 +21,7 @@
     <th><%= sortable 'clients.name', 'Client Name' %></th>
     <th><%= sortable 'locations.address1', 'Address' %></th>
     <th><%= sortable 'locations.city', 'City' %></th>
+    <th><%= sortable 'locations.post_code', 'Postal Code' %></th>
     <th><%= sortable 'outstanding_pms', 'Earliest PM' %></th>
     <th><%= sortable 'pm_count', 'Count' %></th>
   </tr>
@@ -35,6 +36,7 @@
       <td id="search_client_name_cell"><%= text_field_tag "search[client_name]", @search_params[:client_name], :size => 1 %></td>
       <td id="search_addr1_cell"><%= text_field_tag "search[addr1]", @search_params[:addr1], :size => 1 %></td>
       <td id="search_city_cell"><%= text_field_tag "search[city]", @search_params[:city], :size => 1 %></td>
+      <td id="search_pc_cell"><%= text_field_tag "search[post_code]", @search_params[:post_code], :size => 1 %></td>
       <td col_span=2><%= submit_tag 'Search', :name => nil %></td>
     <% end %>
   </tr>
@@ -57,7 +59,8 @@
         <td><%= dev.serial_number %></td>
         <td><%= dev.client.name %></td>
         <td><%= dev.location.nil? ? '' : dev.location.address1 %></td>
-        <td><%= dev.location.nil? ? '' : dev.location.city %> <%= dev.location.nil? ? '' : "(#{dev.location.post_code})" %></td>
+        <td><%= dev.location.nil? ? '' : dev.location.city %></td>
+        <td><%= dev.location.nil? ? '' : dev.location.post_code %></td>
         <td class='<%= pm_status_class(dev) %>'><%= @code_date[dev.id].to_s(:MdY) %></td>
         <td class='<%= pm_status_class(dev) %>'><%= @code_count[dev.id] %></td>
       </tr>
