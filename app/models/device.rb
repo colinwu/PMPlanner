@@ -151,7 +151,7 @@ class Device < ActiveRecord::Base
   end
 
   def last_non_zero_reading_on_or_before(date = Date.today)
-    self.readings.where("taken_at <= '#{date}'").order('taken_at desc').each do |r|
+    self.readings.where("taken_at is not NULL and taken_at <= '#{date}'").order('taken_at desc').each do |r|
       r.counters.each do |c|
         if c.value > 0
           return r

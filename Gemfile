@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.9'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -20,8 +20,8 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 4.0.0'
-  gem 'coffee-rails', '~> 4.0.0'
+  gem 'sass-rails'
+  gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
@@ -29,7 +29,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder'
 gem 'jquery-rails'
 gem 'csv-mapper'
 gem 'will_paginate'
@@ -39,7 +39,7 @@ gem 'protected_attributes', '~> 1.0.8'
 gem 'jquery-datetimepicker-rails'
 gem 'css3-progress-bar-rails'
 gem 'rails4-autocomplete'
-gem 'best_in_place', '~> 3.1'
+gem 'best_in_place'
 gem "paperclip", "~> 5.0.0"
 gem 'activerecord-session_store'
 
@@ -60,7 +60,7 @@ gem 'rvm1-capistrano3', require: false
 # Deploy with Capistrano
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
   
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

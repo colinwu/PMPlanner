@@ -1,13 +1,19 @@
 class TechniciansController < ApplicationController
   before_action :authorize
+  helper_method :sort_column, :sort_direction
   
   def index
+    if params[:sort].nil? or params[:sort].empty?
+      @order = 'first_name'
+    else
+      @order = params[:sort]
+    end
     if current_user.admin?
       @title = "Technicians"
-      @technicians = Technician.all
+      @technicians = Technician.all.joins(:team).order(@order)
     elsif current_user.manager?
       @title = "My techs"
-      @technicians = current_user.my_techs
+      @technicians = current_user.my_techs.joins(:team).order(@order)
     end
   end
 
@@ -108,4 +114,15 @@ class TechniciansController < ApplicationController
     end
     redirect_to back_or_go_here(current_user.preference.default_root_path)
   end
+  
+  private
+  
+  def sort_column
+    (Technician.column_names + ['teams.name']).include?(params[:sort]) ? params[:sort] : 'first_name'
+  end
+  
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+  
 end
