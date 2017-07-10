@@ -1,5 +1,6 @@
 class ReadingsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   
   def index
     @readings = Reading.order(:taken_at).page(params[:page])

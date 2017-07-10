@@ -1,5 +1,6 @@
 class ContactsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   helper_method :sort_column, :sort_direction
   
   def index

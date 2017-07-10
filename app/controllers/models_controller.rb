@@ -1,5 +1,6 @@
 class ModelsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_admin, only: [:destroy, :new, :create]
   
   def index

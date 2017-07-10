@@ -1,14 +1,12 @@
 class DevicesController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_manager, only: [:new, :create, :destroy, :send_transfer]
   helper_method :sort_column, :sort_direction
   autocomplete :client, :name, full: true
   
   def index
     you_are_here
-    if session[:showbackup].nil?
-      session[:showbackup] = current_user.preference.showbackup.to_s
-    end
     @search_params = params[:search] || Hash.new
     search_ar = ["active = true"]
     where_ar = []
@@ -65,10 +63,11 @@ class DevicesController < ApplicationController
 #         @tech = current_user
       end
     else
+      byebug
       @title = "#{current_technician.friendly_name}'s Devices"
       @tech = current_technician
       unless where_ar.empty?
-        if session[:showbackup]
+        if session[:showbackup] == 'true'
           search_ar[0] = [search_ar[0], '(primary_tech_id = ? or backup_tech_id = ?)'].join(' and ')
           search_ar << @tech.id
           search_ar << @tech.id
@@ -77,7 +76,7 @@ class DevicesController < ApplicationController
           search_ar << @tech.id
         end
       else
-        if session[:showbackup]
+        if session[:showbackup] == 'true'
           search_ar = ['primary_tech_id = ? or backup_tech_id = ?', @tech.id, @tech.id]
         else
           search_ar = ["primary_tech_id = ?", @tech.id]

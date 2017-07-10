@@ -1,5 +1,6 @@
 class PreferencesController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   
   def index
     unless current_user.admin?

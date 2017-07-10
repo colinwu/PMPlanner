@@ -1,5 +1,6 @@
 class PartsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_manager, only: [:new, :create, :destroy]
   
   def index

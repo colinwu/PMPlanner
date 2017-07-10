@@ -2,6 +2,7 @@ class ClientsController < ApplicationController
   respond_to :json
   before_action :authorize
   before_action :require_admin
+  before_action :set_defaults
   
   def index
     you_are_here

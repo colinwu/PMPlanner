@@ -1,5 +1,7 @@
 class ModelTargetsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
+  
   def index
     @search_params = params[:search] || Hash.new
     if params[:search]

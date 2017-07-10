@@ -1,5 +1,6 @@
 class ModelGroupsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_admin, except: [:get_targets, :index, :show]
   def index
     respond_to do |format|

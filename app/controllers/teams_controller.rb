@@ -1,4 +1,7 @@
 class TeamsController < ApplicationController
+  before_action :authorize
+  before_action :set_defaults
+
   def index
     @teams = Team.all
   end
