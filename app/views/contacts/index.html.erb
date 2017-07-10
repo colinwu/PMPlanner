@@ -1,6 +1,6 @@
 <% title @title, false %>
 
-<table width="100%">
+<table width="100%" class="table-condensed table-hover table-responsive">
   <tr>
     <th><%= sortable 'name' %></th>
     <th><%= sortable 'phone1' %></th>
@@ -15,12 +15,12 @@
   <%= form_tag contacts_url, :method => :get do %>
     <%= hidden_field_tag 'sort', sort_column %>
     <%= hidden_field_tag 'direction', sort_direction %>
-    <td id="search_name_cell"><%= text_field_tag "search[name]", @search_params['name'], :size => 1 %></td>
-    <td id="search_phone1_cell"><%= text_field_tag "search[phone1]", @search_params[:phone1], :size => 1 %></td>
-    <td id="search_phone2_cell"><%= text_field_tag "search[phone2]", @search_params[:phone2], :size => 1 %></td>
-    <td id="search_email_cell"><%= text_field_tag "search[email]", @search_params[:email], :size => 1 %></td>
-    <td id="search_notes_cell"><%= text_field_tag "search[notes]", @search_params[:notes], :size => 1 %></td>
-    <td id="search_location_cell"><%= text_field_tag "search[location]", @search_params[:location], :size => 1 %></td>
+    <td id="search_name_cell"><%= text_field_tag "search[name]", @search_params['name'], :size => 1, class: "variable-width-input" %></td>
+    <td id="search_phone1_cell"><%= text_field_tag "search[phone1]", @search_params[:phone1], :size => 15, class: "fixed-width-input" %></td>
+    <td id="search_phone2_cell"><%= text_field_tag "search[phone2]", @search_params[:phone2], :size => 15, class: "fixed-width-input" %></td>
+    <td id="search_email_cell"><%= text_field_tag "search[email]", @search_params[:email], :size => 1, class: "variable-width-input" %></td>
+    <td id="search_notes_cell"><%= text_field_tag "search[notes]", @search_params[:notes], :size => 1, class: "variable-width-input" %></td>
+    <td id="search_location_cell"><%= text_field_tag "search[location]", @search_params[:location], :size => 1, class: "variable-width-input" %></td>
     <td></td>
     <td><%= submit_tag 'Search', :name => nil %></td>
   <% end %>

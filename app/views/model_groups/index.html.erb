@@ -1,27 +1,31 @@
-<% title "Model Groups", false %>
-
-<table>
-  <tr>
-  <%= form_tag model_groups_path, method: :get do %>
-    <td><%= text_field_tag 'name', params[:name], size: 10 %></td>
-    <td><%= text_field_tag 'desc', params[:desc], size: 30 %></td>
-    <td><%= radio_button_tag 'color', true %>True<br /><%= radio_button_tag 'color', false %>False</td>
-    <td><%= submit_tag "Search" %></td>
-  <% end %>
-  </tr>
+<br />
+<table width="100%" class="table-condensed table-hover">
   <tr>
     <th>Name</th>
     <th>Description</th>
     <th>Colour Flag</th>
     <th>Action</th>
   </tr>
+  <tr>
+    <%= form_tag model_groups_path, method: :get do %>
+      <td><%= text_field_tag 'name', params[:name], size: 10 %></td>
+      <td><%= text_field_tag 'desc', params[:desc], size: 30 %></td>
+      <td><%= radio_button_tag 'color', true %>True<br /><%= radio_button_tag 'color', false %>False</td>
+      <td><%= submit_tag "Search" %></td>
+    <% end %>
+  </tr>
   <% for model_group in @model_groups %>
     <tr>
       <td><%= link_to model_group.name, model_group_path(model_group) %></td>
       <td><%= model_group.description %></td>
       <td><%= model_group.color_flag %></td>
-      <td><%= link_to "Edit", edit_model_group_path(model_group) %> |
-          <%= link_to "Del", model_group, :confirm => 'Are you sure?', :method => :delete %>
+      <td>
+        <%= link_to edit_model_group_path(model_group) do %>
+          <span class="glyphicon glyphicon-edit"></span>
+        <% end %> |
+        <%= link_to model_group, :confirm => 'Are you sure?', :method => :delete do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
       </td>
     </tr>
   <% end %>

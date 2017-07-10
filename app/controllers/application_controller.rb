@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
     elsif session[:active_at].nil? or ((Time.now - session[:active_at]) > 6000)
       you_are_here
       current_user.logs.create(message: "Session timed out.")
+      session.destroy
       redirect_to login_url, alert: "Your session has timed out. Please log in."
     else
       session[:active_at] = Time.now

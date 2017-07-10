@@ -1,15 +1,13 @@
-<% title "Models", false %>
-
-<table>
+<table width="100%" class="table-condensed">
   <tr>
     <th>Model</th><th>Model Group</th><th>Color</th><th>Description</th>
   </tr>
   <tr>
     <%= form_tag models_url, method: :get do %>
-    <td><%= text_field_tag "search[nm]", @search_params['nm'], :size => 1 %></td>
-    <td><%= text_field_tag "search[mg]", @search_params['mg'], :size => 1 %></td>
+    <td><%= text_field_tag "search[nm]", @search_params['nm'], :size => 10, class: "fixed-width-input" %></td>
+    <td><%= text_field_tag "search[mg]", @search_params['mg'], :size => 10, class: "fixed-width-input" %></td>
     <td></td>
-    <td><%= text_field_tag "search[desc]", @search_params['desc'], :size => 1 %></td>
+    <td><%= text_field_tag "search[desc]", @search_params['desc'], :size => 1, class: "variable-width-input" %></td>
     <td colspan=3><%= submit_tag 'Search' %></td>
     <% end %>
   </tr>
@@ -19,9 +17,18 @@
       <td><%= model.model_group.name %></td>
       <td><%= model.model_group.color_flag %></td>
       <td><%= model.model_group.description %></td>
-      <td><%= link_to "Show", model %></td>
-      <td><%= link_to "Edit", edit_model_path(model) %></td>
-      <td><%= link_to "Destroy", model, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to model do %>
+            <span class="glyphicon glyphicon-eye-open"></span>
+          <% end %>
+      </td>
+      <td><%= link_to edit_model_path(model) do %>
+            <span class="glyphicon glyphicon-edit"></span>
+          <% end %>
+      </td>
+      <td><%= link_to model, :confirm => 'Are you sure?', :method => :delete do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+      </td>
     </tr>
   <% end %>
 </table>

@@ -4,8 +4,11 @@ class DevicesController < ApplicationController
   helper_method :sort_column, :sort_direction
   autocomplete :client, :name, full: true
   
+  include ApplicationHelper
+  
   def index
     you_are_here
+    @page_title = replace_my + " Territory"
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
@@ -314,11 +317,11 @@ class DevicesController < ApplicationController
         # background color for the total counters
         case
         when next_pm_date <= @now
-          bgclass = 'emerg'
+          bgclass = 'danger'
         when (next_pm_date < @now + range) # (> @now is implied)
-          bgclass = 'urgent'
+          bgclass = 'warning'
         when (next_pm_date < @now + 2*range)
-          bgclass = 'approaching'
+          bgclass = 'info'
         else
           bgclass = ''
         end

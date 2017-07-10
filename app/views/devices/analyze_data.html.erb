@@ -6,19 +6,20 @@
 <%= render partial: "header_table", locals: {button: "analysis"} %>
 
 <% unless @device.nil? or @prev_reading.nil? %>
-<table width="100%">
+<table class="table-condensed" width="100%">
   <%= form_tag(record_data_device_url,  id: "counter_form") do %>
   <tr>
     <th>PM Code</th>
-    <th>PM Description</th>
-    <th>Previous Readings<br /><%= @prev_reading.nil? ? ' ' : @prev_reading.taken_at.strftime('%b %-d, %Y') %></th>
-    <th><% if @todays_reading.nil? %>
+    <th class="hidden-xs">PM Description</th>
+    <th class="hidden-xs">Previous Readings<br /><%= @prev_reading.nil? ? ' ' : @prev_reading.taken_at.strftime('%b %-d, %Y') %></th>
+    <th class="center"><% if @todays_reading.nil? %>
       Current Estimate
       <% else %>
       Today's Entry
-      <% end %><br /><%= text_field_tag 'reading[taken_at]', Date::today.to_s(:MdY), {class: 'center'} %></th>
-    <th>Progress to next PM</th>
-    <th>Next PM Date</th>
+      <% end %><br />
+      <%= text_field_tag 'reading[taken_at]', Date::today.to_s(:MdY), {class: 'center form-control input-sm'} %></th>
+    <th class="hidden-xs">Progress to next PM</th>
+    <th class="hidden-xs">Next PM Date</th>
   </tr>
     <%= hidden_field_tag 'reading[technician_id]', @prev_reading.technician_id %>
     <%= hidden_field_tag 'reading[device_id]', @prev_reading.device_id %>
@@ -26,11 +27,17 @@
     <% @rows.each do |r| %>
       <tr class=<%= r[0] %>>
         <td><%= r[1].upcase %></td>
-        <td><%= r[2] %></td>
-        <td class=rightjustify><span id="prev_<%= r[1].upcase %>"><%= number_with_delimiter(r[3]) %></span></td>
-        <td class=rightjustify><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify'} %></td>
-        <td class=rightjustify><%= progress_bar(r[5], :color => 'white', :tiny => true, :rounded => false) %></td>
-        <td class=rightjustify><%= r[6] %> </td>
+        <td class="hidden-xs"><%= r[2] %></td>
+        <td class='rightjustify hidden-xs'><span id="prev_<%= r[1].upcase %>"><%= number_with_delimiter(r[3]) %></span></td>
+        <td class='rightjustify'><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify'} %></td>
+        <td class="hidden-xs">
+          <div class="progress" style="width:100%">
+            <div class="progress-bar" role="progressbar" style="width:<%= r[5].to_i %>%">
+              <%= r[5].to_i %>%
+            </div>
+          </div>
+        </td>
+        <td class='rightjustify hidden-xs'><%= r[6] %> </td>
       </tr>
     <% end %>
     <tr><td colspan=6>

@@ -7,7 +7,7 @@
       <td><%= device.client.name %></td>
       <td><%= device.location.address1 %></td>
       <td><%= device.location.city %></td>
-      <td class='<%= pm_status_class(device) %>'><%= device.outstanding_pms.order(:next_pm_date).where("next_pm_date is not NULL").first.next_pm_date.to_s(:MdY) %></td> 
+      <td class='<%= pm_status_class(device) %>' style="white-space: nowrap;"><%= device.outstanding_pms.order(:next_pm_date).where("next_pm_date is not NULL").first.next_pm_date.to_s(:MdY) %></td> 
       <% if current_user.manager? or current_user.admin? %>
         <td><%= link_to 'del', device, data: {:confirm => "Are you sure you want to delete #{device.crm_object_id}?"}, method: :delete %></td>
       <% end %>

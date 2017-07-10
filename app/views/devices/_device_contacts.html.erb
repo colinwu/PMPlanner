@@ -3,7 +3,7 @@
   <legend>Contacts</legend>
   <p>Note: only the <strong>name</strong> and <strong>email address</strong> are used to find an existing contact. If the search comes up empty a new contact record will be created.</p>
   <p><strong>Name</strong> and <strong>email</strong> are both required to create a new contact.</p>
-  <table width="100%">
+  <table class="table-condensed table-hover" width="100%">
     <tr>
       <th>Name*</th>
       <th>Phone1</th>
@@ -27,11 +27,11 @@
 contacts populate the list above. If no matches found then create new Contact
 record and add to list above. -->
     <%= form_tag add_contact_for_device_path(@device) do %>
-      <td><%= text_field_tag 'contact[name]', @contact_name, size: 20%></td>
-      <td><%= text_field_tag 'contact[phone1]', @contact_phone1, size: 10 %></td>
-      <td><%= text_field_tag 'contact[phone2]', @contact_phone2, size: 10 %></td>
-      <td><%= text_field_tag 'contact[email]', @contact_email, size: 25 %></td>
-      <td><%= text_field_tag 'contact[notes]', @contact_notes, size: 30 %></td>
+      <td><%= text_field_tag 'contact[name]', @contact_name, class: "form-control" %></td>
+      <td><%= text_field_tag 'contact[phone1]', @contact_phone1, size: 10, class: "form-control" %></td>
+      <td><%= text_field_tag 'contact[phone2]', @contact_phone2, size: 10, class: "form-control" %></td>
+      <td><%= text_field_tag 'contact[email]', @contact_email, size: 25, class: "form-control" %></td>
+      <td><%= text_field_tag 'contact[notes]', @contact_notes, size: 30, class: "form-control" %></td>
       <td><%= submit_tag "Add Contact" %></td>
     <% end %>
     </tr>

@@ -27,6 +27,7 @@ group :assets do
   gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
+  gem 'bootstrap-sass'
 end
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
@@ -37,7 +38,6 @@ gem 'getopt'
 gem 'net-ldap', '~> 0.14.0'
 gem 'protected_attributes', '~> 1.0.8'
 gem 'jquery-datetimepicker-rails'
-gem 'css3-progress-bar-rails'
 gem 'rails4-autocomplete'
 gem 'best_in_place'
 gem "paperclip", "~> 5.0.0"

@@ -1,8 +1,9 @@
 <div>
-  <%= form_tag do_search_devices_path, method: :get, id: 'root_search' do %>
-    <%= text_field_tag 'search_str', @search_str, size: 10 %><br />
+  <%= form_tag do_search_devices_path, method: :get, id: 'root_search', class: 'form-inline' do %>
     <%= hidden_field_tag 'target', 'All' %>
-    <%= submit_tag "Search" %>
+    <div class="fields">
+      <%= text_field_tag 'search_str', @search_str, class: "form-control" %>
+      <%= submit_tag "Search" %>
+    </div>
   <% end %>
 </div>
-

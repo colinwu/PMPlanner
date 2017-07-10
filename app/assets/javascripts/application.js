@@ -16,12 +16,19 @@
 //= require jquery.purr
 //= require best_in_place.purr
 //= require jquery_ujs
+//= require bootstrap
 //= require jquery-ui
 //= require best_in_place.jquery-ui
 //= require autocomplete-rails
 //= require jquery.datetimepicker
 //= require_tree .
-set_size_of = function(e) {
-  $(e).outerWidth(1);
-  return($(e).outerWidth($(e).parent().innerWidth()));
+set_size_of = function(element) {
+  var width;
+  if ($(element).attr("class") === "variable-width-input") {
+    $(element).outerWidth(1);
+    return $(element).outerWidth("100%");
+  } else {
+    width = $(element).outerWidth();
+    return $(element).parent().innerWidth(width);
+  }
 };

@@ -11,3 +11,258 @@
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from($from), to($to));
 }
 
+.boxed {
+  border: 1px solid black;
+}
+
+.clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}
+
+.pretty th .current {
+  padding-right: 16px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.pretty th .asc {
+  background-image: url(up_arrow.png);
+}
+
+.pretty th .desc {
+  background-image: url(down_arrow.png);
+}
+
+#container {
+width: 95%;
+margin: 0 auto;
+background-color: #FFFFDD;
+padding: 10px 10px;
+border: solid 1px black;
+margin-top: 20px;
+}
+
+#flash_area {
+/*  float: left; */
+width: 60%;
+}
+#flash_notice, #flash_error, #flash_alert {
+/*   float: left; */
+/*   padding: 5px 8px; */
+/*   margin: 10px 0; */
+/*   width: 60%; */
+/*   display: inline; */
+}
+
+#flash_notice {
+color: green;
+/*   border: solid 1px #6C6; */
+}
+
+#flash_alert {
+color: #FF8000;
+font-weight: bold;
+}
+#flash_error {
+color: red;
+/*   border: solid 1px #C66; */
+}
+
+#page_title {
+display: none;
+}
+
+#tech_navbar {
+font-size: 10pt;
+text-align: right;
+/*  float: right;*/
+/*  display: inline;*/
+margin-bottom: 10px;
+/*   height: 70px; */
+}
+
+#device_notes {
+display: inline;
+float: right;
+width: 600px;
+}
+
+#device_notes_label {
+background: #014464;
+background: -moz-linear-gradient(top, #0272a7, #013953);
+background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0272a7), to(#013953));
+text-align: center;
+margin: 0 0;
+padding-top: .3em;
+padding-left: .5em;
+padding-right: .5em;
+color: white;
+width: 100%;
+}
+
+#device_contacts {
+border: 1px solid gray;
+-moz-border-radius: 5px 5px 5px 5px;
+-webkit-border-radius: 5px 5px 5px 5px;
+border-radius: 5px 5px 5px 5px;
+
+}
+
+#eq_detail, #eq_notes {
+padding: .5em;
+}
+.field {
+  margin-top: 1em;
+  margin-botom: 1em;
+}
+.leftdiv {
+  display: inline;
+  margin-right: 1em;
+  float: left;
+}
+.rightdiv {
+  display: inline;
+}
+
+#email {
+margin-top: 1em;
+}
+
+.fieldWithErrors {
+  display: inline;
+}
+
+.error_messages {
+  width: 400px;
+  border: 2px solid #CF0000;
+  padding: 0px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  font-size: 12px;
+}
+
+.error_messages h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 12px;
+  margin: 0;
+  background-color: #c00;
+  color: #fff;
+}
+
+.error_messages p {
+  margin: 8px 10px;
+}
+
+.error_messages ul {
+  margin: 0;
+}
+
+.left_field_label {
+  display: inline;
+  width: 8em;
+  vertical-align: top;
+  float: left;
+  margin-right: .5em;
+  padding-bottom: 2px;
+  border-bottom: 1px solid gray;
+}
+
+.pagination a {
+  text-decoration: none;
+  padding: 2px;
+}
+
+.pagination .current {
+  padding: 2px;
+  border: 1px solid black;
+}
+
+.emerg {
+  background-color: red;
+  color: white;
+}
+
+.urgent {
+  background-color: yellow;
+}
+
+.approaching {
+  background-color: blue;
+  color: white;
+}
+
+.rightjustify {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+.light {
+  background-color: #FFFFDD;
+}
+
+.dark {
+  background-color: #D2D2D2;
+}
+
+.search_fields {
+  background-color: silver;
+}
+/*These classes display a red, yellow, blue or white LED image
+ *as the background to represent PM Status of each device.*/
+.past_due, .in_range, .range2, .all_good {
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+  background-position: center center;
+  width: 1em;
+  height: 1em;
+  text-align: right;
+}
+
+.past_due {
+  /*   background-image: url(red_led.png); */
+  color: white;
+  background-color: red;
+}
+
+.in_range {
+  /*   background-image: url(yellow_led.png); */
+  color: black;
+  background-color: yellow;
+}
+
+.range2 {
+  /*   background-image: url(blue_led.png); */
+  background-color: blue;
+  color: white;
+}
+
+.all_good {
+  /*   background-image: url(white_led.png); */
+}
+
+#device_location {
+float: left;
+}
+
+/* Printer friendly */
+@media print {
+  .context_menu, #menu, #flash_alert, #flash_notice, #flash_error, .search_fields, #tech_navbar, input {
+    display: none;
+  }
+  #container {
+  width: 100%;
+  background-color: white;
+  padding: 0;
+  margin: 0;
+  /*     padding: 20px 30px; */
+  border: solid 1px black;
+  /*     margin-top: 20px; */
+  }
+}

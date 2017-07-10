@@ -8,7 +8,7 @@ deltaBW = deltaC = 0
 main_counter_changed = exports ? this
 main_counter_changed = false
 
-jQuery ->
+jQuery ->    
   # retrieve the current device's ID #
   dev_id = $("#reading_device_id").val()
   
@@ -31,11 +31,12 @@ jQuery ->
 
   # Set the size of the input field to be the same as the enclosing element 
   # (usually this is a table cell) when the browser window is resized
-  set_size_of field for field in fields
+  set_size_of field for field in $("[class$='width-input']")
+  
   $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
 
   $(window).resize ->
-    set_size_of field for field in fields
+    set_size_of field for field in $("[class$='width-input']")
     $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
   
 # Detects the last device to be "checked" and makes it the target for "service history", "PM status" and "Data Entry"

@@ -1,14 +1,10 @@
 jQuery ->
-  $("#reading_taken_at").datetimepicker({
-    timepicker: false,
-    format: 'M d, Y',
-    closeOnDateSelect: true
-    })
+  $("#reading_taken_at").datepicker({
+    dateFormat: 'M d, yy',
+  })
 
-  $("#first_visit").datetimepicker({
-    timepicker: false,
-    format: 'M d, Y',
-    closeOnDateSelect: true
+  $("#first_visit").datepicker({
+    dateFormat: 'M d, yy',
   })
   
   $.datepicker.setDefaults({

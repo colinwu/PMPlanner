@@ -2,16 +2,16 @@
 <%= form_tag sessions_path do %>
   <div class="field">
     <label for="username">Domain\Username</label><br />
-    <input autofocus="autofocus" type="username" value="" name="username" />
+    <input class="form-control" autofocus="autofocus" type="username" value="" name="username" />
   </div>
 
   <div class="field">
     <label for="password">Password</label><br />
-    <input autocomplete="off" type="password" name="password" />
+    <input class="form-control" autocomplete="off" type="password" name="password" />
   </div>
   <br />
   <div class="actions">
-    <%= submit_tag "Log In" %>
+    <%= submit_tag "Log In", class: "form-control" %>
   </div>
 <% end %>
 

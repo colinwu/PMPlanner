@@ -1,6 +1,4 @@
-<% title @title, false %>
-
-<table width=100%>
+<table width="100%" class="table-condensed table-hover">
   <tr class="pretty">
     <th><%= sortable 'teams.name', 'Team' %></th>
     <th><%= sortable 'first_name' %></th>
@@ -26,7 +24,13 @@
       <td><%= technician.crm_id %></td>
       <td><%= technician.admin %></td>
       <td><%= technician.manager %></td>
-      <td><%= link_to "Edit", edit_technician_path(technician) %> | <%= link_to "Delete", technician, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to edit_technician_path(technician) do %>
+            <span class="glyphicon glyphicon-edit"></span>
+          <% end %>
+      | <%= link_to technician, :confirm => 'Are you sure?', :method => :delete do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+      </td>
     </tr>
   <% end %>
 </table>

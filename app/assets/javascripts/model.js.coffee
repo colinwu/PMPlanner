@@ -74,6 +74,3 @@ jQuery ->
     $("#section_VY").val(val)
     return true
 
-  set_size_of field for field in $("[id^='search_']")
-  $(window).resize ->
-    set_size_of field for field in $("[id^='search_']")
