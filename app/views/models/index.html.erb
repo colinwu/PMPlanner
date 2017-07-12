@@ -25,7 +25,7 @@
     </tr>
   <% end %>
 </table>
-<% if current_technician.admin %>
+<% if current_technician.try(:admin) %>
   <p><%= link_to "New Model", new_model_path %></p>
 <% end %>
 <p><%= will_paginate(@models) %></p>

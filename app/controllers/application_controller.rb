@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
     if current_user.nil?
       redirect_to login_url, alert: "Please log in."
     elsif session[:active_at].nil? or ((Time.now - session[:active_at]) > 6000)
-      you_are_here
       current_user.logs.create(message: "Session timed out.")
+      session.destroy
       redirect_to login_url, alert: "Your session has timed out. Please log in."
     else
       session[:active_at] = Time.now
@@ -36,8 +36,14 @@ class ApplicationController < ActionController::Base
   end
   
   def set_defaults
-    session[:showbackup] = current_user.preference.showbackup.to_s
+    if session[:showbackup].nil?
+      session[:showbackup] = current_user.preference.showbackup.to_s
+    end
     WillPaginate.per_page = current_user.preference.lines_per_page
+  end
+  
+  def lpp
+    current_user.preference.lines_per_page
   end
   
   protected

@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
     you_are_here
     @title = "Clients"
 #     @tech = current_user.admin? ? Technician.find(params[:tech_id]) : current_user
-    @clients = Client.order(:name).page(params[:page])
+    @clients = Client.order(:name).page(params[:page]).per_page(lpp)
   end
 
   def show

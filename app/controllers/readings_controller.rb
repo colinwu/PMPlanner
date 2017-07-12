@@ -3,7 +3,7 @@ class ReadingsController < ApplicationController
   before_action :set_defaults
   
   def index
-    @readings = Reading.order(:taken_at).page(params[:page])
+    @readings = Reading.order(:taken_at).page(params[:page]).per_page(lpp)
   end
 
   def show

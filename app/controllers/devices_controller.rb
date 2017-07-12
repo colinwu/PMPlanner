@@ -46,7 +46,7 @@ class DevicesController < ApplicationController
     if current_technician.nil?
       if current_user.admin?
         @title = "All Devices"
-        @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page])
+        @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       elsif current_user.manager?
         @title = "Devices in #{current_user.team.name}"
         @tech = current_user
@@ -56,7 +56,7 @@ class DevicesController < ApplicationController
         else
           search_ar = ["devices.team_id = ?", current_user.team_id]
         end
-        @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
+        @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       else
 # should never reach this
 #         @title = "My Territory"
@@ -82,11 +82,11 @@ class DevicesController < ApplicationController
           search_ar = ["primary_tech_id = ?", @tech.id]
         end
       end
-      @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
+      @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     end
     
     if @devices.nil? or @devices.empty?
-      @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page])
+      @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     end
   end
 
@@ -420,11 +420,11 @@ class DevicesController < ApplicationController
       @target = params[:target]
       @title = "Search: #{@search_str}"
       if @target == 'All'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page])
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       elsif @target == 'Region'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page])
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       else
-        @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page])
+        @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       end
       case @devices.length
       when 1

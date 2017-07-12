@@ -6,4 +6,5 @@ class Model < ActiveRecord::Base
   
   validates :nm, presence: true
   validates :nm, uniqueness: true
+   
 end
