@@ -63,7 +63,6 @@ class DevicesController < ApplicationController
 #         @tech = current_user
       end
     else
-      byebug
       @title = "#{current_technician.friendly_name}'s Devices"
       @tech = current_technician
       unless where_ar.empty?
