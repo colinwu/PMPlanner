@@ -181,19 +181,45 @@ margin-top: 1em;
   padding: 2px;
   border: 1px solid black;
 }
+td .progress {
+  height: 100%;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+
+tr.emerg td, 
+tr.urgent td, 
+tr.approaching td,
+tr.allgood td
+{
+  vertical-align: middle;
+}
 
 .emerg {
   background-color: red;
   color: white;
+  
+  input {
+    color: black;
+  }
 }
 
 .urgent {
   background-color: yellow;
+  
+  input {
+    color: black;
+  }
 }
 
 .approaching {
   background-color: blue;
   color: white;
+  
+  input {
+     color: black;
+  }
 }
 
 .rightjustify {
@@ -245,6 +271,7 @@ margin-top: 1em;
 
 .all_good {
   /*   background-image: url(white_led.png); */
+  
 }
 
 #device_location {

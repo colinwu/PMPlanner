@@ -36,6 +36,10 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def lpp
+    current_user.preference.lines_per_page
+  end
+  
   protected
   
   def current_technician

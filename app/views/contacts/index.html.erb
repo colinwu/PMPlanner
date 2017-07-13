@@ -8,7 +8,7 @@
     <th><%= sortable 'email' %></th>
     <th><%= sortable 'notes' %></th>
     <th><%= sortable 'locations.address1', 'Location' %></th>
-    <th>Devices</th>
+    <th># Devs</th>
     <th> </th>
   </tr>
   <tr class=search_fields>
@@ -37,12 +37,20 @@
            <% end %>
       </td>
       <td class=rightjustify><%= link_to contact.location.devices.length, show_devices_at_location_url(contact.location) %></td>
-      <td><%= link_to "Edit", edit_contact_path(contact) %> | 
-      <%= link_to "Del", contact, data: {:confirm => 'Are you sure?'}, method: :delete %></td>
+      <td class=rightjustify>
+        <%= link_to edit_contact_path(contact) do %>
+          <span class="glyphicon glyphicon-edit"></span> 
+        <% end %> | 
+        <%= link_to contact, data: {:confirm => 'Are you sure?'}, method: :delete do %>
+          <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+      </td>
     </tr>
   <% end %>
 </table>
 
-<% if current_technician.admin? %>
+<%= will_paginate @contacts %>
+
+<% if current_user.admin? %>
   <p><%= link_to "New Contact", new_contact_path %></p>
 <% end %>

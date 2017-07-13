@@ -1,5 +1,5 @@
 <% title @title, false %>
-<table width=100% class="table-condensed table-hover">
+<table width=100% class="table-condensed">
   <caption>Devices with outstanding PMs
     <span class=right_end>
       <%= form_tag show_or_hide_backup_devices_url do %>
@@ -68,3 +68,4 @@
   <% end %>
 </table>
 <br />
+<%= will_paginate @dev_list %>

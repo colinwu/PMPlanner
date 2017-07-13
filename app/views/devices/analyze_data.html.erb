@@ -29,15 +29,15 @@
         <td><%= r[1].upcase %></td>
         <td class="hidden-xs"><%= r[2] %></td>
         <td class='rightjustify hidden-xs'><span id="prev_<%= r[1].upcase %>"><%= number_with_delimiter(r[3]) %></span></td>
-        <td class='rightjustify'><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify'} %></td>
+        <td class='rightjustify'><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify form-control'} %></td>
         <td class="hidden-xs">
-          <div class="progress" style="width:100%">
+          <div class="progress">
             <div class="progress-bar" role="progressbar" style="width:<%= r[5].to_i %>%">
               <%= r[5].to_i %>%
             </div>
           </div>
         </td>
-        <td class='rightjustify hidden-xs'><%= r[6] %> </td>
+        <td class='hidden-xs'><%= r[6] %> </td>
       </tr>
     <% end %>
     <tr><td colspan=6>

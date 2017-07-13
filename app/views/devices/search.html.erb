@@ -1,9 +1,13 @@
 <div>
-  <%= form_tag do_search_devices_path, method: :get, id: 'root_search', class: 'form-inline' do %>
+  <%= form_tag do_search_devices_path, method: :get, id: 'root_search' do %>
     <%= hidden_field_tag 'target', 'All' %>
-    <div class="fields">
-      <%= text_field_tag 'search_str', @search_str, class: "form-control" %>
-      <%= submit_tag "Search" %>
+    <div class="input-group">
+      <%= text_field_tag 'search_str', @search_str, class: "form-control", placeholder: "Enter any device attribute; e.g. Any portion of serial number, model name, CRM ID, client name, address, or primary technician's name" %>
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit" name="commit" value="Search">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </div>
     </div>
   <% end %>
 </div>

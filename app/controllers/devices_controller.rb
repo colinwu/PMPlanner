@@ -251,6 +251,7 @@ class DevicesController < ApplicationController
   end
   
   def analyze_data
+    @page_title = "PM Status"
     session[:search_caller] = request.path_parameters[:action]
     you_are_here
     @rows = Array.new
@@ -323,7 +324,7 @@ class DevicesController < ApplicationController
         when (next_pm_date < @now + 2*range)
           bgclass = 'info'
         else
-          bgclass = ''
+          bgclass = 'allgood'
         end
         
         # Record TotBW row
@@ -387,7 +388,7 @@ class DevicesController < ApplicationController
             when (next_pm_date < @now + 2*range)
               bgclass = 'approaching'
             else
-              bgclass = ''
+              bgclass = 'allgood'
             end
             
             case
@@ -424,11 +425,11 @@ class DevicesController < ApplicationController
       @target = params[:target]
       @title = "Search: #{@search_str}"
       if @target == 'All'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page])
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       elsif @target == 'Region'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page])
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       else
-        @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page])
+        @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       end
       case @devices.length
       when 1
@@ -446,6 +447,7 @@ class DevicesController < ApplicationController
   end
   
   def enter_data
+    @page_title = "Data Entry"
     session[:search_caller] = request.path_parameters[:action]
     you_are_here
     
@@ -693,7 +695,7 @@ class DevicesController < ApplicationController
         else
           @order = 'outstanding_pms.next_pm_date asc'
         end
-        @dev_list = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).order(@order).uniq
+        @dev_list = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).order(@order).page(params[:page]).per_page(lpp)
         @dev_list.each do |d| 
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
@@ -708,10 +710,9 @@ class DevicesController < ApplicationController
 #           @code_date[c[0]] = c[1]
 #         end
       else
-        devs = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).uniq
-        devs.each do |dev|
+        @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).page(params[:page]).per_page(lpp)
+        @dev_list.each do |dev|
           pm_list = dev.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
-          @dev_list << dev
           @code_date[dev.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
           @code_count[dev.id] = pm_list.length
         end # Device.each

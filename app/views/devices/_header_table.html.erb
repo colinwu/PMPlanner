@@ -1,34 +1,42 @@
-<table width="100%">
+<table width="100%" class="hidden-xs">
   <tr>
     <td rowspan=2 width="30%" class="boxed" >
-    <%= form_tag do_search_devices_path, method: :get do %>
-      <%= text_field_tag 'search_str', @search_str, size: 10 %><br />
-      <%= hidden_field_tag 'target', 'All' %>
-      <%= submit_tag "Search" %>
-    <% end %>
-    <br />
-    <% unless @reading.nil? %>
-      <% unless @reading.device.model.model_group.model_targets.where("maint_code = 'DK' or maint_code = 'MREQ'").first.label.nil? %>
-        <%= form_for @reading do |f| %>
-          <%= f.label "Upload 22-6 file for this device" %>
-          <%= f.file_field :ptn1 %>
-          <%= f.hidden_field :device_id, { value: @reading.device_id } %>
-          <%= f.hidden_field :technician_id, { value: @reading.technician_id} %>
-          <%= f.submit "Upload" %>
+      <div>
+        <%= form_tag do_search_devices_path, method: :get do %>
+          <%= hidden_field_tag 'target', 'All' %>
+          <div class="input-group">
+            <%= text_field_tag 'search_str', @search_str, class: "form-control", placeholder: "Enter any device attribute;" %>
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit" name="commit" value="Search">
+                <span class="glyphicon glyphicon-search"></span>
+              </button>
+            </div>
+          </div>
         <% end %>
-      <% end %>
-    <% end %>
-    <br />
-    <% unless @device.nil? %>
-      <% case button
-        when "enter" %>
-      <% when "analysis" %>
-          <%= form_tag handle_checked_devices_path do %>
-            <%= hidden_field_tag "device[#{@device.id}]", @device.id %>
-            <%= submit_tag "Generate Parts List", name: 'parts' %>
+        <br />
+        <% unless @reading.nil? %>
+          <% unless @reading.device.model.model_group.model_targets.where("maint_code = 'DK' or maint_code = 'MREQ'").first.label.nil? %>
+            <%= form_for @reading do |f| %>
+              <%= f.label "Upload 22-6 file for this device" %>
+              <%= f.file_field :ptn1 %>
+              <%= f.hidden_field :device_id, { value: @reading.device_id } %>
+              <%= f.hidden_field :technician_id, { value: @reading.technician_id} %>
+              <%= f.submit "Upload" %>
+            <% end %>
           <% end %>
-      <% end %>
-    <% end %>
+        <% end %>
+        <br />
+        <% unless @device.nil? %>
+          <% case button
+            when "enter" %>
+          <% when "analysis" %>
+              <%= form_tag handle_checked_devices_path do %>
+                <%= hidden_field_tag "device[#{@device.id}]", @device.id %>
+                <%= submit_tag "Generate Parts List", name: 'parts' %>
+              <% end %>
+          <% end %>
+        <% end %>
+      </div>
     </td>
     <th>Equipment Details - <%= link_to_unless @device.nil?, "Edit", {controller: "devices", action: "edit", id: @device} %></th>
   </tr>
