@@ -6,11 +6,12 @@ set :repo_url, 'https://github.com/colinwu/PMPlanner.git'
 set :default_shell, "/bin/bash --login"
 set :default_stage, "production"
 
+set :keep_releases, 5
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/home/wucolin/apps/PMPlanner'
+# set :deploy_to, '/home/wucolin/apps/PMPlanner'
 
 # Default value for :scm is :git
 # set :scm, :git

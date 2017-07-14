@@ -1,6 +1,7 @@
-set :deploy_to, "/home/wucolin/src/PMPlanner"
+set :deploy_to, "/home/wucolin/apps/PMPlanner-mobile"
+set :branch, "mobile"
 
-server 'njpmq01.sharpamericas.com', user: 'wucolin', roles: %w{app db}, 
+server 'njpmp01.sharpamericas.com', user: 'wucolin', roles: %w{app db web}, 
     ssh_options: {
       port: 22,
       keys: %w(/home/wucolin/.ssh/id_rsa),
