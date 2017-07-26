@@ -70,3 +70,4 @@ end
 # gem 'debugger'
 
 gem "mocha", :group => :test
+gem "simple_form"

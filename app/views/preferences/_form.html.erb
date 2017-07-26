@@ -1,54 +1,84 @@
-<%= form_for @preference do |f| %>
-  <%= f.error_messages %>
+<%= simple_form_for @preference, html: {class: 'form-horizontal'} do |f| %>
+  <%= f.error_notification %>
 
   <fieldset>
     <legend>General Display and Pager Setting</legend>
-    <div class="left_field_label">Initial Screen</div>
-    <%= f.select 'default_root_path', [
-        ['Home', '/devices/search'],
-        ['My PM List', '/devices/my_pm_list'],
-        ['My Territory', '/devices'],
-        ['Data Analysis', '/devices/0/analyze_data'],
-        ['Service History', '/devices/0/service_history']
-      ]
-    %>
-    <br />
-    <div class="left_field_label">Lines / page</div>
-    <%= f.text_field :lines_per_page %>
+    <div class='form-group'>
+      <%= f.label :default_root_path, "Default startup screen", class: "control-label col-sm-2" %>
+      <div class='col-sm-2'>
+        <%= f.input_field :default_root_path, collection: [
+            ['Home', '/devices/search'],
+            ['My PM List', '/devices/my_pm_list'],
+            ['My Territory', '/devices'],
+            ['Data Analysis', '/devices/0/analyze_data'],
+            ['Service History', '/devices/0/service_history']
+          ], class: "form-control input-sm"
+        %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :lines_per_page, {class: "control-label col-sm-2"} %>
+      <div class='col-sm-2'>
+        <%= f.input_field :lines_per_page, class: "form-control input-sm" %>
+      </div>
+    </div>
   </fieldset>
+  
   <fieldset>
-  <legend>Meter reading</legend>
-    <div class="left_field_label">Default Notes</div>
-    <%= f.text_area :default_notes, :rows => 5, :cols => 60 %>
+    <legend>Meter reading</legend>
+    <div class="form-group">
+      <%= f.label :default_notes, class: "control-label col-sm-2" %>
+      <div class="col-sm-8">
+        <%= f.input_field :default_notes, class: "form-control input-sm" %>
+      </div>
+    </div>
   </fieldset>
+
   <fieldset>
-  <legend>PM List Settings</legend>
-<!--    <%= f.check_box :select_territory %>
-    Allow selection of territory<br />-->
-    <%= f.check_box :showbackup %>
-    Show devices for which I am the backup technician<br />
-    <p>
-    <div class="left_field_label">Forecast range:</div> <%= f.number_field :upcoming_interval %> weeks</p>
+    <legend>PM List Settings</legend>
+    <div class="form-group">
+      <%= f.label :upcoming_interval, "Forecast range (weeks)", class: "control-label col-sm-2" %>
+      <div class="col-sm-2">
+        <%= f.input_field :upcoming_interval, class: "form-control input-sm" %>
+      </div>
+      <div class="col-sm-8">
+        <%= f.input :showbackup, label: "Show devices for which I am the backup technician" %>
+      </div>
+    </div>
   </fieldset>
+  
   <fieldset>
   <legend>E-Mail Defaults</legend>
-    <%= f.check_box :use_default_email %> Allow use of default parameters for email messages<br />
-    <p>
-    <div class="left_field_label">Parts eMail</div>
-    <%= f.text_field :default_to_email, :size => 40 %></p>
-    <div class="left_field_label">Dispatch eMail</div>
-    <p>
-    <%= f.text_field :default_from_email, :size => 40 %></p>
-    <p>
-    <div class="left_field_label">Subject</div>
-    <%= f.text_field :default_subject, :size => 60 %></p>
-    <p>
-    <div class="left_field_label">Message</div>
-    <%= f.text_area :default_message, :cols => 60 %></p>
-    <p>
-    <div class="left_field_label">Signature</div>
-    <%= f.text_area :default_sig, :rows => 5, :cols => 60 %></p>
-    <p>
+    <div class="form-group">
+      <%= f.label :default_to_email, "Parts eMail", class: "control-label col-sm-2" %>
+      <div class="col-sm-6">
+        <%= f.input_field :default_to_email, as: :email, class: "form-control input-sm" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :default_from_email, "From eMail", class: "control-label col-sm-2" %>
+      <div class="col-sm-6">
+        <%= f.input_field :default_from_email, as: :email, class: "form-control input-sm" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :default_subject, "Subject", class: "control-label col-sm-2" %>
+      <div class="col-sm-7">
+        <%= f.input_field :default_subject, class: "form-control input-sm" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :default_message, "Message", class: "control-label col-sm-2" %>
+      <div class="col-sm-7">
+        <%= f.input_field :default_message, class: "form-control input-sm" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :default_sig, "Signature", class: "control-label col-sm-2" %>
+      <div class="col-sm-7">
+        <%= f.input_field :default_sig, as: :text, class: "form-control input-sm" %>
+      </div>
+    </div>
     <%= f.hidden_field :technician_id %>
   </fieldset>
   <p><%= f.submit %></p>

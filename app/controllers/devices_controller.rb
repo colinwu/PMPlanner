@@ -619,6 +619,7 @@ class DevicesController < ApplicationController
 
   def my_pm_list
     you_are_here
+    @page_title = "PM List"
     @search_params = params[:search] || Hash.new
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
@@ -806,6 +807,7 @@ class DevicesController < ApplicationController
   end
   
   def service_history
+    @page_title = "PM History"
     session[:search_caller] = request.path_parameters[:action]
     you_are_here
     begin
@@ -813,7 +815,6 @@ class DevicesController < ApplicationController
     rescue
       @device = nil
     end
-    @title = "Service History"
     if @device.nil?
       flash[:alert] = "No valid device specified."
       render "service_history"

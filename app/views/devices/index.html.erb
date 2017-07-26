@@ -1,5 +1,5 @@
 
-<table class="table-condensed table-hover" width="100%">
+<table class="table-condensed" width="100%">
   <caption>
     <span class=right_end>
       <%= form_tag show_or_hide_backup_devices_url do %>
@@ -48,7 +48,7 @@
         <%= submit_tag "Create Parts List for PMs", name: 'parts' %> | 
         <%= submit_tag "Create PM Order", name: 'service' %>
         <% if current_user.admin? or current_user.manager? %>
-          | Transfer device(s) to <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), include_blank: true %> <%= submit_tag "Go", name: 'transfer' %>
+          | Transfer device(s) to <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), {include_blank: true} %> <%= submit_tag "Go", name: 'transfer' %>
         <% end %>
       </div>
       <br />

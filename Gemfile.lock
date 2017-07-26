@@ -178,6 +178,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    simple_form (3.5.0)
+      actionpack (> 4, < 5.2)
+      activemodel (> 4, < 5.2)
     spring (2.0.0)
       activesupport (>= 4.2)
     sprockets (3.7.1)
@@ -239,6 +242,7 @@ DEPENDENCIES
   responders (~> 2.0)
   rvm1-capistrano3
   sass-rails
+  simple_form
   spring
   therubyracer
   uglifier (>= 1.0.3)
