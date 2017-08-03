@@ -66,18 +66,38 @@ jQuery ->
       content = ''
       for c in html
         content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + '<a href="/locations/' + c.id + '/edit">' + c.to_s + '</a><br />'
-      content += '<hr />
+      content += '<br />
         <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
-        <span class="left_field_label">Address1</span>
-        <input type="text" name="location[address1]" id="location_address1" value="" size="40" /><br />
-        <span class="left_field_label">Address2</span>
-        <input type="text" name="location[address2]" id="location_address2" value="" size="40" /><br />
-        <span class="left_field_label">City</span>
-        <input type="text" name="location[city]" id="location_city" value="" size="40" /><br />
-        <span class="left_field_label">Province</span>
-        <input type="text" name="location[province]" id="location_province" value="" size="2" /><br />
-        <span class="left_field_label">Postal Code</span>
-        <input type="text" name="location[post_code]" id="location_post_code" value="" size="7" />
+        <label class="control-label col-sm-2" for="location_address1">Address line 1</label>
+        <div class="col-sm-10">
+        <input type="text" name="location[address1]" id="location_address1" value="" class="form-control input-sm" />
+        </div>
+        <label class="control-label col-sm-2" for="location_address2">Address line 2</label>
+        <div class="col-sm-10">
+        <input type="text" name="location[address2]" id="location_address2" value="" class="form-control input-sm" />
+        </div>
+        <label class="control-label col-sm-2" for="location_city">City</label>
+        <div class="col-sm-10">
+        <input type="text" name="location[city]" id="location_city" value="" class="form-control input-sm" />
+        </div>
+        <label class="control-label col-sm-2" for="location_province">Province</label>
+        <div class="col-sm-10">
+        <select name="location[province]" id="location_province" class="form-control input-sm"><option value=""></option>
+        <option value="AB">Alberta</option>
+        <option value="BC">BC</option>
+        <option value="MB">Manitoba</option>
+        <option value="NB">New Brunswick</option>
+        <option value="NF">Newfoundland</option>
+        <option value="NS">Nova Scotia</option>
+        <option value="ON">Ontario</option>
+        <option value="PEI">PEI</option>
+        <option value="QC">Quebec</option>
+        <option value="SK">Sask</option></select>
+        </div>
+        <label class="control-label col-sm-2" for="location_post_code">Postal Code</label>
+        <div class="col-sm-10">
+        <input type="text" name="location[post_code]" id="location_post_code" value="" class="form-control input-sm" />
+        </div>
         </fieldset>'
       $('#device_location').html(content)
   )

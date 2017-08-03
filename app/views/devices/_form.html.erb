@@ -95,7 +95,7 @@
     <div class="form-group">
       <%= f.label :location_id, label: "Location", class: "control-label col-sm-2" %>
       <div class="col-sm-10">
-        <div id="device_location variable-width-input">
+        <div id="device_location" class="variable-width-input">
           <% @locations.each do |loc| %>
             <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc) %><br />
           <% end %>
