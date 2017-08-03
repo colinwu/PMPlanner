@@ -22,6 +22,11 @@ class Device < ActiveRecord::Base
   
   delegate :name, to: :client , prefix: true, allow_nil: true
   delegate :nm, to: :model, prefix: true, allow_nil: true
+#   delegate :name, to: :team, prefix: true
+    
+  def team_name
+    self.team.name
+  end
   
   def target_for(code)
     self.model.model_group.model_targets.where(["maint_code = ?",code]).first

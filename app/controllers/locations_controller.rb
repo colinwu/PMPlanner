@@ -3,6 +3,7 @@ class LocationsController < ApplicationController
   respond_to :json
   
   def index
+    @page_title = "Locations"
     you_are_here
     search_ar = ['placeholder']
     where_ar = []
@@ -73,6 +74,7 @@ class LocationsController < ApplicationController
   end
 
   def new
+    @page_title = "New Location"
     @location = Location.new
   end
 
@@ -88,6 +90,7 @@ class LocationsController < ApplicationController
   end
 
   def edit
+    @page_title = "Edit Location"
     @location = Location.find(params[:id])
     current_user.logs.create(message: "Editing location data: " + @location.inspect)
   end

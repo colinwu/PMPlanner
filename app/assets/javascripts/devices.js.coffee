@@ -18,12 +18,12 @@ jQuery ->
   mfp_model_id = {}
   if url.match(/\/devices\/new$/) || url.match(/\/devices\/\d+\/edit$/)
     $.getJSON '/models', (result) ->
-      $("#model_nm").hide()
+      $("#device_model_nm").hide()
       for m in result
         mfp_models.push(m.model.nm)
         mfp_model_id[m.model.nm] = m.model.id
-      $("#model_nm").autocomplete({ source: mfp_models })
-      $("#model_nm").show()
+      $("#device_model_nm").autocomplete({ source: mfp_models })
+      $("#device_model_nm").show()
   
   if url.match(/\/devices\/new$/)
     all_ids = JSON.parse($("#all_dev_ids_hidden").text())
@@ -33,11 +33,11 @@ jQuery ->
   # (usually this is a table cell) when the browser window is resized
   set_size_of field for field in $("[class$='width-input']")
   
-  $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
+#   $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
 
-  $(window).resize ->
-    set_size_of field for field in $("[class$='width-input']")
-    $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
+#   $(window).resize ->
+#     set_size_of field for field in $("[class$='width-input']")
+#     $("#device_location").outerWidth($("#device_location").parent().width() - $(".left_field_label").outerWidth() - 10)
   
 # Detects the last device to be "checked" and makes it the target for "service history", "PM status" and "Data Entry"
   $("[id^='device_']").change (e) ->

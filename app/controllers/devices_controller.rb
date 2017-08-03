@@ -181,6 +181,7 @@ class DevicesController < ApplicationController
     you_are_here
     @device = Device.find(params[:id])
     @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
+    @location = Location.new
     @contacts = @device.location.contacts
     if current_user.can_manage?(@device)
       @readonly_flag =  false
@@ -199,6 +200,7 @@ class DevicesController < ApplicationController
       loc.save
       params[:device][:location_id] = loc.id
     end
+    params[:device].delete('model_nm')
     if @device.update_attributes(params[:device])
       current_user.logs.create(device_id: @device.id, message: "Updated device with #{params[:device].inspect}")
       flash[:alert] = nil

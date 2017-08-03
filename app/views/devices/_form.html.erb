@@ -1,104 +1,133 @@
-<%= form_for @device do |f| %>
-  <%= f.error_messages %>
-  <br />
-  <table width=100%>
-    <tr><th>Equipment Detail</th><th>Equipment Notes</th></tr>
-    <tr>
-      <td width=45%>
-        <span class="left_field_label">CRM ID</span>
-        <%= f.text_field :crm_object_id, readonly: @readonly_flag, size: 10 %><br />
-        <span class="left_field_label">Model</span>
-        <%= text_field_tag :model_nm, @device.model_nm, readonly: @readonly_flag, size: 10 %><br />
+<br />
+<%= simple_form_for @device, html: {class: "form-horizontal"} do |f| %>
+  <%= f.error_notification %>
+  <fieldset>
+    <legend>Equipment Detail</legend>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <%= f.label :crm_object_id, label: "CRM ID", class: "control-label col-sm-4" %>
+          <div class="col-sm-8">
+            <%= f.input_field :crm_object_id, {readonly: @readonly_flag, class: "form-control input-sm"} %>
+            <%= f.error :crm_object_id %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :nm, label: "Model", class: "control-label col-sm-4" %>
+          <div class="col-sm-8">
+            <%= f.input_field :model_nm, {readonly: @readonly_flag, class: "form-control input-sm"} %>
+            <%= f.error :model_nm %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :serial_number, label: "Serial #", class: "control-label col-sm-4" %>
+          <div class="col-sm-8">
+            <%= f.input_field :serial_number, {:readonly => @readonly_flag, class: "form-control input-sm"} %>
+            <%= f.error :serial_number %>
+          </div>
+        </div>
         <%= f.hidden_field :model_id %>
-        <span class="left_field_label">Serial Number</span>
-        <%= f.text_field :serial_number, :readonly => @readonly_flag, size: 10 %>
-      </td>
-      <td id="dev_notes_cell">
-        <%= f.text_area :notes, :rows => 5, id: 'dev_notes' %>
-      </td> 
-    </tr>
-  </table>
-  <table width="100%">
-    <tr>
-      <td width="33%">
-        <span class='left_field_label'>Team</span>
-        <% if current_user.admin? %>
-          <%= f.select :team_id, options_from_collection_for_select(Team.all, :id, :name, @device.team.nil? ? nil : @device.team_id), include_blank: true %>
-          <br />
-        <% else %>
-          <%= text_field_tag :team, "#{@device.team.name}", :readonly => true %>
-          <br />
-        <% end %>
-        <span class="left_field_label">Primary tech</span>
-        <% if current_user.manager? or current_user.admin? %>
-          <%= f.select :primary_tech_id, options_from_collection_for_select(current_user.my_techs, :id, :full_name, @device.primary_tech_id.nil? ? nil : @device.primary_tech_id), include_blank: true %>
-          <br />
-        <% else %>
-          <%= text_field_tag :primary_tech, "#{@device.primary_tech.first_name} #{@device.primary_tech.last_name}", :readonly => @readonly_flag %>
-          <br />
-        <% end %>
-        <span class="left_field_label">Backup tech</span>
-        <% if current_user.manager? or current_user.admin? %>
-          <%= f.select :backup_tech_id, options_from_collection_for_select(current_user.my_techs, :id, :full_name, @device.backup_tech_id.nil? ? nil : @device.backup_tech_id), include_blank: true %>
-          <br />
-        <% else %>
-          <%= text_field_tag :backup_tech, @device.backup_tech.nil? ? '' : "#{@device.backup_tech.first_name} #{@device.backup_tech.last_name}", :readonly => @readonly_flag %>
-          <br />
-        <% end %>
-        <span class="left_field_label">Manager</span>
-        <% manager = (@device.manager.nil?) ? '' : "#{@device.manager.full_name}" %>
-        <%= text_field_tag :manager, manager, :readonly => @readonly_flag %>
-        <% if @device.id.nil? %>
-          <br />
-          <span class="left_field_label" title="When do you want the tech to make the first visit?">Date of 1st visit (?)</span>
-          <%= text_field_tag 'first_visit', Date::today.to_s(:MdY), {class: 'center'} %>
-        <% end %>
-      </td>
-      <td width=33%>
-        Equipment Status:<br /><br />
-        <%= f.check_box :active %> Active
-        <br />
-        <%= f.check_box :under_contract %> Under contract
-        <br />
-        <%= f.check_box :do_pm %> In PM program
-      </td>
-      <td>
-        Estimate PM date using:<br /><br />
-        <%= f.radio_button :pm_counter_type, 'count' %> Page Counter<br />
-        <%= f.radio_button :pm_counter_type, 'rotation' %> Rotations<br />
-        <%= f.radio_button :pm_counter_type, 'life' %> Life %
-      </td>
-    </tr>
-  </table>
-  <p><hr /></p>
-  <table width="100%">
-    <tr><td>
-      <span class="left_field_label" title="Start typing the customer's name...">Customer (?)</span>
-      <%= f.hidden_field :client_id %>
-      <%= f.hidden_field 'location_id' %>
-      <%= autocomplete_field_tag :client_name, @device.client_name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', :size => 60 %>
-    <br />
-      <span class="left_field_label" title="Select from the list once you've entered a valid customer name.">Location (?)</span>
-      <div id="device_location">
-        <% @locations.each do |loc| %>
-          <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc) %><br />
-        <% end %>
-        <br /><hr />
-        <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
-        <span class='left_field_label'>Address1</span>
-          <%= text_field_tag 'location[address1]', '', size: 40 %><br />
-        <span class='left_field_label'>Address2</span>
-          <%= text_field_tag 'location[address2]', '', size: 40 %><br />
-        <span class='left_field_label'>City</span>
-          <%= text_field_tag 'location[city]', '', size: 40 %><br />
-        <span class='left_field_label'>Province</span>
-          <%= select_tag 'location[province]', options_for_select([['',''],['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]) %><br />
-        <span class='left_field_label'>Postal Code</span>
-          <%= text_field_tag 'location[post_code]', '', size: 7 %>
-        </fieldset>
       </div>
-      </td>
-    </tr>
+      <div class="col-sm-3 left-vert-separator">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-11">
+          <%= f.input :active %>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-11">
+          <%= f.input :under_contract %>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-11">
+          <%= f.input :do_pm, label: "In PM program" %>
+        </div>
+      </div>
+      
+      <div class="col-sm-5 left-vert-separator">
+        <%= f.label :team_id, label: "Team", class: "control-label col-sm-4" %>
+        <div class="col-sm-8">
+          <% if current_user.admin? %>
+            <%= f.input_field :team_id, collection: Team.all.map{|team| [team.name, team.id]} , selected: @device.team_id, include_blank: false, class: 'form-control input-sm' %>
+          <% else %>
+            <p class="form-control-static"><%= @device.team.name %></p>
+          <% end %>
+        </div>
+        <%= f.label :primary_tech_id, label: "Primary Tech", class: "control-label col-sm-4" %>
+        <div class="col-sm-8">
+          <% if current_user.manager? or current_user.admin? %>
+            <%= f.input_field :primary_tech_id, collection: current_user.my_techs.map{|tech| [tech.full_name, tech.id]}, selected: (@device.primary_tech_id.nil? ? nil : @device.primary_tech_id), include_blank: true, class: 'form-control input-sm' %>
+          <% else %>
+            <p class="form-control-static"><%= @device.primary_tech.full_name %></p>
+          <% end %>
+        </div>
+        <%= f.label :backup_tech_id, label: "Backup Tech", class: "control-label col-sm-4" %>
+        <div class="col-sm-8">
+          <% if current_user.manager? or current_user.admin? %>
+            <%= f.input_field :backup_tech_id, collection: current_user.my_techs.map{|tech| [tech.full_name, tech.id]}, selected: @device.backup_tech_id.nil? ? nil : @device.backup_tech_id, include_blank: true, class: "form-control input-sm" %>
+          <% else %>
+            <p class="form-control-static"><%= @device.backup_tech.nil? ? '' : "#{@device.backup_tech.full_name}" %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-4">
+        <%= f.input :pm_counter_type, collection: [['Page Counter','counter'], ['Rotations', 'rotation'], ['Life %','life']], as: :radio_buttons, label: "Estimate PM date using:" %>
+      </div>
+      <div class="col-sm-6">
+        <%= f.input :notes, placeholder: "Record notes for this device.", class: "form-control input-sm variable-width-input" %>
+      </div>
+    </div>
+  </fieldset>
+  
+  <fieldset>
+    <legend>Client and Location</legend>
+    <div class="form-group">
+      <%= f.label :client_id, label: "Customer", title: "Start typing the customer's name...", class: "control-label col-sm-2" %>
+      <div class="col-sm-10">
+        <%= autocomplete_field_tag :client_name, @device.client_name, autocomplete_client_name_devices_path(team_id: @device.team_id), id_element: '#device_client_id', class: "form-control input-sm" %>
+        <%= f.hidden_field :client_id %>
+        <%= f.hidden_field 'location_id' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :location_id, label: "Location", class: "control-label col-sm-2" %>
+      <div class="col-sm-10">
+        <div id="device_location variable-width-input">
+          <% @locations.each do |loc| %>
+            <%= f.radio_button :location_id, loc.id %> <%= link_to loc.to_s, edit_location_path(loc) %><br />
+          <% end %>
+          <br />
+          <fieldset>
+            <legend>New Location. Fill in all fields as best as you can.</legend>
+            <%= label_tag 'location[address1]', 'Address line 1', {class: "control-label col-sm-2"} %>
+            <div class="col-sm-10">
+              <%= text_field_tag 'location[address1]', '', class: "form-control input-sm" %>
+            </div>
+            <%= label_tag 'location[address2]', 'Address line 2', {class: "control-label col-sm-2"} %>
+            <div class="col-sm-10">
+              <%= text_field_tag 'location[address2]', '', class: "form-control input-sm" %>
+            </div>
+            <%= label_tag 'location[city]', 'City', {class: "control-label col-sm-2"} %>
+            <div class="col-sm-10">
+              <%= text_field_tag 'location[city]', '', class: "form-control input-sm" %>
+            </div>
+            <%= label_tag 'location[province]', 'Province', {class: "control-label col-sm-2"} %>
+            <div class="col-sm-10">
+              <%= select_tag 'location[province]', options_for_select([['',''],['Alberta','AB'],['BC','BC'],['Manitoba','MB'],['New Brunswick','NB'],['Newfoundland','NF'],['Nova Scotia','NS'],['Ontario','ON'],['PEI','PEI'],['Quebec','QC'],['Sask','SK']]), class: "form-control input-sm" %>
+            </div>
+            <%= label_tag 'location[post_code]', "Postal Code", {class: "control-label col-sm-2"} %>
+            <div class="col-sm-10">
+              <%= text_field_tag 'location[post_code]', '', {class: "form-control input-sm"} %>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <table width="100%">
     <tr><td colspan='100%'>
       <p><%= f.submit %></p>
     </td></tr>

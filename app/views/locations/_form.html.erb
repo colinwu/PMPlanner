@@ -1,36 +1,12 @@
-<%= form_for @location do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :address1 %><br />
-    <%= f.text_field :address1, size: 60 %>
-  </p>
-  <p>
-    <%= f.label :address2 %><br />
-    <%= f.text_field :address2, size: 60 %>
-  </p>
-  <p>
-    <%= f.label :city %><br />
-    <%= f.text_field :city %>
-  </p>
-  <p>
-    <%= f.label :province %><br />
-    <%= f.text_field :province %>
-  </p>
-  <p>
-    <%= f.label :post_code %><br />
-    <%= f.text_field :post_code %>
-  </p>
-  <p>
-    <%= f.label :notes %><br />
-    <%= f.text_field :notes, size: 60 %>
-  </p>
-  <p>
-    <%= f.label 'Team' %><br />
-    <%= f.collection_select :team_id, Team.all.order(:name), :id, :name %>
-  </p>
-  <p>
-    Client:<br />
-    <%= f.collection_select :client_id, Client.all.order(:name), :id, :name %>
-  </p>
-  <p><%= f.submit %></p>
+<%= simple_form_for @location do |f| %>
+  <%= f.error_notification %>
+    <%= f.input :address1, label: "Address line 1" %>
+    <%= f.input :address2, label: "Address line 2" %>
+    <%= f.input :city %>
+    <%= f.input :province %>
+    <%= f.input :post_code, label: "Postal code" %>
+    <%= f.input :notes %>
+    <%= f.association :team, collection: Team.order(:name) %>
+    <%= f.association :client, collection: Client.order(:name) %>
+    <%= f.button :submit %>
 <% end %>
