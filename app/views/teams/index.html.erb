@@ -1,6 +1,6 @@
-<% title "Teams" %>
+<br />
 
-<table>
+<table class="table-condensed table-striped">
   <tr>
     <th>Team</th>
     <th>Name</th>
@@ -9,9 +9,10 @@
     <tr>
       <td><%= team.team_id %></td>
       <td><%= team.name %></td>
-      <td><%= link_to "Show", team %></td>
-      <td><%= link_to "Edit", edit_team_path(team) %></td>
-      <td><%= link_to "Destroy", team, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to edit_team_path(team) do %><span class="glyphicon glyphicon-edit"></span>
+      <% end %></td>
+      <td><%= link_to team, :confirm => 'Are you sure?', :method => :delete do %><span class="glyphicon glyphicon-trash"></span>
+      <% end %></td>
     </tr>
   <% end %>
 </table>

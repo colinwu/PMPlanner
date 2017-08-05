@@ -107,7 +107,7 @@ class DevicesController < ApplicationController
   end
 
   def new
-    @title = "Add a new device"
+    @page_title = "Add Device"
     you_are_here
     begin
       @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
@@ -176,7 +176,7 @@ class DevicesController < ApplicationController
   end
 
   def edit
-    @title = "Edit device info"
+    @page_title = "Edit device info"
     session[:caller] = request.path_parameters[:action]
     you_are_here
     @device = Device.find(params[:id])
@@ -621,7 +621,7 @@ class DevicesController < ApplicationController
 
   def my_pm_list
     you_are_here
-    @page_title = "PM List"
+    @page_title = replace_my + " PM List"
     @search_params = params[:search] || Hash.new
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
