@@ -2,6 +2,7 @@ class ModelGroupsController < ApplicationController
   before_action :authorize
   before_action :require_admin, except: [:get_targets, :index, :show]
   def index
+    @page_title = "Model Groups"
     respond_to do |format|
       format.html {
         you_are_here
@@ -34,6 +35,7 @@ class ModelGroupsController < ApplicationController
   end
 
   def show
+    @page_title = "Model Group Details"
     you_are_here
     @model_group = ModelGroup.find(params[:id])
     @pm_code = {}
@@ -50,6 +52,7 @@ class ModelGroupsController < ApplicationController
   end
 
   def new
+    @page_title = "New Model Group"
     if current_user.admin? or current_user.manager?
       @model_group = ModelGroup.new(color_flag: true)
       @pm_code = {}
@@ -99,6 +102,7 @@ class ModelGroupsController < ApplicationController
   end
 
   def edit
+    @page_title = "Edit Model Group"
     @model_group = ModelGroup.find(params[:id])
     @pm_code = {}
     @section = {}
@@ -156,7 +160,7 @@ class ModelGroupsController < ApplicationController
   def destroy
     @model_group = ModelGroup.find(params[:id])
     @model_group.destroy
-    redirect_to model_groups_url, :notice => "Successfully destroyed model group."
+    redirect_to model_groups_url, :notice => "Successfully deleted model group."
   end
   
   def get_targets

@@ -4,6 +4,7 @@ class ContactsController < ApplicationController
   
   def index
     you_are_here
+    @page_title = "Contacts"
     @search_params = params[:search] || Hash.new
     search_ar = []
     if params[:search]
@@ -52,11 +53,12 @@ class ContactsController < ApplicationController
   end
 
   def show
+    @page_title = "Contact Details"
     @contact = Contact.find(params[:id])
   end
 
   def new
-    @title = "Add New Contact"
+    @page_title = "Add New Contact"
     @contact = Contact.new
     @clients = Client.all.order(:name)
   end
@@ -71,7 +73,7 @@ class ContactsController < ApplicationController
   end
 
   def edit
-    @title = "Edit Contact"
+    @page_title = "Edit Contact"
     @contact = Contact.find(params[:id])
     @clients = Client.all.order(:name)
   end
@@ -88,7 +90,7 @@ class ContactsController < ApplicationController
   def destroy
     @contact = Contact.find(params[:id])
     @contact.destroy
-    redirect_to contacts_url, :notice => "Successfully destroyed contact."
+    redirect_to contacts_url, :notice => "Successfully deleted contact."
   end
   
   private

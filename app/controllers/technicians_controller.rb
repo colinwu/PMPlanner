@@ -9,10 +9,10 @@ class TechniciansController < ApplicationController
       @order = params[:sort]
     end
     if current_user.admin?
-      @title = "Technicians"
+      @page_title = "Technicians"
       @technicians = Technician.all.joins(:team).order(@order)
     elsif current_user.manager?
-      @title = "My techs"
+      @page_title = "My Techs"
       @technicians = current_user.my_techs.joins(:team).order(@order)
     end
   end
@@ -24,6 +24,7 @@ class TechniciansController < ApplicationController
 
   def new
     if current_user.admin?
+      @page_title = "Add Technician"
       @technician = Technician.new
     else
       flash[:notice] = "Sorry, only admins can add technicians."
@@ -35,13 +36,10 @@ class TechniciansController < ApplicationController
     @technician = Technician.new(params[:technician])
     if @technician.save
       @technician.create_preference(
-        limit_to_region: true,
-        limit_to_territory: true,
         default_root_path: '/devices/search',
         lines_per_page: 25,
         upcoming_interval: 2,
-        default_to_email: 'sharpdirectparts@sharpsec.com',
-        default_from_email: 'landriaultl@sharpsec.com'
+        default_to_email: 'sharpdirectparts@sharpsec.com'
       )
       current_user.logs.create(message: "Successfully created technician #{@technician.id}")
       redirect_to back_or_go_here, :notice => "Successfully created technician."
@@ -53,7 +51,7 @@ class TechniciansController < ApplicationController
   def edit
     if current_user.admin? or current_user.manager?
       @technician = Technician.find(params[:id])
-      @title = "Edit Info for #{@technician.first_name} #{@technician.last_name}"
+      @page_title = "Edit Info for #{@technician.first_name} #{@technician.last_name}"
     else
       redirect_to back_or_go_here(current_user.preference.default_root_path), alert: "You are not permitted to edit technicians."
     end

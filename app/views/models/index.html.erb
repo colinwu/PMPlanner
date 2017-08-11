@@ -1,3 +1,4 @@
+<br />
 <table width="100%" class="table-condensed">
   <tr>
     <th>Model</th><th>Model Group</th><th>Color</th><th>Description</th>
@@ -19,20 +20,18 @@
       <td><%= model.model_group.description %></td>
       <td><%= link_to model do %>
             <span class="glyphicon glyphicon-eye-open"></span>
-          <% end %>
-      </td>
-      <td><%= link_to edit_model_path(model) do %>
+          <% end %> |
+       <%= link_to edit_model_path(model) do %>
             <span class="glyphicon glyphicon-edit"></span>
-          <% end %>
-      </td>
-      <td><%= link_to model, :confirm => 'Are you sure?', :method => :delete do %>
+          <% end %> |
+       <%= link_to model, :confirm => 'Are you sure?', :method => :delete do %>
             <span class="glyphicon glyphicon-trash"></span>
           <% end %>
       </td>
     </tr>
   <% end %>
 </table>
-<% if current_technician.admin %>
+<% if current_user.admin? %>
   <p><%= link_to "New Model", new_model_path %></p>
 <% end %>
 <p><%= will_paginate(@models) %></p>

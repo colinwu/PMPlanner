@@ -3,6 +3,7 @@ class PartsController < ApplicationController
   before_action :require_manager, only: [:new, :create, :destroy]
   
   def index
+    @page_title = "Parts List"
     if params[:commit] == 'Search'
       search_ar = ['placeholder']
       where_ar = []
@@ -23,11 +24,12 @@ class PartsController < ApplicationController
   end
 
   def show
+    @page_title = "Part Detail"
     @part = Part.find(params[:id])
   end
 
   def new
-    @title = "Add new part"
+    @page_title = "Add new part"
     @part = Part.new
   end
 
@@ -41,6 +43,7 @@ class PartsController < ApplicationController
   end
 
   def edit
+    @page_title = "Edit Part"
     @part = Part.find(params[:id])
   end
 
@@ -56,6 +59,6 @@ class PartsController < ApplicationController
   def destroy
     @part = Part.find(params[:id])
     @part.destroy
-    redirect_to parts_url, :notice => "Successfully destroyed part."
+    redirect_to parts_url, :notice => "Successfully deleted part."
   end
 end

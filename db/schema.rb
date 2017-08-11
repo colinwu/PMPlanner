@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206213025) do
+ActiveRecord::Schema.define(version: 20170809172418) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -72,9 +72,9 @@ ActiveRecord::Schema.define(version: 20161206213025) do
     t.integer  "location_id",       limit: 4
     t.integer  "primary_tech_id",   limit: 4
     t.integer  "backup_tech_id",    limit: 4
-    t.boolean  "active",            limit: 1
-    t.boolean  "under_contract",    limit: 1
-    t.boolean  "do_pm",             limit: 1
+    t.boolean  "active"
+    t.boolean  "under_contract"
+    t.boolean  "do_pm"
     t.string   "pm_counter_type",   limit: 255,   default: "0"
     t.float    "pm_visits_min",     limit: 24
     t.text     "notes",             limit: 65535
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 20161206213025) do
     t.string   "description", limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
-    t.boolean  "color_flag",  limit: 1
+    t.boolean  "color_flag"
   end
 
   create_table "model_targets", force: :cascade do |t|
@@ -174,30 +174,21 @@ ActiveRecord::Schema.define(version: 20161206213025) do
   end
 
   create_table "preferences", force: :cascade do |t|
-    t.boolean  "limit_to_region",         limit: 1
-    t.boolean  "limit_to_territory",      limit: 1
-    t.boolean  "previous_pm",             limit: 1
-    t.boolean  "data_entry_date_prompt",  limit: 1
-    t.boolean  "data_entry_notes_prompt", limit: 1
-    t.text     "default_notes",           limit: 65535
-    t.boolean  "select_territory",        limit: 1
-    t.string   "territory_to_explore",    limit: 255
-    t.string   "default_units_to_show",   limit: 255
-    t.integer  "upcoming_interval",       limit: 4
-    t.boolean  "use_default_email",       limit: 1
-    t.string   "default_to_email",        limit: 255
-    t.string   "default_subject",         limit: 255
-    t.string   "default_from_email",      limit: 255
-    t.text     "default_message",         limit: 65535
-    t.string   "default_sig",             limit: 255
-    t.integer  "max_lines",               limit: 4
-    t.boolean  "email_edit",              limit: 1
-    t.integer  "technician_id",           limit: 4
-    t.datetime "created_at",                                                            null: false
-    t.datetime "updated_at",                                                            null: false
-    t.integer  "lines_per_page",          limit: 4
-    t.string   "default_root_path",       limit: 255,   default: "/devices/my_pm_list"
-    t.boolean  "showbackup",              limit: 1
+    t.text     "default_notes",         limit: 65535
+    t.string   "default_units_to_show", limit: 255
+    t.integer  "upcoming_interval",     limit: 4
+    t.string   "default_to_email",      limit: 255
+    t.string   "default_subject",       limit: 255
+    t.string   "default_from_email",    limit: 255
+    t.text     "default_message",       limit: 65535
+    t.string   "default_sig",           limit: 255
+    t.integer  "max_lines",             limit: 4
+    t.integer  "technician_id",         limit: 4
+    t.datetime "created_at",                                                          null: false
+    t.datetime "updated_at",                                                          null: false
+    t.integer  "lines_per_page",        limit: 4
+    t.string   "default_root_path",     limit: 255,   default: "/devices/my_pm_list"
+    t.boolean  "showbackup"
   end
 
   create_table "reading_targets", force: :cascade do |t|
@@ -271,8 +262,8 @@ ActiveRecord::Schema.define(version: 20161206213025) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip", limit: 255
     t.string   "last_sign_in_ip",    limit: 255
-    t.boolean  "admin",              limit: 1,   default: false, null: false
-    t.boolean  "manager",            limit: 1,   default: false
+    t.boolean  "admin",                          default: false, null: false
+    t.boolean  "manager",                        default: false
   end
 
   add_index "technicians", ["email"], name: "index_technicians_on_email", unique: true, using: :btree
@@ -281,7 +272,7 @@ ActiveRecord::Schema.define(version: 20161206213025) do
     t.integer  "from_team_id", limit: 4
     t.integer  "to_team_id",   limit: 4
     t.integer  "device_id",    limit: 4
-    t.boolean  "accepted",     limit: 1, default: false
+    t.boolean  "accepted",               default: false
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
   end

@@ -70,6 +70,7 @@ class LocationsController < ApplicationController
   end
 
   def show
+    @page_title = "Location Details"
     @location = Location.find(params[:id])
   end
 
@@ -122,7 +123,7 @@ class LocationsController < ApplicationController
     @search_params = params[:search] || Hash.new
     @location = Location.find(params[:id])
     @devices = @location.devices.paginate(:page => params[:page])
-    @title = "Devices located at #{@location.address1}, #{@location.city}"
+    @page_title = "Devices located at #{@location.address1}, #{@location.city}"
     render "/devices/index"
   end
   

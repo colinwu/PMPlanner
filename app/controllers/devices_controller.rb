@@ -96,6 +96,7 @@ class DevicesController < ApplicationController
 
   def show
     @device = Device.find(params[:id])
+    @page_title = "Details for #{@device.serial_number}"
     if current_user.can_manage?(@device)
       you_are_here
       @manager = Technician.where(["team_id = ? and manager = TRUE", @device.team_id]).first

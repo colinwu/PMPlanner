@@ -1,14 +1,18 @@
 <br />
 
-<table class="table-condensed table-striped">
+<table class="table table-striped">
   <tr>
     <th>Team</th>
     <th>Name</th>
+    <th>Manager</th>
+    <th>Warehouse</th>
   </tr>
   <% for team in @teams %>
     <tr>
       <td><%= team.team_id %></td>
       <td><%= team.name %></td>
+      <td><%= team.manager.try(:full_name) %></td>
+      <td><%= team.warehouse_id %></td>
       <td><%= link_to edit_team_path(team) do %><span class="glyphicon glyphicon-edit"></span>
       <% end %></td>
       <td><%= link_to team, :confirm => 'Are you sure?', :method => :delete do %><span class="glyphicon glyphicon-trash"></span>

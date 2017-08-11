@@ -7,5 +7,4 @@ class Model < ActiveRecord::Base
   validates :nm, presence: true
   validates :nm, uniqueness: true
   
-  accepts_nested_attributes_for :devices
 end

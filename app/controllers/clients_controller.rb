@@ -5,16 +5,18 @@ class ClientsController < ApplicationController
   
   def index
     you_are_here
-    @title = "Clients"
+    @page_title = "Clients"
 #     @tech = current_user.admin? ? Technician.find(params[:tech_id]) : current_user
     @clients = Client.order(:name).page(params[:page])
   end
 
   def show
     @client = Client.find(params[:id])
+    @page_title = "Details for #{@client.name}"
   end
 
   def new
+    @page_title = "Create New Client"
     @client = Client.new
   end
 
@@ -28,6 +30,7 @@ class ClientsController < ApplicationController
   end
 
   def edit
+    @page_title = "Edit Client"
     you_are_here
     @client = Client.find(params[:id])
   end
@@ -44,7 +47,7 @@ class ClientsController < ApplicationController
   def destroy
     @client = Client.find(params[:id])
     @client.destroy
-    redirect_to clients_url, :notice => "Successfully destroyed client."
+    redirect_to clients_url, :notice => "Successfully deleted client."
   end
 
   def get_info

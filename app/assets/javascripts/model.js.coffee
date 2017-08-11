@@ -5,30 +5,31 @@ jQuery ->
   codeNames = []
   url = document.documentURI
   if url.match(/\/models\/new$/) || url.match(/\/models\/\d+\/edit$/)
-    $("#model_group").hide()
-    $.getJSON "/model_groups", (result) ->
-      for mg in result
-        gn = mg.model_group.name
-        groupIDs[gn] = mg.model_group.id
-        groupNames.push(gn)
-      $("#model_group").autocomplete({ source: groupNames })
-      $("#model_group").show()
-      return true
+#     $("#model_model_group_id").hide()
+#     $.getJSON "/model_groups", (result) ->
+#       for mg in result
+#         gn = mg.model_group.name
+#         groupIDs[gn] = mg.model_group.id
+#         groupNames.push(gn)
+#       $("#model_group").autocomplete({ source: groupNames })
+#       $("#model_group").show()
+#       return true
     $.getJSON "/pm_codes", (result) ->
       for item in result
         codeNames.push(item.pm_code.name)
       return true
   
-  $("#model_group").focusout (e) ->
-    mg = $(e.currentTarget).val()
+  $("#model_model_group_id").change (e) ->
+    mg = $("#model_model_group_id").val()
+    console.log("mg value = " + mg)
     to_show = ['BWTOTAL', 'CTOTAL']
     to_hide = []
-    if mg.length > 0 and groupNames.indexOf(mg) != -1
+    if mg.length > 0
       targetValue = {}
       targetSec = {}
       targetLbl = {}
       $("[id$='_field']").show()
-      $.getJSON "/model_groups/#{groupIDs[mg]}/get_targets", (result) ->
+      $.getJSON "/model_groups/#{mg}/get_targets", (result) ->
         # build list of codes that should remain visible
         for item in result
           target = item.model_target

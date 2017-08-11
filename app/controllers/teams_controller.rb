@@ -1,5 +1,6 @@
 class TeamsController < ApplicationController
   def index
+    @page_title = "Teams"
     @teams = Team.all
   end
 
@@ -12,26 +13,28 @@ class TeamsController < ApplicationController
   end
 
   def new
+    @page_title = "Create Team"
     @team = Team.new
   end
 
   def create
     @team = Team.new(params[:team])
     if @team.save
-      redirect_to @team, :notice => "Successfully created team."
+      redirect_to teams_url, :notice => "Successfully created team."
     else
       render :action => 'new'
     end
   end
 
   def edit
+    @page_title = "Edit Team Details"
     @team = Team.find(params[:id])
   end
 
   def update
     @team = Team.find(params[:id])
     if @team.update_attributes(params[:team])
-      redirect_to @team, :notice  => "Successfully updated team."
+      redirect_to teams_url, :notice  => "Successfully updated team."
     else
       render :action => 'edit'
     end
@@ -40,7 +43,7 @@ class TeamsController < ApplicationController
   def destroy
     @team = Team.find(params[:id])
     @team.destroy
-    redirect_to teams_url, :notice => "Successfully destroyed team."
+    redirect_to teams_url, :notice => "Successfully deleted team."
   end
   
   # [NOTE] This assumes there's only one manager per region

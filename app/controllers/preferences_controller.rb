@@ -2,6 +2,7 @@ class PreferencesController < ApplicationController
   before_action :authorize
   
   def index
+    @page_title = "Profiles"
     unless current_user.admin?
       redirect_to edit_preferences_path(current_technician)
     else
@@ -21,11 +22,11 @@ class PreferencesController < ApplicationController
       @preference = Preference.new(
         limit_to_region: true,
         limit_to_territory: true,
-        default_root_path: '/devices/my_pm_list',
+        default_root_path: '/devices/search',
         lines_per_page: 25,
         upcoming_interval: 2,
         default_to_email: 'sharpdirectparts@sharpsec.com',
-        default_from_email: 'landriaultl@sharpsec.com'
+        default_from_email: ''
       )
     end
   end
@@ -40,14 +41,13 @@ class PreferencesController < ApplicationController
   end
 
   def edit
+    @page_title = "Edit Preferences"
     if current_user.admin?
       @technician = Technician.find params[:id]
-      @title = "Edit Preferences for #{@technician.first_name} #{@technician.last_name}"
     else
       if params[:id].to_i != current_user.id
         flash[:notice] = "You can only edit your own profile."
       end
-      @title = "Edit Preferences for #{current_user.first_name} #{current_user.last_name}"
       @technician = current_user
     end
     @preference = @technician.preference

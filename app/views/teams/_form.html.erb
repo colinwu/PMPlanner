@@ -1,12 +1,8 @@
-<%= form_for @team do |f| %>
+<%= simple_form_for @team do |f| %>
   <%= f.error_messages %>
-  <p>
-    <%= f.label :team_id %><br />
-    <%= f.number_field :team_id %>
-  </p>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p><%= f.submit %></p>
+    <%= f.input :team_id %>
+    <%= f.input :name %>
+  <%= f.association :manager, collection: Technician.where("manager is true or admin is true").map {|t| [t.full_name, t.id]} %>
+  <%= f.input :warehouse_id %>
+    <p><%= f.submit %></p>
 <% end %>

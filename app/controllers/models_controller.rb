@@ -3,6 +3,7 @@ class ModelsController < ApplicationController
   before_action :require_admin, only: [:destroy, :new, :create]
   
   def index
+    @page_title = "Models"
     @search_params = params[:search] || {}
     search_ar = ["place holder"]
     where_ar = []
@@ -37,9 +38,11 @@ class ModelsController < ApplicationController
 
   def show
     @model = Model.find(params[:id])
+    @page_title = "Details for #{@model.nm}"
   end
 
   def new
+    @page_title = "New Model"
     if current_user.admin? or current_user.manager?
       @model = Model.new
       @pm_code = {}
@@ -54,7 +57,7 @@ class ModelsController < ApplicationController
     name = params[:model][:nm].gsub(/\W/,'')
     @model = Model.new(nm: name)
     # Make sure model group exists and is properly associated with the model
-    mg_name = params[:model_group].empty? ? name : params[:model_group]
+    mg_name = params[:model][:model_group_id].empty? ? name : ModelGroup.find(params[:model][:model_group_id]).name
     @model_group = ModelGroup.find_or_create_by(name: mg_name)
     @model.model_group_id = @model_group.id
     counters = params[:pm_code]
@@ -85,11 +88,16 @@ class ModelsController < ApplicationController
     if @model.save
       redirect_to models_url, :notice => "Successfully created model."
     else
+      @pm_code = {}
+      @section = {}
+      @label = {}
+      
       render :action => 'new'
     end
   end
 
   def edit
+    @page_title = "Edit Model Details"
     if current_user.admin? or current_user.manager?
       @model = Model.find(params[:id])
       @pm_code = {}
@@ -147,6 +155,6 @@ class ModelsController < ApplicationController
   def destroy
     @model = Model.find(params[:id])
     @model.destroy
-    redirect_to models_url, :notice => "Successfully destroyed model."
+    redirect_to models_url, :notice => "Successfully deleted model."
   end
 end

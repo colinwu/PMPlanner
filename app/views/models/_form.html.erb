@@ -1,13 +1,7 @@
-<%= form_for @model do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label 'Name (no spaces or dash)' %><br />
-    <%= f.text_field :nm %>
-  </p>
-  <p>
-    <%= f.label "Model Group (Leave blank to auto-create a new group using the model name)" %><br />
-    <%= text_field_tag :model_group, @model.model_group.nil? ? '' :@model.model_group.name %>
-  </p>
+<%= simple_form_for @model do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :nm, label: 'Name', hint: "no spaces or dashes" %>
+  <%= f.association :model_group, collection: ModelGroup.all.order(:name).map {|m| [m.name, m.id]} %>
   <%= render partial: 'model_groups/targets', locals: {mg: @model.model_group} %>
   <p><%= f.submit %></p>
 <% end %>
