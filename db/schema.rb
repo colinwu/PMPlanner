@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170809172418) do
+ActiveRecord::Schema.define(version: 20170816014739) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -222,21 +222,6 @@ ActiveRecord::Schema.define(version: 20170809172418) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
-
-  create_table "ship_tos", force: :cascade do |t|
-    t.integer  "ship_to_id",  limit: 4
-    t.integer  "location_id", limit: 4
-    t.integer  "client_id",   limit: 4
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-  end
-
-  create_table "sold_tos", force: :cascade do |t|
-    t.integer  "sold_to_id", limit: 4
-    t.integer  "client_id",  limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
 
   create_table "teams", primary_key: "team_id", force: :cascade do |t|
     t.string   "name",         limit: 255

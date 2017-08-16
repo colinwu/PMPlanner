@@ -173,7 +173,7 @@ jQuery ->
     bw = JSON.parse($("#bw_hidden").text())
     color = JSON.parse($("#c_hidden").text())
     all = JSON.parse($("#all_hidden").text())
-    deltaBW = Number($(e.currentTarget).val()) - Number($("#prev_MREQ").text())
+    deltaBW = Number($("#counter_MREQ").val()) - Number($("#prev_MREQ").text())
     change_val_of code, deltaBW for code in bw
     change_val_of code, (deltaBW + deltaC) for code in all
 

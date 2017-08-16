@@ -6,17 +6,25 @@ gem 'rails', '4.2.9'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2', '0.3.17'
-gem 'minitest'
 gem 'responders', '~> 2.0'
+gem 'json'
 # gem 'passenger', '~> 5.0.28'
 
 group :development, :test do
+  # do rails generate rspec:install after initial install
+  gem 'rspec-rails'
   gem 'railroady'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'bullet'
 end
 
+group :test do
+  gem "factory_girl_rails"
+  gem "capybara"
+  gem "guard-rspec"
+  gem "mocha"
+end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -69,5 +77,5 @@ end
 # To use debugger
 # gem 'debugger'
 
-gem "mocha", :group => :test
 gem "simple_form"
+# then rails generate simple_form:install --bootstrap

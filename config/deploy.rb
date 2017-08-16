@@ -7,6 +7,8 @@ set :default_shell, "/bin/bash --login"
 set :default_stage, "production"
 
 set :keep_releases, 5
+
+set :passenger_restart_with_touch, true
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
