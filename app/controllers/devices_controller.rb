@@ -323,7 +323,7 @@ class DevicesController < ApplicationController
         when next_pm_date <= @now
           bgclass = 'danger'
         when (next_pm_date < @now + range) # (> @now is implied)
-          bgclass = 'warning'
+          bgclass = 'urgent'
         when (next_pm_date < @now + 2*range)
           bgclass = 'info'
         else

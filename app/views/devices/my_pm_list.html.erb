@@ -52,7 +52,7 @@
     <br />
     <% @dev_list.each do |dev| %>
       <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
-      <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and  dev.backup_tech_id == current_technician.id %> backup_tech<% end %>">
+      <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and dev.backup_tech_id == current_technician.id %> backup_tech<% end %>">
         <td><%= check_box_tag "device[#{dev.id}]", dev.id %></td>
         <td class=rightjustify><%= link_to dev.crm_object_id, analyze_data_device_path(dev), title: "PM Analysis" %></td>
         <td><%= dev.model.nm %></td>

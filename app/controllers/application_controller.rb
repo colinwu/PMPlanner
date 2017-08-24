@@ -11,12 +11,18 @@ class ApplicationController < ActionController::Base
   
   def authorize
     if current_user.nil?
-      redirect_to login_url, alert: "Please log in."
-    elsif session[:active_at].nil? or ((Time.now - session[:active_at]) > 6000)
+      redirect_to login_url
+    elsif session[:active_at].nil? or ((Time.now - session[:active_at]) > 600)
       you_are_here
       current_user.logs.create(message: "Session timed out.")
-      session.destroy
-      redirect_to login_url, alert: "Your session has timed out. Please log in."
+#       session.destroy
+      session[:tech] = nil
+      session[:act_as] = nil
+      session[:active_at] = nil
+      session[:user] = nil
+      session[:showbackup] = nil
+      
+      redirect_to login_url, alert: "Your session has timed out. Please log in again."
     else
       session[:active_at] = Time.now
     end

@@ -4,9 +4,9 @@
       <td><%= link_to device.crm_object_id, edit_device_path(device), title: "Edit device details." %></td>
       <td><%= device.model.nm %></td>
       <td><%= device.serial_number %></td>
-      <td><%= device.client.name %></td>
-      <td><%= device.location.address1 %></td>
-      <td><%= device.location.city %></td>
+      <td class="hidden-xs"><%= device.client.name %></td>
+      <td class="hidden-xs"><%= device.location.address1 %></td>
+      <td class="hidden-xs"><%= device.location.city %></td>
       <td class='<%= pm_status_class(device) %>' style="white-space: nowrap;"><%= device.outstanding_pms.order(:next_pm_date).where("next_pm_date is not NULL").first.next_pm_date.to_s(:MdY) %></td> 
       <% if current_user.manager? or current_user.admin? %>
         <td><%= link_to device, data: {:confirm => "Are you sure you want to delete #{device.crm_object_id}?"}, method: :delete do %>

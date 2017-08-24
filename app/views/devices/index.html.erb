@@ -20,8 +20,8 @@
     <th><%= sortable 'models.nm', 'Model', params[:search] %></th>
     <th><%= sortable 'serial_number', 'Serial Number', params[:search] %></th>
     <th><%= sortable 'clients.name', 'Client Name', params[:search] %></th>
-    <th><%= sortable 'locations.address1', 'Location', params[:search] %></th>
-    <th><%= sortable 'locations.city', 'City', params[:search] %></th>
+    <th class="hidden-xs"><%= sortable 'locations.address1', 'Location', params[:search] %></th>
+    <th class="hidden-xs"><%= sortable 'locations.city', 'City', params[:search] %></th>
     <th>Earliest PM</th>
     <% if current_user.manager? or current_user.admin? %>
       <th></th>
@@ -36,8 +36,8 @@
     <td id="search_model_cell"><%= text_field_tag "search[model]", @search_params[:model], {:size => 8, class: "fixed-width-input"} %></td>
     <td id="search_sn_cell"><%= text_field_tag "search[sn]", @search_params[:sn], {:size => 8, class: "fixed-width-input"} %></td>
     <td id="search_client_name_cell"><%= text_field_tag "search[client_name]", @search_params[:client_name], {:size => 1, class: "variable-width-input"} %></td>
-    <td id="search_addr1_cell"><%= text_field_tag "search[addr1]", @search_params[:addr1], {:size => 1, class: "variable-width-input"} %></td>
-    <td id="search_city_cell"><%= text_field_tag "search[city]", @search_params[:city], {:size => 1, class: "variable-width-input"} %></td>
+    <td id="search_addr1_cell" class="hidden-xs"><%= text_field_tag "search[addr1]", @search_params[:addr1], {:size => 1, class: "variable-width-input"} %></td>
+    <td id="search_city_cell" class="hidden-xs"><%= text_field_tag "search[city]", @search_params[:city], {:size => 1, class: "variable-width-input"} %></td>
     <td><%= submit_tag 'Search', :name => nil %></td>
   <% end %>
   </tr>
