@@ -2,12 +2,13 @@ class ClientsController < ApplicationController
   respond_to :json
   before_action :authorize
   before_action :require_admin
+  before_action :set_defaults
   
   def index
     you_are_here
     @page_title = "Clients"
 #     @tech = current_user.admin? ? Technician.find(params[:tech_id]) : current_user
-    @clients = Client.order(:name).page(params[:page])
+    @clients = Client.order(:name).page(params[:page]).per_page(lpp)
   end
 
   def show

@@ -38,7 +38,7 @@ class Technician < ActiveRecord::Base
       else
         filter[0] += " and location_id in (#{loc_list})"
       end
-      contacts = Contact.joins(:location).where(filter).order("#{sort_attribute} #{direction}").page(page)
+      contacts = Contact.joins(:location).where(filter).order("#{sort_attribute} #{direction}").page(page).per_page(lpp)
     end
     return contacts
   end

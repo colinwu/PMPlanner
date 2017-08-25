@@ -1,5 +1,6 @@
 class PartsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_manager, only: [:new, :create, :destroy]
   
   def index
@@ -16,9 +17,9 @@ class PartsController < ApplicationController
         where_ar << 'description regexp ?'
       end
       search_ar[0] = where_ar.join(' and ')
-      @parts = Part.where(search_ar).page(params[:page])
+      @parts = Part.where(search_ar).page(params[:page]).per_page(lpp)
     else
-      @parts = Part.page(params[:page])
+      @parts = Part.page(params[:page]).per_page(lpp)
     end
     you_are_here
   end

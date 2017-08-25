@@ -1,5 +1,6 @@
 class ModelsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_admin, only: [:destroy, :new, :create]
   
   def index
@@ -26,7 +27,7 @@ class ModelsController < ApplicationController
     end
     respond_to do |format|
       format.html {
-        @models = Model.joins(:model_group).where(search_ar).page(params[:page]).order(:nm)
+        @models = Model.joins(:model_group).where(search_ar).page(params[:page]).order(:nm).per_page(lpp)
         render erb: @models
       }
       format.json {

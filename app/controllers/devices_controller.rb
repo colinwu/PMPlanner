@@ -1,5 +1,6 @@
 class DevicesController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_manager, only: [:new, :create, :destroy, :send_transfer]
   helper_method :sort_column, :sort_direction
   autocomplete :client, :name, full: true
@@ -51,7 +52,7 @@ class DevicesController < ApplicationController
     if current_technician.nil?
       if current_user.admin?
         @title = "All Devices"
-        @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page])
+        @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       elsif current_user.manager?
         @title = "Devices in #{current_user.team.name}"
         @tech = current_user
@@ -61,7 +62,7 @@ class DevicesController < ApplicationController
         else
           search_ar = ["devices.team_id = ?", current_user.team_id]
         end
-        @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
+        @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       else
 # should never reach this
 #         @title = "My Territory"
@@ -71,7 +72,7 @@ class DevicesController < ApplicationController
       @title = "#{current_technician.friendly_name}'s Devices"
       @tech = current_technician
       unless where_ar.empty?
-        if session[:showbackup]
+        if session[:showbackup] == 'true'
           search_ar[0] = [search_ar[0], '(primary_tech_id = ? or backup_tech_id = ?)'].join(' and ')
           search_ar << @tech.id
           search_ar << @tech.id
@@ -80,17 +81,17 @@ class DevicesController < ApplicationController
           search_ar << @tech.id
         end
       else
-        if session[:showbackup]
+        if session[:showbackup] == 'true'
           search_ar = ['primary_tech_id = ? or backup_tech_id = ?', @tech.id, @tech.id]
         else
           search_ar = ["primary_tech_id = ?", @tech.id]
         end
       end
-      @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page])
+      @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     end
     
     if @devices.nil? or @devices.empty?
-      @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page])
+      @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     end
   end
 

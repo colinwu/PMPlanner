@@ -1,4 +1,7 @@
 class TeamsController < ApplicationController
+  before_action :authorize
+  before_action :set_defaults
+
   def index
     @page_title = "Teams"
     @teams = Team.all

@@ -1,5 +1,6 @@
 class ModelGroupsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_admin, except: [:get_targets, :index, :show]
   def index
     @page_title = "Model Groups"
@@ -22,9 +23,9 @@ class ModelGroupsController < ApplicationController
             where_ar << 'color_flag = ?'
           end
           search_ar[0] = where_ar.join(' and ')
-          @model_groups = ModelGroup.where(search_ar).order(:name).page(params[:page])
+          @model_groups = ModelGroup.where(search_ar).order(:name).page(params[:page]).per_page(lpp)
         else
-          @model_groups = ModelGroup.all.page(params[:page])
+          @model_groups = ModelGroup.all.page(params[:page]).per_page(lpp)
         end 
       }
       format.json {

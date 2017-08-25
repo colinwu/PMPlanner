@@ -1,5 +1,6 @@
 class PartsForPmsController < ApplicationController
   before_action :authorize
+  before_action :set_defaults
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
   
@@ -38,7 +39,7 @@ class PartsForPmsController < ApplicationController
     else
       @order = sort_column + ' ' + sort_direction
     end
-    @parts_for_pms = PartsForPm.joins(:model_group,:part, :pm_code).where(search_ar).order(@order).page(params[:page])
+    @parts_for_pms = PartsForPm.joins(:model_group,:part, :pm_code).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     if @parts_for_pms.group(:model_group_id).length == 1
       @new_pfp = PartsForPm.new(model_group_id: @parts_for_pms[0].model_group_id)
     else
