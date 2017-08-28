@@ -42,6 +42,13 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def set_defaults
+    if session[:showbackup].nil?
+      session[:showbackup] = current_user.preference.showbackup.to_s
+    end
+    WillPaginate.per_page = current_user.preference.lines_per_page
+  end
+  
   def lpp
     current_user.preference.lines_per_page
   end
