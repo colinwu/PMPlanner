@@ -6,7 +6,7 @@
 <%= render partial: 'header_table', locals: {button: 'enter'} %>
 
 <% unless @device.nil? %>
-<table class="table-condensed table-hover" width="100%">
+<table class="table-condensed" width="100%">
 <%= form_tag(record_data_device_url, id: 'counter_form') do %>
   <%= hidden_field_tag 'reading[technician_id]', @reading.technician_id %>
   <%= hidden_field_tag 'reading[device_id]', @reading.device_id %>
@@ -46,7 +46,7 @@
     <% end %>
   <% end %>
   <tr><td colspan=6>
-    <%= text_area_tag 'reading[notes]', @reading.notes, rows: 5, cols: 60, class: 'form-control' %>
+    <%= text_area_tag 'reading[notes]', @reading.notes, class: 'form-control' %>
   </td></tr>
   <tr><td>
     <%= submit_tag "Save Reading" %>
