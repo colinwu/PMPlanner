@@ -130,6 +130,7 @@ class DevicesController < ApplicationController
   end
 
   def create
+    params[:device].delete(:model_nm)
     @device = Device.new(params[:device])
     @readonly_flag = 'false'
     if params[:device][:model_id].empty?

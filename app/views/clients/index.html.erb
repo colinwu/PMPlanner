@@ -22,6 +22,6 @@
 </table>
 
 <%= will_paginate @clients %>
-<% if current_technician.admin? %>
+<% if current_user.admin? %>
   <p><%= link_to "New Client", new_client_path %></p>
 <% end %>

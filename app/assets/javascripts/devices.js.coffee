@@ -192,7 +192,7 @@ jQuery ->
       $("#device_backup_tech_id").html(optionStr)
       return true
     
-  $("#model_nm").focusout (e) ->
+  $("#device_model_nm").focusout (e) ->
     $("#device_model_id").val(mfp_model_id[$(e.currentTarget).val()])
       
 # When a form field has changed set the changed flag to true
