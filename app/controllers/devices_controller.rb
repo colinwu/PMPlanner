@@ -701,7 +701,7 @@ class DevicesController < ApplicationController
         else
           @order = 'outstanding_pms.next_pm_date asc'
         end
-        @dev_list = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).order(@order).page(params[:page]).per_page(lpp)
+        @dev_list = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).order(@order).group(:id).page(params[:page]).per_page(lpp)
         @dev_list.each do |d| 
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
@@ -716,7 +716,7 @@ class DevicesController < ApplicationController
 #           @code_date[c[0]] = c[1]
 #         end
       else
-        @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).page(params[:page]).per_page(lpp)
+        @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).group(:id).page(params[:page]).per_page(lpp)
         @dev_list.each do |dev|
           pm_list = dev.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[dev.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
