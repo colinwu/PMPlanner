@@ -12,25 +12,6 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div id="header">
-        <div id="flash_area">
-        <% flash.each do |name, msg| %>
-          <%= content_tag :div, msg, :id => "flash_#{name}" %>
-        <% end %>
-        </div>
-        <div id="tech_navbar">
-          <% if current_user %>
-            <% session[:active_at] = Time.now %>
-            <% WillPaginate.per_page = current_user.preference.lines_per_page %>
-            Signed in as <%= current_user.friendly_name -%> | 
-            <%= link_to "Sign out", logout_path %> |
-            <%= link_to "My profile", edit_preference_path(current_user) %> |
-            <%= link_to "Bug Report/Feature Request", "mailto://wuc@sharpsec.com?subject=PM Planner issue" %>
-          <% else %>
-            <%= link_to "Sign in", login_path %>
-          <% end %>
-        </div> <!-- tech_navbar -->
-      </div> <!-- header -->
       <div class="navbar navbar-inverse navbar-static-top" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -64,10 +45,34 @@
                 </li>
                 <% if current_user.admin? %><li><%= link_to "Admin Page", admin_path, id: "admin_menu" %></li><% end %>
               <% end %>
-            </ul>
+            </ul> <!-- class="nav navbar-nav" -->
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <% if current_user %>
+                  <% session[:active_at] = Time.now %>
+                  <% WillPaginate.per_page = current_user.preference.lines_per_page %>
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= current_user.friendly_name %><span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><%= link_to "Sign out", logout_path %></li>
+                    <li><%= link_to "My profile", edit_preference_path(current_user) %></li>
+                    <li><%= link_to "Bug Report/Feature Request", "mailto://wuc@sharpsec.com?subject=PM Planner issue" %></li>
+                  </ul>
+                <% else %>
+                  <%= link_to "Sign in", login_path %>
+                <% end %>
+              </li>
+            </ul> <!--class="nav navbar-nav navbar-right" -->
           </div>
         </div>
       </div>
+      <div id="header">
+        <div id="flash_area">
+          <% flash.each do |name, msg| %>
+            <%= content_tag :div, msg, :id => "flash_#{name}" %>
+          <% end %>
+        </div>
+      </div> <!-- header -->
+      
       <%= yield %>
     </div>
   </body>
