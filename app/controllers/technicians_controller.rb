@@ -35,6 +35,8 @@ class TechniciansController < ApplicationController
 
   def create
     @technician = Technician.new(params[:technician])
+    @technician.email =~ /([^@]+)@/
+    @technician.sharp_name = "sec\\\\$1"
     if @technician.save
       @technician.create_preference(
         default_root_path: '/devices/search',
