@@ -36,7 +36,7 @@ class Device < ActiveRecord::Base
   def calculate_stats
     if self.readings.count > 1
       first_reading = self.readings.order(:taken_at).first      
-      last_reading = self.last_non_zero_reading_on_or_before(Date.today) 
+      last_reading = self.last_non_zero_reading_on_or_before(Date.today)
       first_last_interval = (last_reading.taken_at - first_reading.taken_at).to_i
       if first_last_interval == 0  # for the case where there is only 1 non-zero reading
         return {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0}
@@ -87,7 +87,7 @@ class Device < ActiveRecord::Base
         pm_code[c.name] = c.colorclass
       end
       
-      range = self.primary_tech.preference.upcoming_interval * 7 # in days
+#       range = self.primary_tech.preference.upcoming_interval * 7 # in days
       
       stats = self.calculate_stats
       bw_monthly = stats['bw_monthly']
@@ -111,7 +111,13 @@ class Device < ActiveRecord::Base
       
       # BW and C progress % and PM Dates depend on @vpy
       visit_interval = 365 / vpy
-#       next_pm_date = prev_reading.taken_at + visit_interval.round
+      next_pm_date = prev_reading.taken_at + visit_interval.round
+      op = OutstandingPm.find_or_create_by(device_id: self.id, code: 'BWTOTAL')
+      op.update_attributes(next_pm_date: next_pm_date)
+      if (self.model.model_group.color_flag)
+        op = OutstandingPm.find_or_create_by(device_id: self.id, code: 'CTOTAL')
+        op.update_attributes(next_pm_date: next_pm_date)
+      end
       ###
       # Now calculate stuff for all the other PM codes
       if codes_list.empty?
@@ -148,7 +154,7 @@ class Device < ActiveRecord::Base
       end # codes_list.each do |c|
       if self.outstanding_pms.where("next_pm_date is not NULL").empty?
         # basically, no outstanding PMs so just schedule the next PM based on vpy
-        neg.update_attributes(next_visit: (prev_reading.taken_at + (365/vpy).round))
+        neg.update_attributes(next_visit: (prev_reading.taken_at + visit_interval.round))
       end
     else # no previous readings, so no stats and no outstanding_pms
       neg.update_attributes(next_visit: Date.today)
