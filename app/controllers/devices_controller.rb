@@ -323,11 +323,11 @@ class DevicesController < ApplicationController
         # background color for the total counters
         case
         when next_pm_date <= @now
-          bgclass = 'danger'
+          bgclass = 'emerg'
         when (next_pm_date < @now + range) # (> @now is implied)
           bgclass = 'urgent'
         when (next_pm_date < @now + 2*range)
-          bgclass = 'info'
+          bgclass = 'approaching'
         else
           bgclass = 'allgood'
         end
