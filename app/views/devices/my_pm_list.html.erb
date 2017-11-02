@@ -37,18 +37,10 @@
       <td id="search_addr1_cell"><%= text_field_tag "search[addr1]", @search_params[:addr1], :size => 1, class: "variable-width-input" %></td>
       <td id="search_city_cell"><%= text_field_tag "search[city]", @search_params[:city], :size => 1, class: "variable-width-input" %></td>
       <td id="search_pc_cell"><%= text_field_tag "search[post_code]", @search_params[:post_code], :size => 7, class: "fixed-width-input" %></td>
-      <td col_span=2><%= submit_tag 'Search', :name => nil %></td>
+      <td colspan=2><%= submit_tag 'Search', :name => nil %></td>
     <% end %>
   </tr>
   <%= form_tag handle_checked_devices_url do %>
-    <div class=context_menu>
-      For selected devices (or all devices if none selected): 
-      <%= submit_tag "Create Parts List", name: 'parts' %> | 
-      <%= submit_tag "Create PM Order", name: 'service' %>
-      <% if current_user.admin? or current_user.manager? %>
-        | Transfer device(s) to <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), include_blank: true %> <%= submit_tag "Go", name: 'transfer' %>
-      <% end %>
-    </div>
     <br />
     <% @dev_list.each do |dev| %>
       <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
@@ -64,8 +56,18 @@
         <td class='<%= pm_status_class(dev) %>' style="white-space: nowrap;"><%= @code_date[dev.id].to_s(:MdY) %></td>
         <td class='<%= pm_status_class(dev) %>'><%= @code_count[dev.id] %></td>
       </tr>
-    <% end %>
-  <% end %>
+    <% end %> <!-- @dev_list.each -->
+    <tr class="context_menu">
+      <td colspan=99>
+        For selected devices (or all devices if none selected): 
+        <%= submit_tag "Create Parts List", name: 'parts' %> | 
+        <%= submit_tag "Create PM Order", name: 'service' %>
+        <% if current_user.admin? or current_user.manager? %>
+          | Transfer device(s) to <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), include_blank: true %> <%= submit_tag "Go", name: 'transfer' %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %> <!-- form -->
 </table>
 <br />
 <%= will_paginate @dev_list %>
