@@ -158,10 +158,11 @@ class Device < ActiveRecord::Base
       end # codes_list.each do |c|
       if self.outstanding_pms.where("next_pm_date is not NULL").empty?
         # basically, no outstanding PMs so just schedule the next PM based on vpy
-        neg.update_attributes(next_visit: (prev_reading.taken_at + visit_interval.round))
+        self.outstanding_pms.update_attributes(code: 'BWTOTAL', next_pm_date: (prev_reading.taken_at + visit_interval.round))
       end
     else # no previous readings, so no stats and no outstanding_pms
-      neg.update_attributes(next_visit: Date.today)
+      op = OutstandingPm.find_or_create_by(device_id: self.id, code: 'BWTOTAL')
+      op.update_attributes(next_pm_date: Date.today)
     end
   end
 

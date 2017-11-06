@@ -694,15 +694,23 @@ class DevicesController < ApplicationController
       search_ar[0] = where_ar.join(' and ')
       @code_count = {}
       @code_date = {}
-
       if (sort_column == 'outstanding_pms' or sort_column.empty?)
-        if sort_direction == 'desc'
-          @order = 'desc'
-        else
-          @order = 'asc'
+#         if sort_direction == 'desc'
+#           @order = 'desc'
+#         else
+#           @order = 'asc'
+#         end
+        if params[:direction].nil?
+          params[:direction] = 'asc'
+          params[:sort] = 'outstanding_pms'
         end
         
-        @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date(@order)}.paginate(page: params[:page], per_page: lpp)
+        if (sort_direction == 'desc')
+          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
+        else
+          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date}.paginate(page: params[:page], per_page: lpp)
+        end
+        @dev_list
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[d.id] = pm_list.order("next_pm_date ASC").first.next_pm_date
