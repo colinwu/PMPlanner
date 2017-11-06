@@ -23,7 +23,11 @@ class Device < ActiveRecord::Base
   delegate :name, to: :client , prefix: true, allow_nil: true
   delegate :nm, to: :model, prefix: true, allow_nil: true
 #   delegate :name, to: :team, prefix: true
-    
+  
+  def pm_date(direction = 'ASC') # direction = 'ASC' or 'DESC'
+    self.outstanding_pms.select(:next_pm_date).order("next_pm_date #{direction}").first.next_pm_date
+  end
+  
   def team_name
     self.team.name
   end

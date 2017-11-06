@@ -612,10 +612,10 @@ class DevicesController < ApplicationController
   
   def show_or_hide_backup
     if params[:showbackup] == 'true'
-      session[:showbackup] = true
+      session[:showbackup] = "true"
       redirect_to request.env['HTTP_REFERER']
     elsif params[:showbackup] == 'false'
-      session[:showbackup] = false
+      session[:showbackup] = "false"
       redirect_to request.env['HTTP_REFERER']
     else
       redirect_to back_or_go_here()
@@ -629,11 +629,12 @@ class DevicesController < ApplicationController
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
+    # if I'm not working with any particular technician and...
     if current_technician.nil?
-      if (current_user.admin?)
+      if (current_user.admin?) # ... I am and admin then I work with all techs' territories
         my_team = Technician.all
         @title = "PM List for all devices"
-      elsif current_user.manager?
+      elsif current_user.manager? # ... or if I'm a manager then I work with my region
         my_team = Technician.where(["team_id = ?",current_user.team_id])
         @title = "PM List #{current_user}.team.name"
       end
@@ -650,10 +651,9 @@ class DevicesController < ApplicationController
     end
     my_team.each do |tech|
       range = tech.preference.upcoming_interval*7
-      
       # toggle to show devices for which the current tech is the backup tech
-      if session[:showbackup] == 'true'
-        where_ar = ["(primary_tech_id = ? or backup_tech_id = ?) and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
+      if session[:showbackup] == "true"
+        where_ar = ["(devices.primary_tech_id = ? or devices.backup_tech_id = ?) and devices.active is true and devices.under_contract is true and devices.do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
         search_ar = ["",tech.id, tech.id]
       else
         where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
@@ -694,33 +694,26 @@ class DevicesController < ApplicationController
       search_ar[0] = where_ar.join(' and ')
       @code_count = {}
       @code_date = {}
-      code_date = {}
+
       if (sort_column == 'outstanding_pms' or sort_column.empty?)
         if sort_direction == 'desc'
-          @order = 'outstanding_pms.next_pm_date desc'
+          @order = 'desc'
         else
-          @order = 'outstanding_pms.next_pm_date asc'
+          @order = 'asc'
         end
-        @dev_list = Device.where(search_ar).joins(:location, :client, :model, :outstanding_pms).order(@order).group(:id).page(params[:page]).per_page(lpp)
-        @dev_list.each do |d| 
+        
+        @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date(@order)}.paginate(page: params[:page], per_page: lpp)
+        @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
-          @code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
+          @code_date[d.id] = pm_list.order("next_pm_date ASC").first.next_pm_date
           @code_count[d.id] = pm_list.length
         end
-#         sorted_dates = code_date.sort_by { |k,v| v }
-#         if (sort_direction == 'desc')
-#           sorted_dates.reverse!
-#         end
-#         sorted_dates.each do |c|
-#           @dev_list << devs.find(c[0])
-#           @code_date[c[0]] = c[1]
-#         end
       else
         @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).group(:id).page(params[:page]).per_page(lpp)
-        @dev_list.each do |dev|
-          pm_list = dev.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
-          @code_date[dev.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order(:next_pm_date).first.next_pm_date
-          @code_count[dev.id] = pm_list.length
+        @dev_list.each do |d|
+          pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
+          @code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order("next_pm_date ASC").first.next_pm_date
+          @code_count[d.id] = pm_list.length
         end # Device.each
       end
     end

@@ -3,7 +3,7 @@
   <caption>Devices with outstanding PMs
     <span class=right_end>
       <%= form_tag show_or_hide_backup_devices_url do %>
-        <% if session[:showbackup] %>
+        <% if session[:showbackup] == "true" %>
           <%= hidden_field_tag 'showbackup', "false" %>
           <%= submit_tag "Hide Backup Devices" %>
         <% else %>
@@ -70,4 +70,5 @@
   <% end %> <!-- form -->
 </table>
 <br />
+
 <%= will_paginate @dev_list %>
