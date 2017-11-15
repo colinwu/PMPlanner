@@ -1,4 +1,5 @@
 PmPlanner::Application.routes.draw do
+  resources :news
   get 'admin', to: 'admin#index'
 
   resources :sessions, only: [:new, :create, :destroy]

@@ -7,6 +7,14 @@ jQuery ->
     dateFormat: 'M d, yy',
   })
   
+  $("#news_activate").datepicker({
+    dateFormat: 'M d, yy',
+  })
+  
+  $("#news_deactivate").datepicker({
+    dateFormat: 'M d, yy',
+    })
+  
   $.datepicker.setDefaults({
     dateFormat: "yy-mm-dd"
   })

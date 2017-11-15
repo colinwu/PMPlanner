@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170816014739) do
+ActiveRecord::Schema.define(version: 20171114043025) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -63,24 +63,22 @@ ActiveRecord::Schema.define(version: 20170816014739) do
   end
 
   create_table "devices", force: :cascade do |t|
-    t.string   "installed_base_id", limit: 255
-    t.string   "crm_object_id",     limit: 255
-    t.string   "alternate_id",      limit: 255
-    t.integer  "model_id",          limit: 4
-    t.integer  "client_id",         limit: 4
-    t.string   "serial_number",     limit: 255
-    t.integer  "location_id",       limit: 4
-    t.integer  "primary_tech_id",   limit: 4
-    t.integer  "backup_tech_id",    limit: 4
+    t.string   "crm_object_id",   limit: 255
+    t.integer  "model_id",        limit: 4
+    t.integer  "client_id",       limit: 4
+    t.string   "serial_number",   limit: 255
+    t.integer  "location_id",     limit: 4
+    t.integer  "primary_tech_id", limit: 4
+    t.integer  "backup_tech_id",  limit: 4
     t.boolean  "active"
     t.boolean  "under_contract"
     t.boolean  "do_pm"
-    t.string   "pm_counter_type",   limit: 255,   default: "0"
-    t.float    "pm_visits_min",     limit: 24
-    t.text     "notes",             limit: 65535
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.integer  "team_id",           limit: 4
+    t.string   "pm_counter_type", limit: 255,   default: "0"
+    t.float    "pm_visits_min",   limit: 24
+    t.text     "notes",           limit: 65535
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.integer  "team_id",         limit: 4
   end
 
   create_table "locations", force: :cascade do |t|
@@ -136,6 +134,15 @@ ActiveRecord::Schema.define(version: 20170816014739) do
     t.date     "next_visit"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+  end
+
+  create_table "news", force: :cascade do |t|
+    t.text     "note",       limit: 65535
+    t.date     "activate"
+    t.string   "deactivate", limit: 255
+    t.boolean  "urgent"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "outstanding_pms", force: :cascade do |t|

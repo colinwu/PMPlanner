@@ -118,6 +118,10 @@ class TechniciansController < ApplicationController
   
   private
   
+  def set_technician
+    @technician = Technician.find(params[:id])
+  end
+  
   def sort_column
     (Technician.column_names + ['teams.name']).include?(params[:sort]) ? params[:sort] : 'first_name'
   end

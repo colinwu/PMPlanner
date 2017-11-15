@@ -788,9 +788,9 @@ class DevicesController < ApplicationController
       begin
         v = value.gsub(/[^0-9-]/,'')
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
-        c.update_attributes(value: v, unit: 'count')
+        c.update_attributes!(value: v, unit: 'count')
       rescue
-        flash[:alert] += "Error saving counter for #{p.name}. Value = #{v}"
+        flash[:alert] = "Error saving counter for #{p.name}. Value = #{v}"
         current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
       end
     end
