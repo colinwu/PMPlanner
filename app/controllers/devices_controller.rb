@@ -783,12 +783,16 @@ class DevicesController < ApplicationController
     taken_at = Date.parse(params[:reading][:taken_at])
     @reading = @device.readings.find_or_create_by(taken_at: taken_at)
     @reading.update_attributes(params[:reading])
+    flash[:alert] = ''
     params[:counter].each do |code,value|
       p = PmCode.find_by_name(code)
       begin
         v = value.gsub(/[^0-9-]/,'')
+        if v.empty?
+          v = 0  # if value is empty make it zero
+        end
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
-        c.update_attributes(value: v, unit: 'count')
+        c.update_attributes!(value: v, unit: 'count')
       rescue
         flash[:alert] += "Error saving counter for #{p.name}. Value = #{v}"
         current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
