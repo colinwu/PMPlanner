@@ -1,6 +1,5 @@
 class LocationsController < ApplicationController
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
   
   helper_method :sort_column, :sort_direction
   respond_to :json

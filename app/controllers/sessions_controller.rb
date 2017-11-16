@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  before_action :fetch_news
+  
   def new
     @title = "PM Planner Login"
   end

@@ -46,6 +46,7 @@ PmPlanner::Application.routes.draw do
     collection do
       get 'root_dispatch'
       post 'select_territory'
+      get 'mark_news_read'
     end
   end
 

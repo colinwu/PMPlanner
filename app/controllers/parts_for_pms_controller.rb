@@ -1,6 +1,5 @@
 class PartsForPmsController < ApplicationController
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
   

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114043025) do
+ActiveRecord::Schema.define(version: 20171116141443) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -139,7 +139,6 @@ ActiveRecord::Schema.define(version: 20171114043025) do
   create_table "news", force: :cascade do |t|
     t.text     "note",       limit: 65535
     t.date     "activate"
-    t.string   "deactivate", limit: 255
     t.boolean  "urgent"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
@@ -269,4 +268,14 @@ ActiveRecord::Schema.define(version: 20171114043025) do
     t.datetime "updated_at",                             null: false
   end
 
+  create_table "unreads", force: :cascade do |t|
+    t.integer "technician_id", limit: 4
+    t.integer "news_id",       limit: 4
+  end
+
+  add_index "unreads", ["news_id"], name: "index_unreads_on_news_id", using: :btree
+  add_index "unreads", ["technician_id"], name: "index_unreads_on_technician_id", using: :btree
+
+  add_foreign_key "unreads", "news"
+  add_foreign_key "unreads", "technicians"
 end

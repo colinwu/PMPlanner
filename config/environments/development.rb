@@ -41,4 +41,6 @@ PmPlanner::Application.configure do
     Bullet.console = true
     Bullet.bullet_logger = true
   end
+  
+  config.web_console.whitelisted_ips = '172.29.51.0/24'
 end

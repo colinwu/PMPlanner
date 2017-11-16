@@ -6,7 +6,8 @@ class Technician < ActiveRecord::Base
   has_many :readings, :dependent => :nullify
   has_many :logs
   has_many :teams, :class_name => 'Team', :foreign_key => 'manager_id'
-  
+  has_many :unreads, dependent: :destroy
+  has_many :news, through: :unreads
   belongs_to :team, :foreign_key => :team_id
   has_one :preference, :dependent => :destroy
   

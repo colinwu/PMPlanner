@@ -15,8 +15,7 @@
     figure out how many news items haven't been seen
     -->
     <% 
-    news = News.where("activate <= curdate() and deactivate > curdate()")
-    items = news.length
+    items = @show_news.length
     %>
   
     <div class="container-fluid">
@@ -55,7 +54,7 @@
               <% end %>
             </ul> <!-- class="nav navbar-nav" -->
             <ul class="nav navbar-nav navbar-right">
-              <li><a data-toggle='modal' href="#news">News <span class='badge'><%= items %></span></a></li>
+              <li><a id="news_link" data-toggle='modal' href="#news">News <span class='badge'><%= items %></span></a></li>
               <li class="dropdown">
                 <% if current_user %>
                   <% session[:active_at] = Time.now %>
@@ -96,14 +95,14 @@
             <h4 class="modal-title">News and Announcements</h4>
           </div>
           <div class="modal-body">
-            <% news.each do |n| %>
-              <h4><%= n.activate.to_s %></h4>
+            <% @show_news.each do |n| %>
+              <h4><%= n.activate.to_s(:Mdy) %></h4>
                 <%= n.note %>
               <hr>
             <% end %>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <%= link_to "All News and Announcements", news_index_path %>
           </div>
         </div>
       

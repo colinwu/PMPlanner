@@ -1,5 +1,5 @@
 class CountersController < ApplicationController
-  before_action :authorize
+  before_action :authorize, :set_defaults, :fetch_news
   
   def index
     @counters = Counter.all
