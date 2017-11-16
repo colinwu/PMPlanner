@@ -11,6 +11,13 @@
     <%= yield(:head) %>
   </head>
   <body>
+    <!-- 
+    figure out how many news items haven't been seen
+    -->
+    <% 
+    items = @show_news.length
+    %>
+  
     <div class="container-fluid">
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -47,6 +54,7 @@
               <% end %>
             </ul> <!-- class="nav navbar-nav" -->
             <ul class="nav navbar-nav navbar-right">
+              <li><a id="news_link" data-toggle='modal' href="#news">News <span class='badge'><%= items %></span></a></li>
               <li class="dropdown">
                 <% if current_user %>
                   <% session[:active_at] = Time.now %>
@@ -75,5 +83,31 @@
       
       <%= yield %>
     </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="news" role="dialog">
+      <div class="modal-dialog modal-lg">
+      
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">News and Announcements</h4>
+          </div>
+          <div class="modal-body">
+            <% @show_news.each do |n| %>
+              <h4><%= n.activate.to_s(:Mdy) %></h4>
+                <%= n.note %>
+              <hr>
+            <% end %>
+          </div>
+          <div class="modal-footer">
+            <%= link_to "All News and Announcements", news_index_path %>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    
   </body>
 </html>

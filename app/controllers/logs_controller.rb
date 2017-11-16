@@ -1,6 +1,5 @@
 class LogsController < ApplicationController
-  before_action :authorize
-  
+  before_action :authorize, :set_defaults, :fetch_news
   before_action :set_log, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

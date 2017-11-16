@@ -1,6 +1,6 @@
 class PmCodesController < ApplicationController
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
+
   def index
     @pm_codes = PmCode.all
     respond_to do |format|

@@ -1,7 +1,6 @@
 class TransfersController < ApplicationController
   # TODO see if we can use before_action filter to ensure the signed-in tech is admin or manager
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
   before_action :require_manager
   
   def index

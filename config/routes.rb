@@ -1,4 +1,5 @@
 PmPlanner::Application.routes.draw do
+  resources :news
   get 'admin', to: 'admin#index'
 
   resources :sessions, only: [:new, :create, :destroy]
@@ -45,6 +46,7 @@ PmPlanner::Application.routes.draw do
     collection do
       get 'root_dispatch'
       post 'select_territory'
+      get 'mark_news_read'
     end
   end
 

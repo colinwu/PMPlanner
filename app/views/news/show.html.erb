@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @news.note %>
+</p>
+
+<p>
+  <strong>Activate:</strong>
+  <%= @news.activate %>
+</p>
+
+<p>
+  <strong>Urgent:</strong>
+  <%= @news.urgent %>
+</p>
+
+<%= link_to 'Edit', edit_news_path(@news) %> |
+<%= link_to 'Back', news_index_path %>

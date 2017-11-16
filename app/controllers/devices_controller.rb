@@ -1,6 +1,5 @@
 class DevicesController < ApplicationController
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
   before_action :require_manager, only: [:new, :create, :destroy, :send_transfer]
   helper_method :sort_column, :sort_direction
   autocomplete :client, :name, full: true
@@ -794,7 +793,7 @@ class DevicesController < ApplicationController
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
         c.update_attributes!(value: v, unit: 'count')
       rescue
-        flash[:alert] += "Error saving counter for #{p.name}. Value = #{v}"
+        flash[:alert] = "Error saving counter for #{p.name}. Value = #{v}"
         current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
       end
     end

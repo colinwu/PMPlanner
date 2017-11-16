@@ -7,14 +7,22 @@ jQuery ->
     dateFormat: 'M d, yy',
   })
   
+  $("#news_activate").datepicker({
+    dateFormat: 'M d, yy',
+  })
+  
   $.datepicker.setDefaults({
     dateFormat: "yy-mm-dd"
   })
   
   $("body").css({"cursor": "default"})
+  
   $("a").click ->
     $("body").css({"cursor": "wait"})
 
+  $(".close").click ->
+    $("body").css({"cursor": "default"})
+    
   $("input[type='submit']").click ->
     $("body").css({"cursor": "wait"})
 
@@ -30,3 +38,6 @@ jQuery ->
   $("#tech_id").change (e) ->
     $("#tech_select").submit()
    
+  $("#news").on 'hidden.bs.modal', ->
+    $.get("/technicians/mark_news_read", (result) ->
+    )

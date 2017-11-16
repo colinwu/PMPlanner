@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<table width=100% class="table-hover">
+  <thead>
+    <tr>
+      <th>Note</th>
+      <th>Activate</th>
+      <th>Urgent</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @news.each do |news| %>
+      <tr>
+        <td><%= news.note %></td>
+        <td><%= news.activate %></td>
+        <td><%= news.urgent %></td>
+        <td>
+          <%= link_to news do %>
+            <span class="glyphicon glyphicon-eye-open"></span>
+          <% end %> 
+          <% if current_user.admin? %>
+            |
+            <%= link_to edit_news_path(news) do %>
+              <span class="glyphicon glyphicon-edit"></span>
+            <% end %> |
+            <%= link_to news, :confirm => 'Are you sure?', :method => :delete do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= will_paginate @news %>
+
+<%= link_to 'New News', new_news_path %>

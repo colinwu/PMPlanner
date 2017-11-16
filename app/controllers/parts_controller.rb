@@ -1,6 +1,5 @@
 class PartsController < ApplicationController
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
   before_action :require_manager, only: [:new, :create, :destroy]
   
   def index

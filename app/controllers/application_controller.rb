@@ -1,14 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  def back_or_go_here(where = root_url)
-    session[:uri].nil? ? where : session[:uri]
-  end
-  
-  def you_are_here
-    session[:uri] = request.env['REQUEST_URI']
-  end
-  
   def authorize
     if current_user.nil?
       redirect_to login_url
@@ -28,6 +20,22 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def back_or_go_here(where = root_url)
+    session[:uri].nil? ? where : session[:uri]
+  end
+  
+  def fetch_news
+    if current_user
+      @show_news = current_user.news.where("activate <= curdate()")
+    else
+      @show_news = []
+    end
+  end
+  
+  def lpp
+    current_user.preference.lines_per_page
+  end
+  
   def require_admin
     unless current_user.admin?
       current_user.logs.create(message: "Admin privileges required to access #{request.env['REQUEST_URI']}")
@@ -49,8 +57,8 @@ class ApplicationController < ActionController::Base
     WillPaginate.per_page = current_user.preference.lines_per_page
   end
   
-  def lpp
-    current_user.preference.lines_per_page
+  def you_are_here
+    session[:uri] = request.env['REQUEST_URI']
   end
   
   protected

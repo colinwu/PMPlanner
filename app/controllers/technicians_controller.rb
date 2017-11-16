@@ -1,6 +1,5 @@
 class TechniciansController < ApplicationController
-  before_action :authorize
-  before_action :set_defaults
+  before_action :authorize, :set_defaults, :fetch_news
   helper_method :sort_column, :sort_direction
   
   def index
@@ -116,7 +115,21 @@ class TechniciansController < ApplicationController
     redirect_to back_or_go_here(current_user.preference.default_root_path)
   end
   
+  def mark_news_read
+    current_user.news.where("activate <= curdate()").each do |n|
+      current_user.unreads.where(news_id: n.id).first.destroy
+    end
+    respond_to do |format|
+      format.html {redirect_to back_or_go_here(root_url)}
+      format.json {head :no_content}
+    end
+  end
+  
   private
+  
+  def set_technician
+    @technician = Technician.find(params[:id])
+  end
   
   def sort_column
     (Technician.column_names + ['teams.name']).include?(params[:sort]) ? params[:sort] : 'first_name'
