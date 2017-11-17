@@ -17,7 +17,7 @@ class NewsController < ApplicationController
 
   # GET /news/new
   def new
-    @news = News.new
+    @news = News.new(activate: Date.today)
   end
 
   # GET /news/1/edit
@@ -35,7 +35,7 @@ class NewsController < ApplicationController
           @news.unreads.create(technician_id: t.id)
         end
         
-        format.html { back_or_go_here news_index_url, notice: 'News was successfully created.' }
+        format.html { redirect_to back_or_go_here(news_index_url), notice: 'News was successfully created.' }
         format.json { render :show, status: :created, location: @news }
       else
         format.html { render :new }
@@ -55,7 +55,7 @@ class NewsController < ApplicationController
           end
         end
         
-        format.html { back_or_go_here news_index_url, notice: 'News was successfully updated.' }
+        format.html { redirect_to back_or_go_here(news_index_url), notice: 'News was successfully updated.' }
         format.json { render :show, status: :ok, location: @news }
       else
         format.html { render :edit }

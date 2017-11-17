@@ -14,9 +14,10 @@
     <!-- 
     figure out how many news items haven't been seen
     -->
-    <% 
-    items = @show_news.length
-    %>
+    <% items = @show_news.length %>
+    <% if @urgent_news_flag == "true" %>
+      <%= hidden_field_tag "urgent_news_flag", @urgent_news_flag %>
+    <% end %>
   
     <div class="container-fluid">
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -96,9 +97,10 @@
           </div>
           <div class="modal-body">
             <% @show_news.each do |n| %>
-              <h4><%= n.activate.to_s(:Mdy) %></h4>
+              <fieldset class="<%= n.urgent ? 'urgent' : ''%>">
+                <legend><%= n.activate.to_s(:Mdy) %><%= n.urgent ? ' - URGENT' : '' %></legend>
                 <%= n.note %>
-              <hr>
+              </fieldset>
             <% end %>
           </div>
           <div class="modal-footer">

@@ -27,8 +27,10 @@ class ApplicationController < ActionController::Base
   def fetch_news
     if current_user
       @show_news = current_user.news.where("activate <= curdate()")
+      @urgent_news_flag = @show_news.exists?(urgent: true).to_s
     else
       @show_news = []
+      @urgent_news_flag = "false"
     end
   end
   

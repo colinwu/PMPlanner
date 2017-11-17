@@ -116,6 +116,7 @@ class TechniciansController < ApplicationController
   end
   
   def mark_news_read
+    return
     current_user.news.where("activate <= curdate()").each do |n|
       current_user.unreads.where(news_id: n.id).first.destroy
     end

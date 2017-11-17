@@ -1,4 +1,8 @@
 jQuery ->
+# show the news if there is an unseen urgent items
+  if ($("#urgent_news_flag").val() == "true")
+    $("#news").modal("show")
+    
   $("#reading_taken_at").datepicker({
     dateFormat: 'M d, yy',
   })
