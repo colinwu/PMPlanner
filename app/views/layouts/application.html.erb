@@ -55,7 +55,7 @@
               <% end %>
             </ul> <!-- class="nav navbar-nav" -->
             <ul class="nav navbar-nav navbar-right">
-              <li><a id="news_link" data-toggle='modal' href="#news">News <span class='badge'><%= items %></span></a></li>
+              <li><a id="news_link" data-toggle='modal' data-backdrop="static" href="#news">News <span class='badge'><%= items %></span></a></li>
               <li class="dropdown">
                 <% if current_user %>
                   <% session[:active_at] = Time.now %>
@@ -99,7 +99,7 @@
             <% @show_news.each do |n| %>
               <fieldset class="<%= n.urgent ? 'urgent' : ''%>">
                 <legend><%= n.activate.to_s(:Mdy) %><%= n.urgent ? ' - URGENT' : '' %></legend>
-                <%= n.note %>
+                <%= n.note.html_safe %>
               </fieldset>
             <% end %>
           </div>

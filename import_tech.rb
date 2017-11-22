@@ -7,14 +7,12 @@ csv_file = ARGV.shift
 if (File.exists?(csv_file))
   r = CsvMapper.import(csv_file) do 
     start_at_row 1
-    [computer_name,it_name,friendly_name,first_name,last_name,full_name,region,team_id,crm_id,car_stock_number,email]
+    [friendly_name,first_name,last_name,full_name,team_id,crm_id,car_stock_number,email]
   end
   if Technician.where(admin: true).empty? or Technician.find_by_sharp_name("sec\\wuc").nil?
     admin_team = Team.find_by_name('Admin')
     admin_user = Technician.create(crm_id: 1, first_name: 'Colin', last_name: 'Wu', friendly_name: 'Colin', email: 'wuc@sharpsec.com', admin: true, team_id: admin_team.team_id, sharp_name: 'sec\\wuc')
     admin_user.create_preference(
-      limit_to_region: false, 
-      limit_to_territory: false, 
       default_notes: "Entered by Colin Wu", 
       upcoming_interval: 2, 
       default_to_email: "", 
@@ -44,8 +42,6 @@ if (File.exists?(csv_file))
         next
       end
       t.create_preference(
-        limit_to_region: true, 
-        limit_to_territory: true, 
         default_notes: "#{t.friendly_name}'s notes ...", 
         upcoming_interval: 2, 
         default_to_email: "sharpdirectparts@sharpsec.com", 
@@ -54,7 +50,7 @@ if (File.exists?(csv_file))
         default_sig: t.full_name,
         max_lines: 30,
         lines_per_page: 25,
-        default_root_path: "/devices/my_pm_list",
+        default_root_path: "/",
         showbackup: false)
     end
   end

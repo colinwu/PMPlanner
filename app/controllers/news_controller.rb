@@ -6,13 +6,14 @@ class NewsController < ApplicationController
   # GET /news
   # GET /news.json
   def index
-    @news = News.all.page(params[:page]).per_page(lpp)
+    @news = News.all.order("activate desc").page(params[:page]).per_page(lpp)
     @page_title = "News"
   end
 
   # GET /news/1
   # GET /news/1.json
   def show
+    @page_title = "News Item"
   end
 
   # GET /news/new

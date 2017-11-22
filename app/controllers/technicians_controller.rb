@@ -100,6 +100,17 @@ class TechniciansController < ApplicationController
     end
   end
   
+  def act_as
+    unless params[:tech_id].blank?
+      t = Technician.find(params[:tech_id])
+      current_user.logs.create(message: "Pretending to be #{t.friendly_name}")
+      session[:user] = t.id
+      session[:tech] = t.id
+      
+    end
+    redirect_to current_user.preference.default_root_path
+  end
+  
   def root_dispatch
     redirect_to current_user.preference.default_root_path
   end
@@ -116,7 +127,6 @@ class TechniciansController < ApplicationController
   end
   
   def mark_news_read
-    return
     current_user.news.where("activate <= curdate()").each do |n|
       current_user.unreads.where(news_id: n.id).first.destroy
     end

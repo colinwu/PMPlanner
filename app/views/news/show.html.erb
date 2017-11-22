@@ -2,7 +2,7 @@
 
 <p>
   <strong>Note:</strong>
-  <%= @news.note %>
+  <%= @news.note.html_safe %>
 </p>
 
 <p>
@@ -15,5 +15,7 @@
   <%= @news.urgent %>
 </p>
 
-<%= link_to 'Edit', edit_news_path(@news) %> |
+<% if current_user.admin? %>
+  <%= link_to 'Edit', edit_news_path(@news) %> |
+<% end %>
 <%= link_to 'Back', news_index_path %>

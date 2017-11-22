@@ -38,6 +38,8 @@ module ApplicationHelper
         'All'
       elsif current_user.manager?
         "#{current_user.team.name}"
+      else
+        'My'
       end
     elsif not current_user.nil? and (current_user.admin? or current_user.manager?)
         "#{current_technician.friendly_name}'s"
