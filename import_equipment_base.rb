@@ -12,17 +12,20 @@ if File.exists?(csv_file)
   r.each do |row|
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
+      # find or create the client record
       client = Client.find_by soldtoid: row.soldtoid
       if client.nil?
         client = Client.create(:name => row.soldtoname, :soldtoid => row.soldtoid)
       else
         client.update_attributes(name: row.soldtoname)
       end
+      # find or create the location record
       loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ? and team_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id, row.serviceorgid]).first
       if loc.nil?
         loc = Location.create(:notes => row.addcontactname, :address1 => row.address1, :address2 => row.address2.nil? ? '' : row.address2, :city => row.city, :province => row.province, :post_code => row.postalcode, :team_id => row.serviceorgid, :client_id => client.id)
       end
       
+      # find the device, model and techs for the device
       dev = Device.find_by_crm_object_id(row.crm_objectid)
       m = Model.find_by_nm(row.model)
       if m.nil?
@@ -32,91 +35,64 @@ if File.exists?(csv_file)
       primary_tech = Technician.find_by_crm_id(row.primarytechid)
       backup_tech = Technician.find_by_crm_id(row.backuptechid)
       if primary_tech.nil? and row.serviceorgid != '61000184'
-        puts "Primary tech (#{row.primarytechid}) is not in the database."
+        puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} is not in the database."
       end
       if backup_tech.nil? and row.serviceorgid != '61000184'
-        puts "Backup tech (#{row.backuptechid}) is not in the database."
+        puts "Backup tech (#{row.backuptechid}) for #{row.crm_objectid} is not in the database."
+      end
+      
+      # team_id == 61000184 means it's a dealer, then make the dealer the primary tech
+      if (row.serviceorgid == '61000184')
+        primary_tech = Technician.find_by_crm_id(row.dealerid)
+        if (primary_tech.nil?)
+          primary_tech = Technician.create(
+              crm_id: row.dealerid,
+              first_name: row.dealername,
+              last_name: 'Dealer',
+              email: 'nobody@sharpsec.com',
+              friendly_name: row.dealername
+            )
+        end
       end
       if dev.nil?
-        unless (primary_tech.nil? or backup_tech.nil? or row.primarytechid.nil? or row.backuptechid.nil?)
-          if dev = Device.create(:crm_object_id => row.crm_objectid, 
-                            :model_id => m.id,
-                            :serial_number => row.serialnumber, 
-                            :location_id => loc.id,
-                            :primary_tech_id => row.primarytechid.nil? ? nil : primary_tech.id,
-                            :backup_tech_id => row.backuptechid.nil? ? nil : backup_tech.id,
-                            :active => (row.inactive == '0') ? true : false,
-                            :under_contract => (row.nocontract == '0') ? true : false,
-                            :do_pm => (row.nopm == '0') ? true : false,
-                            :client_id => client.id,
-                            :team_id => row.serviceorgid,
-                            :pm_counter_type => 'counter',
-                            :pm_visits_min => 2
+        if dev = Device.create(:crm_object_id => row.crm_objectid, 
+                          :model_id => m.id,
+                          :serial_number => row.serialnumber, 
+                          :location_id => loc.id,
+                          :primary_tech_id => primary_tech.try(:id),
+                          :backup_tech_id => backup_tech.try(:id),
+                          :active => (row.inactive == '0') ? true : false,
+                          :under_contract => (row.nocontract == '0') ? true : false,
+                          :do_pm => (row.nopm == '0') ? true : false,
+                          :client_id => client.id,
+                          :team_id => row.serviceorgid,
+                          :pm_counter_type => 'counter',
+                          :pm_visits_min => 2
+                          )
+          dev.create_neglected(next_visit: nil)
+          dev.create_device_stat()
+          dev.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
+            op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
+            op.update_attributes(next_pm_date: Date.today)
+          end
+        else
+          puts "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
+        end
+      else # if the device is already in the db
+        dev.update_attributes(:crm_object_id => row.crm_objectid, 
+                              :model_id => m.id,
+                              :serial_number => row.serialnumber, 
+                              :location_id => loc.id,
+                              :primary_tech_id => primary_tech.try(:id),
+                              :backup_tech_id => backup_tech.try(:id),
+                              :active => (row.inactive == '0') ? true : false,
+                              :under_contract => (row.nocontract == '0') ? true : false,
+                              :do_pm => (row.nopm == '0') ? true : false,
+                              :client_id => client.id,
+                              :team_id => row.serviceorgid,
+                              :pm_counter_type => 'counter',
+                              :pm_visits_min => 2
                             )
-            dev.create_neglected(next_visit: nil)
-            dev.create_device_stat()
-            dev.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
-              op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
-              op.update_attributes(next_pm_date: Date.today)
-            end
-          else
-            puts "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
-          end
-        else
-          tech = Technician.find_by_friendly_name("Dealers")
-          if dev = tech.primary_devices.create(:crm_object_id => row.crm_objectid, 
-                                     :model_id => m.id,
-                                     :serial_number => row.serialnumber, 
-                                     :location_id => loc.id,
-                                     :active => (row.inactive == '0') ? true : false,
-                                     :under_contract => (row.nocontract == '0') ? true : false,
-                                     :do_pm => (row.nopm == '0') ? true : false,
-                                     :client_id => client.id,
-                                     :team_id => row.serviceorgid,
-                                     :pm_counter_type => 'counter'
-                                    )
-            dev.create_neglected(next_visit: nil)
-            dev.create_device_stat()
-            dev.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
-              op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
-              op.update_attributes(next_pm_date: Date.today)
-            end
-          else
-            puts "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
-          end
-        end
-      else
-        unless row.primarytechid.nil?
-          dev.update_attributes(:crm_object_id => row.crm_objectid, 
-                                :model_id => m.id,
-                                :serial_number => row.serialnumber, 
-                                :location_id => loc.id,
-                                :primary_tech_id => primary_tech.nil? ? nil : primary_tech.id,
-                                :backup_tech_id => backup_tech.nil? ? nil : backup_tech.id,
-                                :active => (row.inactive == '0') ? true : false,
-                                :under_contract => (row.nocontract == '0') ? true : false,
-                                :do_pm => (row.nopm == '0') ? true : false,
-                                :client_id => client.id,
-                                :team_id => row.serviceorgid,
-                                :pm_counter_type => 'counter',
-                                :pm_visits_min => 2
-                              )
-        else
-          tech = Technician.find_by_friendly_name("Dealers")
-          dev.update_attributes(:crm_object_id => row.crm_objectid, 
-                                :model_id => m.id,
-                                :serial_number => row.serialnumber, 
-                                :location_id => loc.id,
-                                :primary_tech_id => tech.id,
-                                :active => (row.inactive == '0') ? true : false,
-                                :under_contract => (row.nocontract == '0') ? true : false,
-                                :do_pm => (row.nopm == '0') ? true : false,
-                                :client_id => client.id,
-                                :team_id => row.serviceorgid,
-                                :pm_counter_type => 'counter',
-                                :pm_visits_min => 2
-                               )
-        end
       end
 #       contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
 #       unless (contacts.empty? or dev.nil?)

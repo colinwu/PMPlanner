@@ -15,8 +15,8 @@ class Device < ActiveRecord::Base
   has_many :transfers, :dependent => :destroy
   
   validates :primary_tech_id, :backup_tech_id, numericality: { greater_than: 0 }, allow_nil: true
-  validates :location_id, :client_id, numericality: { greater_than: 0 }
-  validates :crm_object_id, :serial_number, :location_id, presence: true
+  validates :location_id, :client_id, numericality: { greater_than: 0 }, allow_nil: true
+  validates :crm_object_id, :serial_number, presence: true
   validates :crm_object_id, :serial_number, uniqueness: true
   validates_associated :model, :outstanding_pms
   

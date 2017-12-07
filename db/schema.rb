@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171116141443) do
+ActiveRecord::Schema.define(version: 20171207031227) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -256,8 +256,6 @@ ActiveRecord::Schema.define(version: 20171116141443) do
     t.boolean  "admin",                          default: false, null: false
     t.boolean  "manager",                        default: false
   end
-
-  add_index "technicians", ["email"], name: "index_technicians_on_email", unique: true, using: :btree
 
   create_table "transfers", force: :cascade do |t|
     t.integer  "from_team_id", limit: 4
