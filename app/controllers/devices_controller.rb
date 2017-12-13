@@ -1,6 +1,6 @@
 class DevicesController < ApplicationController
   before_action :authorize, :set_defaults, :fetch_news
-  before_action :require_manager, only: [:new, :create, :destroy, :send_transfer]
+  before_action :require_manager, only: [:new, :create, :destroy, :send_transfer, :unassigned]
   helper_method :sort_column, :sort_direction
   autocomplete :client, :name, full: true
   
@@ -628,9 +628,9 @@ class DevicesController < ApplicationController
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
-    # if I'm not working with any particular technician and...
-    if current_technician.nil?
-      if (current_user.admin?) # ... I am and admin then I work with all techs' territories
+    
+    if current_technician.nil? # if I'm not working with any particular technician and...
+      if (current_user.admin?) # ... I am an admin then I work with all techs' territories
         my_team = Technician.all
         @title = "PM List for all devices"
       elsif current_user.manager? # ... or if I'm a manager then I work with my region
@@ -884,6 +884,54 @@ class DevicesController < ApplicationController
       flash[:error] = 'Appropriate email parameters not found.'
       redirect_to back_or_go_here
     end
+  end
+  
+  def unassigned
+    you_are_here
+    @page_title = "Unassigned Devices"
+    if session[:showbackup].nil?
+      session[:showbackup] = current_user.preference.showbackup.to_s
+    end
+    @search_params = params[:search] || Hash.new
+    search_ar = ["devices.team_id is NULL"]
+    where_ar = []
+    if params[:search]
+      unless @search_params['crm'].nil? or @search_params['crm'].blank?
+        search_ar <<  @search_params[:crm]
+        where_ar << "crm_object_id regexp ?"
+      end
+      unless  @search_params['model'].nil? or  @search_params['model'].blank?
+        search_ar <<  @search_params[:model]
+        where_ar << "models.nm regexp ?"
+      end
+      unless  @search_params['sn'].nil? or  @search_params['sn'].blank?
+        search_ar <<  @search_params[:sn]
+        where_ar << "serial_number regexp ?"
+      end
+      unless  @search_params['client_name'].nil? or  @search_params['client_name'].blank?
+        search_ar <<  @search_params['client_name']
+        where_ar << "clients.name regexp ?"
+      end
+      unless  @search_params['addr1'].nil? or  @search_params['addr1'].blank?
+        search_ar <<  @search_params['addr1']
+        where_ar << "locations.address1 regexp ?"
+      end
+      unless  @search_params['city'].nil? or  @search_params['city'].blank?
+        search_ar <<  @search_params['city']
+        where_ar << "locations.city regexp ?"
+      end
+      search_ar[0] = ([search_ar[0]]+where_ar).join(' and ')
+    end
+    if params[:sort].nil? or params[:sort].empty?
+      @order = 'crm_object_id'
+    else
+      @order = sort_column + ' ' + sort_direction
+    end
+    
+    @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
+    
+    render :index
+    
   end
   
   def write_parts_order

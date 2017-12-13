@@ -77,6 +77,7 @@ PmPlanner::Application.routes.draw do
       post 'send_order'
       post 'write_parts_order'
       post 'show_or_hide_backup'
+      get 'unassigned'
     end
     member do
       get 'enter_data'
