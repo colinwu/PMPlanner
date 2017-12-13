@@ -17,7 +17,7 @@ class Technician < ActiveRecord::Base
   validates :email, format: { with: /\A[a-zA-Z0-9.\-_]+@[a-zA-Z0-9\-_]+\.[a-zA-Z]+\Z/, message: "is not a valid email address" }
   validates_associated :team
   
-  def find_contacts(filter = [], sort_attribute = 'name', direction = 'asc', territory = true, page = 1)
+  def find_contacts(filter = [], sort_attribute = 'name', direction = 'asc', territory = true, page = 1, lpp)
     unless territory # Look in team territory
       loc_list = Location.where("team_id = #{self.team_id}").map{|l| l.id}.join(', ')
       if loc_list.blank?

@@ -115,8 +115,8 @@ class ModelsController < ApplicationController
 
   def update
     @model = Model.find(params[:id])
-    mg_name = params[:model_group].empty? ? params[:model][:nm] : params[:model_group]
-    @model_group = ModelGroup.find_or_create_by(name: mg_name)
+#     mg_name = params[:model].empty? ? params[:model][:nm] : params[:model_group_id]
+    @model_group = ModelGroup.find(params[:model][:model_group_id])
     @model.model_group_id = @model_group.id
     counters = params[:pm_code]
     sections = params[:section]

@@ -34,11 +34,13 @@ if File.exists?(csv_file)
       end
       primary_tech = Technician.find_by_crm_id(row.primarytechid)
       backup_tech = Technician.find_by_crm_id(row.backuptechid)
-      if primary_tech.nil? and row.serviceorgid != '61000184'
-        puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} is not in the database."
-      end
-      if backup_tech.nil? and row.serviceorgid != '61000184'
-        puts "Backup tech (#{row.backuptechid}) for #{row.crm_objectid} is not in the database."
+      if (row.serviceorgid != '61000184' and row.serviceorg != 'Not assigned')
+        if primary_tech.nil?
+          puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
+        end
+        if backup_tech.nil?
+          puts "Backup tech (#{row.backuptechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
+        end
       end
       
       # team_id == 61000184 means it's a dealer, then make the dealer the primary tech

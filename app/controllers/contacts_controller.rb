@@ -48,7 +48,7 @@ class ContactsController < ApplicationController
       @contacts = Contact.joins(:location).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     else
       @title = "My Contacts"
-      @contacts = current_technician.find_contacts(search_ar, sort_column, sort_direction, true, params[:page])
+      @contacts = current_technician.find_contacts(search_ar, sort_column, sort_direction, true, params[:page], lpp)
     end 
     
   end
