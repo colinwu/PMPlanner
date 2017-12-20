@@ -52,7 +52,8 @@ if File.exists?(csv_file)
               first_name: row.dealername,
               last_name: 'Dealer',
               email: 'nobody@sharpsec.com',
-              friendly_name: row.dealername
+              friendly_name: row.dealername,
+              team_id: row.serviceorgid
             )
         end
       end

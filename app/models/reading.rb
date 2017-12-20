@@ -14,7 +14,13 @@ class Reading < ActiveRecord::Base
 #   validates :taken_at, uniqueness: true
   
   def counter_for(code)
-    self.counters.joins(:pm_code).where(["pm_codes.name = ?", code]).first    
+    c = self.counters.joins(:pm_code).where(["pm_codes.name = ?", code]).first
+    if c.nil?
+      pm_code_id = PmCode.find_by(name: code).id
+      return Counter.new(pm_code_id: pm_code_id, value: 0, reading_id: self.id)
+    else
+      return c
+    end
   end
   
   def taken_at_is_date
@@ -47,7 +53,7 @@ class Reading < ActiveRecord::Base
     end
     
     ptn1_file = self.ptn1.path
-    ptn1_file =~ /_(\d{11,12})_PTN/
+    ptn1_file =~ /_(\d+)_PTN/
     file_date = $1.slice(0,8)
     f = File.open(ptn1_file)
     while (row = f.gets)

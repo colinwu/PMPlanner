@@ -371,7 +371,7 @@ class DevicesController < ApplicationController
               daily = dailybw
             end
             monthlyaverage = daily * 30.5
-            estimate = @todays_reading.nil? ? (last_val + daily * last_now_interval) : @todays_reading.counter_for(c).value
+            estimate = @todays_reading.nil? ? (last_val + daily * last_now_interval) : @todays_reading.counter_for(c).try(:value)
             prog = (100.0 * estimate / target_val)
             case monthlyaverage
             when 0
@@ -709,7 +709,6 @@ class DevicesController < ApplicationController
         else
           @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date}.paginate(page: params[:page], per_page: lpp)
         end
-        @dev_list
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[d.id] = pm_list.order("next_pm_date ASC").first.next_pm_date
