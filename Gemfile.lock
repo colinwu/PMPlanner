@@ -161,7 +161,7 @@ GEM
     multi_json (1.12.1)
     mysql2 (0.3.17)
     nenv (0.3.0)
-    net-ldap (0.14.0)
+    net-ldap (0.16.1)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (3.2.0)
@@ -314,7 +314,7 @@ DEPENDENCIES
   json
   mocha
   mysql2 (= 0.3.17)
-  net-ldap (~> 0.14.0)
+  net-ldap (~> 0.16.0)
   paperclip (~> 5.0.0)
   protected_attributes (~> 1.0.8)
   railroady
