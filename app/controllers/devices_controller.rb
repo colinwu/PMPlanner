@@ -63,9 +63,9 @@ class DevicesController < ApplicationController
         end
         @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       else
-# should never reach this
-#         @title = "My Territory"
-#         @tech = current_user
+        # should never reach this
+        #         @title = "My Territory"
+        #         @tech = current_user
       end
     else
       @title = "#{current_technician.friendly_name}'s Devices"
@@ -116,7 +116,7 @@ class DevicesController < ApplicationController
       flash[:error] = "Could not create new device: #{@device.errors.message}"
       redirect_to back_or_go_here(root_url)
     end
-# only admin or manager can add devices
+    # only admin or manager can add devices
     if current_user.admin? or current_user.manager?
       @all_dev_ids = Device.all.map { |d| "#{d.crm_object_id}" }
       @device.team_id = (current_technician.nil? or current_technician.team_id.nil?) ? Team.find_by(name: 'Admin').id : current_technician.team_id
@@ -441,7 +441,7 @@ class DevicesController < ApplicationController
         redirect_to "/devices/#{@device.id}/#{session[:search_caller]}"
       when 0
         flash[:error] = "Nothing found."
-        redirect_to back_or_go_here()
+        redirect_to root_url
       else
         render :index
       end
