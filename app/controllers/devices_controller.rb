@@ -63,9 +63,9 @@ class DevicesController < ApplicationController
         end
         @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       else
-        # should never reach this
-        #         @title = "My Territory"
-        #         @tech = current_user
+    # should never reach this
+    #         @title = "My Territory"
+    #         @tech = current_user
       end
     else
       @title = "#{current_technician.friendly_name}'s Devices"
@@ -485,7 +485,7 @@ class DevicesController < ApplicationController
       @c_monthly = stats['c_monthly']
       @vpy = stats['vpy']
       @last_reading = @device.last_non_zero_reading_on_or_before(@now)
-#       @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
+    #         @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
       if @last_reading.nil?
         @last_reading = Reading.new(taken_at: Date.today)
         @lastbw = 0

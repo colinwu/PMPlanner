@@ -1,5 +1,5 @@
 class Technician < ActiveRecord::Base
-  attr_accessible :team_id, :first_name, :last_name, :friendly_name, :sharp_name, :car_stock_number, :email, :crm_id, :remember_me, :admin, :manager, :current_sign_in_at, :current_sign_in_ip
+  attr_accessible :team_id, :first_name, :last_name, :friendly_name, :sharp_name, :car_stock_number, :email, :crm_id, :remember_me, :admin, :manager, :current_sign_in_at, :current_sign_in_ip, :sent_date
   
   has_many :primary_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'primary_tech_id'
   has_many :backup_devices, :dependent => :nullify, :class_name => 'Device', :foreign_key => 'backup_tech_id'
@@ -57,13 +57,13 @@ class Technician < ActiveRecord::Base
   def can_manage?(device)
     # turns out techs need to be able to search and record data for all devices in inventory
     return true
-#     if self.admin?
-#       true
-#     elsif self.manager?
-#       self.team_id == device.team_id
-#     else
-#       device.primary_tech_id == self.id or device.backup_tech_id == self.id
-#     end
+    # if self.admin?
+    #   true
+    # elsif self.manager?
+    #   self.team_id == device.team_id
+    # else
+    #   device.primary_tech_id == self.id or device.backup_tech_id == self.id
+    # end
   end
       
   def get_manager
@@ -73,5 +73,5 @@ class Technician < ActiveRecord::Base
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
-    
+
 end
