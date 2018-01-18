@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171207031227) do
+ActiveRecord::Schema.define(version: 20180116161453) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -195,6 +195,8 @@ ActiveRecord::Schema.define(version: 20171207031227) do
     t.integer  "lines_per_page",        limit: 4
     t.string   "default_root_path",     limit: 255,   default: "/devices/my_pm_list"
     t.boolean  "showbackup"
+    t.integer  "pm_list_freq",          limit: 4,     default: 0
+    t.integer  "pm_list_freq_unit",     limit: 4
   end
 
   create_table "reading_targets", force: :cascade do |t|
@@ -255,6 +257,7 @@ ActiveRecord::Schema.define(version: 20171207031227) do
     t.string   "last_sign_in_ip",    limit: 255
     t.boolean  "admin",                          default: false, null: false
     t.boolean  "manager",                        default: false
+    t.date     "sent_date"
   end
 
   create_table "transfers", force: :cascade do |t|

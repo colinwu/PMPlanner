@@ -20,8 +20,6 @@ class PreferencesController < ApplicationController
       redirect_to edit_preferences_path(current_technician), :alert => "Only admin can create new technician profile."
     else
       @preference = Preference.new(
-        limit_to_region: true,
-        limit_to_territory: true,
         default_root_path: '/devices/search',
         lines_per_page: 25,
         upcoming_interval: 2,

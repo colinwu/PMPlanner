@@ -1,5 +1,5 @@
 Log.create(technician_id: 1, message: "Starting Check_PM_status")
-Reading.where("taken_at is NULL").each {|r| r.destroy}
+Reading.where("taken_at is NULL").find_each {|r| r.destroy}
 Device.find_each do |dev|
   begin
     dev.update_pm_visit_tables
