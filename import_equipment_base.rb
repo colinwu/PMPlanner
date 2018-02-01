@@ -35,10 +35,10 @@ if File.exists?(csv_file)
       primary_tech = Technician.find_by_crm_id(row.primarytechid)
       backup_tech = Technician.find_by_crm_id(row.backuptechid)
       if (row.serviceorgid != '61000184' and row.serviceorg != 'Not assigned')
-        if primary_tech.nil?
+        if primary_tech.nil? and not row.primarytechid.nil?
           puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
         end
-        if backup_tech.nil?
+        if backup_tech.nil? and not row.backuptechid.nil?
           puts "Backup tech (#{row.backuptechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
         end
       end
