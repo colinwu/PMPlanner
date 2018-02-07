@@ -55,7 +55,9 @@
               <% end %>
             </ul> <!-- class="nav navbar-nav" -->
             <ul class="nav navbar-nav navbar-right">
-              <li><a id="news_link" data-toggle='modal' data-backdrop="static" href="#news">News <span class='badge'><%= items %></span></a></li>
+              <% if items > 0 %>
+                <li><a id="news_link" data-toggle='modal' data-backdrop="static" href="#news">News <span class='badge'><%= items %></span></a></li>
+              <% end %>
               <li class="dropdown">
                 <% if current_user %>
                   <% session[:active_at] = Time.now %>
