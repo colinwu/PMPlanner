@@ -170,6 +170,20 @@
           </p>
           
         </td>
+        <td>
+          <p id= SPF_field>
+            SPF<br />
+            <%= text_field_tag 'pm_code[SPF]',number_with_delimiter(@pm_code['SPF']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[SPF]',@section['SPF'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[SPF]',@label['SPF'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+          <p id= PPF_field>
+            PPF<br />
+            <%= text_field_tag 'pm_code[PPF]',number_with_delimiter(@pm_code['PPF']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[PPF]',@section['PPF'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[PPF]',@label['PPF'], {size:15, placeholder: '22-6 label'} %>
+          </p>
+        </td>
       </tr>
     </table>
       
