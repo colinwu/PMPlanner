@@ -18,7 +18,7 @@ class ReadingsController < ApplicationController
     # have to save the instance before we can process the attached file
     if @reading.save
       if @reading.ptn1_file_name
-        current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}"
+        current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}")
         msg = @reading.process_ptn1
         if msg =~ /processed/
           current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")

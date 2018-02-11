@@ -63,9 +63,9 @@ class DevicesController < ApplicationController
         end
         @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       else
-    # should never reach this
-    #         @title = "My Territory"
-    #         @tech = current_user
+        # should never reach this
+        # @title = "My Territory"
+        # @tech = current_user
       end
     else
       @title = "#{current_technician.friendly_name}'s Devices"
@@ -89,9 +89,9 @@ class DevicesController < ApplicationController
       @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     end
     
-    if @devices.nil? or @devices.empty?
-      @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
-    end
+    # if @devices.nil? or @devices.empty?
+    #   @devices = @tech.primary_devices.joins(:location, :client, :model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
+    # end
   end
 
   def show
