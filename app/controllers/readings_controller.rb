@@ -20,11 +20,11 @@ class ReadingsController < ApplicationController
       if @reading.ptn1_file_name
         current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}")
         msg = @reading.process_ptn1
-        if msg =~ /processed/
+        if msg == "22-6 file processed."
           current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
           redirect_to back_or_go_here(@reading), :notice => "Reading successfully saved."
         else
-          current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Encountered an error processing #{@reading.ptn1_file_name}.")
+          current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Encountered an error processing #{@reading.ptn1_file_name}: #{msg}.")
           @reading.destroy
           redirect_to back_or_go_here(root_url), :alert => msg
         end

@@ -81,9 +81,9 @@ class Device < ActiveRecord::Base
     unless prev_reading.nil? 
       oldest_outstanding = self.outstanding_pms.order(:updated_at).first
       unless oldest_outstanding.nil?
-#         if (oldest_outstanding.updated_at > midnight) and (oldest_outstanding.updated_at > self.readings.order(:updated_at).last.updated_at) 
-#           return nil
-#         end
+        # if (oldest_outstanding.updated_at > midnight) and (oldest_outstanding.updated_at > self.readings.order(:updated_at).last.updated_at) 
+        #   return nil
+        # end
       end
       # See if this will help with making it run faster
       pm_code = Hash.new
@@ -91,7 +91,7 @@ class Device < ActiveRecord::Base
         pm_code[c.name] = c.colorclass
       end
       
-#       range = self.primary_tech.preference.upcoming_interval * 7 # in days
+      # range = self.primary_tech.preference.upcoming_interval * 7 # in days
       
       stats = self.calculate_stats
       bw_monthly = stats['bw_monthly']
@@ -130,7 +130,7 @@ class Device < ActiveRecord::Base
       codes_list.each do |c|
         target = self.target_for(c)
         unless target.nil? or target.target == 0
-#           pm_code = PmCode.find_by name: c
+          # pm_code = PmCode.find_by name: c
           target_val = target.target
           last_val = prev_reading.counter_for(c).nil? ? 0 : prev_reading.counter_for(c).value
           if pm_code[c] == 'ALL'

@@ -161,7 +161,7 @@ class Reading < ActiveRecord::Base
       end # codes.each
       return "22-6 file processed."
     else
-      return nil
+      return "Could not find model and/or serial number in the uploaded file."
     end
   end
 end

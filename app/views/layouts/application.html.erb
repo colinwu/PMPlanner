@@ -34,9 +34,9 @@
           <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li><%= link_to "Home", search_devices_path %></li>
-              <li><%= link_to "#{replace_my} Territory", devices_path, id: "territory_menu" %></li>
-              <li><%= link_to "#{replace_my} Contacts", contacts_path, id: "contacts_menu" %></li>
-              <li><%= link_to "#{replace_my} PM List", my_pm_list_devices_path, id: "pm_list_menu" %></li>
+              <li><%= link_to "My Territory", devices_path, id: "territory_menu" %></li>
+              <li><%= link_to "My Contacts", contacts_path, id: "contacts_menu" %></li>
+              <li><%= link_to "My PM List", my_pm_list_devices_path, id: "pm_list_menu" %></li>
               <% if (@device.nil? or @device.id.nil?) %>
                 <p class="navbar-text">PM Status</p>
                 <p class="navbar-text">PM History</p>

@@ -694,11 +694,11 @@ class DevicesController < ApplicationController
       @code_count = {}
       @code_date = {}
       if (sort_column == 'outstanding_pms' or sort_column.empty?)
-#         if sort_direction == 'desc'
-#           @order = 'desc'
-#         else
-#           @order = 'asc'
-#         end
+        # if sort_direction == 'desc'
+        #   @order = 'desc'
+        # else
+        #   @order = 'asc'
+        # end
         if params[:direction].nil?
           params[:direction] = 'asc'
           params[:sort] = 'outstanding_pms'
@@ -798,7 +798,8 @@ class DevicesController < ApplicationController
     end
     current_user.logs.create(device_id: @device.id, message: "Counter data saved.")
     @device.update_pm_visit_tables
-    redirect_to analyze_data_device_url(@device)
+    # redirect_to analyze_data_device_url(@device)
+    redirect_to my_pm_list_devices_url
   end
   
   def rm_contact
