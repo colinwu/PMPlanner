@@ -5,6 +5,10 @@
 <br />
 <%= render partial: "header_table", locals: {button: "analysis"} %>
 
+<div class=visible-xs>
+<strong>Monthly avg: BW =</strong> <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; <strong>COL = </strong><%= number_with_delimiter(@c_monthly.round) %><% else %>; <strong>COL = </strong>Unknown<% end %>
+</div>
+
 <% unless @device.nil? or @prev_reading.nil? %>
 <table class="table-condensed" width="100%">
   <%= form_tag(record_data_device_url,  id: "counter_form") do %>
