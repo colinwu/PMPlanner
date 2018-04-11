@@ -64,7 +64,11 @@ class Device < ActiveRecord::Base
       
       vpy = 2.0
       if (self.active and self.do_pm)
-        vpy = 2.0*(1 + (bw_monthly + c_monthly)/self.target_for('amv').target)
+        begin
+          vpy = 2.0*(1 + (bw_monthly + c_monthly)/self.target_for('amv').target)
+        rescue
+          vpy = 2.0
+        end
       end
       return {'bw_monthly' => bw_monthly, 'c_monthly' => c_monthly , 'vpy' => vpy}
     else
@@ -79,12 +83,12 @@ class Device < ActiveRecord::Base
     midnight = Time.parse(now.to_s)
     prev_reading = self.last_non_zero_reading_on_or_before(now)
     unless prev_reading.nil? 
-      oldest_outstanding = self.outstanding_pms.order(:updated_at).first
-      unless oldest_outstanding.nil?
-        # if (oldest_outstanding.updated_at > midnight) and (oldest_outstanding.updated_at > self.readings.order(:updated_at).last.updated_at) 
-        #   return nil
-        # end
-      end
+      # oldest_outstanding = self.outstanding_pms.order(:updated_at).first
+      # unless oldest_outstanding.nil?
+      #   # if (oldest_outstanding.updated_at > midnight) and (oldest_outstanding.updated_at > self.readings.order(:updated_at).last.updated_at) 
+      #   #   return nil
+      #   # end
+      # end
       # See if this will help with making it run faster
       pm_code = Hash.new
       PmCode.all.each do |c|
@@ -118,7 +122,7 @@ class Device < ActiveRecord::Base
       next_pm_date = prev_reading.taken_at + visit_interval.round
       op = OutstandingPm.find_or_create_by(device_id: self.id, code: 'BWTOTAL')
       op.update_attributes(next_pm_date: next_pm_date)
-      if (self.model.model_group.color_flag)
+      if self.model.model_group.color_flag
         op = OutstandingPm.find_or_create_by(device_id: self.id, code: 'CTOTAL')
         op.update_attributes(next_pm_date: next_pm_date)
       end
@@ -132,7 +136,8 @@ class Device < ActiveRecord::Base
         unless target.nil? or target.target == 0
           # pm_code = PmCode.find_by name: c
           target_val = target.target
-          last_val = prev_reading.counter_for(c).nil? ? 0 : prev_reading.counter_for(c).value
+          # last_val = prev_reading.counter_for(c).nil? ? 0 : prev_reading.counter_for(c).value
+          last_val = prev_reading.counter_for(c).value
           if pm_code[c] == 'ALL'
             daily = dailyc + dailybw
           elsif pm_code[c] == 'COLOR'
@@ -147,20 +152,16 @@ class Device < ActiveRecord::Base
           else
             next_pm_date = (now + ((target_val - estimate) / daily))
           end
-          if next_pm_date > now + 366
-            next_pm_date = now + 366
-          end
-#           unless (c == 'TA' or c == 'CA')
-            op = OutstandingPm.find_or_create_by(device_id: self.id, code: c)
-            op.update_attributes(next_pm_date: next_pm_date)
-#           end
+          next_pm_date = now + 366 if next_pm_date > now + 366
+          op = OutstandingPm.find_or_create_by(device_id: self.id, code: c)
+          op.update_attributes(next_pm_date: next_pm_date)
         end # unless target.nil? or target.target == 0
       end # codes_list.each do |c|
-      if self.outstanding_pms.where("next_pm_date is not NULL").empty?
+      if self.outstanding_pms.where('next_pm_date is not NULL').empty?
         # basically, no outstanding PMs so just schedule the next PM based on vpy
         self.outstanding_pms.update_attributes(code: 'BWTOTAL', next_pm_date: (prev_reading.taken_at + visit_interval.round))
       end
-    else # no previous readings, so no stats and no outstanding_pms
+    else # no previous readings, so no stats and no outstanding_pms; go visit asap
       op = OutstandingPm.find_or_create_by(device_id: self.id, code: 'BWTOTAL')
       op.update_attributes(next_pm_date: Date.today)
     end
