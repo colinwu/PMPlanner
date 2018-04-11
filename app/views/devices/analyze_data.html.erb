@@ -5,7 +5,7 @@
 <br />
 <%= render partial: "header_table", locals: {button: "analysis"} %>
 
-<div class=visible-xs>
+<div class="visible-xs boxed">
 <strong>Monthly avg: BW =</strong> <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; <strong>COL = </strong><%= number_with_delimiter(@c_monthly.round) %><% else %>; <strong>COL = </strong>Unknown<% end %>
 </div>
 
