@@ -38,12 +38,15 @@ class Device < ActiveRecord::Base
   
   # Returns {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0} if 0 or 1 reading available,
   def calculate_stats
+    ds = device_stat
+    create_device_stat() if ds.nil?
     if self.readings.count > 1
-      first_reading = self.readings.order(:taken_at).first      
+      first_reading = self.readings.order(:taken_at).first
       last_reading = self.last_non_zero_reading_on_or_before(Date.today)
       first_last_interval = (last_reading.taken_at - first_reading.taken_at).to_i
-      if first_last_interval == 0  # for the case where there is only 1 non-zero reading
-        return {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0}
+      if first_last_interval.zero?  # for the case where there is only 1 non-zero reading
+        ds.update_attributes(bw_monthly: 0, c_monthly: 0, bw_daily: 0, c_daily: 0, vpy: 2.0)
+        return ds
       end
       c_monthly = 0
       c_daily = 0
@@ -52,27 +55,31 @@ class Device < ActiveRecord::Base
         first_c_val = first_ctotal.nil? ? 0 : first_ctotal.value
         last_ctotal = last_reading.counter_for('ctotal')
         last_c_val = last_ctotal.nil? ? 0 : last_ctotal.value
-        c_daily = 1.0*(last_c_val - first_c_val)/first_last_interval
-        c_monthly = (c_daily > 0) ? 30.5*c_daily : 0
+        c_daily = 1.0*(last_c_val - first_c_val) / first_last_interval
+        c_daily = c_daily.positive? ? c_daily : 0
+        c_monthly = 30.5 * c_daily
       end
       first_bwtotal = first_reading.counter_for('bwtotal')
       first_bw_val = first_bwtotal.nil? ? 0 : first_bwtotal.value
       last_bwtotal = last_reading.counter_for('bwtotal')
       last_bw_val = last_bwtotal.nil? ? 0 : last_bwtotal.value
-      bw_daily = 1.0*(last_bw_val - first_bw_val)/first_last_interval
-      bw_monthly = (bw_daily > 0) ? 30.5*bw_daily : 0
-      
+      bw_daily = 1.0 * (last_bw_val - first_bw_val) / first_last_interval
+      bw_daily = bw_daily.positive? ? bw_daily : 0
+      bw_monthly = 30.5 * bw_daily
+
       vpy = 2.0
-      if (self.active and self.do_pm)
+      if self.active and self.do_pm
         begin
           vpy = 2.0*(1 + (bw_monthly + c_monthly)/self.target_for('amv').target)
         rescue
           vpy = 2.0
         end
       end
-      return {'bw_monthly' => bw_monthly, 'c_monthly' => c_monthly , 'vpy' => vpy}
+      ds.update_attributes(bw_monthly: bw_monthly, c_monthly: c_monthly, bw_daily: bw_daily, c_daily: c_daily, vpy: vpy)
+      return ds
     else
-      return {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0}
+      ds.update_attributes(bw_monthly: 0, c_monthly: 0, bw_daily: 0, c_daily: 0, vpy: 2.0)
+      return ds
     end
   end
 
@@ -100,23 +107,12 @@ class Device < ActiveRecord::Base
       stats = self.calculate_stats
       bw_monthly = stats['bw_monthly']
       c_monthly = stats['c_monthly']
+      dailyc = stats['c_daily']
+      dailybw = stats['bw_daily']
       vpy = stats['vpy']
-      
-      ds.update_attributes(c_monthly: c_monthly, bw_monthly: bw_monthly, vpy: vpy)
-      self.device_stat(true)
-      
+
       last_now_interval = Date.today - prev_reading.taken_at
-      
-      ### NOTE May be able to skip this section if Total counters are not included,
-      ## except that we will still need the dailyc and dailybw numbers
-      dailyc = 0
-      if self.model.model_group.color_flag
-        dailyc = c_monthly / 30.5
-      end
-      
-      # Calculate BW stats
-      dailybw = bw_monthly / 30.5
-      
+
       # BW and C progress % and PM Dates depend on @vpy
       visit_interval = 365 / vpy
       next_pm_date = prev_reading.taken_at + visit_interval.round
@@ -170,19 +166,19 @@ class Device < ActiveRecord::Base
   def last_non_zero_reading_on_or_before(date = Date.today)
     self.readings.where("taken_at is not NULL and taken_at <= '#{date}'").order('taken_at desc').each do |r|
       r.counters.each do |c|
-        if c.value > 0
+        if c.value.positive?
           return r
         end
       end
     end
     return nil
   end
-  
+
   def pm_parts(choice = {})
     # 'choice" is hash where key is the PM code and value is the choice; 
     #    e.g. {'PK' => 1, 'DC' => 2} means we want choice 1 for 'PK' code and 2nd choice
     #    for 'DC' code
-    
+
     code_list = self.outstanding_pms.map(&:code)
     pm_parts = Hash.new
     code_list.each do |c|

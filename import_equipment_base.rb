@@ -97,12 +97,12 @@ if File.exists?(csv_file)
                               :pm_visits_min => 2
                             )
       end
-#       contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
-#       unless (contacts.empty? or dev.nil?)
-#         contacts.each do |c|
-#           c.update_attribute(:location_id, loc.id)
-#         end
-#       end
+      # contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
+      # unless (contacts.empty? or dev.nil?)
+      #   contacts.each do |c|
+      #     c.update_attribute(:location_id, loc.id)
+      #   end
+      # end
     end
   end
 else

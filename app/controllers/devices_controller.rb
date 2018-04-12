@@ -288,13 +288,14 @@ class DevicesController < ApplicationController
       end
       if @device.device_stat.nil?
         avg = @device.calculate_stats
-        @device.create_device_stat(c_monthly: avg['c_monthly'], bw_monthly: avg['bw_monthly'], vpy: avg['vpy'])
       else
         avg = @device.device_stat
       end
-      @bw_monthly = avg['bw_monthly']
-      @c_monthly = avg['c_monthly']
-      @vpy = avg['vpy']
+      @bw_monthly = avg[:bw_monthly]
+      @c_monthly = avg[:c_monthly]
+      dailyc = avg[:c_daily]
+      dailybw = avg[:bw_daily]
+      @vpy = avg[:vpy]
       
       @todays_reading = @device.readings.find_by_taken_at(@now)
       @prev_reading = @device.last_non_zero_reading_on_or_before(@now-1)
@@ -302,15 +303,12 @@ class DevicesController < ApplicationController
       unless @prev_reading.nil?
         last_now_interval = @now - @prev_reading.taken_at
         range = @tech.preference.upcoming_interval * 7
-        dailyc = 0
         if @device.model.model_group.color_flag
-          dailyc = @c_monthly / 30.5
           last_c_val = @prev_reading.counter_for('ctotal').value
           c_estimate = @todays_reading.nil? ? (last_c_val + dailyc * last_now_interval) : @todays_reading.counter_for('ctotal').value
         end
       
         # Calculate BW stats
-        dailybw = @bw_monthly / 30.5
         last_bw_val = @prev_reading.counter_for('bwtotal').value
         bw_estimate = @todays_reading.nil? ? (last_bw_val + (dailybw + dailyc) * last_now_interval) : @todays_reading.counter_for('bwtotal').value
         
@@ -481,9 +479,9 @@ class DevicesController < ApplicationController
       else
         stats = @device.device_stat
       end
-      @bw_monthly = stats['bw_monthly']
-      @c_monthly = stats['c_monthly']
-      @vpy = stats['vpy']
+      @bw_monthly = stats[:bw_monthly]
+      @c_monthly = stats[:c_monthly]
+      @vpy = stats[:vpy]
       @last_reading = @device.last_non_zero_reading_on_or_before(@now)
     #         @last_reading = @device.readings.where("taken_at < '#{@now}'").order(:taken_at).last
       if @last_reading.nil?
@@ -799,7 +797,7 @@ class DevicesController < ApplicationController
     current_user.logs.create(device_id: @device.id, message: "Counter data saved.")
     @device.update_pm_visit_tables
     # redirect_to analyze_data_device_url(@device)
-    redirect_to my_pm_list_devices_url
+    redirect_to current_user.preference.default_root_path
   end
   
   def rm_contact
@@ -835,14 +833,13 @@ class DevicesController < ApplicationController
       
       if @device.device_stat.nil?
         stats = @device.calculate_stats
-        @device.create_device_stat(c_monthly: stats['c_monthly'], bw_monthly: stats['bw_monthly'], vpy: stats['vpy'])
       else
         stats = @device.device_stat
       end
         
-      @bw_monthly = stats['bw_monthly']
-      @c_monthly = stats['c_monthly']
-      @vpy = stats['vpy']
+      @bw_monthly = stats[:bw_monthly]
+      @c_monthly = stats[:c_monthly]
+      @vpy = stats[:vpy]
       
       @readings = @device.readings.order(taken_at: :desc)
       @all_codes = @device.model.model_group.model_targets.map do |t|

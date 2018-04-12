@@ -51,7 +51,7 @@ class NewsController < ApplicationController
     respond_to do |format|
       if @news.update(news_params)
         Technician.find_each do |t|
-          unless @news.unreads.exists?(technician_id: t.id)
+          unless @news.show_flag && @news.unreads.exists?(technician_id: t.id)
             @news.unreads.create(technician_id: t.id)
           end
         end
@@ -83,6 +83,6 @@ class NewsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def news_params
-      params.require(:news).permit(:note, :activate, :urgent)
+      params.require(:news).permit(:note, :activate, :urgent, :show_flag)
     end
 end

@@ -1,5 +1,5 @@
 class DeviceStat < ActiveRecord::Base
-  attr_accessible :c_monthly, :bw_monthly, :vpy, :device_id
+  attr_accessible :c_monthly, :bw_monthly, :vpy, :device_id, :bw_daily, :c_daily
   
   belongs_to :device, inverse_of: :device_stat
   

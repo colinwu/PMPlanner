@@ -5,7 +5,8 @@
     <tr>
       <th>Note</th>
       <th>Activate</th>
-      <th>Urgent</th>
+      <th>Urgent?</th>
+      <th>Show?</th>
       <th></th>
     </tr>
   </thead>
@@ -16,6 +17,7 @@
         <td><%= news.note %></td>
         <td><%= news.activate %></td>
         <td><%= news.urgent %></td>
+        <td><%= news.show_flag %></td>
         <td>
           <%= link_to news do %>
             <span class="glyphicon glyphicon-eye-open"></span>
