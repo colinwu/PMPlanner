@@ -39,7 +39,7 @@ class Device < ActiveRecord::Base
   # Returns {'bw_monthly' => 0, 'c_monthly' => 0 , 'vpy' => 2.0} if 0 or 1 reading available,
   def calculate_stats
     ds = device_stat
-    create_device_stat() if ds.nil?
+    ds = create_device_stat() if ds.nil?
     if self.readings.count > 1
       first_reading = self.readings.order(:taken_at).first
       last_reading = self.last_non_zero_reading_on_or_before(Date.today)
