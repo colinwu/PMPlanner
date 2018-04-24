@@ -26,14 +26,14 @@ if File.exists?(csv_file)
       end
       
       # find the device, model and techs for the device
-      dev = Device.find_by_crm_object_id(row.crm_objectid)
-      m = Model.find_by_nm(row.model)
+      dev = Device.find_by crm_object_id: row.crm_objectid
+      m = Model.find_by nm: row.model
       if m.nil?
-        mg = ModelGroup.find_by_name 'OTHERS'
+        mg = ModelGroup.find_by name: 'OTHERS'
         m = mg.models.create(nm: row.model)
       end
-      primary_tech = Technician.find_by_crm_id(row.primarytechid)
-      backup_tech = Technician.find_by_crm_id(row.backuptechid)
+      primary_tech = Technician.find_by crm_id: row.primarytechid
+      backup_tech = Technician.find_by crm_id: row.backuptechid
       if (row.serviceorgid != '61000184' and row.serviceorg != 'Not assigned')
         if primary_tech.nil? and not row.primarytechid.nil?
           puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."

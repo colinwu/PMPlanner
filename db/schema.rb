@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118135930) do
+ActiveRecord::Schema.define(version: 20180411235501) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(version: 20180118135930) do
     t.integer  "device_id",  limit: 4
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.float    "bw_daily",   limit: 24
+    t.float    "c_daily",    limit: 24
   end
 
   create_table "devices", force: :cascade do |t|
@@ -141,8 +143,9 @@ ActiveRecord::Schema.define(version: 20180118135930) do
     t.text     "note",       limit: 65535
     t.date     "activate"
     t.boolean  "urgent"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "show_flag",                default: true
   end
 
   create_table "outstanding_pms", force: :cascade do |t|
