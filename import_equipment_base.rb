@@ -9,9 +9,11 @@ if File.exists?(csv_file)
 #     read_attributes_from_file
   end
   
+  csv_devs = {}
   r.each do |row|
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
+      csv_devs[row.crm_objectid] = 1
       # find or create the client record
       client = Client.find_by soldtoid: row.soldtoid
       if client.nil?
@@ -64,9 +66,9 @@ if File.exists?(csv_file)
                           :location_id => loc.id,
                           :primary_tech_id => primary_tech.try(:id),
                           :backup_tech_id => backup_tech.try(:id),
-                          :active => (row.inactive == '0') ? true : false,
-                          :under_contract => (row.nocontract == '0') ? true : false,
-                          :do_pm => (row.nopm != 'TRUE') ? true : false,
+                          :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
+                          :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
+                          :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
                           :client_id => client.id,
                           :team_id => row.serviceorgid,
                           :pm_counter_type => 'counter',
@@ -88,21 +90,23 @@ if File.exists?(csv_file)
                               :location_id => loc.id,
                               :primary_tech_id => primary_tech.try(:id),
                               :backup_tech_id => backup_tech.try(:id),
-                              :active => (row.inactive == '0') ? true : false,
-                              :under_contract => (row.nocontract == '0') ? true : false,
-                              :do_pm => (row.nopm != 'TRUE') ? true : false,
+                              :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
+                              :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
+                              :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
                               :client_id => client.id,
                               :team_id => row.serviceorgid,
                               :pm_counter_type => 'counter',
                               :pm_visits_min => 2
                             )
+        # puts "#{dev.crm_object_id}, active: #{dev.active}, contract: #{dev.under_contract}, pm: #{dev.do_pm}"
       end
-      # contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
-      # unless (contacts.empty? or dev.nil?)
-      #   contacts.each do |c|
-      #     c.update_attribute(:location_id, loc.id)
-      #   end
-      # end
+    end
+  end
+  # Look for devices in db but not in the CSV file and set their "under_contract", 
+  # "active", and "do_pm" flags to FALSE
+  Device.all.find_each do |d|
+    if csv_devs[d.crm_object_id]
+      d.update_attributes(active: false, under_contract: false, do_pm: false)
     end
   end
 else

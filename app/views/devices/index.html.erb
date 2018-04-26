@@ -28,7 +28,7 @@
     <% end %>
   </tr>
   <tr class=search_fields>
-  <%= form_tag devices_url, :method => :get do %>
+  <%= form_tag session[:uri], :method => :get do %>
     <%= hidden_field_tag 'sort', sort_column %>
     <%= hidden_field_tag 'direction', sort_direction %>
     <td></td>

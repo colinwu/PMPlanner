@@ -890,7 +890,7 @@ class DevicesController < ApplicationController
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
     @search_params = params[:search] || Hash.new
-    search_ar = ["devices.team_id is NULL"]
+    search_ar = ["(devices.team_id is NULL or (devices.team_id <> '61000184' and devices.primary_tech_id is NULL))"]
     where_ar = []
     if params[:search]
       unless @search_params['crm'].nil? or @search_params['crm'].blank?

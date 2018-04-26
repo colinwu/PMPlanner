@@ -28,7 +28,7 @@
       <td><%= link_to edit_technician_path(technician) do %>
             <span class="glyphicon glyphicon-edit"></span>
           <% end %>
-      | <%= link_to technician, :confirm => 'Are you sure?', :method => :delete do %>
+      <%= link_to technician, :confirm => 'Are you sure?', :method => :delete do %>
             <span class="glyphicon glyphicon-trash"></span>
           <% end %>
       </td>
