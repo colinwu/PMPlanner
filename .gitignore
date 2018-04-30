@@ -11,7 +11,7 @@ schema.rb
 /coverage/
 /spec/tmp
 **.orig
-rerun.txt
+*.txt
 pickle-email-*.html
 grab_prod_db.sh
 *.sql

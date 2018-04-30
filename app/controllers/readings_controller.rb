@@ -22,6 +22,7 @@ class ReadingsController < ApplicationController
         msg = @reading.process_ptn1
         if msg == "22-6 file processed."
           current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
+	  @reading.device.update_pm_visit_table
           redirect_to back_or_go_here(@reading), :notice => "Reading successfully saved."
         else
           current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Encountered an error processing #{@reading.ptn1_file_name}: #{msg}.")

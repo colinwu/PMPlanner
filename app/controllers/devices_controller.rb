@@ -427,9 +427,9 @@ class DevicesController < ApplicationController
       @target = params[:target]
       @title = "Search: #{@search_str}"
       if @target == 'All'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["devices.crm_object_id regexp ? or devices.serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       elsif @target == 'Region'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_user.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       else
         @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       end
@@ -890,7 +890,7 @@ class DevicesController < ApplicationController
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
     @search_params = params[:search] || Hash.new
-    search_ar = ["(devices.team_id is NULL or (devices.team_id <> '61000184' and devices.primary_tech_id is NULL))"]
+    search_ar = ["(devices.team_id is NULL or (devices.team_id <> '61000184' and devices.primary_tech_id is NULL) and devices.active = true)"]
     where_ar = []
     if params[:search]
       unless @search_params['crm'].nil? or @search_params['crm'].blank?

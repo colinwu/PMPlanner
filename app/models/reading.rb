@@ -97,69 +97,73 @@ class Reading < ActiveRecord::Base
       line_number += 1
     end
     f.close
-  
     if (seen[:model] and seen[:sn])
       # make sure the 22-6 file is for this device.
-      ptn1_dev = Device.joins(:model).where(["models.nm = ? and serial_number = ?", model, sn]).first
-      if ptn1_dev.nil?
+      devs = Device.joins(:model).where(["models.nm = ? and (serial_number = ? or serial_number = ?)", model, sn, "#{sn}R"])
+      if devs.length == 0
         return "Device specified by 22-6 file not found: #{model}, #{sn}"
-      elsif ptn1_dev.id != dev.id
-        return "The 22-6 file #{self.ptn1_file_name} is not for this device."
-      else
-        t = Technician.find(self.technician_id)
-        self.taken_at = Date.parse(file_date)
-        self.notes = "Readings uploaded from #{self.ptn1_file_name} by #{t.friendly_name}."
-        self.save
-        # generate list of PM codes for this model
-        dev.model.model_group.model_targets.each do |c|
-          unless (c.label.nil? or c.label.strip.empty?)
-            codes[c.label] = c.maint_code
-            section[c.maint_code] = c.section
-          end
-        end
-        # if it's a colour model add the CTOTAL code
-        if dev.model.model_group.color_flag
-          codes['TOTAL OUT(COL):'] = 'CTOTAL'
-          section['CTOTAL'] = '22-01'
-        end
-      end
-      codes.each do |label,name|
-        new_label = label.gsub(/[()]/,{'(' => '\(',')' => '\)'})
-        if ptn1_sec[section[name]].nil?
-          dev.logs.create(message: "Don't know what section (#{label}, #{name}) is in.")
-          next
-        end
-        line_idx = ptn1_sec[section[name]].line
-        start_column = ptn1_sec[section[name]].c_start
-        column_width = ptn1_sec[section[name]].len.nil? ? max_len : ptn1_sec[section[name]].len
-        if name == 'PPF'
-          ppf_max = 0
-          while (row = content[line_idx][start_column, column_width] and not row =~ /^$/ and not row =~ /\(SIM/)
-            if row =~ /#{new_label}\s+(\d+)/
-              ppf_max = (ppf_max < $1.to_i) ? $1.to_i : ppf_max
-            end
-            line_idx += 1
-          end          
-          counter = ppf_max
+      elsif devs.length == 1
+        ptn1_dev = devs.first
+        if ptn1_dev.id != dev.id
+          return "The 22-6 file #{self.ptn1_file_name} is not for this device."
         else
-          begin
-            row = content[line_idx][start_column, column_width]
-            line_idx += 1
-          end until (row =~ /#{new_label}\s+([-0-9]+)/ or row =~ /^$/ or row =~ /\(SIM/)
-          counter = $1.to_i
-          if (section[name] == '22-13')
-            if (row =~ /#{new_label}\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9%]+)\s+([-0-9]+)/)
-              turn = $2.to_i
-              day = $3.to_i
-              life = $4.to_i
-              remain = $5.to_i
+          t = Technician.find(self.technician_id)
+          self.taken_at = Date.parse(file_date)
+          self.notes = "Readings uploaded from #{self.ptn1_file_name} by #{t.friendly_name}."
+          self.save
+          # generate list of PM codes for this model
+          dev.model.model_group.model_targets.each do |c|
+            unless (c.label.nil? or c.label.strip.empty?)
+              codes[c.label] = c.maint_code
+              section[c.maint_code] = c.section
             end
           end
+          # if it's a colour model add the CTOTAL code
+          if dev.model.model_group.color_flag
+            codes['TOTAL OUT(COL):'] = 'CTOTAL'
+            section['CTOTAL'] = '22-01'
+          end
         end
-        pm = PmCode.find_by_name name
-        self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: 'counter')
-      end # codes.each
-      return "22-6 file processed."
+        codes.each do |label,name|
+          new_label = label.gsub(/[()]/,{'(' => '\(',')' => '\)'})
+          if ptn1_sec[section[name]].nil?
+            dev.logs.create(message: "Don't know what section (#{label}, #{name}) is in.")
+            next
+          end
+          line_idx = ptn1_sec[section[name]].line
+          start_column = ptn1_sec[section[name]].c_start
+          column_width = ptn1_sec[section[name]].len.nil? ? max_len : ptn1_sec[section[name]].len
+          if name == 'PPF'
+            ppf_max = 0
+            while (row = content[line_idx][start_column, column_width] and not row =~ /^$/ and not row =~ /\(SIM/)
+              if row =~ /#{new_label}\s+(\d+)/
+                ppf_max = (ppf_max < $1.to_i) ? $1.to_i : ppf_max
+              end
+              line_idx += 1
+            end          
+            counter = ppf_max
+          else
+            begin
+              row = content[line_idx][start_column, column_width]
+              line_idx += 1
+            end until (row =~ /#{new_label}\s+([-0-9]+)/ or row =~ /^$/ or row =~ /\(SIM/)
+            counter = $1.to_i
+            if (section[name] == '22-13')
+              if (row =~ /#{new_label}\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9%]+)\s+([-0-9]+)/)
+                turn = $2.to_i
+                day = $3.to_i
+                life = $4.to_i
+                remain = $5.to_i
+              end
+            end
+          end
+          pm = PmCode.find_by_name name
+          self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: 'counter')
+        end # codes.each
+        return "22-6 file processed."
+      else
+        return "More than one dev in the db has this SN: #{sn}"
+      end
     else
       return "Could not find model and/or serial number in the uploaded file."
     end

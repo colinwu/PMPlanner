@@ -3,7 +3,6 @@ class Location < ActiveRecord::Base
   
   has_many :devices, :dependent => :restrict_with_error
   has_many :contacts, :dependent => :nullify
-  has_many :ship_tos, :dependent => :nullify
   belongs_to :client
   belongs_to :team, :foreign_key => :team_id
   

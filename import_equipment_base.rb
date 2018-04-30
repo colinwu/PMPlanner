@@ -13,7 +13,7 @@ if File.exists?(csv_file)
   r.each do |row|
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
-      csv_devs[row.crm_objectid] = 1
+      csv_devs[row.serialnumber] = 1
       # find or create the client record
       client = Client.find_by soldtoid: row.soldtoid
       if client.nil?
@@ -105,7 +105,7 @@ if File.exists?(csv_file)
   # Look for devices in db but not in the CSV file and set their "under_contract", 
   # "active", and "do_pm" flags to FALSE
   Device.all.find_each do |d|
-    if csv_devs[d.crm_object_id]
+    unless csv_devs[d.serial_number]
       d.update_attributes(active: false, under_contract: false, do_pm: false)
     end
   end

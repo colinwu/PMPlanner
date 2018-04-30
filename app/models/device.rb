@@ -1,5 +1,5 @@
 class Device < ActiveRecord::Base
-  attr_accessible :installed_base_id, :crm_object_id, :alternate_id, :model_id, :client_id, :serial_number, :location_id, :primary_tech_id, :backup_tech_id, :active, :under_contract, :do_pm, :pm_counter_type, :pm_visits_min, :notes, :team_id, :install_date
+  attr_accessible :crm_object_id, :model_id, :client_id, :serial_number, :location_id, :primary_tech_id, :backup_tech_id, :active, :under_contract, :do_pm, :pm_counter_type, :pm_visits_min, :notes, :team_id, :install_date
   
   belongs_to :model
   belongs_to :client
