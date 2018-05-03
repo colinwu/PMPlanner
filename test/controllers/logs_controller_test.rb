@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class LogsControllerTest < ActionController::TestCase
+class LogsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @log = logs(:one)
   end
@@ -25,7 +25,7 @@ class LogsControllerTest < ActionController::TestCase
   end
 
   test "should show log" do
-    get :show, id: @log
+    get log_url(@log)
     assert_response :success
   end
 
@@ -35,13 +35,13 @@ class LogsControllerTest < ActionController::TestCase
   end
 
   test "should update log" do
-    patch :update, id: @log, log: { device_id: @log.device_id, message: @log.message, tech_id: @log.tech_id }
+    patch :update, id: @log, log: { device_id: @log.device_id, message: @log.message, technician_id: @log.tech_id }
     assert_redirected_to log_path(assigns(:log))
   end
 
   test "should destroy log" do
     assert_difference('Log.count', -1) do
-      delete :destroy, id: @log
+      delete log_url(@log)
     end
 
     assert_redirected_to logs_path

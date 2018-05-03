@@ -1,7 +1,11 @@
 one:
-  team_id: 1
   name: MyString
+  crm_name: MyString
+  warehouse_id: MyString
+  manager_id: 1
 
 two:
-  team_id: 1
   name: MyString
+  crm_name: MyString
+  warehouse_id: MyString
+  manager_id: 1

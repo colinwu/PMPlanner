@@ -1,11 +1,17 @@
 one:
-  taken_at: 
-  notes: 
-  device_id: 
-  technician_id: 
+  taken_at: 1969-01-01
+  notes: MyString
+  device_id: 1
+  technician_id: 1
+  ptn1_file_name: MyFile
+  ptn1_file_size: 1
+  ptn1_updated_at: 1969-01-01
 
 two:
-  taken_at: 
-  notes: 
-  device_id: 
-  technician_id: 
+  taken_at: 1969-01-01
+  notes: MyString
+  device_id: 1
+  technician_id: 1
+  ptn1_file_name: MyFile
+  ptn1_file_size: 1
+  ptn1_updated_at: 1969-01-01

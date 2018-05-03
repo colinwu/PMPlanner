@@ -1,7 +1,9 @@
 one:
   name: MyString
   description: MyString
+  color_flag: true
 
 two:
   name: MyString
   description: MyString
+  color_flag: false

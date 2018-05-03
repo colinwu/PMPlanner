@@ -2,11 +2,11 @@
 
 <table width=100%>
   <tr class=pretty>
-    <th width='10%'><%= sortable 'model_groups.name', 'Model Group', params[:search] %></th>
-    <th width='10%'><%= sortable 'pm_codes.name', 'Pm Code', params[:search] %></th>
-    <th width='10%'><%= sortable 'choice', 'Choice', params[:search] %></th>
-    <th width='15%'><%= sortable 'parts.name', 'Part Name', params[:search] %></th>
-    <th><%= sortable 'parts.description', 'Description', params[:search] %></th>
+    <th width='10%'><%= sortable 'model_groups.name,choice', 'Model Group', @search_params %></th>
+    <th width='10%'><%= sortable 'pm_codes.name,choice', 'Pm Code', @search_params %></th>
+    <th width='10%'><%= sortable 'choice', 'Choice', @search_params %></th>
+    <th width='15%'><%= sortable 'parts.name', 'Part Name', @search_params %></th>
+    <th><%= sortable 'parts.description', 'Description', @search_params %></th>
     <th width='10%'>Quantity</th>
     <th>Action</th>
   </tr>
@@ -14,11 +14,11 @@
   <%= form_tag parts_for_pms_url, method: :get do %>
     <%= hidden_field_tag 'sort', sort_column %>
     <%= hidden_field_tag 'direction', sort_direction %>
-    <td><%= text_field_tag 'search[model_group]', @search_params[:model_group], :size => 1 %></td>
-    <td><%= text_field_tag 'search[pmcode]', @search_params[:pmcode], :size => 1 %></td>
-    <td><%= text_field_tag 'search[choice]', @search_params[:choice], :size => 1 %></td>
-    <td><%= text_field_tag 'search[pn]', @search_params[:pn], :size => 1 %></td>
-    <td><%= text_field_tag 'search[desc]', @search_params[:desc], :size => 1 %></td>
+    <td><%= text_field_tag 'search[model_group]', @search_params[:model_group], {size: 1, class: 'variable-width-input'} %></td>
+    <td><%= text_field_tag 'search[pmcode]', @search_params[:pmcode], {size: 1, class: 'variable-width-input'} %></td>
+    <td><%= text_field_tag 'search[choice]', @search_params[:choice], {size: 1, class: 'variable-width-input'} %></td>
+    <td><%= text_field_tag 'search[pn]', @search_params[:pn], {size: 1, class: 'variable-width-input'} %></td>
+    <td><%= text_field_tag 'search[desc]', @search_params[:desc], {size: 1, class: 'variable-width-input'} %></td>
     <td></td>
     <td><%= submit_tag 'Search', name: nil %></td>
   <% end %>
@@ -31,7 +31,7 @@
       <td><%= parts_for_pm.part.name %></td>
       <td><%= parts_for_pm.part.description %></td>
       <td><%= parts_for_pm.quantity %></td>
-      <td><% if current_technician.admin? %>
+      <td><% if current_user.admin? %>
           <%= link_to 'Edit', edit_parts_for_pm_url(parts_for_pm) %> |
           <%= link_to 'Del', parts_for_pm, method: :delete %>
           <% end %>

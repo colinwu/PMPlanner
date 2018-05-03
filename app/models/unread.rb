@@ -5,5 +5,5 @@ class Unread < ActiveRecord::Base
   validates :technician_id, presence: true
   validates :news_id, presence: true
   
-  attr_accessible :technician_id, :news_id
+  # attr_accessible :technician_id, :news_id
 end

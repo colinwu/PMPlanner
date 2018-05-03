@@ -56,7 +56,7 @@ class NewsController < ApplicationController
           end
         end
         
-        format.html { redirect_to back_or_go_here(news_index_url), notice: 'News was successfully updated.' }
+        format.html { redirect_to back_or_go_here(news_index_url), notice: 'News item was successfully updated.' }
         format.json { render :show, status: :ok, location: @news }
       else
         format.html { render :edit }
@@ -70,7 +70,7 @@ class NewsController < ApplicationController
   def destroy
     @news.destroy
     respond_to do |format|
-      format.html { back_or_go_here news_index_url, notice: 'News was successfully destroyed.' }
+      format.html { back_or_go_here news_index_url, notice: 'News item was successfully deleted.' }
       format.json { head :no_content }
     end
   end

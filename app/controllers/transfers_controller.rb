@@ -49,6 +49,12 @@ class TransfersController < ApplicationController
         end
       end
     end
-    redirect_to back_or_go_here()      
+    redirect_to back_or_go_here()
+  end
+
+  private
+  
+  def transfer_params
+    params.require(:transfer).permit( :from_team_id, :to_team_id, :device_id, :accepted )
   end
 end

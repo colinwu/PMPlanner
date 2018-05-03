@@ -5,6 +5,8 @@ one:
   email: MyString
   notes: MyString
   client_id: 1
+  location_id: 1
+  crm_object_id: 1
 
 two:
   name: MyString
@@ -13,3 +15,5 @@ two:
   email: MyString
   notes: MyString
   client_id: 1
+  location_id: 1
+  crm_object_id: 1

@@ -2,12 +2,12 @@
 
 <table width='100%' class="table-condensed">
   <tr class='pretty'>
-    <th><%= sortable 'clients.name', 'Client', params[:search] %></th>
-    <th><%= sortable 'address1', 'Address1', params[:search] %></th>
-    <th><%= sortable 'address2', 'Address2', params[:search] %></th>
-    <th><%= sortable 'city', 'City', params[:search] %></th>
-    <th><%= sortable 'province', 'Prov', params[:search] %></th>
-    <th><%= sortable 'post_code', 'Postal Code', params[:search] %></th>
+    <th><%= sortable 'clients.name', 'Client', @search_params %></th>
+    <th><%= sortable 'address1', 'Address1', @search_params %></th>
+    <th><%= sortable 'address2', 'Address2', @search_params %></th>
+    <th><%= sortable 'city', 'City', @search_params %></th>
+    <th><%= sortable 'province', 'Prov', @search_params %></th>
+    <th><%= sortable 'post_code', 'Postal Code', @search_params %></th>
     <th>Notes</th>
     <th># Devs</th>
     <th></th>
@@ -39,11 +39,14 @@
       <td><%= location.devices.length %></td>
       <td><%= link_to edit_location_path(location) do %>
               <span class="glyphicon glyphicon-edit">
-          <% end %>|
-        <%= link_to "Show Devs", show_devices_at_location_path(location) %> |
-        <%= link_to_unless (location.devices.length > 0), location, method: :delete do %>
-          <span class="glyphicon glyphicon-trash"></span>
-        <% end %>
+          <% end %>
+          <% if location.devices.length > 0 %>
+            <%= link_to "Show Devs", show_devices_at_location_path(location) %> 
+          <% else %>
+            <%= link_to location, {method: :delete} do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
+          <% end %>
       </td>
     </tr>
   <% end %>

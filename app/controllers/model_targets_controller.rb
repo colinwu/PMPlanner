@@ -37,9 +37,9 @@ class ModelTargetsController < ApplicationController
   end
 
   def create
-    @model_target = ModelTarget.new(params[:model_target])
+    @model_target = ModelTarget.new(mt_params)
     if @model_target.save
-      redirect_to model_targets_url, :notice => "Successfully created model target."
+      redirect_to model_targets_url, notice: 'Successfully created model target.'
     else
       render :action => 'new'
     end
@@ -52,8 +52,8 @@ class ModelTargetsController < ApplicationController
   def update
     @model_target = ModelTarget.find(params[:id])
     respond_to do |format|
-      if @model_target.update_attributes(params[:model_target])
-        format.html {redirect_to model_target_url, :notice  => "Successfully updated model target."}
+      if @model_target.update_attributes(mt_params)
+        format.html {redirect_to model_target_url, notice: 'Successfully updated model target.'}
         format.json {respond_with_bip(@model_target)}
       else
         format.html {render :action => 'edit'}
@@ -65,7 +65,7 @@ class ModelTargetsController < ApplicationController
   def destroy
     @model_target = ModelTarget.find(params[:id])
     @model_target.destroy
-    redirect_to model_targets_url, :notice => "Successfully destroyed model target."
+    redirect_to model_targets_url, notice: 'Successfully destroyed model target.'
   end
   
   private
@@ -75,5 +75,9 @@ class ModelTargetsController < ApplicationController
   
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def mt_params
+    params.require(:model_target).permit(:maint_code, :target, :model_group_id, :unit, :section, :label)
   end
 end

@@ -18,7 +18,7 @@ class PmCodesController < ApplicationController
   end
 
   def create
-    @pm_code = PmCode.new(params[:pm_code])
+    @pm_code = PmCode.new(pm_code_params)
     if @pm_code.save
       redirect_to @pm_code, :notice => "Successfully created pm code."
     else
@@ -33,7 +33,7 @@ class PmCodesController < ApplicationController
   def update
     @pm_code = PmCode.find(params[:id])
     respond_to do |format|
-      if @pm_code.update_attributes(params[:pm_code])
+      if @pm_code.update_attributes(pm_code_params)
         format.html {redirect_to @pm_code, :notice  => "Successfully updated pm code."}
         format.json {respond_with_bip(@pm_code)}
       else
@@ -47,5 +47,9 @@ class PmCodesController < ApplicationController
     @pm_code = PmCode.find(params[:id])
     @pm_code.destroy
     redirect_to pm_codes_url, :notice => "Successfully destroyed pm code."
+  end
+
+  def pm_code_params
+    params.require(:pm_code).permit( :name, :description, :colorclass )
   end
 end

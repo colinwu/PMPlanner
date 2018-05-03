@@ -17,7 +17,7 @@ class PreferencesController < ApplicationController
 
   def new
     unless current_user.admin?
-      redirect_to edit_preferences_path(current_technician), :alert => "Only admin can create new technician profile."
+      redirect_to edit_preferences_path(current_technician), :alert => 'Only admin can create new technician profile.'
     else
       @preference = Preference.new(
         default_root_path: '/devices/search',
@@ -30,7 +30,7 @@ class PreferencesController < ApplicationController
   end
 
   def create
-    @preference = Preference.new(params[:preference])
+    @preference = Preference.new(preference_params)
     if @preference.save
       redirect_to @preference, :notice => "Successfully created preference."
     else
@@ -53,10 +53,10 @@ class PreferencesController < ApplicationController
 
   def update
     @preference = Preference.find(params[:id])
-    if @preference.update_attributes(params[:preference])
+    if @preference.update_attributes(preference_params)
       current_user.logs.create(message: "Preference data updated: #{params[:preference].inspect}")
       redirect_to @preference.default_root_path
-      current_user.preference(true)
+      current_user.preference
     else
       render :action => 'edit'
     end
@@ -71,5 +71,9 @@ class PreferencesController < ApplicationController
       current_user.logs.create(message: "Preference for technician #{params[:id]} deleted.")
       redirect_to preferences_url, :notice => "Successfully destroyed preference."
     end
+  end
+
+  def preference_params
+    params.require(:preference).permit( :default_notes, :default_units_to_show, :upcoming_interval, :default_to_email, :default_subject, :default_from_email, :default_message, :default_sig, :max_lines, :technician_id, :lines_per_page, :default_root_path, :showbackup, :pm_list_freq, :pm_list_freq_unit )
   end
 end

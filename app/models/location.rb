@@ -1,5 +1,4 @@
-class Location < ActiveRecord::Base
-  attr_accessible :address1, :address2, :city, :province, :post_code, :notes, :shiptoid, :client_id, :team_id
+class Location < ApplicationRecord
   
   has_many :devices, :dependent => :restrict_with_error
   has_many :contacts, :dependent => :nullify

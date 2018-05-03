@@ -54,7 +54,7 @@ class ModelGroupsController < ApplicationController
   def new
     @page_title = "New Model Group"
     if current_user.admin? or current_user.manager?
-      @model_group = ModelGroup.new(color_flag: true)
+      @model_group = ModelGroup.new(name: '', description: '', color_flag: true)
       @pm_code = {}
       @section = {}
       @label = {}
@@ -64,10 +64,11 @@ class ModelGroupsController < ApplicationController
   end
 
   def create
-    @model_group = ModelGroup.new(params[:model_group])
-    @pm_code = params[:pm_code]
-    @section = params[:section]
-    @label = params[:label]
+    byebug
+    @model_group = ModelGroup.new(mg_params)
+    @pm_code = params[:pm_code].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
+    @section = params[:section].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
+    @label = params[:label].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
     if @model_group.color_flag
     end
     if @pm_code['TA'].empty?
@@ -119,11 +120,11 @@ class ModelGroupsController < ApplicationController
 
   def update
     @model_group = ModelGroup.find(params[:id])
-    if @model_group.update_attributes(params[:model_group])
-      @pm_code = params[:pm_code]
+    if @model_group.update_attributes(mg_params)
+      @pm_code = params[:pm_code].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
       @pm_code.each {|c,v| v.gsub!(/[^0-9-]/,'')}
-      @section = params[:section]
-      @label = params[:label]
+      @section = params[:section].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
+      @label = params[:label].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
       if @pm_code['TA'].empty?
         @pm_code['TA'] = @pm_code['DK'].empty? ? @pm_code['DRC'] : @pm_code['DK']
       end
@@ -151,7 +152,7 @@ class ModelGroupsController < ApplicationController
           end
         end
       end
-      redirect_to back_or_go_here(model_groups_path), :notice  => "Successfully updated model group."
+      redirect_to back_or_go_here(model_groups_path), notice: 'Successfully updated model group.'
     else
       render :action => 'edit'
     end
@@ -160,7 +161,7 @@ class ModelGroupsController < ApplicationController
   def destroy
     @model_group = ModelGroup.find(params[:id])
     @model_group.destroy
-    redirect_to model_groups_url, :notice => "Successfully deleted model group."
+    redirect_to model_groups_url, :notice => 'Successfully deleted model group.'
   end
   
   def get_targets
@@ -170,4 +171,11 @@ class ModelGroupsController < ApplicationController
       format.json { render json: @targets }
     end
   end
+
+  private
+
+  def mg_params
+    params.require(:model_group).permit(:name, :description, :color_flag)
+  end
+
 end

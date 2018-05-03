@@ -1,9 +1,13 @@
 one:
-  name: 
-  description: 
-  maint_code: 
+  name: MyString
+  reading_id: 1
+  pm_code_id: 1
+  value: 1
+  unit: MyString
 
 two:
-  name: 
-  description: 
-  maint_code: 
+  name: MyString
+  reading_id: 1
+  pm_code_id: 1
+  value: 1
+  unit: MyString

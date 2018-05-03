@@ -1,4 +1,4 @@
-PmPlanner::Application.routes.draw do
+Rails.application.routes.draw do
   resources :news
   get 'admin', to: 'admin#index'
 
@@ -21,7 +21,7 @@ PmPlanner::Application.routes.draw do
   resources :model_targets
   
   resources :parts_for_pms do
-    get :autocomplete_part_name, on: :collection
+    # get :autocomplete_part_name, on: :collection
     collection do
       post 'new1'
     end

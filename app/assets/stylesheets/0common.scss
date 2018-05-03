@@ -54,7 +54,11 @@ margin-top: 20px;
 width: 60%;
 }
 #flash_notice, #flash_error, #flash_alert {
-font-size: 12pt;
+/*   float: left; */
+/*   padding: 5px 8px; */
+/*   margin: 10px 0; */
+/*   width: 60%; */
+/*   display: inline; */
 }
 
 #flash_notice {

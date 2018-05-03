@@ -1,24 +1,24 @@
-<%= form_for @client do |f| %>
+<%= simple_form_for @client do |f| %>
   <%= f.error_messages %>
   <p>
     <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <%= f.input_field :name %>
   </p>
   <p>
     <%= f.label :address %><br />
-    <%= f.text_field :address %>
+    <%= f.input_field :address %>
   </p>
   <p>
     <%= f.label :city %><br />
-    <%= f.text_field :city %>
+    <%= f.input_field :city %>
   </p>
   <p>
     <%= f.label :province %><br />
-    <%= f.text_field :province %>
+    <%= f.input_field :province %>
   </p>
   <p>
     <%= f.label :postal_code %><br />
-    <%= f.text_field :postal_code %>
+    <%= f.input_field :postal_code %>
   </p>
   <p>
     <%= f.label :notes %><br />

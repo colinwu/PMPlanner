@@ -20,14 +20,14 @@ jQuery ->
     $.getJSON '/models', (result) ->
       $("#device_model_nm").hide()
       for m in result
-        mfp_models.push(m.model.nm)
-        mfp_model_id[m.model.nm] = m.model.id
+        mfp_models.push(m.nm)
+        mfp_model_id[m.nm] = m.id
       $("#device_model_nm").autocomplete({ source: mfp_models })
       $("#device_model_nm").show()
   
-  if url.match(/\/devices\/new$/)
-    all_ids = JSON.parse($("#all_dev_ids_hidden").text())
-    $("#device_crm_object_id").autocomplete({ source: all_ids})
+  # if url.match(/\/devices\/new$/)
+  #   all_ids = JSON.parse($("#all_dev_ids_hidden").text())
+  #   $("#device_crm_object_id").autocomplete({ source: all_ids})
 
   # Set the size of the input field to be the same as the enclosing element 
   # (usually this is a table cell) when the browser window is resized
@@ -60,47 +60,100 @@ jQuery ->
     $("tr").css("background-color", "")
     $("[id^='"+$(this).text()+"']").css("background-color", 'pink')
 
-# 
-  $('#client_name').bind('railsAutocomplete.select', (e, data) ->
-    $.ajax(url: "/clients/" + data.item.id + "/get_locations.json").done (html) ->
-      content = ''
-      for c in html
-        content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + '<a href="/locations/' + c.id + '/edit">' + c.to_s + '</a><br />'
-      content += '<br />
-        <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
-        <label class="control-label col-sm-2" for="location_address1">Address line 1</label>
-        <div class="col-sm-10">
-        <input type="text" name="location[address1]" id="location_address1" value="" class="form-control input-sm" />
-        </div>
-        <label class="control-label col-sm-2" for="location_address2">Address line 2</label>
-        <div class="col-sm-10">
-        <input type="text" name="location[address2]" id="location_address2" value="" class="form-control input-sm" />
-        </div>
-        <label class="control-label col-sm-2" for="location_city">City</label>
-        <div class="col-sm-10">
-        <input type="text" name="location[city]" id="location_city" value="" class="form-control input-sm" />
-        </div>
-        <label class="control-label col-sm-2" for="location_province">Province</label>
-        <div class="col-sm-10">
-        <select name="location[province]" id="location_province" class="form-control input-sm"><option value=""></option>
-        <option value="AB">Alberta</option>
-        <option value="BC">BC</option>
-        <option value="MB">Manitoba</option>
-        <option value="NB">New Brunswick</option>
-        <option value="NF">Newfoundland</option>
-        <option value="NS">Nova Scotia</option>
-        <option value="ON">Ontario</option>
-        <option value="PEI">PEI</option>
-        <option value="QC">Quebec</option>
-        <option value="SK">Sask</option></select>
-        </div>
-        <label class="control-label col-sm-2" for="location_post_code">Postal Code</label>
-        <div class="col-sm-10">
-        <input type="text" name="location[post_code]" id="location_post_code" value="" class="form-control input-sm" />
-        </div>
-        </fieldset>'
-      $('#device_location').html(content)
-  )
+# Use autocomplete to help select the right customer name.
+
+  clients = []
+  client_ids = {}
+  if url.match(/\/devices\/new$/) || url.match(/\/devices\/\d+\/edit$/)
+    $.getJSON '/clients', (result) ->
+      for c in result
+        clients.push(c.name)
+        client_ids[c.name] = c.id
+      $("#client_name").autocomplete({ 
+          source: clients, 
+          minLength: 3,
+          select: (e, ui) ->
+            $('#device_client_id').val("#{client_ids[ui.item.value]}")
+            $.getJSON '/clients/' + client_ids[ui.item.value] + '/get_locations', (result) ->
+              content = ''
+              for c in result
+                content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + '<a href="/locations/' + c.id + '/edit">' + c.to_s + '</a><br />'
+              content += '<br />
+                <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
+                <label class="control-label col-sm-2" for="location_address1">Address line 1</label>
+                <div class="col-sm-10">
+                <input type="text" name="location[address1]" id="location_address1" value="" class="form-control input-sm" />
+                </div>
+                <label class="control-label col-sm-2" for="location_address2">Address line 2</label>
+                <div class="col-sm-10">
+                <input type="text" name="location[address2]" id="location_address2" value="" class="form-control input-sm" />
+                </div>
+                <label class="control-label col-sm-2" for="location_city">City</label>
+                <div class="col-sm-10">
+                <input type="text" name="location[city]" id="location_city" value="" class="form-control input-sm" />
+                </div>
+                <label class="control-label col-sm-2" for="location_province">Province</label>
+                <div class="col-sm-10">
+                <select name="location[province]" id="location_province" class="form-control input-sm"><option value=""></option>
+                <option value="AB">Alberta</option>
+                <option value="BC">BC</option>
+                <option value="MB">Manitoba</option>
+                <option value="NB">New Brunswick</option>
+                <option value="NF">Newfoundland</option>
+                <option value="NS">Nova Scotia</option>
+                <option value="ON">Ontario</option>
+                <option value="PEI">PEI</option>
+                <option value="QC">Quebec</option>
+                <option value="SK">Sask</option></select>
+                </div>
+                <label class="control-label col-sm-2" for="location_post_code">Postal Code</label>
+                <div class="col-sm-10">
+                <input type="text" name="location[post_code]" id="location_post_code" value="" class="form-control input-sm" />
+                </div>
+                </fieldset>'
+              $('#device_location').html(content)
+       })
+      
+  # $('#client_name').bind('railsAutocomplete.select', (e, data) ->
+  #   $.ajax(url: "/clients/" + data.item.id + "/get_locations.json").done (html) ->
+  #     content = ''
+  #     for c in html
+  #       content += '<input type="radio" value="' + c.id + '" name="device[location_id]" id="device_location_id_' + c.id + '" /> ' + '<a href="/locations/' + c.id + '/edit">' + c.to_s + '</a><br />'
+  #     content += '<br />
+  #       <fieldset><legend>New Location. Fill in all fields as best as you can.</legend>
+  #       <label class="control-label col-sm-2" for="location_address1">Address line 1</label>
+  #       <div class="col-sm-10">
+  #       <input type="text" name="location[address1]" id="location_address1" value="" class="form-control input-sm" />
+  #       </div>
+  #       <label class="control-label col-sm-2" for="location_address2">Address line 2</label>
+  #       <div class="col-sm-10">
+  #       <input type="text" name="location[address2]" id="location_address2" value="" class="form-control input-sm" />
+  #       </div>
+  #       <label class="control-label col-sm-2" for="location_city">City</label>
+  #       <div class="col-sm-10">
+  #       <input type="text" name="location[city]" id="location_city" value="" class="form-control input-sm" />
+  #       </div>
+  #       <label class="control-label col-sm-2" for="location_province">Province</label>
+  #       <div class="col-sm-10">
+  #       <select name="location[province]" id="location_province" class="form-control input-sm"><option value=""></option>
+  #       <option value="AB">Alberta</option>
+  #       <option value="BC">BC</option>
+  #       <option value="MB">Manitoba</option>
+  #       <option value="NB">New Brunswick</option>
+  #       <option value="NF">Newfoundland</option>
+  #       <option value="NS">Nova Scotia</option>
+  #       <option value="ON">Ontario</option>
+  #       <option value="PEI">PEI</option>
+  #       <option value="QC">Quebec</option>
+  #       <option value="SK">Sask</option></select>
+  #       </div>
+  #       <label class="control-label col-sm-2" for="location_post_code">Postal Code</label>
+  #       <div class="col-sm-10">
+  #       <input type="text" name="location[post_code]" id="location_post_code" value="" class="form-control input-sm" />
+  #       </div>
+  #       </fieldset>'
+  #     $('#device_location').html(content)
+  # )
 
 # Automatically fill in appropriate counter fields when the maintenance counters have been changed
   change_val_of = (code, diff) ->
@@ -181,12 +234,12 @@ jQuery ->
     team_id = $(e.currentTarget).val()
     $("#client_name").attr('data-autocomplete',"/devices/autocomplete_client_name?team_id=#{team_id}")
     $.getJSON "/teams/#{team_id}/manager", (result) ->
-      $("#manager").val("#{result.technician.first_name} #{result.technician.last_name}")
+      $("#manager").val("#{result.first_name} #{result.last_name}")
       return true
     $.getJSON "/teams/#{team_id}/techs", (result) ->
       techList = []
       for tech in result
-        techList.push("<option value='#{tech.technician.id}'>#{tech.technician.first_name} #{tech.technician.last_name}</option>")
+        techList.push("<option value='#{tech.id}'>#{tech.first_name} #{tech.last_name}</option>")
       optionStr = techList.join("\n")
       $("#device_primary_tech_id").html(optionStr)
       $("#device_backup_tech_id").html(optionStr)

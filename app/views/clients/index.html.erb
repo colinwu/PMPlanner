@@ -2,19 +2,13 @@
 <table width="100%" class="table-condensed">
   <tr>
     <th>Name</th>
-    <th>Address</th>
-    <th>City</th>
-    <th>Province</th>
-    <th>Postal Code</th>
+    <th>SoldTo ID</th>
     <th>Notes</th>
   </tr>
   <% for client in @clients %>
-    <tr>
+    <tr class="<%= cycle('light','dark') %>">
       <td><%= client.name %></td>
-      <td><%= client.address %></td>
-      <td><%= client.city %></td>
-      <td><%= client.province %></td>
-      <td><%= client.postal_code %></td>
+      <td><%= client.soldtoid %></td>
       <td><%= client.notes %></td>
       <td><%= link_to "Edit", edit_client_path(client) %></td>
     </tr>

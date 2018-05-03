@@ -1,5 +1,4 @@
-class Reading < ActiveRecord::Base
-  attr_accessible :taken_at, :notes, :device_id, :technician_id, :ptn1
+class Reading < ApplicationRecord
   
   belongs_to :device
   belongs_to :technician
@@ -97,6 +96,7 @@ class Reading < ActiveRecord::Base
       line_number += 1
     end
     f.close
+  
     if (seen[:model] and seen[:sn])
       # make sure the 22-6 file is for this device.
       devs = Device.joins(:model).where(["models.nm = ? and (serial_number = ? or serial_number = ?)", model, sn, "#{sn}R"])
@@ -162,7 +162,7 @@ class Reading < ActiveRecord::Base
         end # codes.each
         return "22-6 file processed."
       else
-        return "More than one dev in the db has this SN: #{sn}"
+        return "More than one device with SN #{sn} in the database."
       end
     else
       return "Could not find model and/or serial number in the uploaded file."

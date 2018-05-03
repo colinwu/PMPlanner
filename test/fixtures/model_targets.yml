@@ -1,11 +1,16 @@
 one:
-  name: 
-  target: 
-  model_group_id: 
-  unit: 
+  maint_code: MyString
+  target: 1
+  model_group_id: 1
+  unit: counter
+  label: 22-6 label
+  section: 22-01
 
 two:
-  name: 
-  target: 
-  model_group_id: 
-  unit: 
+  maint_code: MyString
+  target: 1
+  model_group_id: 1
+  unit: counter
+  label: 22-6 label
+  section: 22-01
+

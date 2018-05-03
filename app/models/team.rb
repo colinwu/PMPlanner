@@ -1,5 +1,4 @@
-class Team < ActiveRecord::Base
-  attr_accessible :team_id, :crm_name, :name, :warehouse_id, :manager_id
+class Team < ApplicationRecord
   
   has_many :technicians, :dependent => :nullify, :foreign_key => 'team_id'
   has_many :devices, :foreign_key => 'team_id'

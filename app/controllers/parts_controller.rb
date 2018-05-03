@@ -1,9 +1,9 @@
 class PartsController < ApplicationController
   before_action :authorize, :set_defaults, :fetch_news
   before_action :require_manager, only: [:new, :create, :destroy]
-  
+
   def index
-    @page_title = "Parts List"
+    @page_title = 'Parts List'
     if params[:commit] == 'Search'
       search_ar = ['placeholder']
       where_ar = []
@@ -24,33 +24,33 @@ class PartsController < ApplicationController
   end
 
   def show
-    @page_title = "Part Detail"
+    @page_title = 'Part Detail'
     @part = Part.find(params[:id])
   end
 
   def new
-    @page_title = "Add new part"
+    @page_title = 'Add new part'
     @part = Part.new
   end
 
   def create
-    @part = Part.new(params[:part])
+    @part = Part.new(part_params)
     if @part.save
-      redirect_to @part, :notice => "Successfully created part."
+      redirect_to @part, notice: 'Successfully created part.'
     else
       render :action => 'new'
     end
   end
 
   def edit
-    @page_title = "Edit Part"
+    @page_title = 'Edit Part'
     @part = Part.find(params[:id])
   end
 
   def update
     @part = Part.find(params[:id])
-    if @part.update_attributes(params[:part])
-      redirect_to @part, :notice  => "Successfully updated part."
+    if @part.update_attributes(part_params)
+      redirect_to @part, notice: 'Successfully updated part.'
     else
       render :action => 'edit'
     end
@@ -59,6 +59,12 @@ class PartsController < ApplicationController
   def destroy
     @part = Part.find(params[:id])
     @part.destroy
-    redirect_to parts_url, :notice => "Successfully deleted part."
+    redirect_to parts_url, notice: 'Successfully deleted part.'
+  end
+
+  private
+
+  def part_params
+    params.require(:part).permit( :name, :description, :price, :new_name )
   end
 end

@@ -5,10 +5,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= content_for?(:title) ? yield(:title) : "PM Planner" %></title>
-    <%= stylesheet_link_tag "application", media: 'all' %>
-    <%= javascript_include_tag :application %>
-    <%= csrf_meta_tag %>
-    <%= yield(:head) %>
+  <%= csrf_meta_tag %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= yield(:head) %>
   </head>
   <body>
     <!-- 

@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
     elsif session[:active_at].nil? or ((Time.now - session[:active_at]) > 3600)
       you_are_here
       current_user.logs.create(message: "Session timed out.")
+      current_user.update_attributes(last_sign_in_at: current_user.current_sign_in_at)
 #       session.destroy
       session[:tech] = nil
       session[:act_as] = nil

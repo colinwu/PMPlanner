@@ -2,7 +2,7 @@ class DevicesController < ApplicationController
   before_action :authorize, :set_defaults, :fetch_news
   before_action :require_manager, only: [:new, :create, :destroy, :send_transfer, :unassigned]
   helper_method :sort_column, :sort_direction
-  autocomplete :client, :name, full: true
+  # autocomplete :client, :name, full: true
   
   include ApplicationHelper
   
@@ -12,10 +12,14 @@ class DevicesController < ApplicationController
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
-    @search_params = params[:search] || Hash.new
+    if params[:search].nil?
+      @search_params = {}
+    else
+      @search_params = params[:search].permit(:crm,:model,:sn,:client_name,:addr1,:city).to_h
+    end
     search_ar = ["active = true"]
     where_ar = []
-    if params[:search]
+    if @search_params
       unless @search_params['crm'].nil? or @search_params['crm'].blank?
         search_ar <<  @search_params[:crm]
         where_ar << "crm_object_id regexp ?"
@@ -83,7 +87,7 @@ class DevicesController < ApplicationController
         if session[:showbackup] == 'true'
           search_ar = ['primary_tech_id = ? or backup_tech_id = ?', @tech.id, @tech.id]
         else
-          search_ar = ["primary_tech_id = ?", @tech.id]
+          search_ar = ['primary_tech_id = ?', @tech.id]
         end
       end
       @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
@@ -99,16 +103,16 @@ class DevicesController < ApplicationController
     @page_title = "Details for #{@device.serial_number}"
     if current_user.can_manage?(@device)
       you_are_here
-      @manager = Technician.where(["team_id = ? and manager = TRUE", @device.team_id]).first
+      @manager = Technician.where(['team_id = ? and manager = TRUE', @device.team_id]).first
       @contacts = @device.location.contacts
     else
-      flash[:alert] = "You are not allowed to access that device."
+      flash[:alert] = 'You are not allowed to access that device.'
       redirect_to back_or_go_here
     end
   end
 
   def new
-    @page_title = "Add Device"
+    @page_title = 'Add Device'
     you_are_here
     begin
       @device = Device.new(pm_counter_type: 'count', active: true, do_pm: true)
@@ -118,22 +122,21 @@ class DevicesController < ApplicationController
     end
     # only admin or manager can add devices
     if current_user.admin? or current_user.manager?
-      @all_dev_ids = Device.all.map { |d| "#{d.crm_object_id}" }
       @device.team_id = (current_technician.nil? or current_technician.team_id.nil?) ? Team.find_by(name: 'Admin').id : current_technician.team_id
       @readonly_flag = false
       @contacts = []
       @locations = []
     else
-      redirect_to back_or_go_here, :alert => "You are not allowed to add devices. Pease see your manager."
+      redirect_to back_or_go_here, :alert => 'You are not allowed to add devices. Pease see your manager.'
     end
   end
 
   def create
     params[:device].delete(:model_nm)
-    @device = Device.new(params[:device])
+    @device = Device.new(device_params)
     @readonly_flag = 'false'
     if params[:device][:model_id].empty?
-      flash[:alert] = "The model you specified is not known to PM Planner. Please make sure it is in the system before proceeding."
+      flash[:alert] = 'The model you specified is not known to PM Planner. Please make sure it is in the system before proceeding.'
       @locations = []
       render action: 'new'
       return
@@ -203,7 +206,7 @@ class DevicesController < ApplicationController
       params[:device][:location_id] = loc.id
     end
     params[:device].delete('model_nm')
-    if @device.update_attributes(params[:device])
+    if @device.update_attributes(device_params)
       current_user.logs.create(device_id: @device.id, message: "Updated device with #{params[:device].inspect}")
       flash[:alert] = nil
       flash[:error] = nil
@@ -427,9 +430,9 @@ class DevicesController < ApplicationController
       @target = params[:target]
       @title = "Search: #{@search_str}"
       if @target == 'All'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["devices.crm_object_id regexp ? or devices.serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       elsif @target == 'Region'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_user.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       else
         @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       end
@@ -506,7 +509,7 @@ class DevicesController < ApplicationController
   
   def handle_checked
     @tech = current_user
-    @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
+    @dev_list = params[:selected_devices] ? params[:selected_devices] : params[:alldevs]
     @devices = Device.find(@dev_list)
     if params[:service]
       @msg_body = "Please create PM order(s) for the following unit(s):\n\n"
@@ -518,7 +521,7 @@ class DevicesController < ApplicationController
     elsif params[:parts]
       @parts_hash = {}
       @all_parts = {}
-      @choice = params[:choice] || Hash.new
+      @choice = params[:choice] || {}
       @devices.each do |dev|
         @parts_hash[dev] = []
         # See if any part has been checked to find alternate
@@ -620,13 +623,18 @@ class DevicesController < ApplicationController
   end
 
   def my_pm_list
+    # Shows list of devices whose next_pm_visit is either in the past or is within
+    # range (as defined by the tech's preferences)
     you_are_here
     @page_title = replace_my + " PM List"
-    @search_params = params[:search] || Hash.new
+    @search_params = {}
+    if params[:search]
+      @search_params = params[:search].permit(:crm, :model, :sn, :client_name, :addr1, :city, :post_code)
+    end
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
-    
+
     if current_technician.nil? # if I'm not working with any particular technician and...
       if (current_user.admin?) # ... I am an admin then I work with all techs' territories
         my_team = Technician.all
@@ -703,9 +711,9 @@ class DevicesController < ApplicationController
         end
         
         if (sort_direction == 'desc')
-          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
         else
-          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.pm_date}.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.paginate(page: params[:page], per_page: lpp)
         end
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
@@ -725,9 +733,9 @@ class DevicesController < ApplicationController
   
   def parts_for_multi_pm
     @tech = current_user
-    
+    params.permit!
     # @dev_list controls which devs we generate parts list for. Must send back to form.
-    @dev_list = params[:device] ? params[:device].each_key.map {|x| x} : params[:alldevs].each_key.map {|x| x}
+    @dev_list = params[:selected_devices] ? params[:selected_devices] : params[:alldevs]
     @devices = Device.find(@dev_list)
     # create @parts_hash = {dev1_id => [[code, choice, Part], [code, choice, Part], ...], ...}
     
@@ -740,7 +748,7 @@ class DevicesController < ApplicationController
     else
       @parts_hash = {}
       @all_parts = {}
-      @choice = params[:choice] || Hash.new
+      @choice = params[:choice].to_h || {}
       @devices.each do |dev|
         unless dev.nil?
           @parts_hash[dev] = []
@@ -749,7 +757,7 @@ class DevicesController < ApplicationController
           choice_hash = {}
           @choice["dev_#{dev.id}"] = @choice["dev_#{dev.id}"].nil? ? {} : @choice["dev_#{dev.id}"]
           if params[:checked]
-            checked = params[:checked]
+            checked = params[:checked].to_h
             if checked["dev_#{dev.id}"]
               code_hash = checked["dev_#{dev.id}"]
               code_hash.each_key do |code|
@@ -778,7 +786,7 @@ class DevicesController < ApplicationController
     @device = Device.find(params[:id])
     taken_at = Date.parse(params[:reading][:taken_at])
     @reading = @device.readings.find_or_create_by(taken_at: taken_at)
-    @reading.update_attributes(params[:reading])
+    @reading.update_attributes(params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1))
     flash[:alert] = ''
     params[:counter].each do |code,value|
       p = PmCode.find_by_name(code)
@@ -890,7 +898,7 @@ class DevicesController < ApplicationController
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
     @search_params = params[:search] || Hash.new
-    search_ar = ["(devices.team_id is NULL or (devices.team_id <> '61000184' and devices.primary_tech_id is NULL) and devices.active = true)"]
+    search_ar = ["devices.team_id is NULL"]
     where_ar = []
     if params[:search]
       unless @search_params['crm'].nil? or @search_params['crm'].blank?
@@ -963,5 +971,9 @@ class DevicesController < ApplicationController
   
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def device_params
+    params.require(:device).permit(:installed_base_id, :crm_object_id, :alternate_id, :model_id, :client_id, :serial_number, :location_id, :primary_tech_id, :backup_tech_id, :active, :under_contract, :do_pm, :pm_counter_type, :pm_visits_min, :notes, :team_id, :install_date)
   end
 end

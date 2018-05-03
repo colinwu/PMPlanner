@@ -3,6 +3,8 @@
 one:
   c_monthly: 1.5
   bw_monthly: 1.5
+  c_daily: 1.5
+  bw_daily: 1.5
   vpy: 1.5
   device_id: 1
 
@@ -11,3 +13,5 @@ two:
   bw_monthly: 1.5
   vpy: 1.5
   device_id: 1
+  c_daily: 1.5
+  bw_daily: 1.5

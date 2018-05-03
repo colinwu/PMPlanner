@@ -7,10 +7,11 @@ class LocationsController < ApplicationController
   def index
     @page_title = "Locations"
     you_are_here
-    search_ar = ['placeholder']
+    search_ar = ['clients.name <> ""']
     where_ar = []
-    @search_params = params[:search] || Hash.new
+    @search_params = {}
     if params[:search]
+      @search_params = params[:search].permit(:client_name, :address1, :address2, :city, :province, :post_code, :loc_notes)
       unless @search_params['client_name'].blank?
         search_ar <<  @search_params['client_name']
         where_ar << "clients.name regexp ?"
@@ -48,7 +49,7 @@ class LocationsController < ApplicationController
     end
     if current_technician.nil?
       if current_user.admin?
-        search_ar[0] = where_ar.join(' and ')
+        search_ar[0] = ([search_ar[0]] + where_ar).join(' and ')
         @locations = Location.joins(:client).order(@order).where(search_ar).page(params[:page])
         @title = "All Locations"
       elsif current_user.manager?
@@ -82,7 +83,7 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.new(params[:location])
+    @location = Location.new(location_params)
     if @location.save
       current_user.logs.create(message: "New location data: " + @location.inspect)
       flash[:notice] = "Successfully created location."
@@ -100,7 +101,7 @@ class LocationsController < ApplicationController
 
   def update
     @location = Location.find(params[:id])
-    if @location.update_attributes(params[:location])
+    if @location.update_attributes(location_params)
       current_user.logs.create(message: "Location updated: " + @location.inspect)
       flash[:notice]  = "Successfully updated location."
       redirect_to back_or_go_here(locations_url) 
@@ -138,4 +139,7 @@ class LocationsController < ApplicationController
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
   end
   
+  def location_params
+    params.require(:location).permit(:address1, :address2, :city, :province, :post_code, :notes, :client_id, :team_id)
+  end
 end

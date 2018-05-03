@@ -20,7 +20,7 @@ class TeamsController < ApplicationController
   end
 
   def create
-    @team = Team.new(params[:team])
+    @team = Team.new(team_params)
     if @team.save
       redirect_to teams_url, :notice => "Successfully created team."
     else
@@ -35,7 +35,7 @@ class TeamsController < ApplicationController
 
   def update
     @team = Team.find(params[:id])
-    if @team.update_attributes(params[:team])
+    if @team.update_attributes(team_params)
       redirect_to teams_url, :notice  => "Successfully updated team."
     else
       render :action => 'edit'
@@ -63,5 +63,11 @@ class TeamsController < ApplicationController
       format.html { render html: "/technicians/index" }
       format.json { render json: @technicians }
     end
+  end
+
+  private
+
+  def team_params
+    params.require(:team).permit( :team_id, :crm_name, :name, :warehouse_id, :manager_id )
   end
 end

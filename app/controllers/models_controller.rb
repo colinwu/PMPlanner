@@ -115,7 +115,7 @@ class ModelsController < ApplicationController
 
   def update
     @model = Model.find(params[:id])
-#     mg_name = params[:model].empty? ? params[:model][:nm] : params[:model_group_id]
+    # mg_name = params[:model].empty? ? params[:model][:nm] : params[:model_group_id]
     @model_group = ModelGroup.find(params[:model][:model_group_id])
     @model.model_group_id = @model_group.id
     counters = params[:pm_code]
@@ -145,7 +145,7 @@ class ModelsController < ApplicationController
         mt.save
       end
     end
-    if @model.update_attributes(params[:model])
+    if @model.update_attributes(model_params)
       redirect_to models_url, :notice  => "Successfully updated model."
     else
       render :action => 'edit'
@@ -156,5 +156,11 @@ class ModelsController < ApplicationController
     @model = Model.find(params[:id])
     @model.destroy
     redirect_to models_url, :notice => "Successfully deleted model."
+  end
+
+  private
+
+  def model_params
+    params.require(:model).permit( :nm, :model_group_id )
   end
 end

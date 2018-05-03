@@ -1,6 +1,6 @@
 Log.create(technician_id: 1, message: "Starting Check_PM_status")
 Reading.where("taken_at is NULL").find_each {|r| r.destroy}
-Device.find_each do |dev|
+Device.where(active: true).find_each do |dev|
   begin
     dev.update_pm_visit_tables
   rescue

@@ -3,11 +3,14 @@ class PartsForPmsController < ApplicationController
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   helper_method :sort_column, :sort_direction
   
-  autocomplete :part, :name, full: true
+  # autocomplete :part, :name, full: true
   
   def index
     you_are_here
-    @search_params = params[:search] || Hash.new
+    @search_params = {}
+    if params[:search]
+      @search_params = params[:search].permit(:model_group, :pmcode, :choice, :pn, :desc).to_h
+    end
     if params[:search]
       search_ar = ['placeholder']
       where_ar = []
@@ -80,7 +83,7 @@ class PartsForPmsController < ApplicationController
 
   def update
     @parts_for_pm = PartsForPm.find(params[:id])
-    if @parts_for_pm.update_attributes(params[:parts_for_pm])
+    if @parts_for_pm.update_attributes(parts_for_pm_params)
       redirect_to @parts_for_pm, :notice  => "Successfully updated parts for pm."
     else
       render :action => 'edit'
@@ -94,12 +97,17 @@ class PartsForPmsController < ApplicationController
   end
   
   private
+  
   def sort_column(c = '')
     params[:sort] || c
   end
   
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+  end
+
+  def parts_for_pm_params
+    params.require(:parts_for_pm).permit( :model_group_id, :pm_code_id, :choice, :part_id, :quantity )
   end
   
 end

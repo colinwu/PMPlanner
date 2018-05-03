@@ -31,8 +31,8 @@ jQuery ->
       $("[id$='_field']").show()
       $.getJSON "/model_groups/#{mg}/get_targets", (result) ->
         # build list of codes that should remain visible
-        for item in result
-          target = item.model_target
+        for target in result
+          # target = item.model_target
           targetValue[target.maint_code] = target.target
           targetSec[target.maint_code] = target.section
           targetLbl[target.maint_code] = target.label

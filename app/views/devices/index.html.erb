@@ -16,19 +16,19 @@
 
   <tr class=pretty>
     <th></th>
-    <th><%= sortable 'crm_object_id', 'CRM ID', params[:search] %></th>
-    <th><%= sortable 'models.nm', 'Model', params[:search] %></th>
-    <th><%= sortable 'serial_number', 'Serial Number', params[:search] %></th>
-    <th><%= sortable 'clients.name', 'Client Name', params[:search] %></th>
-    <th class="hidden-xs"><%= sortable 'locations.address1', 'Location', params[:search] %></th>
-    <th class="hidden-xs"><%= sortable 'locations.city', 'City', params[:search] %></th>
+    <th><%= sortable 'crm_object_id', 'CRM ID', @search_params %></th>
+    <th><%= sortable 'models.nm', 'Model', @search_params %></th>
+    <th><%= sortable 'serial_number', 'Serial Number', @search_params %></th>
+    <th><%= sortable 'clients.name', 'Client Name', @search_params %></th>
+    <th class="hidden-xs"><%= sortable 'locations.address1', 'Location', @search_params %></th>
+    <th class="hidden-xs"><%= sortable 'locations.city', 'City', @search_params %></th>
     <th>Earliest PM</th>
     <% if current_user.manager? or current_user.admin? %>
       <th></th>
     <% end %>
   </tr>
   <tr class=search_fields>
-  <%= form_tag session[:uri], :method => :get do %>
+  <%= form_tag devices_url, :method => :get do %>
     <%= hidden_field_tag 'sort', sort_column %>
     <%= hidden_field_tag 'direction', sort_direction %>
     <td></td>

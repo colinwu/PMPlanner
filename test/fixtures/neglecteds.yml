@@ -2,8 +2,8 @@
 
 one:
   device_id: 1
-  last_visit: 2015-02-07
+  next_visit: 2015-02-07
 
 two:
   device_id: 1
-  last_visit: 2015-02-07
+  next_visit: 2015-02-07

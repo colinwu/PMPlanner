@@ -1,5 +1,4 @@
-class Counter < ActiveRecord::Base
-  attr_accessible :name, :reading_id, :pm_code_id, :value, :unit
+class Counter < ApplicationRecord
   
   belongs_to :reading
   belongs_to :pm_code

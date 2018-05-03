@@ -1,5 +1,4 @@
-class ModelGroup < ActiveRecord::Base
-  attr_accessible :name, :description, :color_flag
+class ModelGroup < ApplicationRecord
   
   has_many :models, :dependent => :destroy
   has_many :model_targets, :dependent => :destroy, :inverse_of => :model_group

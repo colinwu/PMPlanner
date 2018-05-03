@@ -31,7 +31,7 @@
             when "enter" %>
           <% when "analysis" %>
               <%= form_tag handle_checked_devices_path do %>
-                <%= hidden_field_tag "device[#{@device.id}]", @device.id %>
+                <%= hidden_field_tag "selected_devices[]", @device.id %>
                 <%= submit_tag "Generate Parts List", name: 'parts' %>
               <% end %>
           <% end %>

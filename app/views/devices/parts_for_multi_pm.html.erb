@@ -4,7 +4,7 @@
 
 <%= form_tag parts_for_multi_pm_devices_path do %>
 <% @parts_hash.each_key do |dev| %>
-  <%= hidden_field_tag "alldevs[#{dev.id}]", dev.id %>
+  <%= hidden_field_tag "alldevs[]", dev.id %>
   <% unless @parts_hash[dev].empty? %>
     <tr>
       <th colspan=10>CRM Object ID: <%=h dev.crm_object_id %>, Model: <%=h dev.model.nm %><br /><%=h dev.client.name %>, <%=h dev.location.address1 %></td>

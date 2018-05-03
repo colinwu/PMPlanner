@@ -7,6 +7,12 @@ one:
   car_stock_number: 1
   email: MyString
   crm_id: MyString
+  current_sign_in_at: 1969-01-01
+  current_sign_in_ip: IP Address
+  last_sign_in_ip: IP Address
+  admin: false
+  manager: false
+  sent_date: 1969-01-01
 
 two:
   team_id: 1
@@ -17,3 +23,9 @@ two:
   car_stock_number: 1
   email: MyString
   crm_id: MyString
+  current_sign_in_at: 1969-01-01
+  current_sign_in_ip: IP Address
+  last_sign_in_ip: IP Address
+  admin: false
+  manager: false
+  sent_date: 1969-01-01

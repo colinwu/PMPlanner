@@ -16,7 +16,7 @@
   </p>
   <p>
     <%= f.label 'Part Name' %><br />
-    <%= autocomplete_field_tag :part_name, @parts_for_pm.part_name, autocomplete_part_name_parts_for_pms_path, id_element: '#parts_for_pm_part_id' %>
+    <%= text_field_tag :part_name, @parts_for_pm.part_name %>
     <%= f.hidden_field :part_id %>
   </p>
   <p>

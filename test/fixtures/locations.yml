@@ -5,6 +5,9 @@ one:
   province: MyString
   post_code: MyString
   notes: MyString
+  shiptoid: 1
+  client_id: 1
+  team_id: 1
 
 two:
   address1: MyString
@@ -13,3 +16,6 @@ two:
   province: MyString
   post_code: MyString
   notes: MyString
+  shiptoid: 1
+  client_id: 1
+  team_id: 1

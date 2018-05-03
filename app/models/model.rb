@@ -1,5 +1,4 @@
-class Model < ActiveRecord::Base
-  attr_accessible :nm, :model_group_id
+class Model < ApplicationRecord
   
   belongs_to :model_group
   has_many :devices, :dependent => :destroy

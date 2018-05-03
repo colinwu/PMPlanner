@@ -28,7 +28,7 @@ test:
   database: pm_planner_test
   pool: 5
   username: root
-  password:
+  password: 56tyghbn
   socket: /var/lib/mysql/mysql.sock
 
 production:

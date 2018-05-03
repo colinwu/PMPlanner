@@ -1,5 +1,11 @@
 one:
   name: MyString
+  description: MyString
+  colorclass: MyString
+  
 
 two:
   name: MyString
+  description: MyString
+  colorclass: MyString
+  

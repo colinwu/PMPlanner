@@ -1,6 +1,5 @@
 class ContactsController < ApplicationController
   before_action :authorize, :set_defaults, :fetch_news
-  
   helper_method :sort_column, :sort_direction
   
   def index
@@ -33,7 +32,7 @@ class ContactsController < ApplicationController
         search_ar << @search_params[:location]
         search_ar << @search_params[:location]
         search_ar << @search_params[:location]
-        where_ar << "(locations.address1 regexp ? or locations.address2 regexp ? or locations.city regexp ? or locations.province regexp ? or locations.post_code regexp ?)"
+        where_ar << '(locations.address1 regexp ? or locations.address2 regexp ? or locations.city regexp ? or locations.province regexp ? or locations.post_code regexp ?)'
       end
       search_ar[0] = where_ar.join(' and ')
     end
@@ -44,45 +43,45 @@ class ContactsController < ApplicationController
     end
     @tech = current_technician
     if current_user.admin?
-      @title = "All contacts"
+      @title = 'All contacts'
       @contacts = Contact.joins(:location).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
     else
-      @title = "My Contacts"
+      @title = 'My Contacts'
       @contacts = current_technician.find_contacts(search_ar, sort_column, sort_direction, true, params[:page], lpp)
-    end 
+    end
     
   end
 
   def show
-    @page_title = "Contact Details"
+    @page_title = 'Contact Details'
     @contact = Contact.find(params[:id])
   end
 
   def new
-    @page_title = "Add New Contact"
+    @page_title = 'Add New Contact'
     @contact = Contact.new
     @clients = Client.all.order(:name)
   end
 
   def create
-    @contact = Contact.new(params[:contact])
+    @contact = Contact.new(contact_params)
     if @contact.save
-      redirect_to @contact, :notice => "Successfully created contact."
+      redirect_to @contact, notice: 'Successfully created contact.'
     else
-      render :action => 'new'
+      render action:'new'
     end
   end
 
   def edit
-    @page_title = "Edit Contact"
+    @page_title = 'Edit Contact'
     @contact = Contact.find(params[:id])
     @clients = Client.all.order(:name)
   end
 
   def update
     @contact = Contact.find(params[:id])
-    if @contact.update_attributes(params[:contact])
-      redirect_to contacts_url, :notice  => "Successfully updated contact."
+    if @contact.update_attributes(contact_params)
+      redirect_to contacts_url, notice: 'Successfully updated contact.'
     else
       render :action => 'edit'
     end
@@ -91,7 +90,7 @@ class ContactsController < ApplicationController
   def destroy
     @contact = Contact.find(params[:id])
     @contact.destroy
-    redirect_to contacts_url, :notice => "Successfully deleted contact."
+    redirect_to contacts_url, :notice => 'Successfully deleted contact.'
   end
   
   private
@@ -103,5 +102,10 @@ class ContactsController < ApplicationController
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
   end
-  
+
+  private
+
+  def contact_params
+    params.require(:contact).permit(:name, :phone1, :phone2, :email, :notes, :client_id, :crm_object_id, :location_id)
+  end
 end

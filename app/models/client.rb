@@ -1,8 +1,7 @@
-class Client < ActiveRecord::Base
-  attr_accessible :name, :address, :address2, :city, :province, :postal_code, :notes, :soldtoid
+class Client < ApplicationRecord
   
-  has_many :locations, :dependent => :nullify
-  has_many :contacts, :dependent => :nullify
+  has_many :locations, dependent: :nullify
+  has_many :contacts, dependent: :nullify
   
   validates :name, presence: true
 end

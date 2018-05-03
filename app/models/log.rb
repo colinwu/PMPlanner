@@ -1,5 +1,4 @@
-class Log < ActiveRecord::Base
-  attr_accessible :technician_id, :device_id, :message
+class Log < ApplicationRecord
   
   belongs_to :technician
   belongs_to :device

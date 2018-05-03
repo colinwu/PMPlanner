@@ -9,11 +9,9 @@ if File.exists?(csv_file)
 #     read_attributes_from_file
   end
   
-  csv_devs = {}
   r.each do |row|
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
-      csv_devs[row.serialnumber] = 1
       # find or create the client record
       client = Client.find_by soldtoid: row.soldtoid
       if client.nil?
@@ -28,14 +26,14 @@ if File.exists?(csv_file)
       end
       
       # find the device, model and techs for the device
-      dev = Device.find_by crm_object_id: row.crm_objectid
-      m = Model.find_by nm: row.model
+      dev = Device.find_by_crm_object_id(row.crm_objectid)
+      m = Model.find_by_nm(row.model)
       if m.nil?
-        mg = ModelGroup.find_by name: 'OTHERS'
+        mg = ModelGroup.find_by_name 'OTHERS'
         m = mg.models.create(nm: row.model)
       end
-      primary_tech = Technician.find_by crm_id: row.primarytechid
-      backup_tech = Technician.find_by crm_id: row.backuptechid
+      primary_tech = Technician.find_by_crm_id(row.primarytechid)
+      backup_tech = Technician.find_by_crm_id(row.backuptechid)
       if (row.serviceorgid != '61000184' and row.serviceorg != 'Not assigned')
         if primary_tech.nil? and not row.primarytechid.nil?
           puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
@@ -66,9 +64,9 @@ if File.exists?(csv_file)
                           :location_id => loc.id,
                           :primary_tech_id => primary_tech.try(:id),
                           :backup_tech_id => backup_tech.try(:id),
-                          :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                          :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                          :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
+                          :active => (row.inactive == '0') ? true : false,
+                          :under_contract => (row.nocontract == '0') ? true : false,
+                          :do_pm => (row.nopm != 'TRUE') ? true : false,
                           :client_id => client.id,
                           :team_id => row.serviceorgid,
                           :pm_counter_type => 'counter',
@@ -90,23 +88,21 @@ if File.exists?(csv_file)
                               :location_id => loc.id,
                               :primary_tech_id => primary_tech.try(:id),
                               :backup_tech_id => backup_tech.try(:id),
-                              :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                              :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                              :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
+                              :active => (row.inactive == '0') ? true : false,
+                              :under_contract => (row.nocontract == '0') ? true : false,
+                              :do_pm => (row.nopm != 'TRUE') ? true : false,
                               :client_id => client.id,
                               :team_id => row.serviceorgid,
                               :pm_counter_type => 'counter',
                               :pm_visits_min => 2
                             )
-        # puts "#{dev.crm_object_id}, active: #{dev.active}, contract: #{dev.under_contract}, pm: #{dev.do_pm}"
       end
-    end
-  end
-  # Look for devices in db but not in the CSV file and set their "under_contract", 
-  # "active", and "do_pm" flags to FALSE
-  Device.all.find_each do |d|
-    unless csv_devs[d.serial_number]
-      d.update_attributes(active: false, under_contract: false, do_pm: false)
+      # contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
+      # unless (contacts.empty? or dev.nil?)
+      #   contacts.each do |c|
+      #     c.update_attribute(:location_id, loc.id)
+      #   end
+      # end
     end
   end
 else
