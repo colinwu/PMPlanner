@@ -64,15 +64,19 @@ if File.exists?(csv_file)
                           :location_id => loc.id,
                           :primary_tech_id => primary_tech.try(:id),
                           :backup_tech_id => backup_tech.try(:id),
-                          :active => (row.inactive == '0') ? true : false,
-                          :under_contract => (row.nocontract == '0') ? true : false,
-                          :do_pm => (row.nopm != 'TRUE') ? true : false,
+                          :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
+                          :under_contract => (row.nocontract == '0' or r.nocontract =~ /FALSE/i) ? true : false,
+                          :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
                           :client_id => client.id,
                           :team_id => row.serviceorgid,
                           :pm_counter_type => 'counter',
                           :pm_visits_min => 2
                           )
-          dev.create_neglected(next_visit: nil)
+          # dev.create_neglected(next_visit: nil)
+          unless dev.valid?
+            puts "Device invalid: #{row.crm_object_id}"
+            next
+          end
           dev.create_device_stat()
           dev.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
             op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
@@ -88,9 +92,9 @@ if File.exists?(csv_file)
                               :location_id => loc.id,
                               :primary_tech_id => primary_tech.try(:id),
                               :backup_tech_id => backup_tech.try(:id),
-                              :active => (row.inactive == '0') ? true : false,
-                              :under_contract => (row.nocontract == '0') ? true : false,
-                              :do_pm => (row.nopm != 'TRUE') ? true : false,
+                              :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
+                              :under_contract => (row.nocontract == '0' or r.nocontract =~ /FALSE/i) ? true : false,
+                              :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
                               :client_id => client.id,
                               :team_id => row.serviceorgid,
                               :pm_counter_type => 'counter',
