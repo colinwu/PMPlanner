@@ -65,7 +65,7 @@ if File.exists?(csv_file)
                           :primary_tech_id => primary_tech.try(:id),
                           :backup_tech_id => backup_tech.try(:id),
                           :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
-                          :under_contract => (row.nocontract == '0' or r.nocontract =~ /FALSE/i) ? true : false,
+                          :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
                           :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
                           :client_id => client.id,
                           :team_id => row.serviceorgid,
@@ -74,7 +74,7 @@ if File.exists?(csv_file)
                           )
           # dev.create_neglected(next_visit: nil)
           unless dev.valid?
-            puts "Device invalid: #{row.crm_object_id}"
+            puts "Device invalid: #{row.crm_objectid}"
             next
           end
           dev.create_device_stat()
@@ -93,7 +93,7 @@ if File.exists?(csv_file)
                               :primary_tech_id => primary_tech.try(:id),
                               :backup_tech_id => backup_tech.try(:id),
                               :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
-                              :under_contract => (row.nocontract == '0' or r.nocontract =~ /FALSE/i) ? true : false,
+                              :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
                               :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
                               :client_id => client.id,
                               :team_id => row.serviceorgid,

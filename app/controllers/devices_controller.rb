@@ -785,7 +785,7 @@ class DevicesController < ApplicationController
 #     TODO: Should do some value sanity checking here
     @device = Device.find(params[:id])
     taken_at = Date.parse(params[:reading][:taken_at])
-    @reading = @device.readings.find_or_create_by(taken_at: taken_at)
+    @reading = @device.readings.find_or_create_by(taken_at: taken_at, technician_id: current_user.id)
     @reading.update_attributes(params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1))
     flash[:alert] = ''
     params[:counter].each do |code,value|

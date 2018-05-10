@@ -4,8 +4,8 @@ class Device < ApplicationRecord
   belongs_to :client
   belongs_to :location
   belongs_to :primary_tech, class_name: 'Technician', foreign_key: 'primary_tech_id'
-  belongs_to :backup_tech, class_name: 'Technician', foreign_key: 'backup_tech_id'
-  belongs_to :team, foreign_key: 'team_id'
+  belongs_to :backup_tech, class_name: 'Technician', foreign_key: 'backup_tech_id', optional: true
+  belongs_to :team, foreign_key: 'team_id', optional: true
   has_many :readings, dependent: :destroy, inverse_of: :device
   has_many :outstanding_pms, dependent: :destroy
   has_many :logs

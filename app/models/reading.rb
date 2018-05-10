@@ -6,7 +6,7 @@ class Reading < ApplicationRecord
   has_attached_file :ptn1, styles: {}, path: ":rails_root/public/system/readings/ptn1s/:filename"
 
   validates_attachment_file_name :ptn1, matches: [/PTN1\.txt\z/]
-  validates_associated :counters
+  # validates_associated :counters
   validates_associated :device
   validates_associated :technician
   validate :taken_at_is_date
