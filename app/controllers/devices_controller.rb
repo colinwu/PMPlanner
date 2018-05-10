@@ -637,10 +637,10 @@ class DevicesController < ApplicationController
 
     if current_technician.nil? # if I'm not working with any particular technician and...
       if (current_user.admin?) # ... I am an admin then I work with all techs' territories
-        my_team = Technician.all
+        my_team = Technician.where("team_id <> 1 and team_id <> 61000184").includes(:preference)
         @title = "PM List for all devices"
       elsif current_user.manager? # ... or if I'm a manager then I work with my region
-        my_team = Technician.where(["team_id = ?",current_user.team_id])
+        my_team = Technician.where(["team_id = ?",current_user.team_id]).includes(:preference)
         @title = "PM List #{current_user}.team.name"
       end
     else
@@ -711,9 +711,9 @@ class DevicesController < ApplicationController
         end
         
         if (sort_direction == 'desc')
-          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
         else
-          @dev_list = Device.joins(:outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.paginate(page: params[:page], per_page: lpp)
         end
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
@@ -721,7 +721,7 @@ class DevicesController < ApplicationController
           @code_count[d.id] = pm_list.length
         end
       else
-        @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).group(:id).page(params[:page]).per_page(lpp)
+        @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).group(:id).page(params[:page]).per_page(lpp)
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order("next_pm_date ASC").first.next_pm_date
