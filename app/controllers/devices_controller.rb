@@ -185,7 +185,7 @@ class DevicesController < ApplicationController
     session[:caller] = request.path_parameters[:action]
     you_are_here
     @device = Device.find(params[:id])
-    @locations = Location.where(["client_id = ? and team_id = ?", @device.client_id, @device.team_id])
+    @locations = Location.where(["client_id = ?", @device.client_id])
     @location = Location.new
     @contacts = @device.location.contacts
     if current_user.can_manage?(@device)

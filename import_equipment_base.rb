@@ -54,7 +54,10 @@ if File.exists?(csv_file)
               email: 'nobody@sharpsec.com',
               friendly_name: row.dealername,
               team_id: row.serviceorgid
-            )
+          )
+          primary_tech.create_preference(
+            upcoming_interval: 2
+          )
         end
       end
       if dev.nil?
