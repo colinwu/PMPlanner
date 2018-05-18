@@ -65,6 +65,14 @@ class ModelTargetsController < ApplicationController
   def destroy
     @model_target = ModelTarget.find(params[:id])
     @model_target.destroy
+    @model_target.model_group.models.each do |m|
+      m.devices.each do |d|
+        x = d.outstanding_pms.find_by(code: @model_target.maint_code)
+        unless x.nil?
+          x.destroy
+        end
+      end
+    end
     redirect_to model_targets_url, notice: 'Successfully destroyed model target.'
   end
   
