@@ -2,6 +2,7 @@ class ModelTargetsController < ApplicationController
   before_action :authorize, :set_defaults, :fetch_news
   
   def index
+    you_are_here
     @search_params = params[:search] || Hash.new
     if params[:search]
       search_ar = ['placeholder']
@@ -39,7 +40,7 @@ class ModelTargetsController < ApplicationController
   def create
     @model_target = ModelTarget.new(mt_params)
     if @model_target.save
-      redirect_to model_targets_url, notice: 'Successfully created model target.'
+      redirect_to back_or_go_here(model_targets_url), notice: 'Successfully created model target.'
     else
       render :action => 'new'
     end
@@ -53,7 +54,7 @@ class ModelTargetsController < ApplicationController
     @model_target = ModelTarget.find(params[:id])
     respond_to do |format|
       if @model_target.update_attributes(mt_params)
-        format.html {redirect_to model_target_url, notice: 'Successfully updated model target.'}
+        format.html {redirect_to back_or_go_here(model_target_url), notice: 'Successfully updated model target.'}
         format.json {respond_with_bip(@model_target)}
       else
         format.html {render :action => 'edit'}
@@ -64,8 +65,16 @@ class ModelTargetsController < ApplicationController
 
   def destroy
     @model_target = ModelTarget.find(params[:id])
+    @model_target.model_group.models.each do |m|
+      m.devices.each do |d|
+        x = d.outstanding_pms.find_by(code: @model_target.maint_code)
+        unless x.nil?
+          x.destroy
+        end
+      end
+    end
     @model_target.destroy
-    redirect_to model_targets_url, notice: 'Successfully destroyed model target.'
+    redirect_to back_or_go_here(model_targets_url), notice: 'Successfully destroyed model target.'
   end
   
   private

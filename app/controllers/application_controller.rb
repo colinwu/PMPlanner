@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
   
   def current_technician
     unless session[:tech].nil?
-      Technician.find session[:tech]
+      Technician.includes(:preference).find(session[:tech])
     else
       nil
     end
@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
     
   def current_user
     unless session[:user].nil?
-      Technician.find session[:user]
+      Technician.includes(:preference).find(session[:user])
     else
       nil
     end
