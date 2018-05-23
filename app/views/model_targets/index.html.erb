@@ -25,7 +25,7 @@
       <td><%= model_target.unit %></td>
       <td><%= link_to "Show", model_target %></td>
       <td><%= link_to "Edit", edit_model_target_path(model_target) %></td>
-      <td><%= link_to "Destroy", model_target, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to "Del", model_target, {confirm: 'Are you sure?', method: :delete} %></td>
     </tr>
   <% end %>
 </table>
