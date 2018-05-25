@@ -67,14 +67,7 @@ class ModelTargetsController < ApplicationController
 
   def destroy
     @model_target = ModelTarget.find(params[:id])
-    @model_target.model_group.models.includes(:devices).each do |m|
-      m.devices.each do |d|
-        x = d.outstanding_pms.find_by(code: @model_target.maint_code)
-        unless x.nil?
-          x.destroy
-        end
-      end
-    end
+
     current_user.logs.create(message: "Model target for #{@model_target.model_group.name}, #{@model_target.maint_code} deleted.")
     @model_target.destroy
     redirect_to back_or_go_here(model_targets_url), notice: 'Successfully destroyed model target.'
@@ -92,4 +85,5 @@ class ModelTargetsController < ApplicationController
   def mt_params
     params.require(:model_target).permit(:maint_code, :target, :model_group_id, :unit, :section, :label)
   end
+
 end
