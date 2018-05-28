@@ -1,6 +1,6 @@
 class Log < ApplicationRecord
   
-  belongs_to :technician
+  belongs_to :technician, optional: true
   belongs_to :device, optional: true
   
   validates :message, presence: true
