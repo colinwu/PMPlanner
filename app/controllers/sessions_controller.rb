@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
           unless current_user.admin? or current_user.manager?
             session[:tech] = tech.id
           end
-          redirect_to back_or_go_here(root_url), notice: "Log in successful."
+          redirect_to back_or_go_here(current_user.my_home), notice: "Log in successful."
         else
           Log.create(message: "Failed authentication: user = #{username}")
           flash[:error] = "Name and/or password incorrect."
@@ -37,7 +37,7 @@ class SessionsController < ApplicationController
       end
     else
       Log.create(message: "Unknown tech: #{username }")
-      flash[:notice] = "Sorry, you are not authorized to use this application."
+      flash[:notice] = "Sorry, you are not authorized to use this application. Please contact your manager."
       render :new
     end
     

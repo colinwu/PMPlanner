@@ -73,4 +73,7 @@ class Technician < ApplicationRecord
     "#{self.first_name} #{self.last_name}"
   end
 
+  def my_home
+    self.preference.default_root_path
+  end
 end
