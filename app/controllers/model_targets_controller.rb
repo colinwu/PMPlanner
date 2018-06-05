@@ -22,7 +22,7 @@ class ModelTargetsController < ApplicationController
     else
       @order = sort_column + ' ' + sort_direction
     end
-    @model_targets = ModelTarget.joins(:model_group).where(search_ar).order("model_group.name, maint_code").page(params[:page]).per_page(lpp)
+    @model_targets = ModelTarget.joins(:model_group).where(search_ar).order("model_groups.name, maint_code").page(params[:page]).per_page(lpp)
     respond_to do |format|
       format.html {}
       format.json { render json: @model_targets }
