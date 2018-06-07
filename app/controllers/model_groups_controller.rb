@@ -64,7 +64,6 @@ class ModelGroupsController < ApplicationController
   end
 
   def create
-    byebug
     @model_group = ModelGroup.new(mg_params)
     @pm_code = params[:pm_code].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
     @section = params[:section].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
