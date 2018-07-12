@@ -60,7 +60,7 @@ class ReadingsController < ApplicationController
   private
 
   def reading_params
-    params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1)
+    params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1, :unit)
   end
 
 end

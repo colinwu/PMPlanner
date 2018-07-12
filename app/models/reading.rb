@@ -143,6 +143,7 @@ class Reading < ApplicationRecord
             end          
             counter = ppf_max
           else
+            unit = 0
             begin
               row = content[line_idx][start_column, column_width]
               line_idx += 1
@@ -150,15 +151,14 @@ class Reading < ApplicationRecord
             counter = $1.to_i
             if (section[name] == '22-13')
               if (row =~ /#{new_label}\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9%]+)\s+([-0-9]+)/)
-                turn = $2.to_i
-                day = $3.to_i
-                life = $4.to_i
-                remain = $5.to_i
+                count_ary = [$1, $2, $3, $4, $5]
+                unit = count_ary[dev.pm_counter_type.to_i] == '--------' ? 0 : dev.pm_counter_type.to_i
+                counter = count_ary[unit].to_i
               end
             end
           end
           pm = PmCode.find_by_name name
-          self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: 'counter')
+          self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: unit)
         end # codes.each
         return "22-6 file processed."
       else

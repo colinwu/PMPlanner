@@ -796,7 +796,7 @@ class DevicesController < ApplicationController
           v = 0  # if value is empty make it zero
         end
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
-        c.update_attributes!(value: v, unit: 'count')
+        c.update_attributes!(value: v, unit: @device.pm_counter_type)
       rescue
         flash[:alert] = "Error saving counter for #{p.name}. Value = #{v}"
         current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
@@ -805,7 +805,7 @@ class DevicesController < ApplicationController
     current_user.logs.create(device_id: @device.id, message: "Counter data saved.")
     @device.update_pm_visit_tables
     # redirect_to analyze_data_device_url(@device)
-    redirect_to current_user.preference.default_root_path
+    redirect_to analyze_data_device_path
   end
   
   def rm_contact

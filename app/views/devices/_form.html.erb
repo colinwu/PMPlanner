@@ -74,7 +74,7 @@
       <div class="col-sm-1">
       </div>
       <div class="col-sm-4">
-        <%= f.input :pm_counter_type, collection: [['Page Counter','counter'], ['Rotations', 'rotation'], ['Life %','life']], as: :radio_buttons, label: "Estimate PM date using:" %>
+        <%= f.input :pm_counter_type, collection: [['Page Counter','0'], ['Rotations', '1'], ['Life %','3']], as: :radio_buttons, label: "Estimate PM date using:" %>
       </div>
       <div class="col-sm-6">
         <%= f.input :notes, placeholder: "Record notes for this device.", class: "form-control input-sm variable-width-input" %>
