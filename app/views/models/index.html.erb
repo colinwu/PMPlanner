@@ -18,16 +18,18 @@
       <td><%= model.model_group.name %></td>
       <td><%= model.model_group.color_flag %></td>
       <td><%= model.model_group.description %></td>
-      <td><%= link_to model do %>
-            <span class="glyphicon glyphicon-eye-open"></span>
-          <% end %> |
-       <%= link_to edit_model_path(model) do %>
-            <span class="glyphicon glyphicon-edit"></span>
-          <% end %> |
-       <%= link_to model, :confirm => 'Are you sure?', :method => :delete do %>
-            <span class="glyphicon glyphicon-trash"></span>
-          <% end %>
-      </td>
+      <% if current_user.admin? %>
+        <td><%= link_to model do %>
+              <span class="glyphicon glyphicon-eye-open"></span>
+            <% end %> |
+        <%= link_to edit_model_path(model) do %>
+              <span class="glyphicon glyphicon-edit"></span>
+            <% end %> |
+        <%= link_to model, :confirm => 'Are you sure?', :method => :delete do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
+        </td>
+      <% end %>
     </tr>
   <% end %>
 </table>

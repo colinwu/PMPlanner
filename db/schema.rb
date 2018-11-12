@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_24_154959) do
+ActiveRecord::Schema.define(version: 2018_11_12_182307) do
 
   create_table "clients", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
@@ -263,11 +263,11 @@ ActiveRecord::Schema.define(version: 2018_04_24_154959) do
     t.date "sent_date"
   end
 
-  create_table "transfers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
-    t.integer "from_team_id"
-    t.integer "to_team_id"
-    t.integer "device_id"
-    t.boolean "accepted", default: false
+  create_table "transfers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "tx_file_name"
+    t.string "tx_type"
+    t.integer "tx_file_size"
+    t.datetime "tx_update_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -19,14 +19,16 @@
       <td><%= link_to model_group.name, model_group_path(model_group) %></td>
       <td><%= model_group.description %></td>
       <td><%= model_group.color_flag %></td>
-      <td>
-        <%= link_to edit_model_group_path(model_group) do %>
-          <span class="glyphicon glyphicon-edit"></span>
-        <% end %> |
-        <%= link_to model_group, :confirm => 'Are you sure?', :method => :delete do %>
-          <span class="glyphicon glyphicon-trash"></span>
-        <% end %>
-      </td>
+      <% if current_user.admin? %>
+        <td>
+          <%= link_to edit_model_group_path(model_group) do %>
+            <span class="glyphicon glyphicon-edit"></span>
+          <% end %> |
+          <%= link_to model_group, :confirm => 'Are you sure?', :method => :delete do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        </td>
+      <% end %>
     </tr>
   <% end %>
 </table>

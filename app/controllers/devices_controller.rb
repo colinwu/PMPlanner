@@ -507,6 +507,19 @@ class DevicesController < ApplicationController
     end
   end
   
+def get_autocomplete_items(parameters)
+  super(parameters).joins(:locations).where(["locations.team_id = ?", params[:team_id]]).group(:name)
+end
+
+def get_pm_codes_list
+  d = Device.find(params[:id])
+  respond_to do |format|
+    format.html {}
+    format.js {}
+    format.json { render json: d.pm_codes }
+  end
+end
+
   def handle_checked
     @tech = current_user
     @dev_list = params[:selected_devices] ? params[:selected_devices] : params[:alldevs]
@@ -607,18 +620,6 @@ class DevicesController < ApplicationController
         flash[:error] = "No valid 'to' technician specified."
       end
       redirect_to back_or_go_here
-    end
-  end
-  
-  def show_or_hide_backup
-    if params[:showbackup] == 'true'
-      session[:showbackup] = "true"
-      redirect_to request.env['HTTP_REFERER']
-    elsif params[:showbackup] == 'false'
-      session[:showbackup] = "false"
-      redirect_to request.env['HTTP_REFERER']
-    else
-      redirect_to back_or_go_here()
     end
   end
 
@@ -793,7 +794,7 @@ class DevicesController < ApplicationController
   end
   
   def record_data
-#     TODO: Should do some value sanity checking here
+    # TODO: Should do some value sanity checking here
     @device = Device.find(params[:id])
     taken_at = Date.parse(params[:reading][:taken_at])
     @reading = @device.readings.find_or_create_by(taken_at: taken_at, technician_id: current_user.id)
@@ -830,6 +831,35 @@ class DevicesController < ApplicationController
   def search
     session[:search_caller] = 'analyze_data'
     
+  end
+    
+  def send_order
+    unless params[:email].nil?
+      email = params[:email]
+      email_to = email[:to]
+      email_from = current_user.email
+      email_sub = email[:subject]
+      email_cc = email[:cc]
+      msg_body = email[:msg]
+      if email_to.nil? or email_to.empty?
+        flash[:error] = "You must enter a valid 'To:' email address."
+        render write_service_order
+      else
+        PartsMailer.send_order(email_to, email_cc, email_from, email_sub, msg_body).deliver_now
+        flash[:notice] = "Message has been sent."
+        if request.referer =~ /write_parts_order\Z/
+          current_user.logs.create(message: "Parts order sent\n==============\n#{msg_body}")
+        elsif request.referer =~ /write_service_order\Z/
+          current_user.logs.create(message: "Service order sent\n==============\n#{msg_body}")
+        else
+          current_user.logs.create(message: "Message of unknown origin sent to:#{email_to} from:#{email_from} subject:#{email_sub}\n==============\n#{msg_body}")
+        end
+        redirect_to back_or_go_here
+      end
+    else
+      flash[:error] = 'Appropriate email parameters not found.'
+      redirect_to back_or_go_here
+    end
   end
   
   def service_history
@@ -872,36 +902,19 @@ class DevicesController < ApplicationController
       flash[:alert] = "No valid device specified."
     end
   end
-  
-  def send_order
-    unless params[:email].nil?
-      email = params[:email]
-      email_to = email[:to]
-      email_from = current_user.email
-      email_sub = email[:subject]
-      email_cc = email[:cc]
-      msg_body = email[:msg]
-      if email_to.nil? or email_to.empty?
-        flash[:error] = "You must enter a valid 'To:' email address."
-        render write_service_order
-      else
-        PartsMailer.send_order(email_to, email_cc, email_from, email_sub, msg_body).deliver_now
-        flash[:notice] = "Message has been sent."
-        if request.referer =~ /write_parts_order\Z/
-          current_user.logs.create(message: "Parts order sent\n==============\n#{msg_body}")
-        elsif request.referer =~ /write_service_order\Z/
-          current_user.logs.create(message: "Service order sent\n==============\n#{msg_body}")
-        else
-          current_user.logs.create(message: "Message of unknown origin sent to:#{email_to} from:#{email_from} subject:#{email_sub}\n==============\n#{msg_body}")
-        end
-        redirect_to back_or_go_here
-      end
+ 
+  def show_or_hide_backup
+    if params[:showbackup] == 'true'
+      session[:showbackup] = "true"
+      redirect_to request.env['HTTP_REFERER']
+    elsif params[:showbackup] == 'false'
+      session[:showbackup] = "false"
+      redirect_to request.env['HTTP_REFERER']
     else
-      flash[:error] = 'Appropriate email parameters not found.'
-      redirect_to back_or_go_here
+      redirect_to back_or_go_here()
     end
   end
-  
+
   def unassigned
     you_are_here
     @page_title = "Unassigned Devices"
@@ -960,21 +973,7 @@ class DevicesController < ApplicationController
     end
     @msg_body += "\n" + (@tech.preference.default_sig || '')
   end
-  
-# TODO Need to record the referer URI in log
-  def get_autocomplete_items(parameters)
-    super(parameters).joins(:locations).where(["locations.team_id = ?", params[:team_id]]).group(:name)
-  end
-  
-  def get_pm_codes_list
-    d = Device.find(params[:id])
-    respond_to do |format|
-      format.html {}
-      format.js {}
-      format.json { render json: d.pm_codes }
-    end
-  end
-  
+    
   private
   def sort_column(c = '')
     params[:sort] || c

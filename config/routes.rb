@@ -8,9 +8,7 @@ Rails.application.routes.draw do
   
   resources :transfers do
     collection do
-      get 'to_me'
-      get 'from_me'
-      post 'handle_checked'
+      post 'device'
     end
   end
   

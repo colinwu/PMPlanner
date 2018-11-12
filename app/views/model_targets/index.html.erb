@@ -24,8 +24,10 @@
       <td><%= model_target.model_group.name %></td>
       <td><%= model_target.unit %></td>
       <td><%= link_to "Show", model_target %></td>
-      <td><%= link_to "Edit", edit_model_target_path(model_target) %></td>
-      <td><%= link_to "Del", model_target, {confirm: 'Are you sure?', method: :delete} %></td>
+      <% if current_user.admin? %>
+        <td><%= link_to "Edit", edit_model_target_path(model_target) %></td>
+        <td><%= link_to "Del", model_target, {confirm: 'Are you sure?', method: :delete} %></td>
+      <% end %>
     </tr>
   <% end %>
 </table>

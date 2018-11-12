@@ -1,34 +1,53 @@
-<% title 'Admin Page' %>
+<% title 'Admin Functions' %>
 
 <h2>Device Functions</h2>
 <ul>
+  <% if current_user.admin? %>
+  <% end %>
   <li><%= link_to "List Devices", devices_path %></li>
   <li><%= link_to "List Unassigned Devices", unassigned_devices_path %></li>
   <li><%= link_to "Add new device", new_device_path %></li>
+  <li>Use this form to upload a .CSV file containing a list of devices to be transferred from one technician to another. The records should contain 3 columns: 
+    <ol>
+      <li>The device CRM_ID</li>
+      <li>The primary tech's CRM ID</li>
+      <li>The backup tech's CRM ID</li>
+    </ol>
+    <%= simple_form_for @transfer do |f| %>
+      <%= f.input :tx, as: :file, input_html: {accept: 'text/csv'}  %>
+      <%= f.button :submit,  "Upload"%>
+    <% end %>
+  </li>
 </ul>
 
 <h2>Model Functions</h2>
 <ul>
   <li><%= link_to "List Models", models_path %></li>
-  <li><%= link_to "Add new model", new_model_path %></li>
+  <% if current_user.admin? %>
+    <li><%= link_to "Add new model", new_model_path %></li>
+  <% end %>
 </ul>
 
 <h2>Model Group Functions</h2>
 <ul>
   <li><%= link_to "List Model Groups", model_groups_path %></li>
-  <li><%= link_to "Add new model group", new_model_group_path %></li>
-  <li><%= link_to "Model Group Targets", model_targets_path %></li>
+  <% if current_user.admin? %>
+    <li><%= link_to "Add new model group", new_model_group_path %></li>
+    <li><%= link_to "Model Group Targets", model_targets_path %></li>
+  <% end %>
 </ul>
 
 <h2>General Admin Functions</h2>
 <ul>
   <li><%= link_to "Log", logs_path %></li>
-  <li><%= link_to "News Items", news_index_path %></li>
-  <li>
-    <%= form_tag act_as_technicians_path do %>
-      <%= label_tag "Pretend to be: " %>
-      <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), {include_blank: true, class: "form-control"} %>
-      <%= submit_tag "Mask On"%>
-    <% end %>
-  </li>
+  <% if current_user.admin? %>
+    <li><%= link_to "News Items", news_index_path %></li>
+    <li>
+      <%= form_tag act_as_technicians_path do %>
+        <%= label_tag "Pretend to be: " %>
+        <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), {include_blank: true, class: "form-control"} %>
+        <%= submit_tag "Mask On"%>
+      <% end %>
+    </li>
+  <% end %>
 </ul>

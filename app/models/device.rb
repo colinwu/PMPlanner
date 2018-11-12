@@ -11,7 +11,6 @@ class Device < ApplicationRecord
   has_many :logs
   has_one :neglected, dependent: :destroy
   has_one :device_stat, dependent: :destroy
-  has_many :transfers, dependent: :destroy
   
   validates :primary_tech_id, :backup_tech_id, numericality: { greater_than: 0 }, allow_nil: true
   validates :location_id, :client_id, numericality: { greater_than: 0 }, allow_nil: true

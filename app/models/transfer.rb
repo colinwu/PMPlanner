@@ -1,8 +1,5 @@
-class Transfer < ActiveRecord::Base
-  
-  belongs_to :from_team, :class_name => 'Team', :foreign_key => :from_team_id
-  belongs_to :to_team, :class_name => 'Team', :foreign_key => :to_team_id
-  belongs_to :device
-  
-  # TODO Need validator to ensure there is only one unaccepted transfer per device
+class Transfer < ApplicationRecord
+
+  has_attached_file :tx, styles: {}, path: ":rails_root/public/system/transfers/:filename"
+  validates_attachment_file_name :tx, matches: [/\.csv\z/]
 end
