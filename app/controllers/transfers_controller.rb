@@ -11,6 +11,8 @@ class TransfersController < ApplicationController
   end
   
   def create
+    rails_env = ENV['RAILS_ENV']
+    system("/usr/bin/mysqldump -u root -p#{ENV['DB_PW']} --add-drop-table pm_planner_#{rails_env} > #{ENV['PWD']}/tmp/production.mysql")
     @transfer = Transfer.new(transfer_params)
     if (@transfer.save and @transfer.tx_file_name)
       current_user.logs.create(message: "Processing device transfer file #{@transfer.tx_file_name}")
