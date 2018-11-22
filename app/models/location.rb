@@ -3,7 +3,7 @@ class Location < ApplicationRecord
   has_many :devices, :dependent => :restrict_with_error
   has_many :contacts, :dependent => :nullify
   belongs_to :client
-  belongs_to :team, :foreign_key => :team_id
+  belongs_to :team, :foreign_key => :team_id, optional: true
   
   validates :address1, :city, :province, :post_code, presence: true
   

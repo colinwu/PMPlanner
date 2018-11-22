@@ -12,6 +12,9 @@ if File.exists?(csv_file)
   r.each do |row|
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
+      # strip leading and trailing white spaces
+      row.each_pair {|k,v| row[k].nil? ? '' : row[k].strip!}
+
       # find or create the client record
       client = Client.find_by soldtoid: row.soldtoid
       if client.nil?
@@ -20,12 +23,18 @@ if File.exists?(csv_file)
         client.update_attributes(name: row.soldtoname)
       end
       # find or create the location record
-      loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ? and team_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id, row.serviceorgid]).first
+      loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id]).first
       if loc.nil?
-        loc = Location.create(:notes => row.addcontactname, :address1 => row.address1, :address2 => row.address2.nil? ? '' : row.address2, :city => row.city, :province => row.province, :post_code => row.postalcode, :team_id => row.serviceorgid, :client_id => client.id)
+        loc = Location.create(:notes => row.addcontactname, :address1 => row.address1, :address2 => row.address2.nil? ? '' : row.address2, :city => row.city, :province => row.province, :post_code => row.postalcode, :client_id => client.id, :team_id => row.serviceorgid)
+        if loc.errors
+          puts "Device #{row.crm_objectid} Location errors: #{loc.errors.messages}"
+        end
       end
       
       # find the device, model and techs for the device
+      if !row.serialnumber.nil? and row.serialnumber.length < 8
+        puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
+      end
       dev = Device.find_by_crm_object_id(row.crm_objectid)
       m = Model.find_by_nm(row.model)
       if m.nil?
@@ -46,7 +55,7 @@ if File.exists?(csv_file)
       # team_id == 61000184 means it's a dealer, then make the dealer the primary tech
       if (row.serviceorgid == '61000184')
         primary_tech = Technician.find_by_crm_id(row.dealerid)
-        if (primary_tech.nil?)
+        if (primary_tech.nil? and !row.primarytechid.nil?)
           primary_tech = Technician.create(
               crm_id: row.dealerid,
               first_name: row.dealername,
@@ -69,7 +78,7 @@ if File.exists?(csv_file)
                           :backup_tech_id => backup_tech.try(:id),
                           :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
                           :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                          :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
+                          :do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
                           :client_id => client.id,
                           :team_id => row.serviceorgid,
                           :pm_counter_type => 'counter',
@@ -77,7 +86,7 @@ if File.exists?(csv_file)
                           )
           # dev.create_neglected(next_visit: nil)
           unless dev.valid?
-            puts "Device invalid: #{row.crm_objectid}"
+            puts "Device invalid: #{row.crm_objectid}, #{dev.errors.messages}"
             next
           end
           dev.create_device_stat()
@@ -97,7 +106,7 @@ if File.exists?(csv_file)
                               :backup_tech_id => backup_tech.try(:id),
                               :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
                               :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                              :do_pm => (row.nopm =~ /TRUE/i) ? false : true,
+                              :do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
                               :client_id => client.id,
                               :team_id => row.serviceorgid,
                               :pm_counter_type => 'counter',

@@ -3,7 +3,7 @@ class Device < ApplicationRecord
   belongs_to :model
   belongs_to :client
   belongs_to :location
-  belongs_to :primary_tech, class_name: 'Technician', foreign_key: 'primary_tech_id'
+  belongs_to :primary_tech, class_name: 'Technician', foreign_key: 'primary_tech_id', optional: true
   belongs_to :backup_tech, class_name: 'Technician', foreign_key: 'backup_tech_id', optional: true
   belongs_to :team, foreign_key: 'team_id', optional: true
   has_many :readings, dependent: :destroy, inverse_of: :device
@@ -12,8 +12,9 @@ class Device < ApplicationRecord
   has_one :neglected, dependent: :destroy
   has_one :device_stat, dependent: :destroy
   
-  validates :primary_tech_id, :backup_tech_id, numericality: { greater_than: 0 }, allow_nil: true
-  validates :location_id, :client_id, numericality: { greater_than: 0 }, allow_nil: true
+  validates :primary_tech_id, numericality: { greater_than: 0 }, allow_blank: true
+  validates :backup_tech_id, numericality: { greater_than: 0 }, allow_blank: true
+  validates :client_id, numericality: { greater_than: 0 }, allow_blank: true
   validates :crm_object_id, :serial_number, presence: true
   validates :crm_object_id, uniqueness: true
   validates_associated :model, :outstanding_pms
