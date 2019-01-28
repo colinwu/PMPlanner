@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_182307) do
+ActiveRecord::Schema.define(version: 2019_01_28_144758) do
 
   create_table "clients", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 2018_11_12_182307) do
     t.boolean "showbackup"
     t.integer "pm_list_freq", default: 0
     t.integer "pm_list_freq_unit"
+    t.boolean "mobile", default: true
   end
 
   create_table "reading_targets", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
@@ -263,7 +264,7 @@ ActiveRecord::Schema.define(version: 2018_11_12_182307) do
     t.date "sent_date"
   end
 
-  create_table "transfers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "transfers", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "tx_file_name"
     t.string "tx_type"
     t.integer "tx_file_size"
