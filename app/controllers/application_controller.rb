@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
       session[:active_at] = nil
       session[:user] = nil
       session[:showbackup] = nil
+      session[:mobile] = nil
       
       redirect_to login_url, alert: "Your session has timed out. Please log in again."
     else
@@ -57,6 +58,7 @@ class ApplicationController < ActionController::Base
     if session[:showbackup].nil?
       session[:showbackup] = current_user.preference.showbackup.to_s
     end
+    session[:mobile] = current_user.preference.mobile ? 'hidden-xs' : ''
     WillPaginate.per_page = current_user.preference.lines_per_page
   end
   

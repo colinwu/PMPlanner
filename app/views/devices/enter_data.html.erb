@@ -12,23 +12,23 @@
   <%= hidden_field_tag 'reading[device_id]', @reading.device_id %>
   <tr>
     <th>PM Code</th>
-    <th class="hidden-xs">PM Description</th>
-    <th class="center hidden-xs">Previous Readings<br /><%= @last_reading.taken_at.strftime('%b %-d, %Y') %></th>
+    <th class="<%= session[:mobile] %>">PM Description</th>
+    <th class="center <%= session[:mobile] %>">Previous Readings<br /><%= @last_reading.taken_at.strftime('%b %-d, %Y') %></th>
     <th class="center">Current Readings<br /><%= text_field_tag 'reading[taken_at]', @reading.taken_at, class: 'center form-control input-sm' %></th>
-    <th class="hidden-xs">Progress to next PM</th>
-    <th class="hidden-xs">Next PM Date</th>
+    <th class="<%= session[:mobile] %>">Progress to next PM</th>
+    <th class="<%= session[:mobile] %>">Next PM Date</th>
   </tr>
   <tr>
     <td>TotBW</td>
-    <td class="hidden-xs">Total Counter: TotBW</td>
-    <td class="rightjustify hidden-xs"><%= number_with_delimiter(@lastbw) %></td>
+    <td class="<%= session[:mobile] %>">Total Counter: TotBW</td>
+    <td class="rightjustify <%= session[:mobile] %>"><%= number_with_delimiter(@lastbw) %></td>
     <td class="rightjustify"><%= text_field_tag "counter[BWTOTAL]", '', {class: 'rightjustify form-control input-sm'} %></td>
   </tr>
   <% if @device.model.model_group.color_flag %>
     <tr>
       <td>TotC</td>
-      <td class="hidden-xs">Total Counter: TotC</td>
-      <td class="rightjustify hidden-xs"><%= number_with_delimiter(@lastc) %></td>
+      <td class="<%= session[:mobile] %>">Total Counter: TotC</td>
+      <td class="rightjustify <%= session[:mobile] %>"><%= number_with_delimiter(@lastc) %></td>
       <td class="rightjustify"><%= text_field_tag "counter[CTOTAL]", '', {class: 'rightjustify form-control input-sm'} %></td>
     </tr>
   <% end %>
@@ -39,8 +39,8 @@
       <% pm_code = PmCode.find_by_name c %>
       <tr>
         <td><%= c.upcase %></td>
-        <td class="hidden-xs"><%= pm_code.description %></td>
-        <td class="rightjustify hidden-xs"><span id="prev_<%= c.upcase %>"><%= prev.nil? ? '' : number_with_delimiter(prev.value) %></span></td>
+        <td class="<%= session[:mobile] %>"><%= pm_code.description %></td>
+        <td class="rightjustify <%= session[:mobile] %>"><span id="prev_<%= c.upcase %>"><%= prev.nil? ? '' : number_with_delimiter(prev.value) %></span></td>
         <td class=rightjustify><%= text_field_tag "counter[#{c.upcase}]", '', {class: 'rightjustify form-control input-sm'} %></td>
       </tr>
     <% end %>
