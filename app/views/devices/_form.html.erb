@@ -63,10 +63,15 @@
         <%= f.label :backup_tech_id, label: "Backup Tech", class: "control-label col-sm-4" %>
         <div class="col-sm-8">
           <% if current_user.manager? or current_user.admin? %>
-            <%= f.input_field :backup_tech_id, collection: current_user.my_techs.map{|tech| [tech.full_name, tech.id]}, selected: @device.backup_tech_id.nil? ? nil : @device.backup_tech_id, include_blank: true, class: "form-control input-sm" %>
+            <%= f.input_field :backup_tech_id, collection: current_user.my_techs.map{|tech| [tech.full_name, tech.id]}, selected: @device.backup_tech_id.nil? ? nil : @device.backup_tech_id, include_blank: true, class: "form-control" %>
           <% else %>
             <p class="form-control-static"><%= @device.backup_tech.try(:full_name) %></p>
           <% end %>
+        </div>
+        <%= f.label :acctmgr, label: "Account Manager", class: "control-label col-sm-4" %>
+        <div class="col-sm-8">
+          <%= f.input_field :acctmgr, {readonly: @readonly_flag, class: "form-control input-sm"} %>
+          <%= f.error :crm_object_id %>
         </div>
       </div>
     </div>
@@ -76,9 +81,9 @@
       <div class="col-sm-4">
         <%= f.input :pm_counter_type, collection: [['Page Counter','0'], ['Rotations', '1'], ['Life %','3']], as: :radio_buttons, label: "Estimate PM date using:" %>
       </div>
-      <div class="col-sm-6">
-        <%= f.input :notes, placeholder: "Record notes for this device.", class: "form-control input-sm variable-width-input" %>
-      </div>
+      <div class="col-sm-7"><fieldset><legend>Notes</legend>
+        <%= f.input_field :notes, placeholder: "Record notes for this device." %>
+      </fieldset></div>
     </div>
   </fieldset>
 

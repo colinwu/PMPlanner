@@ -47,6 +47,7 @@
       <%=h @device.client.name %><br />
       <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br />
       <strong>Install Date: </strong><%=h @device.install_date.nil? ? 'Unknown' : @device.install_date.to_s(:MdY) %><br />
+      <strong>Account Manager: </strong><%=h @device.acctmgr %></br />
       <strong>Monthly average: BW =</strong> <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; <strong>COL = </strong><%= number_with_delimiter(@c_monthly.round) %><% else %>; <strong>COL = </strong>Unknown<% end %>
       <% if @vpy > 0 -%>
         ; <strong>PM visits per year: </strong><%= number_with_precision(@vpy, precision: 2) %><br /></strong>

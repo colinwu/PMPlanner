@@ -26,7 +26,7 @@ if File.exists?(csv_file)
       loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id]).first
       if loc.nil?
         loc = Location.create(:notes => row.addcontactname, :address1 => row.address1, :address2 => row.address2.nil? ? '' : row.address2, :city => row.city, :province => row.province, :post_code => row.postalcode, :client_id => client.id, :team_id => row.serviceorgid)
-        if loc.errors
+        unless loc.errors.messages.empty?
           puts "Device #{row.crm_objectid} Location errors: #{loc.errors.messages}"
         end
       end
@@ -82,7 +82,8 @@ if File.exists?(csv_file)
                           :client_id => client.id,
                           :team_id => row.serviceorgid,
                           :pm_counter_type => 'counter',
-                          :pm_visits_min => 2
+                          :pm_visits_min => 2,
+                          :acctmgr => row.accountmgr
                           )
           # dev.create_neglected(next_visit: nil)
           unless dev.valid?
@@ -110,7 +111,8 @@ if File.exists?(csv_file)
                               :client_id => client.id,
                               :team_id => row.serviceorgid,
                               :pm_counter_type => 'counter',
-                              :pm_visits_min => 2
+                              :pm_visits_min => 2,
+                              :acctmgr => row.accountmgr
                             )
       end
       # contacts = Contact.where("crm_object_id = #{row.crm_objectid}")

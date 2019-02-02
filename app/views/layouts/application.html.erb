@@ -67,7 +67,7 @@
                   <ul class="dropdown-menu">
                     <li><%= link_to "Sign out", logout_path %></li>
                     <li><%= link_to "My profile", edit_preference_path(current_user) %></li>
-                    <li><%= link_to "Bug Report/Feature Request", "mailto://wuc@sharpsec.com?subject=PM Planner issue" %></li>
+                    <li><%= link_to "Bug Report/Feature Request", "mailto:wuc@sharpsec.com?subject=PM Planner issue" %></li>
                   </ul>
                 <% else %>
                   <%= link_to "Sign in", login_path %>

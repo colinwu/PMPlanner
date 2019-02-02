@@ -984,6 +984,6 @@ end
   end
 
   def device_params
-    params.require(:device).permit(:installed_base_id, :crm_object_id, :alternate_id, :model_id, :client_id, :serial_number, :location_id, :primary_tech_id, :backup_tech_id, :active, :under_contract, :do_pm, :pm_counter_type, :pm_visits_min, :notes, :team_id, :install_date)
+    params.require(:device).permit(:installed_base_id, :crm_object_id, :alternate_id, :model_id, :client_id, :serial_number, :location_id, :primary_tech_id, :backup_tech_id, :active, :under_contract, :do_pm, :pm_counter_type, :pm_visits_min, :notes, :team_id, :install_date, :acctmgr)
   end
 end
