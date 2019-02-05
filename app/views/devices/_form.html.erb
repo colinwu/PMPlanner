@@ -29,16 +29,19 @@
         <%= f.hidden_field :model_id %>
       </div>
       <div class="col-sm-3 left-vert-separator">
+        <% act_status = (@device.active == @device.crm_active) ? '' : 'urgent'%>
+        <% contract_status = (@device.under_contract == @device.crm_under_contract) ? '' : 'uregent' %>
+        <% pm_status = (@device.do_pm == @device.crm_do_pm) ? '' : 'urgent'%>
         <div class="col-sm-1"></div>
-        <div class="col-sm-11">
-          <%= f.input :active %>
+        <div class="col-sm-11 <%= act_status %>">
+          <%= f.input :active%>
         </div>
         <div class="col-sm-1"></div>
-        <div class="col-sm-11">
+        <div class="col-sm-11 <%= contract_status %>">
           <%= f.input :under_contract %>
         </div>
         <div class="col-sm-1"></div>
-        <div class="col-sm-11">
+        <div class="col-sm-11 <%= pm_status %>">
           <%= f.input :do_pm, label: "In PM program" %>
         </div>
       </div>

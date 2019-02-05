@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_31_195448) do
+ActiveRecord::Schema.define(version: 2019_02_04_145948) do
 
   create_table "clients", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
@@ -83,6 +83,9 @@ ActiveRecord::Schema.define(version: 2019_01_31_195448) do
     t.date "install_date"
     t.date "earliest_pm_date"
     t.string "acctmgr"
+    t.boolean "crm_active"
+    t.boolean "crm_under_contract"
+    t.boolean "crm_do_pm"
   end
 
   create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|

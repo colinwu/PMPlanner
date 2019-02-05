@@ -5,7 +5,34 @@ class LogsController < ApplicationController
   respond_to :html
 
   def index
-    @logs = Log.order("created_at desc").page(params[:page])
+    if params[:search].nil?
+      @search_params = {}
+    else
+      @search_params = params[:search].permit(:tech, :device, :message).to_h
+    end
+    search_ar = ['place_holder']
+    where_ar = []
+    if @search_params
+      unless @search_params['tech'].nil? or @search_params['tech'].blank?
+        search_ar <<  @search_params[:tech]
+        search_ar <<  @search_params[:tech]
+        where_ar << "(technicians.first_name regexp ? or technicians.last_name regexp ?)"
+      end
+      unless  @search_params['device'].nil? or  @search_params['device'].blank?
+        search_ar <<  @search_params[:device]
+        where_ar << "devices.crm_object_id regexp ?"
+      end
+      unless  @search_params['message'].nil? or  @search_params['message'].blank?
+        search_ar <<  @search_params[:message]
+        where_ar << "message regexp ?"
+      end
+      search_ar[0] = (where_ar).join(' and ')
+    end
+    if search_ar[0] == ''
+      @logs = Log.order("created_at desc").page(params[:page])
+    else
+      @logs = Log.joins(:technician, :device).where(search_ar).order("created_at desc").page(params[:page])
+    end
     respond_with(@logs)
   end
 
