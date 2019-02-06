@@ -13,4 +13,6 @@ msg_list.each_pair do |d,m|
   dev.update_attributes(active: ($1 == "1") ? true : false, 
                 under_contract: ($2 == "1") ? true : false, 
                          do_pm: ($3 == "1") ? true : false)
+
+  Log.create(technician_id: 1, device_id: dev.id, message: "Tech-set status: #{m}")
 end
