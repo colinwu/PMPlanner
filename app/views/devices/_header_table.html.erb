@@ -41,7 +41,7 @@
     <th>Equipment Details - <%= link_to_unless @device.nil?, "Edit", {controller: "devices", action: "edit", id: @device} %></th>
   </tr>
   <tr>
-    <td class=boxed>
+    <td class="boxed">
     <% unless @device.nil? %>
       <strong><%=h @device.model.nm %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %></strong><br />
       <%=h @device.client.name %><br />

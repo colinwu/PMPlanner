@@ -6,7 +6,10 @@
 <%= render partial: "header_table", locals: {button: "analysis"} %>
 
 <div class="visible-xs boxed">
-<strong>Monthly avg: BW =</strong> <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; <strong>COL = </strong><%= number_with_delimiter(@c_monthly.round) %><% else %>; <strong>COL = </strong>Unknown<% end %>
+  <strong><%=h @device.model.nm %> s/n <%=h @device.serial_number %> CRM Id <%=h @device.crm_object_id %></strong><br />
+  <%=h @device.client.name %><br />
+  <%=h @device.location.address1 %>, <%=h @device.location.address2 %>, <%=h @device.location.city %>, <%=h @device.location.province %><br />
+  <strong>Monthly avg: BW =</strong> <%= @bw_monthly != 0 ? number_with_delimiter(@bw_monthly.round) : 'Unknown' %><% if @c_monthly > 0 -%>; <strong>COL = </strong><%= number_with_delimiter(@c_monthly.round) %><% else %>; <strong>COL = </strong>Unknown<% end %>
 </div>
 
 <% unless @device.nil? or @prev_reading.nil? %>

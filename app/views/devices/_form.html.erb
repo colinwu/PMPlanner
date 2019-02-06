@@ -73,7 +73,7 @@
         </div>
         <%= f.label :acctmgr, label: "Account Manager", class: "control-label col-sm-4" %>
         <div class="col-sm-8">
-          <%= f.input_field :acctmgr, {readonly: @readonly_flag, class: "form-control input-sm"} %>
+          <p class="form-control-static"><%= @device.acctmgr %></p>
           <%= f.error :crm_object_id %>
         </div>
       </div>
@@ -82,7 +82,7 @@
       <div class="col-sm-1">
       </div>
       <div class="col-sm-4">
-        <%= f.input :pm_counter_type, collection: [['Page Counter','0'], ['Rotations', '1'], ['Life %','3']], as: :radio_buttons, label: "Estimate PM date using:" %>
+        <%= f.input :pm_counter_type, collection: [['Page Counter','counter'], ['Rotations', 'rotation'], ['Life %','life']], as: :radio_buttons, label: "Estimate PM date using:" %>
       </div>
       <div class="col-sm-7"><fieldset><legend>Notes</legend>
         <%= f.input_field :notes, placeholder: "Record notes for this device." %>

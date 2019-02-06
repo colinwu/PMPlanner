@@ -106,6 +106,8 @@ class TechniciansController < ApplicationController
       current_user.logs.create(message: "Pretending to be #{t.friendly_name}")
       session[:user] = t.id
       session[:tech] = t.id
+      session[:mobile] = current_user.preference.mobile ? 'hidden-xs' : ''
+      session[:showbackup] = current_user.preference.showbackup.to_s
     end
     redirect_to current_user.preference.default_root_path
   end
