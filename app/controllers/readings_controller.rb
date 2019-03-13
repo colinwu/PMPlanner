@@ -15,23 +15,37 @@ class ReadingsController < ApplicationController
 
   def create
     @reading = Reading.new(reading_params)
-    # have to save the instance before we can process the attached file
-    if @reading.save
-      if @reading.ptn1_file_name
-        current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}")
-        msg = @reading.process_ptn1
-        if msg == "22-6 file processed."
-          current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
-          @reading.device.update_pm_visit_tables 
-          redirect_to back_or_go_here(@reading), notice: 'Reading successfully saved.'
-        else
-          current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Encountered an error processing #{@reading.ptn1_file_name}: #{msg}.")
-          @reading.destroy
-          redirect_to back_or_go_here(root_url), :alert => msg
+    if @reading.ptn1_file_name
+      if @reading.ptn1_file_name =~ /_(\d+)_PTN/
+        fdate = Date.parse($1.slice(0,8))
+        r = Reading.where(["taken_at = ? and device_id = ?", fdate, @reading.device_id]).first
+        # if a reading for the same date already exists, take its identity (id) then delete it
+        unless r.nil?
+          @reading.id = r.id
+          r.destroy
         end
+
+        # have to save the instance before we can process the attached file
+        if @reading.save
+          if @reading.ptn1_file_name
+            current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}")
+            msg = @reading.process_ptn1
+            if msg == "22-6 file processed."
+              current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
+              @reading.device.update_pm_visit_tables 
+              redirect_to back_or_go_here(@reading), notice: 'Reading successfully saved.'
+            else
+              current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Encountered an error processing #{@reading.ptn1_file_name}: #{msg}.")
+              @reading.destroy
+              redirect_to back_or_go_here(root_url), :alert => msg
+            end
+          end
+        else
+          render :action => 'new'
+        end
+      else
+        redirect_to back_or_go_here(root_url), :alert => "Supplied file is not a PTN1 file."
       end
-    else
-      render :action => 'new'
     end
   end
 

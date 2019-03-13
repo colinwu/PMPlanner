@@ -301,7 +301,7 @@ class DevicesController < ApplicationController
       @vpy = avg[:vpy]
       
       @todays_reading = @device.readings.find_by_taken_at(@now)
-      @prev_reading = @device.last_non_zero_reading_on_or_before(@now-1)
+      @prev_reading = @device.readings.order(:taken_at).last
       
       unless @prev_reading.nil?
         last_now_interval = @now - @prev_reading.taken_at
@@ -361,7 +361,7 @@ class DevicesController < ApplicationController
           @choices[c] = 0
           target = @device.target_for(c)
           unless target.nil? or target.target == 0
-            pm_code = PmCode.where(["name = ?", c]).first
+            pm_code = PmCode.find_by name: c
             target_val = target.target
             last_val = @prev_reading.counter_for(c).nil? ? 0 : @prev_reading.counter_for(c).value
             if pm_code.colorclass == 'ALL'
@@ -797,7 +797,7 @@ end
     # TODO: Should do some value sanity checking here
     @device = Device.find(params[:id])
     taken_at = Date.parse(params[:reading][:taken_at])
-    @reading = @device.readings.find_or_create_by(taken_at: taken_at, technician_id: current_user.id)
+    @reading = @device.readings.find_or_create_by(taken_at: taken_at)
     @reading.update_attributes(params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1))
     flash[:alert] = ''
     params[:counter].each do |code,value|
@@ -879,7 +879,7 @@ end
     
     if @device and current_user.can_manage?(@device)      
       @last_reading = @device.readings.order(:taken_at).last
-      
+      @reading = @device.readings.build(technician_id: current_user.id)
       if @device.device_stat.nil?
         stats = @device.calculate_stats
       else

@@ -41,30 +41,35 @@ class Device < ApplicationRecord
     ds = create_device_stat() if ds.nil?
     if readings.count > 1
       first_reading = readings.order(:taken_at).first
-      last_reading = last_non_zero_reading_on_or_before(Date.today)
+      last_reading = last_non_zero_reading_on_or_before(Date.today, 'BWTOTAL')
       first_last_interval = (last_reading.taken_at - first_reading.taken_at).to_i
       if first_last_interval.zero?  # for the case where there is only 1 non-zero reading
-        ds.update_attributes(bw_monthly: 0, c_monthly: 0, bw_daily: 0, c_daily: 0, vpy: 2.0)
-        return ds
+        bw_monthly = 0
+        bw_daily = 0
+      else
+        first_bwtotal = first_reading.counter_for('bwtotal')
+        first_bw_val = first_bwtotal.nil? ? 0 : first_bwtotal.value
+        last_bwtotal = last_reading.counter_for('bwtotal')
+        last_bw_val = last_bwtotal.nil? ? 0 : last_bwtotal.value
+        bw_daily = 1.0 * (last_bw_val - first_bw_val) / first_last_interval
+        bw_daily = bw_daily.positive? ? bw_daily : 0
+        bw_monthly = 30.5 * bw_daily
       end
       c_monthly = 0
       c_daily = 0
       if model.model_group.color_flag
-        first_ctotal = first_reading.counter_for('ctotal')
-        first_c_val = first_ctotal.nil? ? 0 : first_ctotal.value
-        last_ctotal = last_reading.counter_for('ctotal')
-        last_c_val = last_ctotal.nil? ? 0 : last_ctotal.value
-        c_daily = 1.0*(last_c_val - first_c_val) / first_last_interval
-        c_daily = c_daily.positive? ? c_daily : 0
-        c_monthly = 30.5 * c_daily
+        last_reading = last_non_zero_reading_on_or_before(Date.today, 'CTOTAL')
+        first_last_interval = (last_reading.taken_at - first_reading.taken_at).to_i
+        if first_last_interval.positive? 
+          first_ctotal = first_reading.counter_for('ctotal')
+          first_c_val = first_ctotal.nil? ? 0 : first_ctotal.value
+          last_ctotal = last_reading.counter_for('ctotal')
+          last_c_val = last_ctotal.nil? ? 0 : last_ctotal.value
+          c_daily = 1.0*(last_c_val - first_c_val) / first_last_interval
+          c_daily = c_daily.positive? ? c_daily : 0
+          c_monthly = 30.5 * c_daily
+        end
       end
-      first_bwtotal = first_reading.counter_for('bwtotal')
-      first_bw_val = first_bwtotal.nil? ? 0 : first_bwtotal.value
-      last_bwtotal = last_reading.counter_for('bwtotal')
-      last_bw_val = last_bwtotal.nil? ? 0 : last_bwtotal.value
-      bw_daily = 1.0 * (last_bw_val - first_bw_val) / first_last_interval
-      bw_daily = bw_daily.positive? ? bw_daily : 0
-      bw_monthly = 30.5 * bw_daily
 
       vpy = 2.0
       if active and do_pm
@@ -75,11 +80,10 @@ class Device < ApplicationRecord
         end
       end
       ds.update_attributes(bw_monthly: bw_monthly, c_monthly: c_monthly, bw_daily: bw_daily, c_daily: c_daily, vpy: vpy)
-      return ds
     else
       ds.update_attributes(bw_monthly: 0, c_monthly: 0, bw_daily: 0, c_daily: 0, vpy: 2.0)
-      return ds
     end
+    return ds
   end
 
   def update_pm_visit_tables(codes_list = [])
@@ -160,12 +164,10 @@ class Device < ApplicationRecord
     self.update_attributes(earliest_pm_date: self.pm_date)
   end
 
-  def last_non_zero_reading_on_or_before(date = Date.today)
+  def last_non_zero_reading_on_or_before(date = Date.today, code = 'BWTOTAL')
     readings.where("taken_at is not NULL and taken_at <= '#{date}'").order('taken_at desc').each do |r|
-      r.counters.each do |c|
-        if c.value.positive?
-          return r
-        end
+      if r.counter_for(code).value.positive?
+        return r
       end
     end
     return nil

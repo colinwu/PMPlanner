@@ -7,12 +7,12 @@
     <caption>Counter History</caption>
     <tr>
       <th>Date Readings Taken</th>
-      <th>BW</th>
+      <th class='rightjustify'>BW</th>
       <% if @device.model.model_group.color_flag %>
-        <th>Colour</th>
+        <th class='rightjustify'>Colour</th>
       <% end %>
       <% @all_codes.each do |c| %>
-        <th><%=h c %></th>
+        <th class='rightjustify'><%=h c %></th>
       <% end %>
       <th>Action</th>
     </tr>

@@ -157,7 +157,7 @@ class Reading < ApplicationRecord
               end
             end
           end
-          pm = PmCode.find_by_name name
+          pm = PmCode.find_by name: name
           self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: unit)
         end # codes.each
         return "22-6 file processed."
