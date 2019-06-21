@@ -4,14 +4,14 @@
         <td>
           <p id=BWTOTAL_field>
             BWTOTAL<br />
-            <%= text_field_tag 'pm_code[BWTOTAL]',number_with_delimiter(@pm_code['BWTOTAL']), {size: 10, placeholder: 'counter', readonly: true} %><br />
+            <%= text_field_tag 'pm_code[BWTOTAL]',number_with_delimiter(@pm_code['BWTOTAL']), {size: 10, placeholder: 'counter', readonly: true, value: 0} %><br />
             <%= text_field_tag 'section[BWTOTAL]',@section['BWTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
             <%= text_field_tag 'label[BWTOTAL]',@label['BWTOTAL'], {size:15, placeholder: '22-6 label'} %>
           </p>
           <% if mg.nil? or mg.color_flag %>
             <p id=CTOTAL_field>
               CTOTAL<br />
-              <%= text_field_tag 'pm_code[CTOTAL]',number_with_delimiter(@pm_code['CTOTAL']), {size: 10, placeholder: 'counter', readonly: true} %><br />
+              <%= text_field_tag 'pm_code[CTOTAL]',number_with_delimiter(@pm_code['CTOTAL']), {size: 10, placeholder: 'counter', readonly: true, value: 0} %><br />
               <%= text_field_tag 'section[CTOTAL]]',@section['CTOTAL'], {size:10, placeholder: '22-6 section'} %><br />
               <%= text_field_tag 'label[CTOTAL]',@label['CTOTAL'], {size:15, placeholder: '22-6 label'} %>
             </p>
