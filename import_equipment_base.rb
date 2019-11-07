@@ -1,8 +1,17 @@
 # Updates Location and Client models in addition to Device.
+puts "\n**** WARNING **** WARNING **** WARNING ****"
+puts "\nThe data file you are using MUST contain ALL devices that currently exist in CRM \nor *** BAD *** things will happen."
+puts "\nDo you want to continue? [y/N]"
+ans = STDIN::getc
+unless ans == 'y' or ans == 'Y'
+  exit
+end
 
 csv_file = ARGV.shift
 
 if File.exists?(csv_file)
+  now = Time.now   # remember when the script started
+  dev_list = Array.new()  # keep list of all CRM ids in this update
   r = CsvMapper.import(csv_file) do
     [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, dealerid, dealername, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, inactive, nocontract, nopm]
     start_at_row 1
@@ -10,6 +19,7 @@ if File.exists?(csv_file)
   end
   
   r.each do |row|
+    dev_list << row.crm_objectid
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
       # strip leading and trailing white spaces
@@ -32,10 +42,13 @@ if File.exists?(csv_file)
       end
       
       # find the device, model and techs for the device
-      if !row.serialnumber.nil? and row.serialnumber.length < 8
-        puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
+      valid_sn = true
+      if row.serialnumber.nil? or row.serialnumber.length < 8 or row.serialnumber.length > 9
+      #  puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
+        valid_sn = false
       end
       dev = Device.find_by_crm_object_id(row.crm_objectid)
+
       m = Model.find_by_nm(row.model)
       if m.nil?
         mg = ModelGroup.find_by_name 'OTHERS'
@@ -118,14 +131,18 @@ if File.exists?(csv_file)
                               :acctmgr => row.accountmgr
                             )
       end
-      # contacts = Contact.where("crm_object_id = #{row.crm_objectid}")
-      # unless (contacts.empty? or dev.nil?)
-      #   contacts.each do |c|
-      #     c.update_attribute(:location_id, loc.id)
-      #   end
-      # end
     end
   end
+  dev_list_s = dev_list.join(',')
+  not_in = Device.where("crm_object_id not in (#{dev_list_s})")
+  not_in.each do |d|
+    if d.under_contract
+      puts "Device #{d.crm_object_id} (s/n #{d.serial_number}) not in current feed. Its current contract status is #{d.under_contract}"
+    end
+    d.under_contract = false
+    d.save
+  end
+  puts "There were #{not_in.count} devices not in the current feed."
 else
   puts "Can not open #{csv_file}"
 end

@@ -434,7 +434,7 @@ class DevicesController < ApplicationController
       elsif @target == 'Region'
         @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ?", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       else
-        @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
+        @devices = Device.joins(:model, :client, :location).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ?) and (primary_tech_id = ? or backup_tech_id = ?) and (under_contract = TRUE)", @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.id, current_technician.id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       end
       case @devices.length
       when 1
@@ -507,18 +507,18 @@ class DevicesController < ApplicationController
     end
   end
   
-def get_autocomplete_items(parameters)
-  super(parameters).joins(:locations).where(["locations.team_id = ?", params[:team_id]]).group(:name)
-end
-
-def get_pm_codes_list
-  d = Device.find(params[:id])
-  respond_to do |format|
-    format.html {}
-    format.js {}
-    format.json { render json: d.pm_codes }
+  def get_autocomplete_items(parameters)
+   super(parameters).joins(:locations).where(["locations.team_id = ?", params[:team_id]]).group(:name)
   end
-end
+
+  def get_pm_codes_list
+    d = Device.find(params[:id])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+      format.json { render json: d.pm_codes }
+    end
+  end
 
   def handle_checked
     @tech = current_user
