@@ -14,6 +14,12 @@ class LogsController < ApplicationController
     join_tech = false;
     join_dev = false;
     where_ar = []
+    
+    unless params[:export].nil?
+      days = params[:export].to_i
+      where_ar << "DATEDIFF(CURDATE(), created_at) < #{days}"
+      csv_data = '"Timestamp","Tech","Device CRM ID","Message"' + "\n"
+    end
     if @search_params
       unless @search_params['tech'].nil? or @search_params['tech'].blank?
         search_ar <<  @search_params[:tech]
@@ -36,16 +42,39 @@ class LogsController < ApplicationController
       @logs = Log.order("created_at desc").page(params[:page])
     else
       if (join_tech and join_dev)
-        @logs = Log.joins(:technician, :device).where(search_ar).order("created_at desc").page(params[:page])
+        if params[:export].nil?
+          @logs = Log.joins(:technician, :device).where(search_ar).order("created_at desc").page(params[:page])
+        else
+          @logs = Log.joins(:technician, :device).where(search_ar).order("created_at desc")
+        end
       elsif (join_tech and not join_dev)
-        @logs = Log.joins(:technician).where(search_ar).order("created_at desc").page(params[:page])
+        if params[:export].nil?
+          @logs = Log.joins(:technician).where(search_ar).order("created_at desc").page(params[:page])
+        else
+          @logs = Log.joins(:technician).where(search_ar).order("created_at desc")
+        end
       elsif (not join_tech and join_dev)
-        @logs = Log.joins(:device).where(search_ar).order("created_at desc").page(params[:page])
+        if params[:export].nil?
+          @logs = Log.joins(:device).where(search_ar).order("created_at desc").page(params[:page])
+        else
+          @logs = Log.joins(:device).where(search_ar).order("created_at desc")
+        end
       else
-        @logs = Log.where(search_ar).order("created_at desc").page(params[:page])
+        if params[:export].nil?
+          @logs = Log.where(search_ar).order("created_at desc").page(params[:page])
+        else
+          @logs = Log.where(search_ar).order("created_at desc")
+        end
       end
     end
-    respond_with(@logs)
+    unless params[:export].nil?
+      @logs.each do |a|
+        csv_data += a.to_csv + "\n"
+      end
+      send_data(csv_data, type: "text/csv", filename: "PMPlanner_#{days}days" + Date.today.to_s + ".csv", dispositioin: "attachment")
+    else
+      respond_with(@logs)
+    end
   end
 
   def show

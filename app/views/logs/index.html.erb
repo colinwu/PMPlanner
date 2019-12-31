@@ -15,7 +15,7 @@
   <tbody>
     <tr class=search_fields>
     <%= form_tag logs_url, :method => :get do %>
-      <td></td>
+      <td>Export last <%= submit_tag '', name: 'export', value: 30 %> | <%= submit_tag '', name: 'export', value: 60 %> | <%= submit_tag '', name: 'export', value: 90 %> Days</td>
       <td id="search_tech_cell"><%= text_field_tag "search[tech]", @search_params[:tech], {:size => 10, class: "fixed-width-input"} %></td>
       <td id="search_device_cell"><%= text_field_tag "search[device]", @search_params[:device], {:size => 8, class: "fixed-width-input"} %></td>
       <td id="search_message_cell"><%= text_field_tag "search[message]", @search_params[:message], {:size => 20, class: "variable-width-input"} %></td>
