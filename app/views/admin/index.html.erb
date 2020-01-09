@@ -7,17 +7,16 @@
   <li><%= link_to "List Devices", devices_path %></li>
   <li><%= link_to "List Unassigned Devices", unassigned_devices_path %></li>
   <li><%= link_to "Add new device", new_device_path %></li>
-  <li>Use this form to upload a .CSV file containing a list of devices to be transferred from one technician to another. The records should contain 3 columns: 
-    <ol>
-      <li>The device CRM_ID</li>
-      <li>The primary tech's CRM ID</li>
-      <li>The backup tech's CRM ID</li>
-    </ol>
-    <%= simple_form_for @transfer do |f| %>
-      <%= f.input :tx, as: :file, input_html: {accept: 'text/csv'}  %>
-      <%= f.button :submit,  "Upload"%>
+  <li><%= form_tag transfer_territory_technicians_path, {:id => 'from_select', class: "navbar-form"} do %>
+Transfer devices from 
+      <%= select_tag :from_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), {include_blank: false, class: "form-control"} %>
+  to
+      <%= select_tag :to_tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name), {include_blank: false, class: "form-control"} %>
+
+      <%= submit_tag "Transfer"%>
     <% end %>
   </li>
+  
 </ul>
 
 <h2>Model Functions</h2>

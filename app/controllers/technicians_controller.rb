@@ -3,15 +3,17 @@ class TechniciansController < ApplicationController
   helper_method :sort_column, :sort_direction
   
   def index
+    you_are_here
     if params[:sort].nil? or params[:sort].empty?
       @order = 'first_name'
     else
       @order = params[:sort]
     end
-    if current_user.admin?
-      @page_title = "Technicians"
-      @technicians = Technician.all.joins(:team).order(@order)
-    elsif current_user.manager?
+    # if current_user.admin?
+    #   @page_title = "Technicians"
+    #   @technicians = Technician.all.joins(:team).order(@order)
+    # elsif current_user.manager?
+    if current_user.manager? or current_user.admin?
       @page_title = "My Techs"
       @technicians = current_user.my_techs.joins(:team).order(@order)
     end
@@ -78,7 +80,8 @@ class TechniciansController < ApplicationController
   end
 
   def destroy
-    if current_user.admin?
+    session[:op] = "DELETE"
+    if current_user.admin? or current_user.manager?
       if params[:id] == current_user.id
         flash[:error] = 'You can not delete yourself.'
         redirect_to root_url
@@ -91,7 +94,8 @@ class TechniciansController < ApplicationController
           redirect_to technicians_url
         else
           flash[:alert] = "#{@technician.full_name} still has devices assigned. Please reassign them first."
-          redirect_to technicians_url
+          session[:from_tech_id] = @technician.id
+          redirect_to select_to_technicians_url
         end
       end
     else
@@ -100,6 +104,10 @@ class TechniciansController < ApplicationController
     end
   end
   
+  def select_to
+    @from_tech = Technician.find session[:from_tech_id]
+  end
+
   def act_as
     unless params[:tech_id].blank?
       t = Technician.find(params[:tech_id])
@@ -127,6 +135,25 @@ class TechniciansController < ApplicationController
     redirect_to back_or_go_here(current_user.preference.default_root_path)
   end
   
+  def transfer_territory
+    unless params[:from_tech_id].blank? or params[:to_tech_id].blank?
+      from_tech = Technician.find(params[:from_tech_id])
+      to_tech = Technician.find(params[:to_tech_id])
+      from_tech.primary_devices.each do |d1|
+        d1.update_attributes primary_tech_id: to_tech.id
+      end
+      from_tech.backup_devices.each do |d1|
+        d1.update_attributes backup_tech_id: to_tech.id
+      end
+    end
+    if session[:op] == 'DELETE'
+      fn = from_tech.full_name
+      from_tech.destroy
+      flash[:notice] = "Technician #{fn} successfully deleted."
+    end
+    redirect_to back_or_go_here(admin_path)
+  end
+
   def mark_news_read
     current_user.news.where("activate <= curdate()").each do |n|
       current_user.unreads.where(news_id: n.id).first.destroy

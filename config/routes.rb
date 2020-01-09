@@ -43,6 +43,8 @@ Rails.application.routes.draw do
     end
     collection do
       get 'root_dispatch'
+      post 'transfer_territory'
+      get 'select_to'
       post 'select_territory'
       get 'mark_news_read'
       post 'act_as'

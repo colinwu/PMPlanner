@@ -64,6 +64,7 @@ class ApplicationController < ActionController::Base
   
   def you_are_here
     session[:uri] = request.env['REQUEST_URI']
+    session[:method] = request.env['REQUEST_METHOD']
   end
   
   protected
