@@ -145,11 +145,13 @@ class TechniciansController < ApplicationController
       from_tech.backup_devices.each do |d1|
         d1.update_attributes backup_tech_id: to_tech.id
       end
+      current_user.logs.create(message: "Devices serviced by #{from_tech.full_name} reassigned to #{to_tech.full_name}")
     end
     if session[:op] == 'DELETE'
       fn = from_tech.full_name
       from_tech.destroy
       flash[:notice] = "Technician #{fn} successfully deleted."
+      session[:op] = nil
     end
     redirect_to back_or_go_here(admin_path)
   end
