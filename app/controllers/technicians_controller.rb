@@ -72,7 +72,17 @@ class TechniciansController < ApplicationController
       params[:technician].delete('password')
       params[:technician].delete('password_confirmation')
     end
+    # If the current technician is the manager 
     if @technician.update_attributes(tech_params)
+      if current_user.admin? and @technician.manager?
+        team = @technician.team
+        unless team.manager.nil? or team.manager == @technician
+          current_user.logs.create(message: "#{team.manager.full_name} is no longer manager for #{team.name}")
+          team.manager.update_attributes manager: false
+        end
+        team.update_attributes manager: @technician
+        current_user.logs.create(message: "#{@technician.full_name} is the new manager for #{team.name}")
+      end
       redirect_to technicians_url, :notice  => 'Successfully updated technician.'
     else
       render :action => 'edit'
@@ -151,6 +161,7 @@ class TechniciansController < ApplicationController
       fn = from_tech.full_name
       from_tech.destroy
       flash[:notice] = "Technician #{fn} successfully deleted."
+      current_user.logs.create(message: "Technician #{fn} successfully deleted.")
       session[:op] = nil
     end
     redirect_to back_or_go_here(admin_path)
