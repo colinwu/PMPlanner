@@ -42,7 +42,7 @@ Transfer devices from
   <% if current_user.admin? %>
     <li><%= link_to "News Items", news_index_path %></li>
     <li>
-      <%= form_tag act_as_technicians_path do %>
+      <%= form_tag act_as_technicians_path, class: 'navbar-form' do %>
         <%= label_tag "Pretend to be: " %>
         <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), {include_blank: true, class: "form-control"} %>
         <%= submit_tag "Mask On"%>

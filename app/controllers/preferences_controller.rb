@@ -4,7 +4,11 @@ class PreferencesController < ApplicationController
   def index
     @page_title = "Profiles"
     unless current_user.admin?
-      redirect_to edit_preferences_path(current_technician)
+      if current_technician.nil?
+        @preferences = Preference.all
+      else
+        redirect_to edit_preference_path(current_technician)
+      end
     else
       @preferences = Preference.all
     end
@@ -17,7 +21,7 @@ class PreferencesController < ApplicationController
 
   def new
     unless current_user.admin?
-      redirect_to edit_preferences_path(current_technician), :alert => 'Only admin can create new technician profile.'
+      redirect_to edit_preference_path(current_technician), :alert => 'Only admin can create new technician profile.'
     else
       @preference = Preference.new(
         default_root_path: '/devices/search',
