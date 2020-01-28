@@ -279,7 +279,7 @@ class DevicesController < ApplicationController
       @tech = @device.primary_tech
     end
     if @device and current_user.can_manage?(@device)
-      @reading = @device.readings.build(technician_id: current_technician.id, device_id: @device.id)
+      @reading = @device.readings.build(technician_id: current_user.id, device_id: @device.id)
       @device.pm_codes.each do |code|
         if code.colorclass == 'BW'
           @bw_list << code.name
