@@ -28,8 +28,8 @@
     <th class="<%= session[:mobile] %>">Progress to next PM</th>
     <th class="<%= session[:mobile] %>">Next PM Date</th>
   </tr>
-    <%= hidden_field_tag 'reading[technician_id]', @prev_reading.technician_id %>
-    <%= hidden_field_tag 'reading[device_id]', @prev_reading.device_id %>
+    <%= hidden_field_tag 'reading[technician_id]', @reading.technician_id %>
+    <%= hidden_field_tag 'reading[device_id]', @reading.device_id %>
 
     <% @rows.each do |r| %>
       <tr class=<%= r[0] %>>
