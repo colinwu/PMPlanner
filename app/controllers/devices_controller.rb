@@ -659,10 +659,10 @@ class DevicesController < ApplicationController
       range = tech.preference.upcoming_interval*7
       # toggle to show devices for which the current tech is the backup tech
       if session[:showbackup] == "true"
-        where_ar = ["(devices.primary_tech_id = ? or devices.backup_tech_id = ?) and devices.active is true and devices.under_contract is true and devices.do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
+        where_ar = ["(devices.primary_tech_id = ? or devices.backup_tech_id = ?) and devices.active is true and devices.under_contract is true and devices.do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range}) and earliest_pm_date is not NULL"]
         search_ar = ["",tech.id, tech.id]
       else
-        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range})"]
+        where_ar = ["primary_tech_id = ? and active is true and under_contract is true and do_pm is true and (outstanding_pms.next_pm_date is not NULL and datediff(outstanding_pms.next_pm_date, curdate()) < #{range}) and earliest_pm_date is not NULL"]
         search_ar = ["", tech.id]
       end
       
