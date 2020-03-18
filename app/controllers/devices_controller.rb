@@ -966,7 +966,10 @@ class DevicesController < ApplicationController
   def write_parts_order
     @tech = current_user
     part_list = params[:part]
-    @msg_body = @tech.preference.default_message + "\n\n"
+    @msg_body = @tech.preference.default_message
+ 
+    byebug
+    
     part_list.each do |id,qty|
       p = Part.find id
       @msg_body += "#{qty} X #{p.name} (#{p.description})\n"

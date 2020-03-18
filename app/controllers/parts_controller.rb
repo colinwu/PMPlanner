@@ -20,6 +20,17 @@ class PartsController < ApplicationController
     else
       @parts = Part.page(params[:page]).per_page(lpp)
     end
+    @model_str = Hash.new
+    @parts.each do |part|
+      model_list = []
+      part.parts_for_pms.each do |pfp|
+        pfp.model_group.models.each do |m|
+          model_list << m.nm
+        end
+      end
+      @model_str[part.name] = model_list.join(', ')
+    end
+
     you_are_here
   end
 
