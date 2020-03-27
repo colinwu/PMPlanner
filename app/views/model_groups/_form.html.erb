@@ -12,6 +12,6 @@
     <%= f.label "Colour?" %><br />
     <%= f.select :color_flag, [['Yes',true],['No',false]] %>
   </p>
-  <%= render partial: 'targets', locals: {mg: @model_group} %>
+  <%= render partial: 'targets', locals: {mg: @model_group, ro_flag: false} %>
   <p><%= f.submit %></p>
 <% end %>
