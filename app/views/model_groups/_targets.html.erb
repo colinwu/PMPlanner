@@ -183,6 +183,12 @@
             <%= text_field_tag 'section[PPF]',@section['PPF'], {size:10, placeholder: '22-6 section'} %><br />
             <%= text_field_tag 'label[PPF]',@label['PPF'], {size:15, placeholder: '22-6 label'} %>
           </p>
+          <p id= MC_field>
+            MC<br />
+            <%= text_field_tag 'pm_code[MC]',number_with_delimiter(@pm_code['MC']), {size: 10, placeholder: 'counter'} %><br />
+            <%= text_field_tag 'section[MC]',@section['MC'], {size:10, placeholder: '22-6 section'} %><br />
+            <%= text_field_tag 'label[MC]',@label['MC'], {size:15, placeholder: '22-6 label'} %>
+          </p>
         </td>
       </tr>
     </table>

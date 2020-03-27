@@ -120,10 +120,10 @@ class ModelGroupsController < ApplicationController
   def update
     @model_group = ModelGroup.find(params[:id])
     if @model_group.update_attributes(mg_params)
-      @pm_code = params[:pm_code].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
+      @pm_code = params[:pm_code].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF,:MC).to_h
       @pm_code.each {|c,v| v.gsub!(/[^0-9-]/,'')}
-      @section = params[:section].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
-      @label = params[:label].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF).to_h
+      @section = params[:section].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF,:MC).to_h
+      @label = params[:label].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF,:MC).to_h
       if @pm_code['TA'].empty?
         @pm_code['TA'] = @pm_code['DK'].empty? ? @pm_code['DRC'] : @pm_code['DK']
       end

@@ -18,7 +18,9 @@ if File.exists?(csv_file)
 #     read_attributes_from_file
   end
   
+  Log.create(technician_id: '1', message: "Updatig Equipment Tables from #{csv_file}.")
   r.each do |row|
+    new_model_flag = false
     dev_list << row.crm_objectid
     # Ignore device if no soldtoid
     unless row.soldtoid.nil?
@@ -51,6 +53,7 @@ if File.exists?(csv_file)
 
       m = Model.find_by_nm(row.model)
       if m.nil?
+        new_model_flag = true
         mg = ModelGroup.find_by_name 'OTHERS'
         m = mg.models.create(nm: row.model)
       end
@@ -82,7 +85,7 @@ if File.exists?(csv_file)
           )
         end
       end
-      if dev.nil?
+      if dev.nil?   # new device
         if dev = Device.create(:crm_object_id => row.crm_objectid, 
                           :model_id => m.id,
                           :serial_number => row.serialnumber, 
@@ -104,12 +107,17 @@ if File.exists?(csv_file)
           # dev.create_neglected(next_visit: nil)
           unless dev.valid?
             puts "Device invalid: #{row.crm_objectid}, #{dev.errors.messages}"
+            Log.create(technician_id: 1, message: "Device invalid: #{row.crm_objectid}, #{dev.errors.messages}")
             next
           end
           dev.create_device_stat()
           dev.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
             op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
             op.update_attributes(next_pm_date: Date.today)
+          end
+          dev.logs.create(technician_id: 1, message: "New device added.")
+          if new_model_flag
+            dev.logs.create(technician_id: 1, message: "New model #{row.model} assigned to Model Group 'OTHER'")
           end
         else
           puts "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
@@ -133,11 +141,13 @@ if File.exists?(csv_file)
       end
     end
   end
+
   dev_list_s = dev_list.join(',')
   not_in = Device.where("crm_object_id not in (#{dev_list_s})")
   not_in.each do |d|
     if d.under_contract
       puts "Device #{d.crm_object_id} (s/n #{d.serial_number}) not in current feed. Its current contract status is #{d.under_contract}"
+      d.logs.create(technician_id: 1, message: "Device not in current feed. Its current contract status is #{d.under_contract} - changing to FALSE.")
     end
     d.under_contract = false
     d.save
