@@ -1,6 +1,10 @@
 <div>
   <%= form_tag do_search_devices_path, method: :get, id: 'root_search' do %>
-    <%= hidden_field_tag 'target', 'All' %>
+    <% if current_user.manager? or current_user.admin? %>
+      <%= hidden_field_tag 'target', 'All' %>
+    <% else %>
+      <%= hidden_field_tag 'target', 'Region' %>
+    <% end %>
     <div class="input-group">
       <%= text_field_tag 'search_str', @search_str, class: "form-control", placeholder: "Enter any device attribute; e.g. Any portion of serial number, model name, CRM ID, client name, address, or primary technician's name" %>
       <div class="input-group-btn">

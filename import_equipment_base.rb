@@ -147,10 +147,9 @@ if File.exists?(csv_file)
   not_in.each do |d|
     if d.under_contract
       puts "Device #{d.crm_object_id} (s/n #{d.serial_number}) not in current feed. Its current contract status is #{d.under_contract}"
-      d.logs.create(technician_id: 1, message: "Device not in current feed. Its current contract status is #{d.under_contract} - changing to FALSE.")
+      d.logs.create(technician_id: 1, message: "Device not in current feed. Its current contract status is #{d.crm_under_contract} - changing to FALSE.")
     end
-    d.under_contract = false
-    d.save
+    d.update_attributes(crm_under_contract: false, under_contract: false) 
   end
   puts "There were #{not_in.count} devices not in the current feed."
 else
