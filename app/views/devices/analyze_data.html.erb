@@ -32,11 +32,12 @@
     <%= hidden_field_tag 'reading[device_id]', @reading.device_id %>
 
     <% @rows.each do |r| %>
+      <% target = @device.model.model_group.model_targets.find_by(maint_code: r[1]).target %>
       <tr class=<%= r[0] %>>
         <td><%= r[1].upcase %></td>
         <td class="<%= session[:mobile] %>"><%= r[2] %></td>
         <td class='rightjustify <%= session[:mobile] %>'><span id="prev_<%= r[1].upcase %>"><%= number_with_delimiter(r[3]) %></span></td>
-        <td class='rightjustify'><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify form-control input-sm'} %></td>
+        <td class='rightjustify' title="Counter target: <%= target %>"><%= text_field_tag "counter[#{r[1]}]", number_with_delimiter(r[4]), {class: 'rightjustify form-control input-sm'} %></td>
         <td class="<%= session[:mobile] %>">
           <div class="progress">
             <div class="progress-bar" role="progressbar" style="width:<%= r[5].to_i %>%">

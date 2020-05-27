@@ -46,9 +46,9 @@ class Reading < ApplicationRecord
     ptn1_sec = Hash.new
     model = ''
     sn = ''
-    codes = {'TOTAL OUT(BW):' => 'BWTOTAL'}
+    codes = {}
     counter_column = {0 => 'COUNTER', 1 => 'TURN', 2 => 'DAY', 3 => 'LIFE', 4 => 'REMAIN'}
-    section = {'BWTOTAL' => '22-01'}
+    section = {}
     dev = self.device
     ptn1_dev = nil
     if dev.nil?
@@ -112,6 +112,9 @@ class Reading < ApplicationRecord
           self.notes = "Readings uploaded from #{self.ptn1_file_name} by #{t.friendly_name}."
           self.save
           # generate list of PM codes for this model
+
+          byebug
+          
           dev.model.model_group.model_targets.each do |c|
             unless (c.label.nil? or c.label.strip.empty?)
               codes[c.label] = c.maint_code
@@ -119,10 +122,10 @@ class Reading < ApplicationRecord
             end
           end
           # if it's a colour model add the CTOTAL code
-          if dev.model.model_group.color_flag
-            codes['TOTAL OUT(COL):'] = 'CTOTAL'
-            section['CTOTAL'] = '22-01'
-          end
+          # if dev.model.model_group.color_flag
+          #   codes['TOTAL OUT(COL):'] = 'CTOTAL'
+          #   section['CTOTAL'] = '22-01'
+          # end
         end
         codes.each do |label,name|
           new_label = label.gsub(/[()]/,{'(' => '\(',')' => '\)'})
