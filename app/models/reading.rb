@@ -99,7 +99,7 @@ class Reading < ApplicationRecord
   
     if (seen[:model] and seen[:sn])
       # make sure the 22-6 file is for this device.
-      devs = Device.joins(:model).where(["models.nm = ? and (serial_number = ? or serial_number = ?)", model, sn, "#{sn}R"])
+      devs = Device.joins(:model).where(["models.nm = ? and (serial_number like ?)", model, "#{sn}%"])
       if devs.length == 0
         return "Device specified by 22-6 file not found: #{model}, #{sn}"
       elsif devs.length == 1
@@ -112,9 +112,6 @@ class Reading < ApplicationRecord
           self.notes = "Readings uploaded from #{self.ptn1_file_name} by #{t.friendly_name}."
           self.save
           # generate list of PM codes for this model
-
-          byebug
-          
           dev.model.model_group.model_targets.each do |c|
             unless (c.label.nil? or c.label.strip.empty?)
               codes[c.label] = c.maint_code
