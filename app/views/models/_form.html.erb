@@ -3,7 +3,9 @@
   <%= f.input :nm, label: 'Name', hint: "no spaces or dashes" %>
   <%= f.association :model_group, collection: ModelGroup.all.order(:name).map {|m| [m.name, m.id]} %>
   <p><%= f.submit %></p>
-<p>These counter targets are here only for your information. If you need to modify them do so in the appropriate <%= link_to "Model Group's edit page", edit_model_group_path(@model.model_group) %>.</p>
-  <%= render partial: 'model_groups/targets', locals: {mg: @model.model_group, ro_flag: true} %>
+  <% if not @model.model_group.nil? %>
+    <p>These counter targets are here only for your information. If you need to modify them do so in the appropriate <%= link_to "Model Group's edit page", edit_model_group_path(@model.model_group) %>.</p>
+      <%= render partial: 'model_groups/targets', locals: {mg: @model.model_group, ro_flag: true} %>
+  <% end %>
   
 <% end %>

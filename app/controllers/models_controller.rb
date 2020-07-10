@@ -58,33 +58,9 @@ class ModelsController < ApplicationController
     @model = Model.new(nm: name)
     # Make sure model group exists and is properly associated with the model
     mg_name = params[:model][:model_group_id].empty? ? name : ModelGroup.find(params[:model][:model_group_id]).name
-    @model_group = ModelGroup.find_or_create_by(name: mg_name)
+    @model_group = ModelGroup.find_by(name: mg_name)
     @model.model_group_id = @model_group.id
-    counters = params[:pm_code]
-    sections = params[:section]
-    labels = params[:label]
-    if counters['TA'].empty?
-      counters['TA'] = counters['DK'] || counters['DRC']
-    end
     
-    if (counters['DC'].empty?)
-      @model_group.color_flag = false
-    else
-      if (counters['CA'].empty?)
-        counters['CA'] = counters['DC']
-      end
-      @model_group.color_flag = true
-    end
-    @model_group.save
-    # Update or create model targets
-    counters.keys.each do |c|
-      unless counters[c].empty? and sections[c].empty? and labels[c].empty?
-        val = counters[c].gsub(/[^0-9]/,'')
-        mt = @model_group.model_targets.find_or_create_by(maint_code: c)
-        mt.update_attributes(target: val, section: sections[c], label: labels[c], unit: 'count')
-        mt.save
-      end
-    end
     if @model.save
       redirect_to models_url, :notice => "Successfully created model."
     else
