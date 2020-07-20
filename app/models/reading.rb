@@ -147,10 +147,10 @@ class Reading < ApplicationRecord
             begin
               row = content[line_idx][start_column, column_width]
               line_idx += 1
-            end until (row =~ /#{new_label}\s+([-0-9]+)/ or row =~ /^$/ or row =~ /\(SIM/)
+            end until (row =~ /#{new_label}\s*([-0-9]+)/ or row =~ /^$/ or row =~ /\(SIM/)
             counter = $1.to_i
             if (section[name] == '22-13')
-              if (row =~ /#{new_label}\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9%]+)\s+([-0-9]+)/)
+              if (row =~ /#{new_label}\s*([-0-9]+)\s+([-0-9]+)\s+([-0-9]+)\s+([-0-9%]+)\s+([-0-9]+)/)
                 count_ary = [$1, $2, $3, $4, $5]
                 unit = count_ary[dev.pm_counter_type.to_i] == '--------' ? 0 : dev.pm_counter_type.to_i
                 counter = count_ary[unit].to_i

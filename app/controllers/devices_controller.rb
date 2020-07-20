@@ -231,7 +231,7 @@ class DevicesController < ApplicationController
       dev = @device.to_s
       if @device.destroy
         flash[:notice] = "Successfully removed device record."
-        current_user.logs.create(message: "Deleted device #{dev}")
+        current_user.logs.create(message: "Deleted device #{dev.crm_object_id}")
       else
         flash[:error] = "Could not delete device: #{@device.errors.messages}"
         current_user.logs.create(message: "Could not delete device: #{@device.errors.messages}")
