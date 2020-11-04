@@ -51,6 +51,10 @@ if File.exists?(csv_file)
       end
       dev = Device.find_by_crm_object_id(row.crm_objectid)
 
+      # watch out for '-EMLD' being appended to Emerald models
+      if row.model =~ /-EMLD$/
+        row.model.sub!(/-EMLD/,'')
+      end
       m = Model.find_by_nm(row.model)
       if m.nil?
         new_model_flag = true
@@ -62,9 +66,19 @@ if File.exists?(csv_file)
       if (row.serviceorgid != '61000184' and row.serviceorg != 'Not assigned')
         if primary_tech.nil? and not row.primarytechid.nil?
           puts "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
+        else
+          if !primary_tech.nil? and (primary_tech.team_id != row.serviceorgid.to_i)
+            primary_tech.logs.create(message: "Tech moved from #{primary_tech.team.name} to #{row.serviceorg}")
+            primary_tech.update_attributes(team_id: row.serviceorgid)
+          end
         end
         if backup_tech.nil? and not row.backuptechid.nil?
           puts "Backup tech (#{row.backuptechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
+        else
+          if !backup_tech.nil? and (backup_tech.team_id != row.serviceorgid.to_i)
+            backup_tech.logs.create(message: "Tech moved from #{backup_tech.team.name} to #{row.serviceorg}")
+            backup_tech.update_attributes(team_id: row.serviceorgid)
+          end
         end
       end
       

@@ -99,31 +99,34 @@ class Reading < ApplicationRecord
   
     if (seen[:model] and seen[:sn])
       # make sure the 22-6 file is for this device.
-      devs = Device.joins(:model).where(["models.nm = ? and (serial_number like ?)", model, "#{sn}%"])
-      if devs.length == 0
-        return "Device specified by 22-6 file not found: #{model}, #{sn}"
-      elsif devs.length == 1
-        ptn1_dev = devs.first
-        if ptn1_dev.id != dev.id
-          return "The 22-6 file #{self.ptn1_file_name} is not for this device."
-        else
-          t = Technician.find(self.technician_id)
-          self.taken_at = Date.parse(file_date)
-          self.notes = "Readings uploaded from #{self.ptn1_file_name} by #{t.friendly_name}."
-          self.save
-          # generate list of PM codes for this model
-          dev.model.model_group.model_targets.each do |c|
-            unless (c.label.nil? or c.label.strip.empty?)
-              codes[c.label] = c.maint_code
-              section[c.maint_code] = c.section
-            end
+      # devs = Device.joins(:model).where(["models.nm = ? and (serial_number like ?)", model, "#{sn}%"])
+
+      # if devs.length == 0
+      if dev.model.nm != model or dev.serial_number.slice(0,8) != sn
+        return "Device specified by PTN1 file is not for this device (#{dev.model.nm}, #{model}), (#{dev.serial_number.slice(0,8)}, #{sn})."
+      # elsif devs.length == 1
+      else
+        # ptn1_dev = dev
+        # if ptn1_dev.id != dev.id
+        #   return "The file #{self.ptn1_file_name} is not for this device."
+        # else
+        t = Technician.find(self.technician_id)
+        self.taken_at = Date.parse(file_date)
+        self.notes = "Readings uploaded from #{self.ptn1_file_name} by #{t.friendly_name}."
+        self.save
+        # generate list of PM codes for this model
+        dev.model.model_group.model_targets.each do |c|
+          unless (c.label.nil? or c.label.strip.empty?)
+            codes[c.label] = c.maint_code
+            section[c.maint_code] = c.section
           end
+        end
           # if it's a colour model add the CTOTAL code
           # if dev.model.model_group.color_flag
           #   codes['TOTAL OUT(COL):'] = 'CTOTAL'
           #   section['CTOTAL'] = '22-01'
           # end
-        end
+        # end
         codes.each do |label,name|
           new_label = label.gsub(/[()]/,{'(' => '\(',')' => '\)'})
           if ptn1_sec[section[name]].nil?
@@ -160,9 +163,9 @@ class Reading < ApplicationRecord
           pm = PmCode.find_by name: name
           self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: unit)
         end # codes.each
-        return "22-6 file processed."
-      else
-        return "More than one device with SN #{sn} in the database."
+        return "PTN1 file processed."
+      # else
+      #   return "More than one device with SN #{sn} in the database."
       end
     else
       return "Could not find model and/or serial number in the uploaded file."

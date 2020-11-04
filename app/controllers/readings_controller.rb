@@ -30,7 +30,7 @@ class ReadingsController < ApplicationController
           if @reading.ptn1_file_name
             current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}")
             msg = @reading.process_ptn1
-            if msg == "22-6 file processed."
+            if msg == "PTN1 file processed."
               current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
               @reading.device.update_pm_visit_tables 
               redirect_to back_or_go_here(@reading), notice: 'Reading successfully saved.'
@@ -68,6 +68,7 @@ class ReadingsController < ApplicationController
 
   def destroy
     @reading = Reading.find(params[:id])
+    @reading.device.logs.create(technician_id: current_user.id, message: "Deleted counter data from #{@reading.taken_at}")
     @reading.destroy
     redirect_to back_or_go_here(readings_url)
   end
