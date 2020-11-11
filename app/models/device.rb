@@ -216,4 +216,5 @@ class Device < ApplicationRecord
   def pm_codes
     model.model_group.model_targets.where("maint_code <> 'AMV'").map { |t| PmCode.find_by_name(t.maint_code)}
   end
+
 end
