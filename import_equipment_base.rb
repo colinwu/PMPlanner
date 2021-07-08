@@ -1,10 +1,16 @@
 # Updates Location and Client models in addition to Device.
-puts "\n**** WARNING **** WARNING **** WARNING ****"
-puts "\nThe data file you are using MUST contain ALL devices that currently exist in CRM \nor *** BAD *** things will happen."
-puts "\nDo you want to continue? [y/N]"
-ans = STDIN::getc
-unless ans == 'y' or ans == 'Y'
-  exit
+require 'getopt/std'
+opt = Getopt::Std.getopts('Y')
+if opt['Y']
+  # don't bother asking
+else
+  puts "\n      **** WARNING **** WARNING **** WARNING ****"
+  puts "\nThe data file you are using MUST contain ALL devices that currently exist in CRM \nor *** BAD *** things will happen."
+  puts "\nDo you want to continue? [y/N]"
+  ans = STDIN::getc
+  unless ans == 'y' or ans == 'Y'
+    exit
+  end
 end
 
 csv_file = ARGV.shift
