@@ -36,9 +36,9 @@ if File.exists?(csv_file)
       # find or create the client record
       client = Client.find_by soldtoid: row.soldtoid
       if client.nil?
-        client = Client.create(:name => row.soldtoname, :soldtoid => row.soldtoid)
+        client = Client.create(name: (row.soldtoname || row.addcontactname), soldtoid: row.soldtoid)
       else
-        client.update_attributes(name: row.soldtoname)
+        client.update_attributes(name: (row.soldtoname || row.addcontactname))
       end
       # find or create the location record
       loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id]).first
