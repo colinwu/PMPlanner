@@ -15,7 +15,15 @@ Rails.application.routes.draw do
   resources :logs
   resources :counter_data
   resources :counters
-  resources :readings
+  resources :readings do
+    collection do
+      get 'new_upload'
+    end
+    member do
+      post 'process_upload'
+    end
+  end
+
   resources :model_targets
   
   resources :parts_for_pms do

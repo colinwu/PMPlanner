@@ -14,7 +14,9 @@ class ReadingsController < ApplicationController
   end
 
   def create
+    byebug
     @reading = Reading.new(reading_params)
+    
     if @reading.ptn1_file_name
       if @reading.ptn1_file_name =~ /_(\d+)_PTN/
         fdate = Date.parse($1.slice(0,8))
@@ -28,7 +30,7 @@ class ReadingsController < ApplicationController
         # have to save the instance before we can process the attached file
         if @reading.save
           if @reading.ptn1_file_name
-            current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 fie #{@reading.ptn1_file_name}")
+            current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Processing PTN1 file #{@reading.ptn1_file_name}")
             msg = @reading.process_ptn1
             if msg == "PTN1 file processed."
               current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
@@ -51,6 +53,12 @@ class ReadingsController < ApplicationController
 
   def edit
     @reading = Reading.find(params[:id])
+  end
+
+  def new_upload
+    # This is where techs can upload PTN1 files without having to select a device first.
+    you_are_here
+    @reading = Reading.new(device_id: 1, technician_id: current_user.id)
   end
 
   def update

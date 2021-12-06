@@ -45,6 +45,7 @@
                 <li><%= link_to "PM Status", {controller: '/devices', action: 'analyze_data', id: @device}, id: "analyze_data_menu" %></li>
                 <li><%= link_to "PM History", {controller: "/devices", action: 'service_history', id: @device}, id: "service_history_menu" %></li>
               <% end %>
+              <li><%= link_to "Upload PTN1 files", new_upload_readings_path, id: 'new_upload' %></li>
               <% if not current_user.nil? and (current_user.admin? or current_user.manager?) %>
                 <li><%= link_to "My Team", technicians_path, id: "team_menu" %></li>
                 <li>

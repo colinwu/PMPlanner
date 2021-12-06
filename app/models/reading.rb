@@ -54,7 +54,7 @@ class Reading < ApplicationRecord
     if dev.nil?
       return "#{params[:reading][:devie_id]} is not a valid device."
     end
-    
+
     ptn1_file = self.ptn1.path
     ptn1_file =~ /_(\d+)_PTN/
     file_date = $1.slice(0,8)
@@ -101,12 +101,17 @@ class Reading < ApplicationRecord
       # make sure the 22-6 file is for this device.
       # devs = Device.joins(:model).where(["models.nm = ? and (serial_number like ?)", model, "#{sn}%"])
 
-      # if devs.length == 0
-      if dev.model.nm != model or dev.serial_number.slice(0,8) != sn
-        return "Device specified by PTN1 file is not for this device (#{dev.model.nm}, #{model}), (#{dev.serial_number.slice(0,8)}, #{sn})."
+      # if device is not the template, and model or sn not the same as those specified in the file
+      if dev.id != 1 and (dev.model.nm != model or dev.serial_number.slice(0,8) != sn)
+        return "Device specified by PTN1 file is not for this device (#{dev.model.nm} vs #{model}), (#{dev.serial_number.slice(0,8)} vs #{sn})."
       # elsif devs.length == 1
-      else
-        # ptn1_dev = dev
+      elsif dev.id == 1 or (dev.model.nm == model and dev.serial.slice(0,8) == sn)
+        ptn1_dev = Device.joins(:model).where("models.nm = '#{model}' and serial_number = '#{sn}'")
+        if ptn1_dev.empty?
+          return "The device for this PTN1 file is not in the database."
+        end
+        dev = ptn1_dev.first
+        self.device_id = dev.id
         # if ptn1_dev.id != dev.id
         #   return "The file #{self.ptn1_file_name} is not for this device."
         # else
@@ -164,8 +169,8 @@ class Reading < ApplicationRecord
           self.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: unit)
         end # codes.each
         return "PTN1 file processed."
-      # else
-      #   return "More than one device with SN #{sn} in the database."
+      else
+        return "Unanticipated problem occured. Please report this to your manager."
       end
     else
       return "Could not find model and/or serial number in the uploaded file."

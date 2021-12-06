@@ -27,8 +27,9 @@ group :test do
 end
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem 'sass-rails'
+# group :assets do
+  gem 'sassc-rails'
+#  gem 'sass-rails'
   gem 'coffee-rails'
   gem 'turbolinks', '~> 5'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -36,7 +37,7 @@ group :assets do
   gem 'mini_racer', platforms: :ruby
   gem 'uglifier'
   gem 'bootstrap-sass'
-end
+# end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
