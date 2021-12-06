@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.10.2'
+lock '3.16.0'
 
 set :application, 'PMPlanner'
 set :repo_url, 'https://github.com/colinwu/PMPlanner.git'
