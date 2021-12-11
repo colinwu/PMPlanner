@@ -38,7 +38,7 @@ if File.exists?(csv_file)
       if client.nil?
         client = Client.create(name: (row.soldtoname || row.addcontactname), soldtoid: row.soldtoid)
       else
-        client.update_attributes(name: (row.soldtoname || row.addcontactname))
+        client.update(name: (row.soldtoname || row.addcontactname))
       end
       # find or create the location record
       loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id]).first
@@ -75,7 +75,7 @@ if File.exists?(csv_file)
         else
           # if !primary_tech.nil? and (primary_tech.team_id != row.serviceorgid.to_i)
           #   primary_tech.logs.create(message: "Tech moved from #{primary_tech.team.name} to #{row.serviceorg}")
-          #   primary_tech.update_attributes(team_id: row.serviceorgid)
+          #   primary_tech.update(team_id: row.serviceorgid)
           # end
         end
         if backup_tech.nil? and not row.backuptechid.nil?
@@ -83,7 +83,7 @@ if File.exists?(csv_file)
         else
           # if !backup_tech.nil? and (backup_tech.team_id != row.serviceorgid.to_i)
           #   backup_tech.logs.create(message: "Tech moved from #{backup_tech.team.name} to #{row.serviceorg}")
-          #   backup_tech.update_attributes(team_id: row.serviceorgid)
+          #   backup_tech.update(team_id: row.serviceorgid)
           # end
         end
       end
@@ -133,7 +133,7 @@ if File.exists?(csv_file)
           dev.create_device_stat()
           dev.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
             op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
-            op.update_attributes(next_pm_date: Date.today)
+            op.update(next_pm_date: Date.today)
           end
           dev.logs.create(technician_id: 1, message: "New device added.")
           if new_model_flag
@@ -143,7 +143,7 @@ if File.exists?(csv_file)
           puts "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
         end
       else # if the device is already in the db
-        dev.update_attributes(:crm_object_id => row.crm_objectid, 
+        dev.update(:crm_object_id => row.crm_objectid, 
                               :model_id => m.id,
                               :serial_number => row.serialnumber, 
                               :location_id => loc.id,
@@ -169,7 +169,7 @@ if File.exists?(csv_file)
       puts "Device #{d.crm_object_id} (s/n #{d.serial_number}) not in current feed. Its current contract status is #{d.under_contract}"
       d.logs.create(technician_id: 1, message: "Device not in current feed. Its current contract status is #{d.crm_under_contract} - changing to FALSE.")
     end
-    d.update_attributes(crm_under_contract: false, under_contract: false) 
+    d.update(crm_under_contract: false, under_contract: false) 
   end
   puts "There were #{not_in.count} devices not in the current feed."
 else

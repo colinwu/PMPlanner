@@ -162,7 +162,7 @@ class DevicesController < ApplicationController
       @device.create_device_stat()
       @device.model.model_group.model_targets.where("maint_code <> 'AMV' and target > 0").each do |t|
         op = OutstandingPm.find_or_create_by(device_id: @device.id, code: t.maint_code)
-        op.update_attributes(next_pm_date: params[:first_visit])
+        op.update(next_pm_date: params[:first_visit])
       end
       redirect_to back_or_go_here(edit_device_url(@device))
     else
@@ -206,7 +206,7 @@ class DevicesController < ApplicationController
       params[:device][:location_id] = loc.id
     end
     params[:device].delete('model_nm')
-    if @device.update_attributes(device_params)
+    if @device.update(device_params)
       current_user.logs.create(device_id: @device.id, message: "Updated device with #{params[:device].inspect}")
       flash[:alert] = nil
       flash[:error] = nil
@@ -608,10 +608,10 @@ class DevicesController < ApplicationController
       unless params[:to_tech_id].blank? and Technician.exists?(to_tech_id)
         @devices.each do |dev|
           if dev.primary_tech_id == from_tech.id
-            dev.update_attributes(primary_tech_id: to_tech_id)
+            dev.update(primary_tech_id: to_tech_id)
             current_user.logs.create(message: "Device s/n #{dev.serial_number} transfered to #{Technician.find(to_tech_id).friendly_name} as primary.")
           elsif dev.backup_tech_id = from_tech.id
-            dev.update_attributes(backup_tech_id: to_tech_id)
+            dev.update(backup_tech_id: to_tech_id)
             current_user.logs.create(message: "Device s/n #{dev.serial_number} transfered to #{Technician.find(to_tech_id).friendly_name} as backup.")
           else
             flash[:error] = "Device s/n #{dev.serial_number} was not assigned to #{from_tech} as either primary or backup."
@@ -799,7 +799,7 @@ class DevicesController < ApplicationController
     @device = Device.find(params[:id])
     taken_at = Date.parse(params[:reading][:taken_at])
     @reading = @device.readings.find_or_create_by(taken_at: taken_at)
-    @reading.update_attributes(params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1))
+    @reading.update(params.require(:reading).permit(:taken_at, :notes, :device_id, :technician_id, :ptn1))
     flash[:alert] = ''
     params[:counter].each do |code,value|
       p = PmCode.find_by_name(code)
@@ -809,7 +809,7 @@ class DevicesController < ApplicationController
           v = 0  # if value is empty make it zero
         end
         c = @reading.counters.find_or_create_by(pm_code_id: p.id)
-        c.update_attributes!(value: v, unit: @device.pm_counter_type)
+        c.update!(value: v, unit: @device.pm_counter_type)
       rescue
         flash[:alert] = "Error saving counter for #{p.name}. Value = #{v}"
         current_user.logs.create(device_id: @device.id, message: "Error saving counter for #{p.name}. Value = #{value}")
@@ -969,8 +969,6 @@ class DevicesController < ApplicationController
     part_list = params[:part]
     @msg_body = @tech.preference.default_message
  
-    byebug
-    
     part_list.each do |id,qty|
       p = Part.find id
       @msg_body += "#{qty} X #{p.name} (#{p.description})\n"

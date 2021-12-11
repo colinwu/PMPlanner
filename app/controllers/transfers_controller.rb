@@ -53,7 +53,7 @@ class TransfersController < ApplicationController
             end
           end
           
-          dev.update_attributes(primary_tech_id: pt.id, backup_tech_id: bt.try(:id))
+          dev.update(primary_tech_id: pt.id, backup_tech_id: bt.try(:id))
         end
       else
         current_user.logs.create(message: "Can't open transfer file #{@transfer.tx_file_name}")

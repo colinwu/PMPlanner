@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails'
+gem 'rails', '~> 6.1.4.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -49,7 +49,7 @@ gem 'net-ldap'
 # gem 'protected_attributes', '~> 1.0.8'
 # gem 'jquery-datetimepicker-rails'
 # gem 'rails4-autocomplete'
-gem 'best_in_place'
+gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
 gem "paperclip"
 gem 'activerecord-session_store'
 

@@ -89,7 +89,7 @@ class ModelGroupsController < ApplicationController
       unless @pm_code[c].empty? and @section[c].empty? and @label[c].empty?
         val = @pm_code[c].gsub(/[^0-9]/,'')
         mt = @model_group.model_targets.find_or_create_by(maint_code: c)
-        mt.update_attributes(target: val, section: @section[c], label: @label[c], unit: 'count')
+        mt.update(target: val, section: @section[c], label: @label[c], unit: 'count')
         mt.save
       end
     end
@@ -119,7 +119,7 @@ class ModelGroupsController < ApplicationController
 
   def update
     @model_group = ModelGroup.find(params[:id])
-    if @model_group.update_attributes(mg_params)
+    if @model_group.update(mg_params)
       @pm_code = params[:pm_code].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF,:MC).to_h
       @pm_code.each {|c,v| v.gsub!(/[^0-9-]/,'')}
       @section = params[:section].permit(:BWTOTAL,:CTOTAL,:TA,:CA,:MREQ,:AA,:DK,:DC,:DM,:DY,:DRC,:VK,:VC,:VM,:VY,:DVC,:TK,:TK1,:TK2,:TK3,:TK4,:FK,:FK1,:FK2,:FK3,:FK4,:SPF,:PPF,:MC).to_h
@@ -141,7 +141,7 @@ class ModelGroupsController < ApplicationController
         unless @pm_code[c].empty? and @section[c].empty? and @label[c].empty?
           val = @pm_code[c].gsub(/[^0-9]/,'')
           mt = @model_group.model_targets.find_or_create_by(maint_code: c)
-          mt.update_attributes(target: val, section: @section[c], label: @label[c], unit: 'count')
+          mt.update(target: val, section: @section[c], label: @label[c], unit: 'count')
           mt.save
         end
         if @pm_code[c].empty?

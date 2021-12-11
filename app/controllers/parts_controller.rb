@@ -60,7 +60,7 @@ class PartsController < ApplicationController
 
   def update
     @part = Part.find(params[:id])
-    if @part.update_attributes(part_params)
+    if @part.update(part_params)
       redirect_to @part, notice: 'Successfully updated part.'
     else
       render :action => 'edit'

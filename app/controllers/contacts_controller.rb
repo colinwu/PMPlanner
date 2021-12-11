@@ -80,7 +80,7 @@ class ContactsController < ApplicationController
 
   def update
     @contact = Contact.find(params[:id])
-    if @contact.update_attributes(contact_params)
+    if @contact.update(contact_params)
       redirect_to contacts_url, notice: 'Successfully updated contact.'
     else
       render :action => 'edit'

@@ -83,7 +83,7 @@ class PartsForPmsController < ApplicationController
 
   def update
     @parts_for_pm = PartsForPm.find(params[:id])
-    if @parts_for_pm.update_attributes(parts_for_pm_params)
+    if @parts_for_pm.update(parts_for_pm_params)
       redirect_to @parts_for_pm, :notice  => "Successfully updated parts for pm."
     else
       render :action => 'edit'

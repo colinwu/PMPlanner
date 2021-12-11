@@ -73,14 +73,14 @@ class TechniciansController < ApplicationController
       params[:technician].delete('password_confirmation')
     end
     # If the current technician is the manager 
-    if @technician.update_attributes(tech_params)
+    if @technician.update(tech_params)
       if current_user.admin? and @technician.manager?
         team = @technician.team
         unless team.manager.nil? or team.manager == @technician
           current_user.logs.create(message: "#{team.manager.full_name} is no longer manager for #{team.name}")
-          team.manager.update_attributes manager: false
+          team.manager.update manager: false
         end
-        team.update_attributes manager: @technician
+        team.update manager: @technician
         current_user.logs.create(message: "#{@technician.full_name} is the new manager for #{team.name}")
       end
       redirect_to technicians_url, :notice  => 'Successfully updated technician.'
@@ -150,10 +150,10 @@ class TechniciansController < ApplicationController
       from_tech = Technician.find(params[:from_tech_id])
       to_tech = Technician.find(params[:to_tech_id])
       from_tech.primary_devices.each do |d1|
-        d1.update_attributes primary_tech_id: to_tech.id
+        d1.update primary_tech_id: to_tech.id
       end
       from_tech.backup_devices.each do |d1|
-        d1.update_attributes backup_tech_id: to_tech.id
+        d1.update backup_tech_id: to_tech.id
       end
       current_user.logs.create(message: "Devices serviced by #{from_tech.full_name} reassigned to #{to_tech.full_name}")
     end

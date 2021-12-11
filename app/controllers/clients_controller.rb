@@ -48,7 +48,7 @@ class ClientsController < ApplicationController
 
   def update
     @client = Client.find(params[:id])
-    if @client.update_attributes(client_params)
+    if @client.update(client_params)
       redirect_to clients_path, notice: 'Successfully updated client.'
     else
       render action: 'edit'

@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
   def create
     username = params[:username]
+    # byebug
     tech = Technician.find_by_sharp_name(username)
     if tech
       ldap = Net::LDAP.new
@@ -19,7 +20,7 @@ class SessionsController < ApplicationController
         if ldap.bind
           session[:user] = tech.id
           session[:active_at] = Time.now
-          current_user.update_attributes(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
+          current_user.update(current_sign_in_at: Time.now, current_sign_in_ip: request.env['REMOTE_ADDR'])
           current_user.logs.create(message: "Logged in from #{request.env['REMOTE_ADDR']}")
           unless current_user.admin? or current_user.manager?
             session[:tech] = tech.id
@@ -45,7 +46,7 @@ class SessionsController < ApplicationController
 
   def destroy
     current_user.logs.create(message: "Logged out")
-    current_user.update_attributes(last_sign_in_at: current_user.current_sign_in_at)
+    current_user.update(last_sign_in_at: current_user.current_sign_in_at)
 #     session[:tech] = nil
 #     session[:act_as] = nil
 #     session[:active_at] = nil

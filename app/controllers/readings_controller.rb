@@ -14,7 +14,6 @@ class ReadingsController < ApplicationController
   end
 
   def create
-    byebug
     @reading = Reading.new(reading_params)
     
     if @reading.ptn1_file_name
@@ -35,6 +34,9 @@ class ReadingsController < ApplicationController
             if msg == "PTN1 file processed."
               current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Counters saved from #{@reading.ptn1_file_name}.")
               @reading.device.update_pm_visit_tables 
+              # PTN1 file successfully processed - now can delete it
+              @reading.ptn1 = nil
+              @reading.save
               redirect_to back_or_go_here(@reading), notice: 'Reading successfully saved.'
             else
               current_user.logs.create(device_id: @reading.device.crm_object_id, message: "Encountered an error processing #{@reading.ptn1_file_name}: #{msg}.")
@@ -64,7 +66,7 @@ class ReadingsController < ApplicationController
   def update
     @reading = Reading.find(params[:id])
     respond_to do |format|
-      if @reading.update_attributes(reading_params)
+      if @reading.update(reading_params)
         format.html {redirect_to @reading, notice: 'Successfully updated reading.'}
         format.json {respond_with_bip(@reading)}
       else

@@ -101,7 +101,7 @@ class LocationsController < ApplicationController
 
   def update
     @location = Location.find(params[:id])
-    if @location.update_attributes(location_params)
+    if @location.update(location_params)
       current_user.logs.create(message: "Location updated: " + @location.inspect)
       flash[:notice]  = "Successfully updated location."
       redirect_to back_or_go_here(locations_url) 

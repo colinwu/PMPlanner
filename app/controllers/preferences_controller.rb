@@ -57,7 +57,7 @@ class PreferencesController < ApplicationController
 
   def update
     @preference = Preference.find(params[:id])
-    if @preference.update_attributes(preference_params)
+    if @preference.update(preference_params)
       current_user.logs.create(message: "Preference data updated: #{params[:preference].inspect}")
       session[:mobile] = @preference.mobile ? 'hidden-xs' : ''
       redirect_to @preference.default_root_path

@@ -117,11 +117,11 @@ class ModelsController < ApplicationController
       unless counters[c].empty? and sections[c].empty? and labels[c].empty?
         val = counters[c].gsub(/[^0-9]/,'')
         mt = @model_group.model_targets.find_or_create_by(maint_code: c)
-        mt.update_attributes(target: val, section: sections[c], label: labels[c], unit: 'count')
+        mt.update(target: val, section: sections[c], label: labels[c], unit: 'count')
         mt.save
       end
     end
-    if @model.update_attributes(model_params)
+    if @model.update(model_params)
       redirect_to models_url, :notice  => "Successfully updated model."
     else
       render :action => 'edit'

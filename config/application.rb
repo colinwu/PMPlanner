@@ -18,5 +18,6 @@ module PmPlanner
     config.encoding = "utf-8"
     config.active_support.escape_html_entities_in_json = true
     config.assets.enabled = true
+    # config.assets.precompile = ["manifest.js"]
   end
 end

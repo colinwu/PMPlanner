@@ -34,7 +34,7 @@ class Reading < ApplicationRecord
     end
   end
   
-  # Parse uploaded 22-6 file
+  # Parse uploaded PTN1 file
   Sec = Struct.new(:line, :c_start, :len)
   def process_ptn1
     # seen = Hash.new(date: false, model: false, sn: false)
