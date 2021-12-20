@@ -79,9 +79,9 @@ class Device < ApplicationRecord
           vpy = 2.0
         end
       end
-      ds.update_attributes(bw_monthly: bw_monthly, c_monthly: c_monthly, bw_daily: bw_daily, c_daily: c_daily, vpy: vpy)
+      ds.update(bw_monthly: bw_monthly, c_monthly: c_monthly, bw_daily: bw_daily, c_daily: c_daily, vpy: vpy)
     else
-      ds.update_attributes(bw_monthly: 0, c_monthly: 0, bw_daily: 0, c_daily: 0, vpy: 2.0)
+      ds.update(bw_monthly: 0, c_monthly: 0, bw_daily: 0, c_daily: 0, vpy: 2.0)
     end
     return ds
   end
@@ -117,10 +117,10 @@ class Device < ApplicationRecord
       visit_interval = 365 / vpy
       next_pm_date = prev_reading.taken_at + visit_interval.round
       op = OutstandingPm.find_or_create_by(device_id: id, code: 'BWTOTAL')
-      op.update_attributes(next_pm_date: next_pm_date)
+      op.update(next_pm_date: next_pm_date)
       if model.model_group.color_flag
         op = OutstandingPm.find_or_create_by(device_id: id, code: 'CTOTAL')
-        op.update_attributes(next_pm_date: next_pm_date)
+        op.update(next_pm_date: next_pm_date)
       end
       ###
       # Now calculate stuff for all the other PM codes
@@ -150,18 +150,18 @@ class Device < ApplicationRecord
           end
           next_pm_date = now + 366 if next_pm_date > now + 366
           op = OutstandingPm.find_or_create_by(device_id: id, code: c)
-          op.update_attributes(next_pm_date: next_pm_date)
+          op.update(next_pm_date: next_pm_date)
         end # unless target.nil? or target.target == 0
       end # codes_list.each do |c|
       if outstanding_pms.where('next_pm_date is not NULL').empty?
         # basically, no outstanding PMs so just schedule the next PM based on vpy
-        outstanding_pms.update_attributes(code: 'BWTOTAL', next_pm_date: (prev_reading.taken_at + visit_interval.round))
+        outstanding_pms.update(code: 'BWTOTAL', next_pm_date: (prev_reading.taken_at + visit_interval.round))
       end
     else # no previous readings, so no stats and no outstanding_pms; go visit asap
       op = OutstandingPm.find_or_create_by(device_id: id, code: 'BWTOTAL')
-      op.update_attributes(next_pm_date: Date.today)
+      op.update(next_pm_date: Date.today)
     end
-    self.update_attributes(earliest_pm_date: self.pm_date)
+    self.update(earliest_pm_date: self.pm_date)
   end
 
   def last_non_zero_reading_on_or_before(date = Date.today, code = 'BWTOTAL')

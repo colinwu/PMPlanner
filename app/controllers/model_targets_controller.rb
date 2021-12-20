@@ -54,7 +54,7 @@ class ModelTargetsController < ApplicationController
   def update
     @model_target = ModelTarget.find(params[:id])
     respond_to do |format|
-      if @model_target.update_attributes(mt_params)
+      if @model_target.update(mt_params)
         current_user.logs.create(message: "Model target for #{@model_target.model_group.name}, #{@model_target.maint_code} updated.")
         format.html {redirect_to back_or_go_here(model_target_url), notice: 'Successfully updated model target.'}
         format.json {respond_with_bip(@model_target)}

@@ -33,7 +33,7 @@ class PmCodesController < ApplicationController
   def update
     @pm_code = PmCode.find(params[:id])
     respond_to do |format|
-      if @pm_code.update_attributes(pm_code_params)
+      if @pm_code.update(pm_code_params)
         format.html {redirect_to @pm_code, :notice  => "Successfully updated pm code."}
         format.json {respond_with_bip(@pm_code)}
       else

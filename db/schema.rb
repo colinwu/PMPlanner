@@ -2,17 +2,17 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2019_02_04_145948) do
 
-  create_table "clients", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "clients", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "address"
     t.string "city"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.integer "soldtoid"
   end
 
-  create_table "contacts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "contacts", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "phone1"
     t.string "phone2"
@@ -37,12 +37,12 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.integer "crm_object_id"
   end
 
-  create_table "contacts_devices", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "contacts_devices", id: false, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "contact_id"
     t.integer "device_id"
   end
 
-  create_table "counters", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "counters", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.string "unit"
   end
 
-  create_table "device_stats", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "device_stats", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.float "c_monthly"
     t.float "bw_monthly"
     t.float "vpy", default: 2.0
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.float "c_daily"
   end
 
-  create_table "devices", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "devices", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "crm_object_id"
     t.integer "model_id"
     t.integer "client_id"
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.boolean "crm_do_pm"
   end
 
-  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "locations", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "address1"
     t.string "address2"
     t.string "city"
@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.integer "team_id"
   end
 
-  create_table "logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "logs", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "technician_id"
     t.integer "device_id"
     t.text "message"
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "model_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "model_groups", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.datetime "created_at", null: false
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.boolean "color_flag"
   end
 
-  create_table "model_targets", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "model_targets", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "maint_code"
     t.integer "target"
     t.integer "model_group_id"
@@ -129,21 +129,21 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.string "section"
   end
 
-  create_table "models", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "models", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "nm"
     t.integer "model_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "neglecteds", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "neglecteds", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "device_id"
     t.date "next_visit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "news", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "news", id: :integer, charset: "latin1", force: :cascade do |t|
     t.text "note"
     t.date "activate"
     t.boolean "urgent"
@@ -152,7 +152,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.boolean "show_flag", default: true
   end
 
-  create_table "outstanding_pms", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "outstanding_pms", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "device_id"
     t.string "code"
     t.date "next_pm_date"
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "parts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "parts", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.float "price"
@@ -169,7 +169,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "parts_for_pms", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "parts_for_pms", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "model_group_id"
     t.integer "pm_code_id"
     t.integer "choice"
@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at"
   end
 
-  create_table "pm_codes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "pm_codes", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.string "colorclass"
@@ -187,7 +187,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "preferences", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "preferences", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.text "default_notes"
     t.string "default_units_to_show"
     t.integer "upcoming_interval"
@@ -208,7 +208,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.boolean "mobile", default: true
   end
 
-  create_table "reading_targets", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "reading_targets", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "target"
     t.integer "model_group_id"
     t.integer "counter_id"
@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at"
   end
 
-  create_table "readings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "readings", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.date "taken_at"
     t.string "notes"
     t.integer "device_id"
@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "ptn1_updated_at"
   end
 
-  create_table "sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "sessions", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
     t.datetime "created_at"
@@ -239,7 +239,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "teams", primary_key: "team_id", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "teams", primary_key: "team_id", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.integer "manager_id"
   end
 
-  create_table "technicians", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "technicians", id: :integer, charset: "utf8", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.integer "team_id"
     t.string "first_name"
     t.string "last_name"
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.date "sent_date"
   end
 
-  create_table "transfers", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "transfers", charset: "latin1", force: :cascade do |t|
     t.string "tx_file_name"
     t.string "tx_type"
     t.integer "tx_file_size"
@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_145948) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "unreads", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "unreads", id: :integer, charset: "latin1", force: :cascade do |t|
     t.integer "technician_id"
     t.integer "news_id"
     t.index ["news_id"], name: "index_unreads_on_news_id"

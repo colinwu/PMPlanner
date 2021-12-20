@@ -81,7 +81,7 @@
       <div id="header">
         <div id="flash_area">
           <% flash.each do |name, msg| %>
-            <%= content_tag :div, msg, :id => "flash_#{name}" %>
+            <%= content_tag :div, msg, {:id => "flash_#{name}"}, false %>
           <% end %>
         </div>
       </div> <!-- header -->

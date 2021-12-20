@@ -1,0 +1,5 @@
+<h2>File Upload</h2>
+<%= form_with url: "/admin/upload", multipart: true do |form| %>
+  <%= form.file_field :megan %>
+  <%= form.submit "Upload" %>
+<% end %>

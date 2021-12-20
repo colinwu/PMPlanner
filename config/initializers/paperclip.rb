@@ -1,3 +1,3 @@
-Paperclip.options[:content_type_mappings] = {
-  txt: %w(application/octet-stream)
-}
+# Paperclip.options[:content_type_mappings] = {
+#   txt: %w(application/octet-stream)
+# }

@@ -50,7 +50,7 @@ gem 'net-ldap'
 # gem 'jquery-datetimepicker-rails'
 # gem 'rails4-autocomplete'
 gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
-gem "paperclip"
+# gem "paperclip"
 gem 'activerecord-session_store'
 
 # To use ActiveModel has_secure_password
