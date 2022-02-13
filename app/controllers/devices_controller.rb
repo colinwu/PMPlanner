@@ -713,20 +713,20 @@ class DevicesController < ApplicationController
         end
         
         if (sort_direction == 'desc')
-          @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.includes(:outstanding_pms, :model).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.reverse.paginate(page: params[:page], per_page: lpp)
         else
-          @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.includes(:outstanding_pms, :model).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.earliest_pm_date}.paginate(page: params[:page], per_page: lpp)
         end
         @dev_list.each do |d|
-          pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
-          @code_date[d.id] = pm_list.order("next_pm_date ASC").first.next_pm_date
+          pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}").order("next_pm_date ASC")
+          @code_date[d.id] = pm_list.first.next_pm_date
           @code_count[d.id] = pm_list.length
         end
       elsif (sort_column == 'pm_count')
         if (sort_direction == 'desc')
-          @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}").length}.reverse.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.includes(:outstanding_pms, :model).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}").length}.reverse.paginate(page: params[:page], per_page: lpp)
         else
-          @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}").length}.paginate(page: params[:page], per_page: lpp)
+          @dev_list = Device.includes(:outstanding_pms, :model).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).group("devices.id").sort_by{|d| d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}").length}.paginate(page: params[:page], per_page: lpp)
         end
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
@@ -734,7 +734,7 @@ class DevicesController < ApplicationController
           @code_count[d.id] = pm_list.length
         end
       else
-        @dev_list = Device.includes(:primary_tech, :outstanding_pms, :client, :model, :location).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).group(:id).page(params[:page]).per_page(lpp)
+        @dev_list = Device.includes(:outstanding_pms, :model).joins(:primary_tech, :outstanding_pms, :client, :model, :location).where(search_ar).order(@order).references(:clients, :models, :locations).group(:id).page(params[:page]).per_page(lpp)
         @dev_list.each do |d|
           pm_list = d.outstanding_pms.where("next_pm_date is not NULL and datediff(next_pm_date, curdate()) < #{range}")
           @code_date[d.id] = pm_list.empty? ? d.neglected.next_visit : pm_list.order("next_pm_date ASC").first.next_pm_date
@@ -867,20 +867,11 @@ class DevicesController < ApplicationController
     @page_title = "PM History"
     session[:search_caller] = request.path_parameters[:action]
     you_are_here
-    begin
-      @device = Device.find(params[:id])
-    rescue
-      @device = nil
-    end
-    if @device.nil?
-      flash[:alert] = "No valid device specified."
-      render "service_history"
-      return
-    end
     
-    if @device and current_user.can_manage?(@device)      
+    if(@device = Device.find(params[:id])) and current_user.can_manage?(@device)
+      @reading = Reading.new(device_id: @device.id)
       @last_reading = @device.readings.order(:taken_at).last
-      @reading = @device.readings.build(technician_id: current_user.id)
+      # @reading = @device.readings.build(technician_id: current_user.id)
       if @device.device_stat.nil?
         stats = @device.calculate_stats
       else
@@ -891,9 +882,18 @@ class DevicesController < ApplicationController
       @c_monthly = stats[:c_monthly]
       @vpy = stats[:vpy]
       
-      @readings = @device.readings.order(taken_at: :desc)
+      @readings = @device.readings.includes(:counters).order(taken_at: :desc)
+      @readings_h = Hash.new
+      @readings.each do |r|
+        counters_h = Hash.new
+        r.counters.each do |c|
+          counters_h[c.name] = c
+        end
+        @readings_h[r.id] = counters_h
+      end
+
       @all_codes = @device.model.model_group.model_targets.map do |t|
-        if !t.target.nil? and t.target > 0
+        unless t.label.nil? or t.label.empty? or t.maint_code == 'BWTOTAL' or t.maint_code == 'CTOTAL'
           t.maint_code
         end
       end

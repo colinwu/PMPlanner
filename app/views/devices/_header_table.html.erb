@@ -17,10 +17,11 @@
         <% unless @reading.nil? %>
           <% unless @reading.device.model.model_group.model_targets.where("maint_code = 'DK' or maint_code = 'MREQ'").first.label.nil? %>
             <%= form_for @reading do |f| %>
-              <%= f.label "Upload 22-6 file for this device" %>
+              <%= f.label "Upload PTN1 file for this device" %>
               <%= f.file_field :ptn1 %>
               <%= f.hidden_field :device_id, { value: @reading.device_id } %>
-              <%= f.hidden_field :technician_id, { value: @reading.technician_id} %>
+              <%= f.hidden_field :technician_id, { value: current_user.id} %>
+              <br />
               <%= f.submit "Upload" %>
             <% end %>
           <% end %>

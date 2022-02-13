@@ -12,6 +12,7 @@ gem 'json'
 
 group :development, :test do
   # do rails generate rspec:install after initial install
+  gem 'scout_apm'
   gem 'rspec-rails'
   gem 'railroady'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -50,7 +51,7 @@ gem 'net-ldap'
 # gem 'jquery-datetimepicker-rails'
 # gem 'rails4-autocomplete'
 gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
-# gem "paperclip"
+gem "paperclip"
 gem 'activerecord-session_store'
 
 # To use ActiveModel has_secure_password
@@ -66,6 +67,8 @@ gem 'capistrano-bundler'
 gem 'capistrano-rails'
 gem 'capistrano-passenger'
 gem 'rvm1-capistrano3', require: false
+gem 'ed25519'
+gem 'bcrypt_pbkdf'
 
 # Deploy with Capistrano
 group :development do

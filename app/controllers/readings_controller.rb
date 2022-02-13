@@ -153,7 +153,7 @@ class ReadingsController < ApplicationController
             end
           end
           pm = PmCode.find_by name: name
-          @reading.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: unit)
+          @reading.counters.find_or_create_by(pm_code_id: pm.id, value: counter, unit: unit, name: name)
         end # codes.each
       else # if (r_params['ptn1'].original_filename)
         msg = "Supplied file (#{r_params['ptn1'].original_filename}) is not a PTN1 file."
