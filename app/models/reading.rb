@@ -13,10 +13,10 @@ class Reading < ApplicationRecord
   # validates :taken_at, uniqueness: true
   
   def counter_for(code)
-    c = self.counters.find_by name: code
+    c = self.counters.joins(:pm_code).where(["pm_codes.name = ?", code]).first
     if c.nil?
       pm_code_id = PmCode.find_by(name: code).id
-      return Counter.new(name: code, pm_code_id: pm_code_id, value: 0, reading_id: self.id)
+      return Counter.new(name: nil, pm_code_id: pm_code_id, value: 0, reading_id: self.id)
     else
       return c
     end

@@ -302,7 +302,7 @@ class DevicesController < ApplicationController
       
       @todays_reading = @device.readings.find_by_taken_at(@now)
       @prev_reading = @device.readings.order(:taken_at).last
-      
+    
       unless @prev_reading.nil?
         last_now_interval = @now - @prev_reading.taken_at
         range = @tech.preference.upcoming_interval * 7
@@ -887,13 +887,13 @@ class DevicesController < ApplicationController
       @readings.each do |r|
         counters_h = Hash.new
         r.counters.each do |c|
-          counters_h[c.name] = c
+          counters_h[c.pm_code.name] = c
         end
         @readings_h[r.id] = counters_h
       end
 
       @all_codes = @device.model.model_group.model_targets.map do |t|
-        unless t.label.nil? or t.label.empty? or t.maint_code == 'BWTOTAL' or t.maint_code == 'CTOTAL'
+        unless t.target == 0 or t.maint_code == 'BWTOTAL' or t.maint_code == 'CTOTAL'
           t.maint_code
         end
       end
