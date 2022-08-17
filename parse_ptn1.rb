@@ -31,7 +31,7 @@ def process_ptn1
     max_len = (max_len < line.length) ? line.length : max_len
     # find the model and serial numbers
     unless (seen[:model])
-      if (row =~ /MACHINE:\s+([A-Z0-9-]+)/)
+      if (line =~ /MACHINE:\s+([A-Z0-9-]+)/)
         model = $1.gsub(/\W/,'')
         seen[:model] = true
       end
