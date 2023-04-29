@@ -161,7 +161,7 @@ class ReadingsController < ApplicationController
         redirect_to back_or_go_here(root_url), :alert => msg
       end
       
-      msg = "PTN1 file for <a href='/devices/#{dev.id}/service_history'>#{dev.crm_object_id}</a> processed."
+      msg = "PTN1 file for <a href='/devices/#{dev.id}/service_history'>#{dev.crm_object_id} (s/n: #{dev.serial_number})</a> processed."
       current_user.logs.create(device_id: dev.id, message: msg)
       redirect_to back_or_go_here(@reading), notice: msg
     end

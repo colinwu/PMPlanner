@@ -43,6 +43,13 @@ Transfer devices from
   <% if current_user.admin? %>
     <li><%= link_to "News Items", news_index_path %></li>
     <li>
+      Select CSV file containing equipment data to upload. Beware this could take more than <strong>45</strong> min. <strong>Perform database updates only during after-hours</strong>."
+      <%= form_with url: "/admin/eq_update", multipart: true do |form| %>
+      <%= form.file_field :megan, accept: 'text/csv' %>
+      <%= form.submit "Upload" %>
+      <% end %>
+    </li>
+    <li>
       <%= form_tag act_as_technicians_path, class: 'navbar-form' do %>
         <%= label_tag "Pretend to be: " %>
         <%= select_tag :tech_id, options_from_collection_for_select(current_user.my_techs.order(:friendly_name), :id, :friendly_name, current_technician.nil? ? nil : current_technician.id), {include_blank: true, class: "form-control"} %>

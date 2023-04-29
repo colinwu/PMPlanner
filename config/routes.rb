@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   resources :news
   get 'admin', to: 'admin#index'
-  get 'file_upload', to: 'admin#new'
-  post 'admin/upload', to: 'admin#upload'
+  post 'admin/eq_update', to: 'admin#eq_update'
 
   resources :sessions, only: [:new, :create, :destroy]
   get 'login', to: 'sessions#new', as: 'login'
