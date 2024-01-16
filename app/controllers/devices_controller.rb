@@ -426,7 +426,7 @@ class DevicesController < ApplicationController
   def do_search
     @search_params = {}
     if params[:commit] == 'Search' and not params[:search_str].blank?
-      
+
       @search_str = params[:search_str]
       @target = params[:target]
       @title = "Search: #{@search_str}"

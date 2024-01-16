@@ -55,7 +55,7 @@ if File.exists?(csv_file)
       #  puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
         valid_sn = false
       end
-      dev = Device.find_by_crm_object_id(row.crm_objectid)
+      # dev = Device.find_by_crm_object_id(row.crm_objectid)
 
       # watch out for '-EMLD' being appended to Emerald models
       if row.model =~ /-EMLD$/
@@ -105,6 +105,9 @@ if File.exists?(csv_file)
           )
         end
       end
+
+      # We now have the serial number and model. See if that combination exists in the db
+      dev = Device.where(["model_id = ? and serial_number = ?", m.id, row.serialnumber])
       if dev.nil?   # new device
         if dev = Device.create(:crm_object_id => row.crm_objectid, 
                           :model_id => m.id,

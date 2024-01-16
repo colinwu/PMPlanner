@@ -16,7 +16,7 @@ class Device < ApplicationRecord
   validates :backup_tech_id, numericality: { greater_than: 0 }, allow_blank: true
   validates :client_id, numericality: { greater_than: 0 }, allow_blank: true
   validates :crm_object_id, :serial_number, presence: true
-  validates :crm_object_id, uniqueness: true
+  # validates :crm_object_id, uniqueness: true
   validates_associated :model, :outstanding_pms
   
   delegate :name, to: :client , prefix: true, allow_nil: true
