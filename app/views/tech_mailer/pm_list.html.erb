@@ -43,7 +43,7 @@
         <td><%= dev.try(:location).try(:address1) %></td>
         <td><%= dev.try(:location).try(:city) %></td>
         <td><%= dev.try(:location).try(:post_code) %></td>
-        <td class='<%= pm_status_class(dev) %>' style="white-space: nowrap;"><%= @code_date[dev.id].to_s(:MdY) %></td>
+        <td class='<%= pm_status_class(dev) %>' style="white-space: nowrap;"><%= @code_date[dev.id].to_fs(:MdY) %></td>
         <td class='<%= pm_status_class(dev) %>'><%= @code_count[dev.id] %></td>
       </tr>
     <% end %> <!-- @dev_list.each -->

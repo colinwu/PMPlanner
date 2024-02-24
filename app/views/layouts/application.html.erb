@@ -102,7 +102,7 @@
           <div class="modal-body">
             <% @show_news.each do |n| %>
               <fieldset class="<%= n.urgent ? 'urgent' : ''%>">
-                <legend><%= n.activate.to_s(:Mdy) %><%= n.urgent ? ' - URGENT' : '' %></legend>
+                <legend><%= n.activate.to_fs(:MdY) %><%= n.urgent ? ' - URGENT' : '' %></legend>
                 <%= n.note.html_safe %>
               </fieldset>
             <% end %>

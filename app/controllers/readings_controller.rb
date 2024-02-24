@@ -18,9 +18,9 @@ class ReadingsController < ApplicationController
   def create
     msg = ""
     r_params = params['reading']
-    
+
     # Check if there's a file being uploaded
-    if (r_params['ptn1'][0].original_filename)
+    if (r_params['ptn1'].length > 0)
       r_params['ptn1'].each do |ptn1file|
         tmp_fh = ptn1file.tempfile
         seen = Hash.new

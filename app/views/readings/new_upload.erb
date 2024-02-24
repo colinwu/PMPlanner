@@ -2,7 +2,7 @@
 
 <h2>Upload PTN1 Files - You may select multiple files to upload all at once.</h2>
 <%= form_for @reading do |f| %>
-  <%= f.file_field :ptn1, :multiple => true %>
+  <%= f.file_field :ptn1, multiple: true, include_hidden: false %>
   <%= f.hidden_field :device_id, {value: @reading.device_id} %>
   <%= f.hidden_field :technician_id, {value: @reading.technician_id} %>
   <%= f.submit "Upload" %>

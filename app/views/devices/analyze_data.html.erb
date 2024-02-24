@@ -24,7 +24,7 @@
       <% else %>
       Today's Entry
       <% end %><br />
-      <%= text_field_tag 'reading[taken_at]', Date::today.to_s(:MdY), {class: 'center form-control input-sm'} %></th>
+      <%= text_field_tag 'reading[taken_at]', Date::today.to_fs(:MdY), {class: 'center form-control input-sm'} %></th>
     <th class="<%= session[:mobile] %>">Progress to next PM</th>
     <th class="<%= session[:mobile] %>">Next PM Date</th>
   </tr>

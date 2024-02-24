@@ -1,6 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1.4.1'
+#gem 'rails', '~> 6.1.4.1'
+gem 'rails', '~> 7.1.3'
+
+# Added 15-Feb-2024 for migration from ruby 2.6 to 3.0
+gem 'webrick', '~> 1.8.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -17,7 +21,7 @@ group :development, :test do
   gem 'railroady'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'bullet'
+  # gem 'bullet'
 end
 
 group :test do
