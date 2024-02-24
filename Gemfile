@@ -92,3 +92,5 @@ gem "simple_form"
 
 # Added at 2018-04-15 21:57:58 -0400 by wucolin:
 gem "sprockets-rails", "~> 3.2"
+
+gem "terser", "~> 1.2"
