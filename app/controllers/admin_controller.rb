@@ -12,10 +12,11 @@ class AdminController < ApplicationController
   def eq_update
     title = "Update Equipment Table"
     csv_file = params[:megan]
+    byebug
     # There is a tempfile at uploaded_file.tempfile
     now = Time.now   # remember when the script started
     dev_list = Array.new()  # keep list of all CRM ids in this update
-    r = CsvMapper.import(csv_file) do
+    r = CsvMapper.import(csv_file.to_path()) do
       [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, dealerid, dealername, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, inactive, nocontract, nopm]
       start_at_row 1
   #     read_attributes_from_file

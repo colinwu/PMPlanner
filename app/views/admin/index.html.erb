@@ -45,7 +45,7 @@ Transfer devices from
     <li>
       Select CSV file containing equipment data to upload. Beware this could take more than <strong>45</strong> min. <strong>Perform database updates only during after-hours</strong>."
       <%= form_with url: "/admin/eq_update", multipart: true do |form| %>
-      <%= form.file_field :megan, accept: 'text/csv' %>
+      <%= form.file_field :megan, accept: 'text/csv', include_hidden: false %>
       <%= form.submit "Upload" %>
       <% end %>
     </li>
