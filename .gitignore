@@ -18,6 +18,8 @@ storage/
 pickle-email-*.html
 grab_prod_db.sh
 *.sql
+*.log
+*.tar.gz
 *.csv
 *.xlsx
 # TODO Comment out these rules if you are OK with secrets being uploaded to the repo
