@@ -21,7 +21,7 @@ group :development, :test do
   gem 'railroady'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  # gem 'bullet'
+  gem 'bullet'
 end
 
 group :test do
@@ -32,7 +32,7 @@ group :test do
 end
 # Gems used only for assets and not required
 # in production environments by default.
-# group :assets do
+group :assets do
   gem 'sassc-rails'
 #  gem 'sass-rails'
   gem 'coffee-rails'
@@ -42,7 +42,7 @@ end
   gem 'mini_racer', platforms: :ruby
   gem 'uglifier'
   gem 'bootstrap-sass'
-# end
+end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
