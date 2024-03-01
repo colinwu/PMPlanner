@@ -16,6 +16,11 @@ gem 'json'
 
 group :development, :test do
   # do rails generate rspec:install after initial install
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'rvm1-capistrano3', require: false
   gem 'scout_apm'
   gem 'rspec-rails'
   gem 'railroady'
@@ -66,11 +71,6 @@ gem 'activerecord-session_store'
 
 # Use unicorn as the app server
 # gem 'unicorn'
-gem 'capistrano'
-gem 'capistrano-bundler'
-gem 'capistrano-rails'
-gem 'capistrano-passenger'
-gem 'rvm1-capistrano3', require: false
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
 
