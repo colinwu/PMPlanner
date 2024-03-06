@@ -38,7 +38,7 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sassc-rails'
+  gem 'sassc-rails', '>= 2.1.0'
 #  gem 'sass-rails'
   gem 'coffee-rails'
   gem 'turbolinks', '~> 5'
@@ -46,7 +46,7 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
   gem 'mini_racer', platforms: :ruby
   gem 'uglifier'
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '~> 3.4.1'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

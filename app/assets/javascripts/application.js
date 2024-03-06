@@ -19,7 +19,6 @@
 //= require bootstrap
 //= require jquery-ui
 //= require best_in_place.jquery-ui
-
 //= require_tree .
 set_size_of = function(element) {
   var width;

@@ -348,7 +348,7 @@ DEPENDENCIES
   activerecord-session_store
   bcrypt_pbkdf
   best_in_place!
-  bootstrap-sass
+  bootstrap-sass (~> 3.4.1)
   bullet
   byebug
   capistrano
@@ -372,7 +372,7 @@ DEPENDENCIES
   responders
   rspec-rails
   rvm1-capistrano3
-  sassc-rails
+  sassc-rails (>= 2.1.0)
   scout_apm
   simple_form
   spring
