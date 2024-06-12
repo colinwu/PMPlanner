@@ -27,6 +27,12 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'bullet'
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console'
+  gem 'listen'
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-watcher-listen'
 end
 
 group :test do
@@ -56,11 +62,8 @@ gem 'csv-mapper'
 gem 'will_paginate'
 gem 'getopt'
 gem 'net-ldap'
-# gem 'protected_attributes', '~> 1.0.8'
-# gem 'jquery-datetimepicker-rails'
-# gem 'rails4-autocomplete'
 gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
-# gem "paperclip"
+# gem "best_in_place"
 gem 'activerecord-session_store'
 
 # To use ActiveModel has_secure_password
@@ -69,23 +72,13 @@ gem 'activerecord-session_store'
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
 
-# Use unicorn as the app server
-# gem 'unicorn'
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
 
 # Deploy with Capistrano
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console'
-  gem 'listen'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen'
-end
 
-# To use debugger
-# gem 'debugger'
+end
 
 gem "simple_form"
 # then rails generate simple_form:install --bootstrap

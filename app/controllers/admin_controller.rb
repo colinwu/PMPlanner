@@ -16,7 +16,7 @@ class AdminController < ApplicationController
     # There is a tempfile at uploaded_file.tempfile
     now = Time.now   # remember when the script started
     dev_list = Array.new()  # keep list of all CRM ids in this update
-    r = CsvMapper.import(csv_file.to_path()) do
+    r = CsvMapper.import(csv_file.to_path().to_s) do
       [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, dealerid, dealername, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, inactive, nocontract, nopm]
       start_at_row 1
   #     read_attributes_from_file
@@ -54,7 +54,7 @@ class AdminController < ApplicationController
         #  puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
           valid_sn = false
         end
-        dev = Device.find_by_crm_object_id(row.crm_objectid)
+        # dev = Device.find_by_crm_object_id(row.crm_objectid)
 
         # watch out for '-EMLD' being appended to Emerald models
         if row.model =~ /-EMLD$/
@@ -104,6 +104,8 @@ class AdminController < ApplicationController
             )
           end
         end
+        # We now have the serial number and model. See if that combination exists in the db
+        dev = Device.where(["model_id = ? and serial_number = ?", m.id, row.serialnumber])
         if dev.nil?   # new device
           if dev = Device.create(:crm_object_id => row.crm_objectid, 
                             :model_id => m.id,

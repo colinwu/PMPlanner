@@ -83,7 +83,7 @@ class ReadingsController < ApplicationController
       
           # finished locating sections of ptn1 file
           if (seen[:model] and seen[:sn])
-            tmp_devlist = Device.joins(:model).where(["models.nm = ? and serial_number like ?", model, "#{sn}%"])
+            tmp_devlist = Device.joins(:model).where(["models.nm = ? and serial_number like ? and active = true", model, "#{sn}%"])
             unless tmp_devlist.empty?  # Is the ptn1 device in the db?
               ptn1_dev = tmp_devlist.first
               # if the reading dev is the template device then make the file device the reading device
