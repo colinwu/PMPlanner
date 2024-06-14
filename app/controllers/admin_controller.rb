@@ -12,7 +12,6 @@ class AdminController < ApplicationController
   def eq_update
     title = "Update Equipment Table"
     csv_file = params[:megan]
-    byebug
     # There is a tempfile at uploaded_file.tempfile
     now = Time.now   # remember when the script started
     dev_list = Array.new()  # keep list of all CRM ids in this update
@@ -104,8 +103,7 @@ class AdminController < ApplicationController
             )
           end
         end
-        # We now have the serial number and model. See if that combination exists in the db
-        dev = Device.where(["model_id = ? and serial_number = ?", m.id, row.serialnumber])
+        dev = Device.where(["model_id = ? and serial_number = ?",m.id, row.serialnumber]).first
         if dev.nil?   # new device
           if dev = Device.create(:crm_object_id => row.crm_objectid, 
                             :model_id => m.id,
@@ -136,7 +134,7 @@ class AdminController < ApplicationController
               op = OutstandingPm.find_or_create_by(device_id: dev.id, code: t.maint_code)
               op.update(next_pm_date: Date.today)
             end
-            dev.logs.create(technician_id: 1, message: "New device added.")
+            dev.logs.create(technician_id: 1, message: "New device added with sn #{dev.serial_number}.")
             if new_model_flag
               dev.logs.create(technician_id: 1, message: "New model #{row.model} assigned to Model Group 'OTHER'")
             end
