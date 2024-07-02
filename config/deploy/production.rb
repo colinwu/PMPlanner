@@ -1,4 +1,4 @@
-set :deploy_to, "/home/wucolin/apps/PMPlanner"
+set :deploy_to, "/home/wucolin/apps/PMPlanner-new"
 
 server 'njpmp01.sharpamericas.com', user: 'wucolin', roles: %w{app db web}, 
     ssh_options: {
