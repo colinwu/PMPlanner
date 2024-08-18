@@ -1,5 +1,5 @@
 Log.create(technician_id: 1, message: "Starting pm_list_runner.rb")
-dow_today = Date.today.to_s(:dow_num).to_i
+dow_today = Date.today.to_fs(:dow_num).to_i
 
 Technician.where("team_id <> 61000184").find_each do |tech|
   send = false

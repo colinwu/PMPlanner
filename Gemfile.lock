@@ -141,6 +141,7 @@ GEM
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     crass (1.0.6)
+    csv (3.2.8)
     csv-mapper (0.5.1)
       fastercsv
     date (3.3.4)
@@ -357,6 +358,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   coffee-rails
+  csv (~> 3.2.8)
   csv-mapper
   ed25519
   getopt

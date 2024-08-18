@@ -58,6 +58,7 @@ end
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 gem 'jquery-rails'
+gem 'csv', '~> 3.2.8'
 gem 'csv-mapper'
 gem 'will_paginate'
 gem 'getopt'

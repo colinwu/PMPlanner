@@ -117,6 +117,8 @@ class ReadingsController < ApplicationController
                 client_id: c.id,
                 location_id: l.id,
                 serial_number: sn,
+                active: true,
+                do_pm: true,
                 primary_tech_id: current_user.id,
                 model_id: Model.find_by_nm(model).id
                 )

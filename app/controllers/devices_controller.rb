@@ -85,9 +85,9 @@ class DevicesController < ApplicationController
         end
       else
         if session[:showbackup] == 'true'
-          search_ar = ['primary_tech_id = ? or backup_tech_id = ?', @tech.id, @tech.id]
+          search_ar = ['(primary_tech_id = ? or backup_tech_id = ?) and active = true', @tech.id, @tech.id]
         else
-          search_ar = ['primary_tech_id = ?', @tech.id]
+          search_ar = ['primary_tech_id = ? and active = true', @tech.id]
         end
       end
       @devices = Device.joins(:location,:client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
