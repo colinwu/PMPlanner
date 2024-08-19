@@ -119,9 +119,11 @@ class ReadingsController < ApplicationController
                 serial_number: sn,
                 active: true,
                 do_pm: true,
+                pm_counter_type: 'counter',
                 primary_tech_id: current_user.id,
                 model_id: Model.find_by_nm(model).id
                 )
+              ptn1_dev.logs.create(message: "Device s/n #{sn} created by PTN1 file upload.")
             end
             @reading.update(device_id: ptn1_dev.id, taken_at: reading_date, notes: "Readings uploaded from #{ptn1file.original_filename} by #{@reading.technician.friendly_name}.")
             @reading.save

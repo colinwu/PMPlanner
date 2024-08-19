@@ -111,8 +111,8 @@ class AdminController < ApplicationController
                             :location_id => loc.id,
                             :primary_tech_id => primary_tech.try(:id),
                             :backup_tech_id => backup_tech.try(:id),
-                            :crm_active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
-                            :active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
+                            :crm_active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
+                            :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
                             :crm_under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
                             :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
                             :crm_do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
@@ -142,13 +142,17 @@ class AdminController < ApplicationController
             @messages << "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
           end
         else # if the device is already in the db
+          if dev.crm_object_id = '-1'
+            dev.logs.create(message: "Device s/n #{row.serialnumber} assigned CRM ID #{row.crm_objectid}")
+          end
           dev.update(:crm_object_id => row.crm_objectid, 
                                 :model_id => m.id,
                                 :serial_number => row.serialnumber, 
                                 :location_id => loc.id,
                                 :primary_tech_id => primary_tech.try(:id),
                                 :backup_tech_id => backup_tech.try(:id),
-                                :crm_active => (row.inactive == '0'or row.inactive =~ /FALSE/i) ? true : false,
+                                :crm_active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
+                                :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
                                 :crm_under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
                                 :crm_do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
                                 :client_id => client.id,
