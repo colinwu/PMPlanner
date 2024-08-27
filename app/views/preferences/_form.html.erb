@@ -6,14 +6,26 @@
     <div class='form-group'>
       <%= f.label :default_root_path, "Default startup screen", class: "control-label col-sm-2" %>
       <div class='col-sm-2'>
-        <%= f.input_field :default_root_path, collection: [
+        <% if current_user.admin? %>
+          <%= f.input_field :default_root_path, collection: [
+            ['Admin Page', '/admin'],
             ['Home', '/devices/search'],
             ['My PM List', '/devices/my_pm_list'],
             ['My Territory', '/devices'],
             ['Data Analysis', '/devices/0/analyze_data'],
             ['Service History', '/devices/0/service_history']
           ], class: "form-control input-sm"
-        %>
+          %>
+        <% else %>
+          <%= f.input_field :default_root_path, collection: [
+              ['Home', '/devices/search'],
+              ['My PM List', '/devices/my_pm_list'],
+              ['My Territory', '/devices'],
+              ['Data Analysis', '/devices/0/analyze_data'],
+              ['Service History', '/devices/0/service_history']
+            ], class: "form-control input-sm"
+          %>
+        <% end %>
       </div>
     </div>
     <div class="form-group">
