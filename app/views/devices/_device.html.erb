@@ -1,5 +1,5 @@
     <%= hidden_field_tag "alldevs[]", device.id %>
-    <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and  device.backup_tech_id == current_technician.id %> backup_tech<% end %>">
+    <tr class="<%= cycle('light','dark') %><% if not current_technician.nil? and  device.backup_tech_id == current_technician.id %> backup_tech<% elsif current_user.admin? and not device.active %> inactive<% end %>">
       <td><%= check_box_tag "selected_devices[]", device.id %></td>
       <td><%= link_to device.crm_object_id, edit_device_path(device), title: "Edit device details." %></td>
       <td><%= device.model.nm %></td>

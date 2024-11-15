@@ -17,7 +17,7 @@ class DevicesController < ApplicationController
     else
       @search_params = params[:search].permit(:crm,:model,:sn,:client_name,:addr1,:city).to_h
     end
-    search_ar = ["active = true"]
+    search_ar = current_user.admin? ? [] : ["active = true"]
     where_ar = []
     if @search_params
       unless @search_params['crm'].nil? or @search_params['crm'].blank?
@@ -431,7 +431,7 @@ class DevicesController < ApplicationController
       @target = params[:target]
       @title = "Search: #{@search_str}"
       if @target == 'All'
-        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and active = true", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
+        @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?)", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       elsif @target == 'Region'
         @devices = Device.joins(:model, :client, :location, :primary_tech).where(["(crm_object_id regexp ? or serial_number regexp ? or models.nm regexp ? or clients.name regexp ? or locations.address1 regexp ? or technicians.first_name regexp ? or technicians.last_name regexp ? or technicians.friendly_name regexp ?) and devices.team_id = ? and active = true", @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, @search_str, current_technician.team_id]).order(:crm_object_id).page(params[:page]).per_page(lpp)
       else

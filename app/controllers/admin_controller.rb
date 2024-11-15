@@ -10,6 +10,8 @@ class AdminController < ApplicationController
   end
   
   def eq_update
+    byebug
+    
     title = "Update Equipment Table"
     csv_file = params[:megan]
     # There is a tempfile at uploaded_file.tempfile
@@ -53,9 +55,14 @@ class AdminController < ApplicationController
         #  puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
           valid_sn = false
         end
+        if row.serialnumber.length == 7
+          row.serialnumber = "0#{row.serialnumber}"
+          valid_sn = true
+        end
         # dev = Device.find_by_crm_object_id(row.crm_objectid)
 
         # watch out for '-EMLD' being appended to Emerald models
+        
         if row.model =~ /-EMLD$/
           row.model.sub!(/-EMLD/,'')
         end
@@ -103,7 +110,7 @@ class AdminController < ApplicationController
             )
           end
         end
-        dev = Device.where(["model_id = ? and serial_number = ?",m.id, row.serialnumber]).first
+        dev = Device.where(["model_id = ? and serial_number = ? and active = true",m.id, row.serialnumber]).order(:created_at).last
         if dev.nil?   # new device
           if dev = Device.create(:crm_object_id => row.crm_objectid, 
                             :model_id => m.id,
@@ -142,25 +149,25 @@ class AdminController < ApplicationController
             @messages << "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
           end
         else # if the device is already in the db
-          if dev.crm_object_id = '-1'
+          if dev.crm_object_id == '-1'
             dev.logs.create(message: "Device s/n #{row.serialnumber} assigned CRM ID #{row.crm_objectid}")
           end
           dev.update(:crm_object_id => row.crm_objectid, 
-                                :model_id => m.id,
-                                :serial_number => row.serialnumber, 
-                                :location_id => loc.id,
-                                :primary_tech_id => primary_tech.try(:id),
-                                :backup_tech_id => backup_tech.try(:id),
-                                :crm_active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                                :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                                :crm_under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                                :crm_do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
-                                :client_id => client.id,
-                                :team_id => row.serviceorgid,
-                                :pm_counter_type => 'counter',
-                                :pm_visits_min => 2,
-                                :acctmgr => row.accountmgr
-                              )
+                      :model_id => m.id,
+                      :serial_number => row.serialnumber, 
+                      :location_id => loc.id,
+                      :primary_tech_id => primary_tech.try(:id),
+                      :backup_tech_id => backup_tech.try(:id),
+                      :crm_active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
+                      :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
+                      :crm_under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
+                      :crm_do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
+                      :client_id => client.id,
+                      :team_id => row.serviceorgid,
+                      :pm_counter_type => 'counter',
+                      :pm_visits_min => 2,
+                      :acctmgr => row.accountmgr
+                    )
         end
       end
     end
@@ -172,7 +179,7 @@ class AdminController < ApplicationController
         @messages << "Device #{d.crm_object_id} (s/n #{d.serial_number}) not in current feed. Its current contract status is #{d.under_contract}"
         d.logs.create(technician_id: 1, message: "Device not in current feed. Its current contract status is #{d.crm_under_contract} - changing to FALSE.")
       end
-      d.update(crm_under_contract: false, under_contract: false) 
+      d.update(crm_under_contract: false, under_contract: false, active: false) 
     end
     @messages << "There were #{not_in.count} devices not in the current feed."
 

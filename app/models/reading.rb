@@ -28,7 +28,9 @@ class Reading < ApplicationRecord
         status = Date.parse(taken_at.to_s)
       rescue
         errors.add(:taken_at, "#{taken_at} is not a valid date")
+        return false
       end
+      return true
     else
       return true
     end
