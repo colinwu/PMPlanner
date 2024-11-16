@@ -1,4 +1,5 @@
-csv_file = '/home/wucolin/BW export for PM planner 2024-08-22.csv'
+# csv_file = '/home/wucolin/BW export for PM planner 2024-08-22.csv'
+csv_file = ARGV.shift
 dev_list = Array.new()  # keep list of all CRM ids in this update
 r = CsvMapper.import(csv_file) do
   [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, dealerid, dealername, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, inactive, nocontract, nopm]
@@ -22,7 +23,7 @@ r.each do |row|
       if dev.crm_object_id == row.crm_objectid
         valid_dev = dev
         puts("CRM ID #{dev.crm_object_id}, created: #{dev.created_at} last used #{dev.updated_at} is in the feed")
-        # dev.update(active: true, crm_active: true)
+        dev.update(active: true, crm_active: true)
       else
         puts("CRM ID #{dev.crm_object_id}, created: #{dev.created_at} last used #{dev.updated_at} is NOT in the feed")
         if dev.crm_object_id == '-1'

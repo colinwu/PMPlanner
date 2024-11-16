@@ -110,7 +110,7 @@ class AdminController < ApplicationController
             )
           end
         end
-        dev = Device.where(["model_id = ? and serial_number = ? and active = true",m.id, row.serialnumber]).order(:created_at).last
+        dev = Device.where(["model_id = ? and serial_number = ? and active = true and crm_object_id = ?",m.id, row.serialnumber, row.crm_objectid]).last
         if dev.nil?   # new device
           if dev = Device.create(:crm_object_id => row.crm_objectid, 
                             :model_id => m.id,
