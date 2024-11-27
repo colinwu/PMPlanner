@@ -17,9 +17,9 @@ class DevicesController < ApplicationController
     else
       @search_params = params[:search].permit(:crm,:model,:sn,:client_name,:addr1,:city).to_h
     end
-    search_ar = current_user.admin? ? [] : ["active = true"]
-    where_ar = []
-    if @search_params
+    where_ar = current_user.admin? ? [] : ["active = true"]
+    search_ar = ['']
+    unless @search_params.empty?
       unless @search_params['crm'].nil? or @search_params['crm'].blank?
         search_ar <<  @search_params[:crm]
         where_ar << "crm_object_id regexp ?"
@@ -44,8 +44,10 @@ class DevicesController < ApplicationController
         search_ar <<  @search_params['city']
         where_ar << "locations.city regexp ?"
       end
-      search_ar[0] = ([search_ar[0]]+where_ar).join(' and ')
     end
+    # build the 'where' expression
+    search_ar[0] = where_ar.join(' and ')
+    # build the sort expression
     if params[:sort].nil? or params[:sort].empty?
       @order = 'crm_object_id'
     else

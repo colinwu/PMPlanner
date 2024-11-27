@@ -13,127 +13,129 @@ class AdminController < ApplicationController
     byebug
     
     title = "Update Equipment Table"
-    csv_file = params[:megan]
+    csv_file = params[:megan].to_path().to_s
     # There is a tempfile at uploaded_file.tempfile
     now = Time.now   # remember when the script started
     dev_list = Array.new()  # keep list of all CRM ids in this update
-    r = CsvMapper.import(csv_file.to_path().to_s) do
-      [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, dealerid, dealername, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, inactive, nocontract, nopm]
-      start_at_row 1
-  #     read_attributes_from_file
-    end
+  #   r = CsvMapper.import(csv_file.to_path().to_s) do
+  #     [crm_objectid, model, serialnumber, jt_equipid, soldtoid, soldtoname, addcontactid, addcontactname, address1, address2, city, province, postalcode, dealerid, dealername, serviceorgid, serviceorg, primarytechid, backuptechid, accountmgrid, accountmgr, inactive, nocontract, nopm]
+  #     start_at_row 1
+  # #     read_attributes_from_file
+  #   end
   
+    # Use CSV module instead of Csv-Mapper. The latter crashes in production!
+    r = CSV.read(csv_file, headers: true, header_converters: :symbol)
     @messages = Array.new
     Log.create(technician_id: '1', message: "Updatig Equipment Tables from #{csv_file}.")
     r.each do |row|
       new_model_flag = false
-      dev_list << row.crm_objectid
+      dev_list << row[:equipment_id]
       # Ignore device if no soldtoid
-      unless row.soldtoid.nil?
+      unless row[:eq_soldto_party].nil?
         # strip leading and trailing white spaces
         row.each_pair {|k,v| row[k].nil? ? '' : row[k].strip!}
 
         # find or create the client record
-        client = Client.find_by soldtoid: row.soldtoid
+        client = Client.find_by soldtoid: row[:eq_soldto_party]
         if client.nil?
-          client = Client.create(name: (row.soldtoname || row.addcontactname), soldtoid: row.soldtoid)
+          client = Client.create(name: (row[:address_line_0] || row[:bp_firrst_name]), soldtoid: row[:eq_soldto_party])
         else
-          client.update(name: (row.soldtoname || row.addcontactname))
+          client.update(name: (row[:address_line_0] || row[:bp_firrst_name]))
         end
         # find or create the location record
-        loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ?", row.address1, row.address2.nil? ? '' : row.address2, row.city, row.province, row.postalcode, client.id]).first
+        loc = Location.where(["address1 = ? and address2 = ? and city = ? and province = ? and post_code = ? and client_id = ?", row[:street_1], row[:street_2].nil? ? '' : row[:street_2], row[:city], row[:region], row[:postal_code], client.id]).first
         if loc.nil?
-          loc = Location.create(:notes => row.addcontactname, :address1 => row.address1, :address2 => row.address2.nil? ? '' : row.address2, :city => row.city, :province => row.province, :post_code => row.postalcode, :client_id => client.id, :team_id => row.serviceorgid)
+          loc = Location.create(:notes => row[bp_firrst_name], :address1 => row[street_1], :address2 => row[street_2].nil? ? '' : row[street_2], :city => row[:city], :province => row[:region], :post_code => row[:postal_code], :client_id => client.id, :team_id => row[ :eq_employee_grp])
           unless loc.errors.messages.empty?
-            @messages << "Device #{row.crm_objectid} Location errors: #{loc.errors.messages}"
+            @messages << "Device #{row[:equipment_id]} Location errors: #{loc.errors.messages}"
           end
         end
         
         # find the device, model and techs for the device
         valid_sn = true
-        if row.serialnumber.nil? or row.serialnumber.length < 8 or row.serialnumber.length > 9
-        #  puts "Device #{row.crm_objectid} has funny serial number: #{row.serialnumber}"
+        if row[:serial_no].nil? or row[:serial_no].length < 8 or row[:serial_no].length > 9
+        #  puts "Device #{row[:equipment_id]} has funny serial number: #{row[:serial_no]}"
           valid_sn = false
         end
-        if row.serialnumber.length == 7
-          row.serialnumber = "0#{row.serialnumber}"
+        if row[:serial_no].length == 7
+          row[:serial_no] = "0#{row[:serial_no]}"
           valid_sn = true
         end
-        # dev = Device.find_by_crm_object_id(row.crm_objectid)
+        # dev = Device.find_by_crm_object_id(row[:equipment_id])
 
         # watch out for '-EMLD' being appended to Emerald models
         
-        if row.model =~ /-EMLD$/
-          row.model.sub!(/-EMLD/,'')
+        if row[:equip_model] =~ /-EMLD$/
+          row[:equip_model].sub!(/-EMLD/,'')
         end
-        m = Model.find_by_nm(row.model)
+        m = Model.find_by_nm(row[:equip_model])
         if m.nil?
           new_model_flag = true
           mg = ModelGroup.find_by_name 'OTHERS'
-          m = mg.models.create(nm: row.model)
+          m = mg.models.create(nm: row[:equip_model])
         end
-        primary_tech = Technician.find_by_crm_id(row.primarytechid)
-        backup_tech = Technician.find_by_crm_id(row.backuptechid)
-        if (row.serviceorgid != '61000184' and row.serviceorg != 'Not assigned')
-          if primary_tech.nil? and not row.primarytechid.nil?
-            @messages << "Primary tech (#{row.primarytechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
+        primary_tech = Technician.find_by_crm_id(row[:eq_preferred_technician])
+        backup_tech = Technician.find_by_crm_id(row[:eq_backup_technician])
+        if (row[:eq_employee_grp] != '61000184' and row[:team] != 'Not assigned')
+          if primary_tech.nil? and not row[:eq_preferred_technician].nil?
+            @messages << "Primary tech (#{row[:eq_preferred_technician]}) for #{row[:equipment_id]} in #{row[:team]} is not in the database."
           else
-            # if !primary_tech.nil? and (primary_tech.team_id != row.serviceorgid.to_i)
-            #   primary_tech.logs.create(message: "Tech moved from #{primary_tech.team.name} to #{row.serviceorg}")
-            #   primary_tech.update(team_id: row.serviceorgid)
+            # if !primary_tech.nil? and (primary_tech.team_id != row[ :eq_employee_grp].to_i)
+            #   primary_tech.logs.create(message: "Tech moved from #{primary_tech.team.name} to #{row[:team]}")
+            #   primary_tech.update(team_id: row[ :eq_employee_grp])
             # end
           end
-          if backup_tech.nil? and not row.backuptechid.nil?
-            @messages << "Backup tech (#{row.backuptechid}) for #{row.crm_objectid} in #{row.serviceorg} is not in the database."
+          if backup_tech.nil? and not row[:eq_backup_technician].nil?
+            @messages << "Backup tech (#{row[:eq_backup_technician]}) for #{row[:equipment_id]} in #{row[:team]} is not in the database."
           else
-            # if !backup_tech.nil? and (backup_tech.team_id != row.serviceorgid.to_i)
-            #   backup_tech.logs.create(message: "Tech moved from #{backup_tech.team.name} to #{row.serviceorg}")
-            #   backup_tech.update(team_id: row.serviceorgid)
+            # if !backup_tech.nil? and (backup_tech.team_id != row[ :eq_employee_grp].to_i)
+            #   backup_tech.logs.create(message: "Tech moved from #{backup_tech.team.name} to #{row[:team]}")
+            #   backup_tech.update(team_id: row[ :eq_employee_grp])
             # end
           end
         end
         
         # team_id == 61000184 means it's a dealer, then make the dealer the primary tech
-        if (row.serviceorgid == '61000184')
-          primary_tech = Technician.find_by_crm_id(row.dealerid)
-          if (primary_tech.nil? and !row.primarytechid.nil?)
+        if (row[:eq_employee_grp] == '61000184')
+          primary_tech = Technician.find_by_crm_id(row[:eq_servicing_dealer])
+          if (primary_tech.nil? and !row[:eq_preferred_technician].nil?)
             primary_tech = Technician.create(
-                crm_id: row.dealerid,
-                first_name: row.dealername,
+                crm_id: row[:eq_servicing_dealer],
+                first_name: row[:dealer],
                 last_name: 'Dealer',
                 email: 'nobody@sharpsec.com',
-                friendly_name: row.dealername,
-                team_id: row.serviceorgid
+                friendly_name: row[:dealer],
+                team_id: row[:eq_employee_grp]
             )
             primary_tech.create_preference(
               upcoming_interval: 2
             )
           end
         end
-        dev = Device.where(["model_id = ? and serial_number = ? and active = true and crm_object_id = ?",m.id, row.serialnumber, row.crm_objectid]).last
+        dev = Device.where(["model_id = ? and serial_number = ? and active = true and crm_object_id = ?",m.id, row[:serial_no], row[:equipment_id]]).last
         if dev.nil?   # new device
-          if dev = Device.create(:crm_object_id => row.crm_objectid, 
+          if dev = Device.create(:crm_object_id => row[:equipment_id], 
                             :model_id => m.id,
-                            :serial_number => row.serialnumber, 
+                            :serial_number => row[:serial_no], 
                             :location_id => loc.id,
                             :primary_tech_id => primary_tech.try(:id),
                             :backup_tech_id => backup_tech.try(:id),
-                            :crm_active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                            :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                            :crm_under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                            :under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                            :crm_do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
-                            :do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
+                            :crm_active => (row[:inactive] == '0' or row[:inactive] =~ /FALSE/i) ? true : false,
+                            :active => (row[:inactive] == '0' or row[:inactive] =~ /FALSE/i) ? true : false,
+                            :crm_under_contract => (row[:nocontract] == '0' or row[:nocontract] =~ /FALSE/i) ? true : false,
+                            :under_contract => (row[:nocontract] == '0' or row[:nocontract] =~ /FALSE/i) ? true : false,
+                            :crm_do_pm => (row[:nopm] =~ /TRUE/i or row[:nopm] == '1') ? false : true,
+                            :do_pm => (row[:nopm] =~ /TRUE/i or row[:nopm] == '1') ? false : true,
                             :client_id => client.id,
-                            :team_id => row.serviceorgid,
+                            :team_id => row[:eq_employee_grp],
                             :pm_counter_type => 'counter',
                             :pm_visits_min => 2,
-                            :acctmgr => row.accountmgr
+                            :acctmgr => row[:eq_account_mgr]
                             )
             # dev.create_neglected(next_visit: nil)
             unless dev.valid?
-              @messages << "Device invalid: #{row.crm_objectid}, #{dev.errors.messages}"
-              Log.create(technician_id: 1, message: "Device invalid: #{row.crm_objectid}, #{dev.errors.messages}")
+              @messages << "Device invalid: #{row[:equipment_id]}, #{dev.errors.messages}"
+              Log.create(technician_id: 1, message: "Device invalid: #{row[:equipment_id]}, #{dev.errors.messages}")
               next
             end
             dev.create_device_stat()
@@ -143,30 +145,30 @@ class AdminController < ApplicationController
             end
             dev.logs.create(technician_id: 1, message: "New device added with sn #{dev.serial_number}.")
             if new_model_flag
-              dev.logs.create(technician_id: 1, message: "New model #{row.model} assigned to Model Group 'OTHER'")
+              dev.logs.create(technician_id: 1, message: "New model #{row[:equip_model]} assigned to Model Group 'OTHER'")
             end
           else
-            @messages << "Error creating device #{dev.crm_objectid}: #{dev.errors.to_s}"
+            @messages << "Error creating device #{dev[:equipment_id]}: #{dev.errors.to_s}"
           end
         else # if the device is already in the db
           if dev.crm_object_id == '-1'
-            dev.logs.create(message: "Device s/n #{row.serialnumber} assigned CRM ID #{row.crm_objectid}")
+            dev.logs.create(message: "Device s/n #{row[:serial_no]} assigned CRM ID #{row[:equipment_id]}")
           end
-          dev.update(:crm_object_id => row.crm_objectid, 
+          dev.update(:crm_object_id => row[:equipment_id], 
                       :model_id => m.id,
-                      :serial_number => row.serialnumber, 
+                      :serial_number => row[:serial_no], 
                       :location_id => loc.id,
                       :primary_tech_id => primary_tech.try(:id),
                       :backup_tech_id => backup_tech.try(:id),
-                      :crm_active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                      :active => (row.inactive == '0' or row.inactive =~ /FALSE/i) ? true : false,
-                      :crm_under_contract => (row.nocontract == '0' or row.nocontract =~ /FALSE/i) ? true : false,
-                      :crm_do_pm => (row.nopm =~ /TRUE/i or row.nopm == '1') ? false : true,
+                      :crm_active => (row[:inactive] == '0' or row[:inactive] =~ /FALSE/i) ? true : false,
+                      :active => (row[:inactive] == '0' or row[:inactive] =~ /FALSE/i) ? true : false,
+                      :crm_under_contract => (row[:nocontract] == '0' or row[:nocontract] =~ /FALSE/i) ? true : false,
+                      :crm_do_pm => (row[:nopm] =~ /TRUE/i or row[:nopm] == '1') ? false : true,
                       :client_id => client.id,
-                      :team_id => row.serviceorgid,
+                      :team_id => row[:eq_employee_grp],
                       :pm_counter_type => 'counter',
                       :pm_visits_min => 2,
-                      :acctmgr => row.accountmgr
+                      :acctmgr => row[:eq_account_mgr]
                     )
         end
       end

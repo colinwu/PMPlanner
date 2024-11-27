@@ -3,9 +3,6 @@ source 'https://rubygems.org'
 #gem 'rails', '~> 6.1.4.1'
 gem 'rails', '~> 7.1.3'
 
-# Added 15-Feb-2024 for migration from ruby 2.6 to 3.0
-gem 'webrick', '~> 1.8.1'
-
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
@@ -29,6 +26,8 @@ group :development, :test do
   gem 'bullet'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console'
+  # Added 15-Feb-2024 for migration from ruby 2.6 to 3.0
+  gem 'webrick', '~> 1.9'
   gem 'listen'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -58,8 +57,8 @@ end
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 gem 'jquery-rails'
-gem 'csv', '~> 3.2.8'
-gem 'csv-mapper'
+gem 'csv', '~> 3.3'
+# gem 'csv-mapper'
 gem 'will_paginate'
 gem 'getopt'
 gem 'net-ldap'
