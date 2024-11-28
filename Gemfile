@@ -9,7 +9,7 @@ gem 'rails', '~> 7.1.3'
 gem 'mysql2'
 gem 'responders'
 gem 'json'
-# gem 'passenger', '~> 5.0.28'
+gem 'passenger', '~> 6.0', '>= 6.0.23'
 
 group :development, :test do
   # do rails generate rspec:install after initial install
