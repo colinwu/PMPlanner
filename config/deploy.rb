@@ -7,6 +7,7 @@ set :default_shell, "/bin/bash --login"
 set :default_stage, "production"
 set :keep_releases, 5
 set :passenger_restart_with_touch, true
+set :passenger_environment_variables, { rbenv_version: '3.0.0' }
 
 # Added 01-Mar-2024 as per documentation
 set :migration_role, :app
