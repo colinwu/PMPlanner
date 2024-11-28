@@ -45,6 +45,7 @@ class DevicesController < ApplicationController
         where_ar << "locations.city regexp ?"
       end
     end
+
     # build the 'where' expression
     search_ar[0] = where_ar.join(' and ')
     # build the sort expression
@@ -57,6 +58,9 @@ class DevicesController < ApplicationController
     if current_technician.nil?
       if current_user.admin?
         @title = "All Devices"
+        if where_ar.empty?
+          search_ar = []
+        end
         @devices = Device.joins(:location, :client,:model).where(search_ar).order(@order).page(params[:page]).per_page(lpp)
       elsif current_user.manager?
         @title = "Devices in #{current_user.team.name}"

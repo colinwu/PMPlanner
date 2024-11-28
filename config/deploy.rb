@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.18.0'
+lock '3.19.2'
 
 set :application, 'PMPlanner'
 set :repo_url, 'https://github.com/colinwu/PMPlanner.git'
@@ -8,6 +8,7 @@ set :default_stage, "production"
 set :keep_releases, 5
 set :passenger_restart_with_touch, true
 set :passenger_environment_variables, { rbenv_version: '3.0.0' }
+# Rake::Task["deploy:assets:backup_manifest"].clear_actions
 
 # Added 01-Mar-2024 as per documentation
 set :migration_role, :app
