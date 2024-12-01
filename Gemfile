@@ -54,6 +54,7 @@ group :assets do
   gem 'mini_racer', platforms: :ruby
   gem 'uglifier'
   gem 'bootstrap-sass', '~> 3.4.1'
+  gem 'bootstrap'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
