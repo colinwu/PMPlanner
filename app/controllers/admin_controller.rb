@@ -9,9 +9,7 @@ class AdminController < ApplicationController
 
   end
   
-  def eq_update
-    byebug
-    
+  def eq_update    
     title = "Update Equipment Table"
     csv_file = params[:megan].to_path().to_s
     # There is a tempfile at uploaded_file.tempfile

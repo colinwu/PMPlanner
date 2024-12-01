@@ -20,7 +20,7 @@
     <% for reading in @readings %>
       <% zero_reading = true %>
       <tr class="<%= cycle('light','dark') %>">
-        <td><span title="<%=h reading.notes %>"><%=h best_in_place(reading, :taken_at, as: :date, :display_with => lambda {|d| d.to_fs(:MdY)}) %></span></td>
+        <td><span title="<%=h reading.notes %>"><%= reading.taken_at %></td>
         <td class=rightjustify><%= @readings_h[reading.id]['BWTOTAL'].nil? ? " " : number_with_delimiter(@readings_h[reading.id]['BWTOTAL'].value) %></td>
         <% if @device.model.model_group.color_flag %>
           <td class=rightjustify><%= @readings_h[reading.id]['CTOTAL'].nil? ? " " : number_with_delimiter(@readings_h[reading.id]['CTOTAL'].value) %></td>

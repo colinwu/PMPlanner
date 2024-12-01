@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  
+  # browser version guard available since Rails 7.2
+  allow_browser versions: :modern
+
   def authorize
     if current_user.nil?
       redirect_to login_url

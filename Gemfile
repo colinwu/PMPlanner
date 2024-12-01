@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-#gem 'rails', '~> 6.1.4.1'
-gem 'rails', '~> 7.1.3'
+gem 'rails', '~> 7.2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -9,7 +8,11 @@ gem 'rails', '~> 7.1.3'
 gem 'mysql2'
 gem 'responders'
 gem 'json'
+# Don't forget to rebuild Apache module with each new version of Ruby:
+#  passenger-install-apache2-module
 gem 'passenger', '~> 6.0', '>= 6.0.23'
+# Access an IRB console on exception pages or by using <%= console %> in views
+gem 'web-console', group: :development
 
 group :development, :test do
   # do rails generate rspec:install after initial install
@@ -24,8 +27,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'bullet'
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console'
+  
   # Added 15-Feb-2024 for migration from ruby 2.6 to 3.0
   gem 'webrick', '~> 1.9'
   gem 'listen'
@@ -62,7 +64,7 @@ gem 'csv', '~> 3.3'
 gem 'will_paginate'
 gem 'getopt'
 gem 'net-ldap'
-gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
+# gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
 # gem "best_in_place"
 gem 'activerecord-session_store'
 
@@ -74,11 +76,6 @@ gem 'activerecord-session_store'
 
 gem 'ed25519'
 gem 'bcrypt_pbkdf'
-
-# Deploy with Capistrano
-group :development do
-
-end
 
 gem "simple_form"
 # then rails generate simple_form:install --bootstrap

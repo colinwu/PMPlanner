@@ -1,6 +1,6 @@
 class DevicesController < ApplicationController
   before_action :authorize, :set_defaults, :fetch_news
-  before_action :require_manager, only: [:new, :create, :destroy, :send_transfer, :unassigned]
+  before_action :require_manager, only: [:new, :create, :destroy, :unassigned]
   helper_method :sort_column, :sort_direction
   # autocomplete :client, :name, full: true
   
