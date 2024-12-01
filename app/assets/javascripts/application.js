@@ -12,13 +12,10 @@
 //
 //= require_self
 //= require jquery
-//= require best_in_place
 //= require jquery.purr
-//= require best_in_place.purr
 //= require jquery_ujs
 //= require bootstrap
 //= require jquery-ui
-//= require best_in_place.jquery-ui
 //= require_tree .
 set_size_of = function(element) {
   var width;
